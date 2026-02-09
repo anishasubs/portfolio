@@ -1,0 +1,1713 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>CoffeeChain - Case Study | Anisha Subberwal</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display:ital@0;1&family=Outfit:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        :root {
+            --coffee-dark: #2D1B11;
+            --coffee-medium: #5C3D2E;
+            --coffee-light: #8B6F47;
+            --cream: #F4EDE3;
+            --cream-dark: #E8DCC8;
+            --accent-green: #7B9E89;
+            --accent-purple: #9B7EBD;
+            --accent-gold: #D4AF37;
+            --text-primary: #1A1A1A;
+            --text-secondary: #666666;
+        }
+
+        body {
+            font-family: 'Outfit', sans-serif;
+            background: var(--cream);
+            color: var(--text-primary);
+            line-height: 1.6;
+            overflow-x: hidden;
+        }
+
+        /* Hero Section */
+        .hero {
+            min-height: 100vh;
+            background: linear-gradient(135deg, var(--coffee-dark) 0%, var(--coffee-medium) 50%, var(--coffee-light) 100%);
+            position: relative;
+            overflow: hidden;
+            display: flex;
+            align-items: center;
+            padding: 2rem;
+        }
+
+        /* Falling coffee beans - Pixel Art */
+        .coffee-bean {
+            position: absolute;
+            animation: fall linear infinite;
+            z-index: 1;
+            pointer-events: none;
+        }
+        
+        .coffee-bean img {
+            display: block;
+            opacity: 0.85;
+            filter: drop-shadow(2px 4px 8px rgba(93, 64, 55, 0.4));
+            image-rendering: pixelated;
+            image-rendering: -moz-crisp-edges;
+            image-rendering: crisp-edges;
+        }
+
+        @keyframes fall {
+            0% {
+                transform: translateY(-150px) rotate(0deg);
+                opacity: 0;
+            }
+            10% {
+                opacity: 0.85;
+            }
+            90% {
+                opacity: 0.85;
+            }
+            100% {
+                transform: translateY(calc(100vh + 150px)) rotate(360deg);
+                opacity: 0;
+            }
+        }
+
+        .coffee-bean:nth-child(1) {
+            left: 8%;
+            animation-duration: 12s;
+            animation-delay: 0s;
+        }
+        .coffee-bean:nth-child(1) img { width: 90px; }
+
+        .coffee-bean:nth-child(2) {
+            left: 18%;
+            animation-duration: 10s;
+            animation-delay: 1.5s;
+        }
+        .coffee-bean:nth-child(2) img { width: 70px; }
+
+        .coffee-bean:nth-child(3) {
+            left: 30%;
+            animation-duration: 14s;
+            animation-delay: 3s;
+        }
+        .coffee-bean:nth-child(3) img { width: 85px; }
+
+        .coffee-bean:nth-child(4) {
+            left: 42%;
+            animation-duration: 11s;
+            animation-delay: 0.5s;
+        }
+        .coffee-bean:nth-child(4) img { width: 75px; }
+
+        .coffee-bean:nth-child(5) {
+            left: 55%;
+            animation-duration: 13s;
+            animation-delay: 2s;
+        }
+        .coffee-bean:nth-child(5) img { width: 95px; }
+
+        .coffee-bean:nth-child(6) {
+            left: 68%;
+            animation-duration: 9.5s;
+            animation-delay: 4s;
+        }
+        .coffee-bean:nth-child(6) img { width: 80px; }
+
+        .coffee-bean:nth-child(7) {
+            left: 78%;
+            animation-duration: 12.5s;
+            animation-delay: 1s;
+        }
+        .coffee-bean:nth-child(7) img { width: 72px; }
+
+        .coffee-bean:nth-child(8) {
+            left: 15%;
+            animation-duration: 15s;
+            animation-delay: 5s;
+        }
+        .coffee-bean:nth-child(8) img { width: 88px; }
+
+        .coffee-bean:nth-child(9) {
+            left: 48%;
+            animation-duration: 10.5s;
+            animation-delay: 3.5s;
+        }
+        .coffee-bean:nth-child(9) img { width: 92px; }
+
+        .coffee-bean:nth-child(10) {
+            left: 88%;
+            animation-duration: 13.5s;
+            animation-delay: 2.5s;
+        }
+        .coffee-bean:nth-child(10) img { width: 78px; }
+
+        .coffee-bean:nth-child(11) {
+            left: 25%;
+            animation-duration: 11.5s;
+            animation-delay: 4.5s;
+        }
+        .coffee-bean:nth-child(11) img { width: 68px; }
+
+        .coffee-bean:nth-child(12) {
+            left: 62%;
+            animation-duration: 14.5s;
+            animation-delay: 1.8s;
+        }
+        .coffee-bean:nth-child(12) img { width: 94px; }
+
+        .hero::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: 
+                radial-gradient(circle at 20% 50%, rgba(123, 158, 137, 0.15) 0%, transparent 50%),
+                radial-gradient(circle at 80% 80%, rgba(155, 126, 189, 0.15) 0%, transparent 50%);
+            animation: pulse 8s ease-in-out infinite;
+        }
+
+        @keyframes pulse {
+            0%, 100% { opacity: 1; }
+            50% { opacity: 0.6; }
+        }
+
+        .hero-content {
+            max-font-size: 1200px;
+            margin: 0 auto;
+            position: relative;
+            z-index: 2;
+        }
+
+        .hero-tag {
+            display: inline-block;
+            padding: 0.5rem 1.5rem;
+            background: rgba(255, 255, 255, 0.1);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            border-radius: 50px;
+            color: var(--cream);
+            font-size: 0.9rem;
+            font-weight: 500;
+            margin-bottom: 2rem;
+            backdrop-filter: blur(10px);
+            animation: fadeInDown 0.8s ease-out;
+        }
+
+        @keyframes fadeInDown {
+            from {
+                opacity: 0;
+                transform: translateY(-20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .hero h1 {
+            font-family: 'DM Serif Display', serif;
+            font-size: clamp(3rem, 8vw, 7rem);
+            color: var(--cream);
+            margin-bottom: 1.5rem;
+            line-height: 1.1;
+            animation: fadeInUp 0.8s ease-out 0.2s both;
+        }
+
+        @keyframes fadeInUp {
+            from {
+                opacity: 0;
+                transform: translateY(30px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .hero-subtitle {
+            font-size: clamp(1.25rem, 3vw, 2rem);
+            color: var(--cream-dark);
+            max-font-size: 800px;
+            margin-bottom: 2rem;
+            font-weight: 300;
+            animation: fadeInUp 0.8s ease-out 0.4s both;
+        }
+
+        .hero-meta {
+            display: flex;
+            gap: 3rem;
+            flex-wrap: wrap;
+            margin-bottom: 3rem;
+            animation: fadeInUp 0.8s ease-out 0.6s both;
+        }
+
+        .meta-item {
+            color: var(--cream);
+        }
+
+        .meta-label {
+            font-size: 0.85rem;
+            text-transform: uppercase;
+            letter-spacing: 1.5px;
+            color: rgba(255, 255, 255, 0.6);
+            margin-bottom: 0.5rem;
+        }
+
+        .meta-value {
+            font-size: 1.1rem;
+            font-weight: 500;
+        }
+
+        .scroll-indicator {
+            position: absolute;
+            bottom: 3rem;
+            left: 50%;
+            transform: translateX(-50%);
+            color: var(--cream);
+            font-size: 0.9rem;
+            text-align: center;
+            animation: bounce 2s infinite;
+        }
+
+        @keyframes bounce {
+            0%, 20%, 50%, 80%, 100% {
+                transform: translateX(-50%) translateY(0);
+            }
+            40% {
+                transform: translateX(-50%) translateY(-10px);
+            }
+            60% {
+                transform: translateX(-50%) translateY(-5px);
+            }
+        }
+
+        /* Section Base Styles */
+        section {
+            padding: 8rem 2rem;
+            max-font-size: 1200px;
+            margin: 0 auto;
+        }
+
+        .section-tag {
+            display: inline-block;
+            font-size: 0.85rem;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+            color: var(--accent-green);
+            font-weight: 600;
+            margin-bottom: 1rem;
+        }
+
+        .section-title {
+            font-family: 'DM Serif Display', serif;
+            font-size: clamp(2.5rem, 5vw, 4rem);
+            margin-bottom: 2rem;
+            color: var(--coffee-dark);
+        }
+
+        /* Overview Section */
+        .overview {
+            background: var(--cream);
+        }
+
+        .overview-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 4rem;
+            margin-top: 3rem;
+        }
+
+        .overview-text {
+            font-size: 1.2rem;
+            line-height: 1.8;
+            color: var(--text-secondary);
+        }
+
+        .stats-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 2rem;
+        }
+
+        .stat-card {
+            padding: 2rem;
+            background: white;
+            border-radius: 16px;
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+        }
+
+        .stat-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 8px 30px rgba(0, 0, 0, 0.12);
+        }
+
+        .stat-number {
+            font-family: 'DM Serif Display', serif;
+            font-size: 2.5rem;
+            color: var(--accent-green);
+            margin-bottom: 0.5rem;
+        }
+
+        .stat-label {
+            font-size: 0.95rem;
+            color: var(--text-secondary);
+            line-height: 1.4;
+        }
+
+        /* Problem Section */
+        .problem {
+            background: var(--coffee-dark);
+            color: var(--cream);
+            border-radius: 32px;
+            margin: 0 2rem;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .problem::before {
+            content: '☕';
+            position: absolute;
+            font-size: 30rem;
+            opacity: 0.03;
+            right: -5rem;
+            top: -5rem;
+            transform: rotate(-15deg);
+        }
+
+        .problem .section-tag {
+            color: var(--accent-gold);
+        }
+
+        .problem .section-title {
+            color: var(--cream);
+        }
+
+        .problem-statement {
+            font-size: 1.5rem;
+            font-weight: 300;
+            margin: 2rem 0 3rem;
+            padding: 2rem;
+            background: rgba(255, 255, 255, 0.05);
+            border-left: 4px solid var(--accent-gold);
+            border-radius: 8px;
+        }
+
+        .problem-points {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 2rem;
+            margin-top: 3rem;
+        }
+
+        .problem-point {
+            padding: 2rem;
+            background: rgba(255, 255, 255, 0.08);
+            border-radius: 16px;
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            transition: all 0.3s ease;
+        }
+
+        .problem-point:hover {
+            background: rgba(255, 255, 255, 0.12);
+            transform: translateY(-5px);
+        }
+
+        .point-number {
+            display: inline-block;
+            font-size: 2.5rem;
+            color: var(--accent-gold);
+            font-weight: 700;
+            margin-bottom: 1rem;
+            font-family: 'DM Serif Display', serif;
+        }
+
+        .point-title {
+            font-size: 1.2rem;
+            font-weight: 600;
+            margin-bottom: 0.5rem;
+            color: var(--cream);
+        }
+
+        .point-description {
+            color: rgba(255, 255, 255, 0.8);
+            font-size: 0.95rem;
+        }
+
+        /* Solution Section */
+        .solution {
+            background: white;
+            border-radius: 32px;
+            margin: 0 2rem;
+            box-shadow: 0 10px 60px rgba(0, 0, 0, 0.1);
+        }
+
+        .solution-intro {
+            font-size: 1.3rem;
+            line-height: 1.8;
+            color: var(--text-secondary);
+            margin-bottom: 3rem;
+            max-font-size: 800px;
+        }
+
+        .architecture-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 3rem;
+            margin: 4rem 0;
+        }
+
+        .architecture-card {
+            padding: 3rem;
+            background: linear-gradient(135deg, var(--accent-green) 0%, var(--accent-purple) 100%);
+            border-radius: 24px;
+            color: white;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .architecture-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: linear-gradient(45deg, transparent 30%, rgba(255, 255, 255, 0.1) 50%, transparent 70%);
+            transform: translateX(-100%);
+            transition: transform 0.6s ease;
+        }
+
+        .architecture-card:hover::before {
+            transform: translateX(100%);
+        }
+
+        .arch-icon {
+            font-size: 3rem;
+            margin-bottom: 1rem;
+        }
+
+        .arch-title {
+            font-family: 'DM Serif Display', serif;
+            font-size: 1.8rem;
+            margin-bottom: 1rem;
+        }
+
+        .arch-description {
+            font-size: 1rem;
+            line-height: 1.6;
+            opacity: 0.95;
+        }
+
+        /* Token Model */
+        .tokens {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 2rem;
+            margin-top: 3rem;
+        }
+
+        .token-card {
+            padding: 3rem;
+            border-radius: 24px;
+            position: relative;
+            overflow: hidden;
+            border: 2px solid;
+            transition: all 0.4s ease;
+        }
+
+        .token-card.beanpoints {
+            background: linear-gradient(135deg, #FFE5B4 0%, #FFD700 100%);
+            border-color: var(--accent-gold);
+        }
+
+        .token-card.beantoken {
+            background: linear-gradient(135deg, #E6E6FA 0%, #D8BFD8 100%);
+            border-color: var(--accent-purple);
+        }
+
+        .token-card:hover {
+            transform: scale(1.02);
+            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.15);
+        }
+
+        .token-symbol {
+            display: inline-block;
+            padding: 0.5rem 1rem;
+            background: rgba(255, 255, 255, 0.5);
+            border-radius: 50px;
+            font-weight: 700;
+            font-size: 0.9rem;
+            margin-bottom: 1.5rem;
+        }
+
+        .token-name {
+            font-family: 'DM Serif Display', serif;
+            font-size: 2rem;
+            margin-bottom: 1rem;
+            color: var(--coffee-dark);
+        }
+
+        .token-description {
+            color: var(--text-primary);
+            line-height: 1.6;
+        }
+
+        /* App Showcase */
+        .app-showcase {
+            background: linear-gradient(180deg, var(--cream) 0%, white 100%);
+            text-align: center;
+        }
+
+        .app-mockup {
+            max-font-size: 500px;
+            margin: 4rem auto;
+            padding: 3rem;
+            background: white;
+            border-radius: 32px;
+            box-shadow: 0 30px 80px rgba(0, 0, 0, 0.15);
+            animation: float 6s ease-in-out infinite;
+        }
+
+        @keyframes float {
+            0%, 100% {
+                transform: translateY(0);
+            }
+            50% {
+                transform: translateY(-20px);
+            }
+        }
+
+        .mockup-screen {
+            width: 100%;
+            border-radius: 24px;
+            overflow: hidden;
+            background: linear-gradient(135deg, var(--accent-green) 0%, var(--coffee-medium) 100%);
+            padding: 2rem;
+            color: white;
+        }
+
+        .mockup-header {
+            text-align: left;
+            margin-bottom: 2rem;
+        }
+
+        .mockup-title {
+            font-size: 1.5rem;
+            font-weight: 600;
+            margin-bottom: 0.5rem;
+        }
+
+        .mockup-subtitle {
+            font-size: 0.9rem;
+            opacity: 0.8;
+        }
+
+        .balance-card {
+            background: rgba(255, 255, 255, 0.15);
+            border-radius: 20px;
+            padding: 2rem;
+            backdrop-filter: blur(10px);
+            margin-bottom: 1.5rem;
+            text-align: left;
+        }
+
+        .balance-label {
+            font-size: 0.9rem;
+            opacity: 0.8;
+            margin-bottom: 0.5rem;
+        }
+
+        .balance-amount {
+            font-family: 'DM Serif Display', serif;
+            font-size: 3rem;
+            margin-bottom: 0.5rem;
+        }
+
+        .balance-usd {
+            font-size: 0.95rem;
+            opacity: 0.9;
+        }
+
+        .features-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 2rem;
+            margin-top: 4rem;
+            text-align: left;
+        }
+
+        .feature-card {
+            padding: 2rem;
+            background: white;
+            border-radius: 20px;
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
+            transition: all 0.3s ease;
+        }
+
+        .feature-card:hover {
+            transform: translateY(-8px);
+            box-shadow: 0 12px 40px rgba(0, 0, 0, 0.15);
+        }
+
+        .feature-icon {
+            font-size: 2.5rem;
+            margin-bottom: 1rem;
+        }
+
+        .feature-title {
+            font-size: 1.3rem;
+            font-weight: 600;
+            margin-bottom: 0.5rem;
+            color: var(--coffee-dark);
+        }
+
+        .feature-description {
+            color: var(--text-secondary);
+            line-height: 1.6;
+        }
+
+        /* Business Model */
+        .business-model {
+            background: var(--accent-green);
+            color: white;
+            border-radius: 32px;
+            margin: 0 2rem;
+        }
+
+        .business-model .section-tag {
+            color: var(--accent-gold);
+        }
+
+        .business-model .section-title {
+            color: white;
+        }
+
+        .business-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 2rem;
+            margin-top: 3rem;
+        }
+
+        .business-card {
+            padding: 3rem;
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 20px;
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+        }
+
+        .business-label {
+            font-size: 0.9rem;
+            text-transform: uppercase;
+            letter-spacing: 1.5px;
+            opacity: 0.9;
+            margin-bottom: 1rem;
+        }
+
+        .business-value {
+            font-family: 'DM Serif Display', serif;
+            font-size: 3rem;
+            margin-bottom: 0.3rem;
+            line-height: 1.2;
+        }
+
+        .business-value:last-of-type {
+            margin-bottom: 1rem;
+        }
+
+        .business-sub-value {
+            font-size: 1.5rem;
+            font-weight: 600;
+            margin-bottom: 1rem;
+            opacity: 0.9;
+        }
+
+        .business-description {
+            font-size: 1rem;
+            line-height: 1.6;
+            opacity: 0.95;
+        }
+
+        .funding-breakdown {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 2rem;
+            margin-top: 3rem;
+            padding: 3rem;
+            background: rgba(0, 0, 0, 0.15);
+            border-radius: 20px;
+        }
+
+        .funding-item {
+            text-align: center;
+        }
+
+        .funding-amount {
+            font-family: 'DM Serif Display', serif;
+            font-size: 2.5rem;
+            margin-bottom: 0.5rem;
+            color: var(--accent-gold);
+        }
+
+        .funding-label {
+            font-size: 0.95rem;
+            opacity: 0.9;
+        }
+
+        /* Competition */
+        .competition {
+            background: white;
+            border-radius: 32px;
+            margin: 0 2rem;
+        }
+
+        .comparison-table {
+            margin-top: 3rem;
+            overflow-x: auto;
+        }
+
+        .comparison-row {
+            display: grid;
+            grid-template-columns: 2fr 1fr 1fr;
+            gap: 2rem;
+            padding: 2rem;
+            border-bottom: 1px solid rgba(0, 0, 0, 0.1);
+            align-items: center;
+        }
+
+        .comparison-row:first-child {
+            background: var(--cream);
+            border-radius: 16px 16px 0 0;
+            font-weight: 600;
+        }
+
+        .comparison-row:last-child {
+            border-bottom: none;
+        }
+
+        .feature-name {
+            font-weight: 500;
+            color: var(--text-primary);
+        }
+
+        .check {
+            color: var(--accent-green);
+            font-weight: 700;
+            font-size: 1.2rem;
+        }
+
+        .cross {
+            color: #D64545;
+            font-weight: 700;
+            font-size: 1.2rem;
+        }
+
+        /* Team */
+        .team {
+            background: var(--cream);
+            text-align: center;
+        }
+
+        .team-members {
+            display: flex;
+            justify-content: center;
+            gap: 3rem;
+            margin-top: 3rem;
+            flex-wrap: wrap;
+        }
+
+        .team-member {
+            text-align: center;
+        }
+
+        .team-name {
+            font-size: 1.1rem;
+            font-weight: 600;
+            color: var(--coffee-dark);
+            margin-bottom: 0.25rem;
+        }
+
+        .team-role {
+            font-size: 0.9rem;
+            color: var(--text-secondary);
+        }
+
+        /* Footer */
+        .footer {
+            background: var(--coffee-dark);
+            color: var(--cream);
+            padding: 4rem 2rem;
+            text-align: center;
+        }
+
+        .footer-content {
+            max-font-size: 1200px;
+            margin: 0 auto;
+        }
+
+        .footer-name {
+            font-family: 'DM Serif Display', serif;
+            font-size: 2rem;
+            margin-bottom: 1rem;
+        }
+
+        .footer-tagline {
+            font-size: 1.1rem;
+            opacity: 0.8;
+            margin-bottom: 2rem;
+        }
+
+        .footer-links {
+            display: flex;
+            justify-content: center;
+            gap: 2rem;
+            margin-top: 2rem;
+        }
+
+        .footer-link {
+            color: var(--cream);
+            text-decoration: none;
+            font-size: 0.95rem;
+            transition: color 0.3s ease;
+        }
+
+        .footer-link:hover {
+            color: var(--accent-gold);
+        }
+
+        /* Responsive */
+        @media (max-width: 768px) {
+            section {
+                padding: 4rem 1.5rem;
+            }
+
+            .hero {
+                padding: 1.5rem;
+                min-height: 90vh;
+            }
+
+            .hero h1 {
+                font-size: 3rem;
+            }
+
+            .overview-grid,
+            .architecture-grid,
+            .tokens,
+            .business-grid {
+                grid-template-columns: 1fr;
+                gap: 2rem;
+            }
+
+            .stats-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .comparison-row {
+                display: flex;
+                flex-direction: column;
+                gap: 0.5rem;
+                padding: 1.5rem 1rem;
+            }
+            
+            .comparison-row:first-child {
+                display: none; /* Hide header row on mobile */
+            }
+            
+            .comparison-row > div:not(.feature-name) {
+                display: flex;
+                justify-content: space-between;
+                align-items: center;
+                padding: 0.75rem 1rem;
+                background: var(--cream);
+                border-radius: 8px;
+            }
+            
+            .comparison-row > div:not(.feature-name)::before {
+                font-weight: 600;
+                color: var(--text-secondary);
+                font-size: 0.9rem;
+            }
+            
+            .comparison-row > div:not(.feature-name):nth-child(2)::before {
+                content: "Traditional: ";
+            }
+            
+            .comparison-row > div:not(.feature-name):nth-child(3)::before {
+                content: "CoffeeChain: ";
+            }
+            
+            .feature-name {
+                font-size: 1.1rem;
+                margin-bottom: 0.5rem;
+            }
+
+            .funding-breakdown {
+                grid-template-columns: 1fr;
+            }
+
+            .problem,
+            .solution,
+            .business-model,
+            .competition {
+                margin: 0 1rem;
+            }
+        }
+
+        /* Prototype button hover */
+        a[href*="figma.com/proto"]:hover {
+            background: var(--coffee-dark) !important;
+            transform: translateY(-2px);
+            box-shadow: 0 8px 30px rgba(123, 158, 137, 0.4) !important;
+        }
+        .pocket-menu {
+            position: fixed; top: 28px; left: 28px; z-index: 200;
+            width: 64px; height: 64px; cursor: pointer;
+            transition: transform 0.3s ease;
+        }
+        .pocket-menu:hover { transform: scale(1.08); }
+        .pocket-menu-icon {
+            position: relative; width: 100%; height: 100%;
+            filter: drop-shadow(0px 2px 4px rgba(0,0,0,0.12));
+        }
+        .pocket-menu-icon img { position: absolute; display: block; }
+        .menu-v1 { inset: 15% 10% 10% 10%; width: 80%; height: 75%; }
+        .menu-v2 { inset: 13% 30% auto 30%; width: 40%; height: 6%; }
+        .menu-v3 { inset: 21% auto auto 46%; width: 8%; height: 8%; }
+    </style>
+</head>
+<body>
+    <a class="pocket-menu" href="../index.html">
+        <div class="pocket-menu-icon">
+            <img class="menu-v1" src="../assets/pocket-v1.svg" alt="">
+            <img class="menu-v2" src="../assets/pocket-v2.svg" alt="">
+            <img class="menu-v3" src="../assets/pocket-v3.svg" alt="">
+        </div>
+    </a>
+
+    <!-- Hero Section -->
+    <section class="hero">
+        <div class="hero-content">
+            <span class="hero-tag">POWERED BY SOLANA</span>
+            <h1>CoffeeChain</h1>
+            <p class="hero-subtitle">Universal loyalty and micro-payments for cafes and coffee drinkers, powered by blockchain technology</p>
+            
+            <div class="hero-meta">
+            </div>
+        </div>
+        
+        <div class="scroll-indicator">
+            <div>Scroll to explore</div>
+            <div style="margin-top: 0.5rem;">↓</div>
+        </div>
+    </section>
+
+    <!-- Overview -->
+    <section class="overview">
+        <!-- Animated Vision Statement -->
+        <div class="vision-statement-box">
+            <!-- Video Section -->
+            <div class="vision-video-container">
+                <video autoplay muted loop playsinline class="vision-video">
+                    <source src="hero-video.mp4" type="video/mp4">
+                </video>
+            </div>
+            
+            <!-- Text Section -->
+            <div class="vision-text-container">
+                <p class="vision-text">
+                    Integrating crypto payments into everyday life—one coffee at a time
+                </p>
+            </div>
+        </div>
+        
+        <span class="section-tag">Overview</span>
+        <h2 class="section-title">Democratizing Coffee Loyalty Programs</h2>
+        
+        <div class="overview-content">
+            <!-- Overview Text with Coffee Bean Background -->
+            <div class="overview-text-box">
+                <div class="coffee-icon">☕</div>
+                <p style="font-size: 1.1rem; line-height: 1.8; color: #2D2D2D;">CoffeeChain is a blockchain-based loyalty and payment system that brings the benefits of robust rewards programs to independent coffee shops. Built on Solana, it enables any café to launch a stablecoin-backed loyalty program in minutes, unlocking interoperability and financial utility that traditional systems cannot offer.</p>
+            </div>
+            
+            <!-- Animated Stats Grid -->
+            <div class="animated-stats-grid">
+                <div class="animated-stat-card" style="animation-delay: 0s;">
+                    <div class="stat-icon">🏪</div>
+                    <div class="stat-number" data-target="40">0</div>
+                    <div class="stat-unit">K</div>
+                    <div class="stat-label">Independent coffee shops nationwide</div>
+                </div>
+                <div class="animated-stat-card" style="animation-delay: 0.1s;">
+                    <div class="stat-icon">☕</div>
+                    <div class="stat-number" data-target="150">0</div>
+                    <div class="stat-unit">M</div>
+                    <div class="stat-label">Daily coffee drinkers in the US</div>
+                </div>
+                <div class="animated-stat-card" style="animation-delay: 0.2s;">
+                    <div class="stat-icon">💳</div>
+                    <div class="stat-number" data-target="1.75">0</div>
+                    <div class="stat-unit">B</div>
+                    <div class="stat-label">Starbucks stored value card balance</div>
+                </div>
+                <div class="animated-stat-card" style="animation-delay: 0.3s;">
+                    <div class="stat-icon">🚀</div>
+                    <div class="stat-number" data-target="100">0</div>
+                    <div class="stat-unit">K</div>
+                    <div class="stat-label">Estimated cost to launch</div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <style>
+        .vision-statement-box {
+            max-width: 1200px;
+            margin: 2rem auto 3rem;
+            padding: 0;
+            background: linear-gradient(135deg, #7B9E89 0%, #5C8A6F 100%);
+            border-radius: 20px;
+            position: relative;
+            overflow: hidden;
+            box-shadow: 0 15px 50px rgba(123, 158, 137, 0.3);
+            animation: fadeInGlow 1s ease-out;
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            min-height: 400px;
+        }
+
+        .vision-video-container {
+            position: relative;
+            overflow: hidden;
+            border-radius: 20px 0 0 20px;
+        }
+
+        .vision-video {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+
+        .vision-text-container {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 3rem;
+            position: relative;
+            z-index: 2;
+        }
+
+        .vision-statement-box::before {
+            content: '';
+            position: absolute;
+            top: -50%;
+            right: -50%;
+            width: 200%;
+            height: 200%;
+            background: radial-gradient(circle, rgba(255,255,255,0.1) 0%, transparent 70%);
+            animation: shimmer 3s infinite;
+            z-index: 1;
+        }
+
+        .vision-text {
+            font-size: 1.5rem;
+            color: white;
+            text-align: center;
+            font-style: italic;
+            font-weight: 500;
+            line-height: 1.8;
+            position: relative;
+            z-index: 2;
+            margin: 0;
+            text-shadow: 0 2px 10px rgba(0,0,0,0.3);
+        }
+
+        @keyframes fadeInGlow {
+            from {
+                opacity: 0;
+                transform: translateY(20px);
+                box-shadow: 0 0 0 rgba(123, 158, 137, 0);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+                box-shadow: 0 15px 50px rgba(123, 158, 137, 0.3);
+            }
+        }
+
+        @keyframes shimmer {
+            0% {
+                transform: translate(-50%, -50%) rotate(0deg);
+            }
+            100% {
+                transform: translate(-50%, -50%) rotate(360deg);
+            }
+        }
+
+        @media (max-width: 768px) {
+            .vision-statement-box {
+                grid-template-columns: 1fr;
+                margin: 1.5rem 1rem 2rem;
+                min-height: auto;
+            }
+
+            .vision-video-container {
+                border-radius: 20px 20px 0 0;
+                min-height: 300px;
+            }
+
+            .vision-text-container {
+                padding: 2rem 1.5rem;
+            }
+
+            .vision-text {
+                font-size: 1.1rem;
+            }
+        }
+
+        .overview-content {
+            max-width: 1200px;
+            margin: 3rem auto;
+        }
+
+        .overview-text-box {
+            background: linear-gradient(135deg, #F4EDE3 0%, #E8E1D5 100%);
+            border-radius: 20px;
+            padding: 3rem;
+            margin-bottom: 3rem;
+            position: relative;
+            overflow: hidden;
+            box-shadow: 0 10px 40px rgba(93, 61, 46, 0.1);
+            animation: fadeInUp 0.8s ease-out;
+        }
+
+        .coffee-icon {
+            display: none;
+        }
+
+        .animated-stats-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 2rem;
+            margin-top: 2rem;
+        }
+
+        .animated-stat-card {
+            background: white;
+            border-radius: 16px;
+            padding: 2.5rem 2rem;
+            text-align: center;
+            box-shadow: 0 5px 20px rgba(45, 27, 17, 0.08);
+            transition: all 0.3s ease;
+            animation: fadeInScale 0.8s ease-out forwards;
+            opacity: 0;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .animated-stat-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 4px;
+            background: linear-gradient(90deg, #7B9E89, #D4AF37);
+        }
+
+        .animated-stat-card:hover {
+            transform: translateY(-8px);
+            box-shadow: 0 15px 40px rgba(45, 27, 17, 0.15);
+        }
+
+        .stat-icon {
+            font-size: 3rem;
+            margin-bottom: 1rem;
+            animation: bounce 2s infinite;
+        }
+
+        .stat-number {
+            font-size: 3.5rem;
+            font-weight: 800;
+            color: #2D1B11;
+            font-family: 'DM Serif Display', serif;
+            display: inline-block;
+        }
+
+        .stat-unit {
+            font-size: 2.5rem;
+            font-weight: 700;
+            color: #7B9E89;
+            display: inline-block;
+            margin-left: 0.2rem;
+        }
+
+        .stat-label {
+            font-size: 0.95rem;
+            color: #5C3D2E;
+            margin-top: 0.8rem;
+            font-weight: 500;
+            line-height: 1.4;
+        }
+
+        @keyframes fadeInUp {
+            from {
+                opacity: 0;
+                transform: translateY(30px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        @keyframes fadeInScale {
+            from {
+                opacity: 0;
+                transform: scale(0.9);
+            }
+            to {
+                opacity: 1;
+                transform: scale(1);
+            }
+        }
+
+        @keyframes bounce {
+            0%, 100% {
+                transform: translateY(0);
+            }
+            50% {
+                transform: translateY(-10px);
+            }
+        }
+
+        @media (max-width: 768px) {
+            .overview-text-box {
+                padding: 2rem;
+            }
+
+            .coffee-icon {
+                font-size: 3rem;
+                right: 20px;
+            }
+
+            .animated-stats-grid {
+                grid-template-columns: 1fr;
+                gap: 1.5rem;
+            }
+
+            .stat-number {
+                font-size: 2.5rem;
+            }
+
+            .stat-unit {
+                font-size: 2rem;
+            }
+        }
+    </style>
+
+    <script>
+        // Animate numbers counting up
+        function animateCounter(element, target, duration = 2000) {
+            const start = 0;
+            const increment = target / (duration / 16);
+            let current = start;
+
+            const timer = setInterval(() => {
+                current += increment;
+                if (current >= target) {
+                    current = target;
+                    clearInterval(timer);
+                }
+                element.textContent = current.toFixed(target % 1 !== 0 ? 2 : 0);
+            }, 16);
+        }
+
+        // Trigger animations when stats come into view
+        const observer = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    const numberElement = entry.target.querySelector('.stat-number');
+                    const target = parseFloat(numberElement.getAttribute('data-target'));
+                    animateCounter(numberElement, target);
+                    observer.unobserve(entry.target);
+                }
+            });
+        }, { threshold: 0.3 });
+
+        document.addEventListener('DOMContentLoaded', () => {
+            document.querySelectorAll('.animated-stat-card').forEach(card => {
+                observer.observe(card);
+            });
+        });
+    </script>
+
+    <!-- The Opportunity -->
+    <section class="problem">
+        <span class="section-tag">The Opportunity</span>
+        <h2 class="section-title">Why should Starbucks and Dunkin' be the sole beneficiaries?</h2>
+        
+        <div class="problem-statement">
+            We know people love to earn rewards and transact electronically for their coffee every day, but the status quo has issues.
+        </div>
+
+        <div class="problem-points">
+            <div class="problem-point">
+                <span class="point-number">1</span>
+                <div class="point-title">Bring beloved coffee loyalty programs to independent cafes</div>
+                <div class="point-description">Enable small cafés to offer the same robust rewards programs that major chains provide</div>
+            </div>
+            <div class="problem-point">
+                <span class="point-number">2</span>
+                <div class="point-title">Transparent, tamper-resistant points ledger</div>
+                <div class="point-description">Blockchain technology ensures complete transparency and security for all transactions</div>
+            </div>
+            <div class="problem-point">
+                <span class="point-number">3</span>
+                <div class="point-title">Instant, low-cost settlement on the blockchain</div>
+                <div class="point-description">Fast, affordable transactions that work for small businesses and their customers</div>
+            </div>
+            <div class="problem-point">
+                <span class="point-number">4</span>
+                <div class="point-title">Interoperable rewards across cafes</div>
+                <div class="point-description">Earn and redeem BeanPoints across a network of independent cafes—something not offered by any single chain's closed loyalty program</div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Solution -->
+    <section class="solution">
+        <span class="section-tag">Core Value Proposition</span>
+        <h2 class="section-title">Decentralize and democratize the closed-loop coffee rewards economy</h2>
+        
+        <p class="solution-intro">
+            Enable any coffee shop to launch a stablecoin-backed loyalty program in minutes, unlocking interoperability and financial utility that traditional systems cannot offer.
+        </p>
+
+        <div class="architecture-grid">
+            <div class="architecture-card">
+                <div class="arch-icon">⚡</div>
+                <div class="arch-title">Architecture</div>
+                <div class="arch-description">A set of audited programs (smart contracts) on Solana. This provides the necessary speed and low cost for real-world retail transactions.</div>
+            </div>
+            <div class="architecture-card">
+                <div class="arch-icon">💰</div>
+                <div class="arch-title">USDC-Backed</div>
+                <div class="arch-description">Merchant's loyalty points ("BeanPoints") are issued as SPL tokens, each unit backed 1:1 by USDC held in a transparent, verifiable reserve.</div>
+            </div>
+        </div>
+
+        <h3 class="section-title" style="font-size: 2.5rem; margin-top: 4rem;">BeanPoints</h3>
+        <div class="tokens" style="grid-template-columns: 1fr;">
+            <div class="token-card beanpoints">
+                <span class="token-symbol">BP</span>
+                <div class="token-name">BeanPoints</div>
+                <div class="token-description">Stable payment currency backed 1:1 by USDC. Users deposit USDC to receive BeanPoints, then spend them at participating cafes. BeanPoints earned at each café are non-transferable between merchants, ensuring true loyalty while giving merchants control over redemption terms.</div>
+            </div>
+        </div>
+    </section>
+
+    <!-- App Showcase -->
+    <section class="app-showcase">
+        <span class="section-tag">Customer Experience</span>
+        <h2 class="section-title">What the dApp looks like in practice</h2>
+        
+        <!-- Split Layout: Prototype Left, Info Right -->
+        <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 4rem; max-width: 1200px; margin: 0 auto; align-items: start;">
+            
+            <!-- Left: Prototype -->
+            <div>
+                <p style="font-size: 1.1rem; color: var(--text-secondary); margin-bottom: 2rem; text-align: center;">
+                    Explore the fully interactive CoffeeChain app
+                </p>
+                
+                <!-- Interactive Figma Make Embed -->
+                <div style="max-width: 375px; margin: 0 auto; background: #1f2937; padding: 16px; border-radius: 40px; box-shadow: 0 30px 80px rgba(0,0,0,0.25); animation: float 6s ease-in-out infinite;">
+                    <div style="background: white; border-radius: 28px; overflow: hidden;">
+                        <iframe
+                            src="https://fake-brave-74884730.figma.site/"
+                            width="343"
+                            height="740"
+                            frameborder="0"
+                            scrolling="auto"
+                            style="border: none; display: block;"
+                        ></iframe>
+                    </div>
+                </div>
+
+                <div style="text-align: center; margin-top: 2rem;">
+                    <a href="https://fake-brave-74884730.figma.site/" target="_blank" style="display: inline-block; padding: 12px 28px; background: var(--accent-green); color: white; border-radius: 12px; text-decoration: none; font-weight: 600; font-size: 0.95rem; transition: all 0.3s ease; box-shadow: 0 4px 20px rgba(123, 158, 137, 0.3);">
+                        Open Full App →
+                    </a>
+                </div>
+            </div>
+
+            <!-- Right: Customer Experience Box -->
+            <div style="background: #E8E1D5; border-radius: 12px; overflow: hidden; box-shadow: 0 8px 30px rgba(0,0,0,0.1);">
+                <!-- Header -->
+                <div style="background: #2D2D2D; color: white; padding: 1.5rem 2rem;">
+                    <h3 style="margin: 0; font-size: 1.8rem; font-weight: 600;">Customer Experience:</h3>
+                </div>
+                
+                <!-- Bullet Points -->
+                <div style="padding: 2rem 2.5rem;">
+                    <ul style="list-style: none; padding: 0; margin: 0;">
+                        <li style="display: flex; gap: 1rem; margin-bottom: 1.5rem; font-size: 1.05rem; line-height: 1.6; color: #2D2D2D;">
+                            <span style="flex-shrink: 0; width: 8px; height: 8px; background: #2D2D2D; border-radius: 50%; margin-top: 0.6rem;"></span>
+                            <span><strong>Deposit USDC</strong> into your account in exchange for BeanPoints (1:1 stable payment currency for use at participating cafes)</span>
+                        </li>
+                        <li style="display: flex; gap: 1rem; margin-bottom: 1.5rem; font-size: 1.05rem; line-height: 1.6; color: #2D2D2D;">
+                            <span style="flex-shrink: 0; width: 8px; height: 8px; background: #2D2D2D; border-radius: 50%; margin-top: 0.6rem;"></span>
+                            <span><strong>Pay with BeanPoints</strong> at participating cafes and <strong>earn rewards</strong> with each purchase, tracked on the blockchain</span>
+                        </li>
+                        <li style="display: flex; gap: 1rem; margin-bottom: 1.5rem; font-size: 1.05rem; line-height: 1.6; color: #2D2D2D;">
+                            <span style="flex-shrink: 0; width: 8px; height: 8px; background: #2D2D2D; border-radius: 50%; margin-top: 0.6rem;"></span>
+                            <span>BeanPoints earned at each café are <strong>non-transferable between merchants</strong>, ensuring true loyalty. Merchants control redemption terms and rewards rates</span>
+                        </li>
+                    </ul>
+
+                    <!-- Flow Diagram -->
+                    <div style="padding: 2rem 0; margin-top: 1.5rem;">
+                        <!-- 4-Step Transaction Flow -->
+                        <div style="display: flex; justify-content: center; align-items: center; gap: 1.5rem;">
+                            <!-- Step 1: User -->
+                            <div style="text-align: center;">
+                                <div style="font-size: 2.5rem; margin-bottom: 0.5rem;">👤</div>
+                                <div style="font-size: 0.7rem; font-weight: 700; color: #2D2D2D; text-transform: uppercase;">USER</div>
+                            </div>
+                            
+                            <div style="font-size: 1.5rem; color: #666;">→</div>
+                            
+                            <!-- Step 2: Load Cash to BP -->
+                            <div style="text-align: center;">
+                                <div style="font-size: 2.5rem; margin-bottom: 0.5rem;">💵</div>
+                                <div style="font-size: 0.7rem; font-weight: 700; color: #2D2D2D; text-transform: uppercase; line-height: 1.3;">LOAD CASH<br/>TO BP</div>
+                            </div>
+                            
+                            <div style="font-size: 1.5rem; color: #666;">→</div>
+                            
+                            <!-- Step 3: Order Coffee -->
+                            <div style="text-align: center;">
+                                <div style="font-size: 2.5rem; margin-bottom: 0.5rem;">☕</div>
+                                <div style="font-size: 0.7rem; font-weight: 700; color: #2D2D2D; text-transform: uppercase; line-height: 1.3;">ORDER<br/>COFFEE</div>
+                            </div>
+                            
+                            <div style="font-size: 1.5rem; color: #666;">→</div>
+
+                            <!-- Step 4: Earn Rewards -->
+                            <div style="text-align: center;">
+                                <div style="font-size: 2.5rem; margin-bottom: 0.5rem;">⭐</div>
+                                <div style="font-size: 0.7rem; font-weight: 700; color: #2D2D2D; text-transform: uppercase; line-height: 1.3;">EARN<br/>REWARDS</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Mobile: Stack vertically -->
+        <style>
+            @media (max-width: 768px) {
+                .app-showcase > div[style*="grid-template-columns"] {
+                    display: block !important;
+                }
+                .app-showcase > div[style*="grid-template-columns"] > div {
+                    margin-bottom: 3rem;
+                }
+            }
+        </style>
+    </section>
+
+    <!-- Business Model -->
+    <section class="business-model">
+        <span class="section-tag">Business Model</span>
+        <h2 class="section-title">The Business Model</h2>
+        
+        <!-- TAM Overview -->
+        <div style="max-width: 900px; margin: 0 auto 3rem; text-align: center;">
+            <div style="font-size: 1.2rem; opacity: 0.95; line-height: 1.7;">
+                With <strong>~40,000 independent coffee shops</strong> nationwide serving <strong>150 million daily coffee drinkers</strong>, the opportunity for a universal loyalty system is substantial.
+            </div>
+        </div>
+        
+        <div class="business-grid">
+            <div class="business-card">
+                <div class="business-label">Total Addressable Market</div>
+                <div class="business-value">~$4.4B</div>
+                <div class="business-description">Based on Starbucks' $1.75B stored value across 16K locations (~$109K per location), scaled to 40K independent shops. <strong>Formula: ($1.75B ÷ 16K) × 40K = $4.4B</strong></div>
+            </div>
+            <div class="business-card">
+                <div class="business-label">Market Size</div>
+                <div class="business-value">40K Shops</div>
+                <div class="business-value">150M Drinkers</div>
+                <div class="business-description">Independent coffee shops nationwide with millions of customers who lack access to robust loyalty rewards programs</div>
+            </div>
+            <div class="business-card">
+                <div class="business-label">Revenue Model</div>
+                <div class="business-value">Dual Stream</div>
+                <div class="business-description">Small flat fee for merchants to mint their loyalty program + yield generation from points held in protocol reserves</div>
+            </div>
+        </div>
+
+        <h3 class="section-title" style="font-size: 2rem; margin-top: 4rem; color: white;">Funding Breakdown</h3>
+        <div class="funding-breakdown">
+            <div class="funding-item">
+                <div class="funding-amount">$60K</div>
+                <div class="funding-label">Engineering<br/>6 months @ $10k/month</div>
+            </div>
+            <div class="funding-item">
+                <div class="funding-amount">$20K</div>
+                <div class="funding-label">Go-to-Market<br/>4 months @ $5k/month</div>
+            </div>
+            <div class="funding-item">
+                <div class="funding-amount">$20K</div>
+                <div class="funding-label">Other Expenses<br/>Legal, audits, operations</div>
+            </div>
+        </div>
+
+        <div style="margin-top: 3rem; padding: 2rem; background: rgba(0,0,0,0.2); border-radius: 16px; text-align: center;">
+            <div style="font-size: 1.1rem; opacity: 0.9; margin-bottom: 0.5rem;">Total Cost to Launch</div>
+            <div style="font-family: 'DM Serif Display', serif; font-size: 3.5rem; color: var(--accent-gold);">$100K</div>
+        </div>
+    </section>
+
+    <!-- Competition -->
+    <section class="competition">
+        <span class="section-tag">Competitive Analysis</span>
+        <h2 class="section-title">How We're Different</h2>
+        
+        <p style="font-size: 1.2rem; color: var(--text-secondary); margin-bottom: 3rem;">
+            There are existing platforms providing coffee rewards on chain, however our dApp is differentiated in several ways:
+        </p>
+
+        <div class="comparison-table">
+            <div class="comparison-row">
+                <div class="feature-name">Feature</div>
+                <div style="text-align: center;">Traditional Chains</div>
+                <div style="text-align: center;">CoffeeChain</div>
+            </div>
+            <div class="comparison-row">
+                <div class="feature-name">Decentralized & Permissionless</div>
+                <div style="text-align: center;"><span class="cross">✗</span></div>
+                <div style="text-align: center;"><span class="check">✓</span></div>
+            </div>
+            <div class="comparison-row">
+                <div class="feature-name">Available to Independent Cafés</div>
+                <div style="text-align: center;"><span class="cross">✗</span></div>
+                <div style="text-align: center;"><span class="check">✓</span></div>
+            </div>
+            <div class="comparison-row">
+                <div class="feature-name">Universal Wallet (Earn & Redeem Everywhere)</div>
+                <div style="text-align: center;"><span class="cross">✗</span></div>
+                <div style="text-align: center;"><span class="check">✓</span></div>
+            </div>
+            <div class="comparison-row">
+                <div class="feature-name">Stablecoin-Backed (No Volatility)</div>
+                <div style="text-align: center;"><span class="cross">✗</span></div>
+                <div style="text-align: center;"><span class="check">✓</span></div>
+            </div>
+            <div class="comparison-row">
+                <div class="feature-name">Transparent Point Ledger</div>
+                <div style="text-align: center;"><span class="cross">✗</span></div>
+                <div style="text-align: center;"><span class="check">✓</span></div>
+            </div>
+        </div>
+
+        <div style="margin-top: 3rem; padding: 2rem; background: var(--cream); border-radius: 16px; text-align: center;">
+            <p style="font-size: 1.3rem; font-weight: 500; color: var(--coffee-dark);">
+                <em>We are bullish on the future of independent cafes relative to the big chains</em>
+            </p>
+        </div>
+    </section>
+
+    <!-- Team -->
+    <section class="team">
+        <span class="section-tag">The Team</span>
+        <h2 class="section-title">Group 13</h2>
+        
+        <div class="team-members">
+            <div class="team-member">
+                <div class="team-name">Anisha Subberwal</div>
+                <div class="team-role">Product Strategy & Design</div>
+            </div>
+            <div class="team-member">
+                <div class="team-name">Andrew Schwartz</div>
+                <div class="team-role">Business Development</div>
+            </div>
+            <div class="team-member">
+                <div class="team-name">Henry Roskin</div>
+                <div class="team-role">Technical Architecture</div>
+            </div>
+            <div class="team-member">
+                <div class="team-name">Ryan Donahoe</div>
+                <div class="team-role">Market Analysis</div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="footer">
+        <div class="footer-content">
+            <div style="opacity: 0.6; font-size: 0.85rem;">
+                © 2025 CoffeeChain Case Study
+            </div>
+        </div>
+    </footer>
+
+    <script>
+        // Smooth scroll for internal links
+        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+            anchor.addEventListener('click', function (e) {
+                e.preventDefault();
+                const target = document.querySelector(this.getAttribute('href'));
+                if (target) {
+                    target.scrollIntoView({
+                        behavior: 'smooth',
+                        block: 'start'
+                    });
+                }
+            });
+        });
+
+        // Intersection Observer for scroll animations
+        const observerOptions = {
+            threshold: 0.1,
+            rootMargin: '0px 0px -100px 0px'
+        };
+
+        const observer = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    entry.target.style.opacity = '1';
+                    entry.target.style.transform = 'translateY(0)';
+                }
+            });
+        }, observerOptions);
+
+        // Observe all sections
+        document.querySelectorAll('section').forEach(section => {
+            section.style.opacity = '0';
+            section.style.transform = 'translateY(30px)';
+            section.style.transition = 'opacity 0.8s ease, transform 0.8s ease';
+            observer.observe(section);
+        });
+
+        // Hero section should be visible immediately
+        document.querySelector('.hero').style.opacity = '1';
+        document.querySelector('.hero').style.transform = 'translateY(0)';
+    </script>
+</body>
+</html>

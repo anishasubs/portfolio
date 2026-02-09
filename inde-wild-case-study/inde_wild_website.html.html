@@ -1,0 +1,945 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Indē Wild Labor Day Campaign - Case Study by Anisha Subberwal</title>
+    <link href="https://fonts.googleapis.com/css2?family=Libre+Franklin:wght@400;600;700&family=Red+Hat+Mono:wght@400;600&display=swap" rel="stylesheet">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        html {
+            scroll-behavior: smooth;
+        }
+        
+        body {
+            font-family: 'Libre Franklin', sans-serif;
+            background: #faf8f3;
+            color: #1a1a1a;
+            line-height: 1.6;
+        }
+        
+        /* Navigation */
+        nav {
+            position: fixed;
+            top: 0;
+            width: 100%;
+            background: rgba(250, 248, 243, 0.95);
+            backdrop-filter: blur(10px);
+            padding: 20px 0;
+            z-index: 1000;
+            border-bottom: 1px solid rgba(45, 45, 45, 0.1);
+        }
+        
+        nav .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 40px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        
+        nav .logo {
+            font-size: 24px;
+            font-weight: 700;
+            color: #cc99ff;
+        }
+        
+        nav ul {
+            display: flex;
+            gap: 30px;
+            list-style: none;
+        }
+        
+        nav a {
+            text-decoration: none;
+            color: #2d2d2d;
+            font-weight: 600;
+            font-size: 14px;
+            transition: color 0.3s;
+        }
+        
+        nav a:hover {
+            color: #cc99ff;
+        }
+        
+        /* Hero Section */
+        .hero {
+            height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            text-align: center;
+            padding: 0 40px;
+            margin-top: -80px;
+        }
+        
+        .hero h1 {
+            font-size: 72px;
+            font-weight: 700;
+            margin-bottom: 20px;
+            line-height: 1.1;
+        }
+        
+        .hero .brand {
+            color: #cc99ff;
+        }
+        
+        .hero p {
+            font-size: 24px;
+            color: #666;
+            max-width: 800px;
+            margin: 0 auto 40px;
+        }
+        
+        .hero .meta {
+            font-family: 'Red Hat Mono', monospace;
+            font-size: 14px;
+            color: #999;
+        }
+        
+        /* Section Styling */
+        section {
+            min-height: 100vh;
+            padding: 120px 40px;
+            display: flex;
+            align-items: center;
+        }
+        
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            width: 100%;
+        }
+        
+        h2 {
+            font-size: 48px;
+            font-weight: 700;
+            margin-bottom: 30px;
+        }
+        
+        h3 {
+            font-size: 28px;
+            font-weight: 600;
+            margin-bottom: 20px;
+        }
+        
+        /* Stats Grid */
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 30px;
+            margin: 60px 0;
+        }
+        
+        .stat-card {
+            background: white;
+            padding: 40px 30px;
+            border-radius: 12px;
+            text-align: center;
+            border: 2px solid transparent;
+            transition: all 0.3s;
+        }
+        
+        .stat-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+        }
+        
+        .stat-card.purple {
+            border-color: #cc99ff;
+        }
+        
+        .stat-card.orange {
+            border-color: #ff9933;
+        }
+        
+        .stat-card.blue {
+            border-color: #d4e4ff;
+        }
+        
+        .stat-card.pink {
+            border-color: #ffc9e0;
+        }
+        
+        .stat-number {
+            font-size: 56px;
+            font-weight: 700;
+            font-family: 'Red Hat Mono', monospace;
+            margin-bottom: 10px;
+            color: #1a1a1a;
+        }
+        
+        .stat-label {
+            font-size: 14px;
+            color: #666;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+        
+        /* Two Column Layout */
+        .two-col {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 60px;
+            margin: 60px 0;
+        }
+        
+        .tier-box {
+            background: white;
+            padding: 40px;
+            border-radius: 12px;
+            border-left: 4px solid;
+        }
+        
+        .tier-box.orange {
+            border-color: #ff9933;
+        }
+        
+        .tier-box.blue {
+            border-color: #d4e4ff;
+        }
+        
+        .tier-title {
+            font-size: 18px;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            margin-bottom: 20px;
+            color: #2d2d2d;
+        }
+        
+        ul {
+            margin-left: 20px;
+        }
+        
+        li {
+            margin-bottom: 12px;
+            color: #444;
+        }
+        
+        /* Challenge Section */
+        .challenge {
+            background: linear-gradient(135deg, #fff5e6 0%, #faf8f3 100%);
+        }
+        
+        .challenge-box {
+            background: white;
+            padding: 50px;
+            border-radius: 16px;
+            border-left: 6px solid #ff9933;
+            margin: 40px 0;
+        }
+        
+        /* Foundation Section */
+        .foundation {
+            background: linear-gradient(135deg, #f0e6ff 0%, #faf8f3 100%);
+        }
+        
+        .foundation-box {
+            background: white;
+            padding: 50px;
+            border-radius: 16px;
+            border-left: 6px solid #cc99ff;
+        }
+        
+        /* Results Section - With Graph */
+        .results {
+            background: white;
+            padding: 120px 40px;
+        }
+        
+        .graph-embed {
+            margin: 60px 0;
+            padding: 60px;
+            background: #faf8f3;
+            border-radius: 16px;
+        }
+        
+        /* Competitive Graph Styles */
+        .graph-wrapper {
+            position: relative;
+            padding: 30px 60px 60px 100px;
+            margin: 0 auto;
+        }
+        
+        .graph-container {
+            position: relative;
+            width: 100%;
+            height: 600px;
+            border-left: 3px solid #2d2d2d;
+            border-bottom: 3px solid #2d2d2d;
+        }
+        
+        .axis-label {
+            position: absolute;
+            font-size: 16px;
+            font-weight: 600;
+            color: #2d2d2d;
+        }
+        
+        .x-axis-label {
+            bottom: -52px;
+            left: 50%;
+            transform: translateX(-50%);
+            text-align: center;
+        }
+        
+        .y-axis-label {
+            top: 50%;
+            left: -92px;
+            transform: translateY(-50%) rotate(-90deg);
+            white-space: nowrap;
+        }
+        
+        .axis-tick {
+            position: absolute;
+            font-size: 13px;
+            color: #666;
+            font-family: 'Red Hat Mono', monospace;
+        }
+        
+        .x-tick {
+            bottom: -30px;
+            transform: translateX(-50%);
+        }
+        
+        .y-tick {
+            left: -35px;
+            transform: translateY(50%);
+        }
+        
+        .brand-point {
+            position: absolute;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            opacity: 0;
+            transform: scale(0);
+            transition: all 0.6s cubic-bezier(0.34, 1.56, 0.64, 1);
+            z-index: 10;
+            cursor: pointer;
+        }
+        
+        .brand-point.visible {
+            opacity: 1;
+            transform: scale(1);
+        }
+        
+        .brand-point.pulse {
+            animation: pulse 2s ease-in-out infinite;
+        }
+        
+        @keyframes pulse {
+            0%, 100% { transform: scale(1); }
+            50% { transform: scale(1.12); }
+        }
+        
+        .dot {
+            width: 18px;
+            height: 18px;
+            border-radius: 50%;
+            border: 3px solid;
+            flex-shrink: 0;
+        }
+        
+        .south-asian .dot {
+            background: #ff9933;
+            border-color: #cc6600;
+        }
+        
+        .global .dot {
+            background: #d4e4ff;
+            border-color: #8fb3e8;
+        }
+        
+        .highlight .dot {
+            width: 24px;
+            height: 24px;
+            background: #cc99ff;
+            border-color: #9966cc;
+            box-shadow: 0 0 20px rgba(204, 153, 255, 0.5);
+        }
+        
+        .brand-label {
+            font-size: 14px;
+            font-weight: 600;
+            color: #1a1a1a;
+            white-space: nowrap;
+            padding: 6px 12px;
+            background: rgba(250, 248, 243, 0.98);
+            border-radius: 6px;
+            box-shadow: 0 2px 6px rgba(0, 0, 0, 0.12);
+            border: 1px solid rgba(45, 45, 45, 0.1);
+        }
+        
+        .grid-line {
+            position: absolute;
+            background: #e5e5e5;
+        }
+        
+        .grid-line.vertical {
+            width: 1px;
+            height: 100%;
+            top: 0;
+        }
+        
+        .grid-line.horizontal {
+            height: 1px;
+            width: 100%;
+            left: 0;
+        }
+        
+        .legend {
+            display: flex;
+            gap: 35px;
+            justify-content: center;
+            margin-top: 50px;
+        }
+        
+        .legend-item {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            font-size: 15px;
+            font-weight: 600;
+        }
+        
+        .legend-dot {
+            width: 16px;
+            height: 16px;
+            border-radius: 50%;
+            border: 2px solid;
+        }
+        
+        /* Learnings Section */
+        .learnings {
+            background: linear-gradient(135deg, #e6f7ff 0%, #faf8f3 100%);
+        }
+        
+        .learning-card {
+            background: white;
+            padding: 30px;
+            border-radius: 12px;
+            margin-bottom: 20px;
+            border-left: 4px solid #d4e4ff;
+        }
+        
+        .learning-card h4 {
+            font-size: 20px;
+            font-weight: 700;
+            margin-bottom: 10px;
+            color: #2d2d2d;
+        }
+        
+        /* Footer */
+        footer {
+            background: #2d2d2d;
+            color: white;
+            padding: 60px 40px;
+            text-align: center;
+        }
+        
+        footer a {
+            color: #cc99ff;
+            text-decoration: none;
+        }
+        
+        /* Animations */
+        .fade-in {
+            opacity: 0;
+            transform: translateY(30px);
+            transition: all 0.8s ease;
+        }
+        
+        .fade-in.visible {
+            opacity: 1;
+            transform: translateY(0);
+        }
+        
+        /* Responsive */
+        @media (max-width: 768px) {
+            .hero h1 {
+                font-size: 40px;
+            }
+            
+            .stats-grid,
+            .two-col {
+                grid-template-columns: 1fr;
+            }
+            
+            nav ul {
+                display: none;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Navigation -->
+            <nav>
+        <div class="container">
+            <div class="logo">Indē Wild Case Study</div>
+            <ul>
+                <li><a href="#brand">Brand</a></li>
+                <li><a href="#positioning">Positioning</a></li>
+                <li><a href="#challenge">Challenge</a></li>
+                <li><a href="#execution">Execution</a></li>
+                <li><a href="#results">Results</a></li>
+                <li><a href="#learnings">Learnings</a></li>
+            </ul>
+        </div>
+    </nav>
+
+    <!-- Hero Section -->
+    <div class="hero">
+        <div>
+            <h1>Scaling Creator Commerce<br>at <span class="brand">Indē Wild</span></h1>
+            <p>Labor Day TikTok Shop Campaign: 159 creators activated in 72 hours, generating 481K+ views and contributing to $344K revenue</p>
+            <div class="meta">Case Study by Anisha Subberwal | Columbia Business School MBA 2026</div>
+        </div>
+    </div>
+
+    <!-- Brand Introduction Section -->
+    <section class="foundation fade-in" id="brand">
+        <div class="container">
+            <h2>About Indē Wild</h2>
+            <div class="foundation-box">
+                <h3>Modern Ayurvedic Beauty Meets Clean Beauty Standards</h3>
+                <div class="two-col" style="margin-top: 30px;">
+                    <div>
+                        <p style="font-size: 16px; margin-bottom: 20px;"><strong>Indē Wild</strong> is a Unilever Ventures-backed Ayurvedic beauty brand bridging cultural heritage with modern clean beauty.</p>
+                        <ul style="font-size: 16px;">
+                            <li><strong>Founded:</strong> By Diipa Khosla, influencer with 2.6M following</li>
+                            <li><strong>Positioning:</strong> Modern Ayurveda meets clean beauty</li>
+                            <li><strong>Price Point:</strong> $25-45 (accessible premium)</li>
+                            <li><strong>Products:</strong> Ayurvedic skincare, hair oil, lip care</li>
+                        </ul>
+                    </div>
+                    <div>
+                        <p style="font-size: 16px; margin-bottom: 20px;"><strong>Market Context:</strong></p>
+                        <ul style="font-size: 16px;">
+                            <li><strong>Current:</strong> DTC in U.S., UK, India; Sephora UK</li>
+                            <li><strong>Launch:</strong> U.S. Sephora February 2026</li>
+                            <li><strong>Distribution:</strong> Nykaa India (leading beauty retailer)</li>
+                            <li><strong>Key Ingredients:</strong> Bakuchiol, Vitamin C, Amla, Squalane</li>
+                        </ul>
+                    </div>
+                </div>
+                <p style="margin-top: 30px; padding-top: 30px; border-top: 1px solid #e0e0e0; font-size: 18px; color: #666;">
+                    <strong>My Role:</strong> U.S. Growth Lead (Summer 2025) - Led monetization, GTM strategy, and TikTok Shop creator commerce campaigns ahead of retail expansion.
+                </p>
+            </div>
+        </div>
+    </section>
+
+    <!-- Competitive Positioning Section -->
+    <section class="results fade-in" id="positioning">
+        <div class="container">
+            <h2>Competitive Positioning</h2>
+            <p style="font-size: 20px; color: #666; margin-bottom: 40px;">Where Indē Wild sits in the beauty landscape</p>
+            
+            <div class="graph-embed">
+                <h3 style="text-align: center; margin-bottom: 20px;">Heritage vs. Modernity Matrix</h3>
+                <p style="text-align: center; color: #666; margin-bottom: 40px;">Indē Wild uniquely balances cultural heritage with modern clean beauty trends</p>
+                
+                <div class="graph-wrapper">
+                    <div class="graph-container" id="competitiveGraph">
+                        <!-- Grid lines -->
+                        <div class="grid-line vertical" style="left: 14.3%;"></div>
+                        <div class="grid-line vertical" style="left: 28.6%;"></div>
+                        <div class="grid-line vertical" style="left: 42.9%;"></div>
+                        <div class="grid-line vertical" style="left: 57.1%;"></div>
+                        <div class="grid-line vertical" style="left: 71.4%;"></div>
+                        <div class="grid-line vertical" style="left: 85.7%;"></div>
+                        
+                        <div class="grid-line horizontal" style="top: 14.3%;"></div>
+                        <div class="grid-line horizontal" style="top: 28.6%;"></div>
+                        <div class="grid-line horizontal" style="top: 42.9%;"></div>
+                        <div class="grid-line horizontal" style="top: 57.1%;"></div>
+                        <div class="grid-line horizontal" style="top: 71.4%;"></div>
+                        <div class="grid-line horizontal" style="top: 85.7%;"></div>
+                        
+                        <!-- Axis ticks -->
+                        <div class="axis-tick x-tick" style="left: 0%;">4</div>
+                        <div class="axis-tick x-tick" style="left: 14.3%;">5</div>
+                        <div class="axis-tick x-tick" style="left: 28.6%;">6</div>
+                        <div class="axis-tick x-tick" style="left: 42.9%;">7</div>
+                        <div class="axis-tick x-tick" style="left: 57.1%;">8</div>
+                        <div class="axis-tick x-tick" style="left: 71.4%;">9</div>
+                        <div class="axis-tick x-tick" style="left: 85.7%;">10</div>
+                        <div class="axis-tick x-tick" style="left: 100%;">11</div>
+                        
+                        <div class="axis-tick y-tick" style="bottom: 0%;">4</div>
+                        <div class="axis-tick y-tick" style="bottom: 14.3%;">5</div>
+                        <div class="axis-tick y-tick" style="bottom: 28.6%;">6</div>
+                        <div class="axis-tick y-tick" style="bottom: 42.9%;">7</div>
+                        <div class="axis-tick y-tick" style="bottom: 57.1%;">8</div>
+                        <div class="axis-tick y-tick" style="bottom: 71.4%;">9</div>
+                        <div class="axis-tick y-tick" style="bottom: 85.7%;">10</div>
+                        <div class="axis-tick y-tick" style="bottom: 100%;">11</div>
+                        
+                        <!-- South Asian Brands -->
+                        <div class="brand-point south-asian" data-heritage="10" data-modernity="6" data-delay="500">
+                            <div class="dot"></div>
+                            <div class="brand-label">Forest Essentials</div>
+                        </div>
+                        
+                        <div class="brand-point south-asian" data-heritage="10.2" data-modernity="7.3" data-delay="800">
+                            <div class="brand-label" style="position: absolute; bottom: 25px; left: 50%; transform: translateX(-50%);">Kama Ayurveda</div>
+                            <div class="dot"></div>
+                        </div>
+                        
+                        <div class="brand-point south-asian" data-heritage="7" data-modernity="8.2" data-delay="1100">
+                            <div class="dot"></div>
+                            <div class="brand-label" style="position: absolute; top: 25px; left: 50%; transform: translateX(-50%);">Ranavat</div>
+                        </div>
+                        
+                        <div class="brand-point south-asian" data-heritage="6" data-modernity="9.3" data-delay="1400">
+                            <div class="brand-label" style="position: absolute; bottom: 25px; left: 50%; transform: translateX(-50%);">Fable & Mane</div>
+                            <div class="dot"></div>
+                        </div>
+                        
+                        <div class="brand-point south-asian" data-heritage="9.3" data-modernity="6.8" data-delay="1700">
+                            <div class="dot"></div>
+                            <div class="brand-label" style="position: absolute; top: 25px; left: 50%; transform: translateX(-50%);">Mauli Rituals</div>
+                        </div>
+                        
+                        <div class="brand-point south-asian" data-heritage="7.2" data-modernity="7.8" data-delay="2000">
+                            <div class="brand-label" style="position: absolute; bottom: 25px; left: 50%; transform: translateX(-50%);">Aavrani</div>
+                            <div class="dot"></div>
+                        </div>
+                        
+                        <div class="brand-point south-asian highlight" data-heritage="8.5" data-modernity="9" data-delay="2300">
+                            <div class="dot"></div>
+                            <div class="brand-label">Indē Wild</div>
+                        </div>
+                        
+                        <!-- Global Competitors -->
+                        <div class="brand-point global" data-heritage="5" data-modernity="10" data-delay="4500">
+                            <div class="brand-label">Summer Fridays</div>
+                            <div class="dot"></div>
+                        </div>
+                        
+                        <div class="brand-point global" data-heritage="7" data-modernity="9.3" data-delay="4800">
+                            <div class="dot"></div>
+                            <div class="brand-label" style="position: absolute; top: 25px; left: 50%; transform: translateX(-50%);">Gisou</div>
+                        </div>
+                        
+                        <div class="brand-point global" data-heritage="10" data-modernity="7" data-delay="5100">
+                            <div class="dot"></div>
+                            <div class="brand-label">Tatcha</div>
+                        </div>
+                        
+                        <div class="axis-label x-axis-label">Cultural Heritage / Depth →</div>
+                        <div class="axis-label y-axis-label">Modernity / Trend Alignment →</div>
+                    </div>
+                </div>
+                
+                <div class="legend">
+                    <div class="legend-item">
+                        <div class="legend-dot" style="background: #ff9933; border-color: #cc6600;"></div>
+                        <span>South Asian Brands</span>
+                    </div>
+                    <div class="legend-item">
+                        <div class="legend-dot" style="background: #d4e4ff; border-color: #8fb3e8;"></div>
+                        <span>Global Competitors</span>
+                    </div>
+                    <div class="legend-item">
+                        <div class="legend-dot" style="background: #cc99ff; border-color: #9966cc;"></div>
+                        <span>Indē Wild</span>
+                    </div>
+                </div>
+                
+                <div style="background: white; padding: 40px; border-radius: 12px; margin-top: 40px;">
+                    <h4 style="font-size: 20px; margin-bottom: 20px; color: #cc99ff;">Strategic Sweet Spot</h4>
+                    <p style="font-size: 16px; color: #666;">Indē Wild occupies a unique position - high on both heritage authenticity and modern appeal. Unlike traditional Ayurvedic brands (Forest Essentials, Kama Ayurveda) that skew heavily traditional, or global clean beauty brands (Summer Fridays) with minimal cultural depth, Indē Wild bridges both worlds. This positioning creates opportunities for TikTok Shop success by appealing to both heritage-seeking and trend-forward consumers.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Challenge Section -->
+    <section class="challenge fade-in" id="challenge">
+        <div class="container">
+            <h2>The Challenge</h2>
+            <div class="challenge-box">
+                <h3>3 Days to Execute a Complex Creator Campaign</h3>
+                <p style="font-size: 18px; margin-bottom: 30px;">With only 3 days until Labor Day sale (Aug 30-31), design and execute a creator-led commerce campaign to drive TikTok Shop revenue and build brand awareness ahead of Sephora launch (Feb 2026).</p>
+                <div style="display: flex; gap: 40px; font-family: 'Red Hat Mono', monospace; font-size: 14px; color: #666;">
+                    <div><strong style="color: #1a1a1a;">Campaign Launch:</strong> August 27, 2025</div>
+                    <div><strong style="color: #1a1a1a;">Sale Dates:</strong> August 30-31, 2025</div>
+                    <div><strong style="color: #1a1a1a;">Timeline:</strong> 72-hour sprint</div>
+                </div>
+            </div>
+            
+            <div class="stats-grid">
+                <div class="stat-card purple">
+                    <div class="stat-number">72</div>
+                    <div class="stat-label">Hour Execution</div>
+                </div>
+                <div class="stat-card orange">
+                    <div class="stat-number">160+</div>
+                    <div class="stat-label">Creators Seeded</div>
+                </div>
+                <div class="stat-card blue">
+                    <div class="stat-number">45</div>
+                    <div class="stat-label">TikTok Sale Posts</div>
+                </div>
+                <div class="stat-card pink">
+                    <div class="stat-number">481K+</div>
+                    <div class="stat-label">Total Views</div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Foundation Section -->
+    <section class="challenge fade-in">
+        <div class="container">
+            <h2>The Foundation</h2>
+            <div class="challenge-box">
+                <h3>Building Creator Networks Through Viral Content</h3>
+                <p style="font-size: 18px; margin-bottom: 30px;"><strong>All creators needed to already have Indē Wild products.</strong> We had seeded 160+ creators after going viral on TikTok on August 3rd—so that's who we activated for the campaign.</p>
+                <p style="font-size: 16px;">This viral-to-seeding strategy enabled rapid execution:</p>
+                <ul style="margin-top: 20px; font-size: 16px;">
+                    <li>Built engaged creator community organically through authentic viral content</li>
+                    <li>Pre-seeded products eliminated friction (creators had product in hand)</li>
+                    <li>Established brand credibility and trust before campaign ask</li>
+                </ul>
+            </div>
+        </div>
+    </section>
+
+    <!-- Execution Section -->
+    <section class="execution fade-in" id="execution">
+        <div class="container">
+            <h2>Strategic Execution</h2>
+            <h3>Two-Tiered Creator Activation</h3>
+            
+            <div class="two-col">
+                <div class="tier-box orange">
+                    <div class="tier-title">Tier 1: Community (105 creators)</div>
+                    <p><strong>Incentive:</strong> $10-50 gift cards based on view tiers</p>
+                    <p><strong>Approach:</strong> Top 3 most creative ads get featured on PR list</p>
+                    <p><strong>Goal:</strong> Generate authentic UGC at scale, fast</p>
+                    <p style="margin-top: 20px; color: #666;"><strong>Result:</strong> 31,837 views from community creators</p>
+                </div>
+                
+                <div class="tier-box blue">
+                    <div class="tier-title">Tier 2: Influencers (55 creators, 6K+)</div>
+                    <p><strong>Incentive:</strong> 10% TikTok Shop commission + Spark Ads boost</p>
+                    <p><strong>Approach:</strong> Shoppable content with direct attribution</p>
+                    <p><strong>Goal:</strong> Drive immediate conversions during sale window</p>
+                    <p style="margin-top: 20px; color: #666;"><strong>Result:</strong> 450,052 views from macro influencers</p>
+                </div>
+            </div>
+            
+            <div style="background: white; padding: 40px; border-radius: 12px; margin-top: 40px; text-align: center;">
+                <p style="font-size: 18px; color: #666;">159 of 160+ pre-seeded creators activated within campaign window</p>
+                <p style="font-size: 48px; font-weight: 700; color: #cc99ff; margin-top: 20px;">99% Activation Rate</p>
+            </div>
+        </div>
+    </section>
+
+    <!-- Results Section -->
+    <section class="results fade-in" id="results">
+        <div class="container">
+            <h2>Campaign Impact</h2>
+            <p style="font-size: 20px; color: #666; margin-bottom: 60px;">Strategic weekend distribution driving sustained Q3 growth</p>
+            
+            <div class="stats-grid">
+                <div class="stat-card purple">
+                    <div class="stat-number">$344K</div>
+                    <div class="stat-label">QTD Revenue (+30% YoY)</div>
+                </div>
+                <div class="stat-card orange">
+                    <div class="stat-number">+20%</div>
+                    <div class="stat-label">Conversion Rate Lift</div>
+                </div>
+                <div class="stat-card blue">
+                    <div class="stat-number">867→1,015</div>
+                    <div class="stat-label">TikTok Follower Growth</div>
+                </div>
+                <div class="stat-card pink">
+                    <div class="stat-number">4+</div>
+                    <div class="stat-label">Organic Tags/Day Sustained</div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Learnings Section -->
+    <section class="learnings fade-in" id="learnings">
+        <div class="container">
+            <h2>Key Learnings</h2>
+            
+            <div class="learning-card">
+                <h4>✓ Segmentation drives efficiency</h4>
+                <p>Gift card tiers ($10-50) for community + 10% commission for influencers optimized CAC while scaling reach</p>
+            </div>
+            
+            <div class="learning-card">
+                <h4>✓ Timing matters</h4>
+                <p>Staggered creator posts across weekend captured different shopping behaviors vs. single-day blast</p>
+            </div>
+            
+            <div class="learning-card">
+                <h4>✓ Speed requires systems</h4>
+                <p>Analytics tracking, content guidelines, and incentive clarity enabled 72-hour execution</p>
+            </div>
+            
+            <div class="learning-card">
+                <h4>✓ Sustained velocity wins</h4>
+                <p>4+ organic tags/day post-campaign shows creator relationships drive long-term value</p>
+            </div>
+            
+            <div style="background: white; padding: 50px; border-radius: 16px; margin-top: 60px; border: 3px solid #cc99ff;">
+                <h3 style="color: #cc99ff; margin-bottom: 20px;">Applying to TikTok Shop Merchant Success</h3>
+                <p style="font-size: 18px; margin-bottom: 30px;">This creator-led commerce model transfers directly to category management:</p>
+                <div class="two-col" style="margin-top: 30px;">
+                    <div>
+                        <p><strong>→ Merchant Segmentation:</strong> Tier by GMV potential and creative capacity</p>
+                        <p style="margin-top: 15px;"><strong>→ Incentive Design:</strong> Structure platform resources based on merchant stage</p>
+                    </div>
+                    <div>
+                        <p><strong>→ Cross-functional Activation:</strong> Partner with ops, creative, analytics</p>
+                        <p style="margin-top: 15px;"><strong>→ Data-Driven Growth:</strong> Build dashboards to track and allocate efficiently</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer>
+        <h3>Anisha Subberwal</h3>
+        <p style="margin: 20px 0;">MBA Candidate, Columbia Business School 2026</p>
+        <p><a href="mailto:as7689@gsb.columbia.edu">as7689@gsb.columbia.edu</a> | +1 (646) 512-1483</p>
+        <p style="margin-top: 30px; color: #999; font-size: 14px;">Applying for: Category Manager Graduate (TikTok Shop - Beauty)</p>
+    </footer>
+
+    <script>
+        // Fade in animations on scroll
+        const observerOptions = {
+            threshold: 0.1,
+            rootMargin: '0px 0px -100px 0px'
+        };
+
+        const observer = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    entry.target.classList.add('visible');
+                }
+            });
+        }, observerOptions);
+
+        document.querySelectorAll('.fade-in').forEach(el => {
+            observer.observe(el);
+        });
+
+        // Animate numbers
+        function animateNumber(element, target) {
+            const duration = 2000;
+            const start = 0;
+            const increment = target / (duration / 16);
+            let current = start;
+
+            const timer = setInterval(() => {
+                current += increment;
+                if (current >= target) {
+                    element.textContent = target;
+                    clearInterval(timer);
+                } else {
+                    element.textContent = Math.floor(current);
+                }
+            }, 16);
+        }
+
+        // Trigger number animations when stats are visible
+        const statsObserver = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    const numbers = entry.target.querySelectorAll('.stat-number');
+                    numbers.forEach(num => {
+                        const text = num.textContent;
+                        const number = parseInt(text.replace(/\D/g, ''));
+                        if (number) {
+                            num.textContent = '0';
+                            animateNumber(num, number);
+                        }
+                    });
+                    statsObserver.unobserve(entry.target);
+                }
+            });
+        }, { threshold: 0.5 });
+
+        document.querySelectorAll('.stats-grid').forEach(grid => {
+            statsObserver.observe(grid);
+        });
+        
+        // Position brands on competitive graph
+        function positionBrands() {
+            const points = document.querySelectorAll('.brand-point');
+            const container = document.querySelector('.graph-container');
+            if (!container) return;
+            
+            const width = container.clientWidth;
+            const height = container.clientHeight;
+            
+            points.forEach(point => {
+                const heritage = parseFloat(point.dataset.heritage);
+                const modernity = parseFloat(point.dataset.modernity);
+                const labelSide = point.dataset.labelSide;
+                
+                // Convert 4-11 scale to percentage
+                const x = ((heritage - 4) / 7) * width;
+                const y = height - (((modernity - 4) / 7) * height);
+                
+                point.style.left = x + 'px';
+                point.style.top = (y - 10) + 'px';
+            });
+        }
+        
+        // Animate brands appearing on graph
+        function animateGraphBrands() {
+            const points = document.querySelectorAll('.brand-point');
+            
+            points.forEach(point => {
+                const delay = parseInt(point.dataset.delay);
+                setTimeout(() => {
+                    point.classList.add('visible');
+                }, delay);
+            });
+            
+            // Pulse Indē Wild after all appear
+            setTimeout(() => {
+                const indeWild = document.querySelector('.highlight');
+                if (indeWild) indeWild.classList.add('pulse');
+            }, 6000);
+        }
+        
+        // Trigger graph animation when visible
+        const graphObserver = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    positionBrands();
+                    animateGraphBrands();
+                    graphObserver.unobserve(entry.target);
+                }
+            });
+        }, { threshold: 0.3 });
+        
+        const graphContainer = document.querySelector('#competitiveGraph');
+        if (graphContainer) {
+            graphObserver.observe(graphContainer);
+        }
+        
+        window.addEventListener('resize', positionBrands);
+    </script>
+</body>
+</html>

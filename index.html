@@ -4,56 +4,50 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta name="color-scheme" content="light">
-    <title>Portfolio</title>
+    <title>Anisha Subberwal — Portfolio</title>
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Sometype+Mono&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Bodoni+Moda:opsz@6..96&family=Parisienne&family=Raleway:wght@400;700&display=swap" rel="stylesheet">
     <style>
         *, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
         html { overscroll-behavior: none; scroll-behavior: smooth; }
-        body { background: #fff; overflow-x: hidden; }
+        body { background: #fffaed; overflow-x: hidden; color: #1c4e89; }
 
         /* ── Artboard system ─────────────────────────────────── */
         .scroll-zone { position: relative; }
-
         .artboard-frame {
-            position: sticky;
-            top: 0;
-            width: 100%;
-            display: flex;
-            justify-content: center;
-            overflow: visible;
+            position: sticky; top: 0; width: 100%;
+            display: flex; justify-content: center; overflow: visible;
         }
-
         .artboard {
-            position: relative;
-            background: #fff;
-            transform-origin: top center;
+            position: relative; background: #fffaed; transform-origin: top center;
         }
 
-        .section-frame {
-            position: relative;
-            width: 100%;
-            display: flex;
-            justify-content: center;
-            overflow: visible;
+        /* ── PocketMenu (fixed) ─────────────────────────────── */
+        .pocket-menu {
+            position: fixed; top: 28px; left: 28px; z-index: 200;
+            width: 64px; height: 64px; cursor: pointer;
+            transition: transform 0.3s ease;
         }
-
-        .section-artboard {
-            position: relative;
-            transform-origin: top center;
+        .pocket-menu:hover { transform: scale(1.08); }
+        .pocket-menu-icon {
+            position: relative; width: 100%; height: 100%;
+            filter: drop-shadow(0px 2px 4px rgba(0,0,0,0.12));
         }
+        .pocket-menu-icon img {
+            position: absolute; display: block;
+        }
+        .menu-v1 { inset: 15% 10% 10% 10%; width: 80%; height: 75%; }
+        .menu-v2 { inset: 13% 30% auto 30%; width: 40%; height: 6%; }
+        .menu-v3 { inset: 21% auto auto 46%; width: 8%; height: 8%; }
 
         /* ── Balloon letters ─────────────────────────────────── */
         .letter {
-            position: absolute;
-            will-change: transform;
-            z-index: 30;
+            position: absolute; will-change: transform; z-index: 30;
         }
         .letter img {
             width: 100%; height: 100%;
-            object-fit: contain;
-            pointer-events: none; user-select: none;
+            object-fit: contain; pointer-events: none; user-select: none;
         }
 
         /* ── Interactive objects ──────────────────────────────── */
@@ -62,10 +56,13 @@
             will-change: left, top, width, height, transform;
             overflow: hidden;
             pointer-events: none; user-select: none;
-            transition: filter 0.3s ease;
+            transition: box-shadow 0.3s ease, filter 0.3s ease;
         }
         .object.clickable { pointer-events: auto; cursor: pointer; }
-        .object.clickable:hover { filter: brightness(1.08) drop-shadow(0 4px 12px rgba(0,0,0,0.15)); }
+        .object.clickable:hover {
+            box-shadow: 6px 7px 5px 3px rgba(0,0,0,0.25);
+            filter: brightness(1.02);
+        }
         .object img {
             width: 100%; height: 100%;
             object-fit: cover; pointer-events: none; display: block;
@@ -75,344 +72,271 @@
         #phone-case { border-radius: 24px; z-index: 7; }
         #todo       { border-radius: 8px;  z-index: 8; }
 
-        /* ── Denim pocket (single instance) ──────────────────── */
-        .pocket {
+        /* ── Hover labels ────────────────────────────────────── */
+        .hover-label {
             position: absolute;
-            z-index: 10;
+            font-family: 'Raleway', sans-serif;
+            font-size: 23.667px;
+            line-height: 1.0;
+            color: #1c4e89;
+            text-transform: uppercase;
+            white-space: pre-wrap;
+            z-index: 25;
+            opacity: 0;
+            pointer-events: none;
+            transition: opacity 0.25s ease;
+        }
+        .hover-label.visible { opacity: 1; }
+        .hover-label strong {
+            font-weight: 700;
+        }
+
+        /* ── Denim pocket ────────────────────────────────────── */
+        .pocket {
+            position: absolute; z-index: 10;
         }
         .pocket img {
             width: 100%; height: 100%;
-            object-fit: cover;
-            pointer-events: none; user-select: none;
+            object-fit: cover; pointer-events: none; user-select: none;
         }
 
-        /* ── Typewriter text ─────────────────────────────────── */
-        .typewriter-text {
-            position: absolute;
-            font-family: 'Sometype Mono', monospace;
-            font-size: 30px;
+        /* ── Text section (below scroll zone) ────────────────── */
+        .text-section {
+            width: 100%; display: flex; justify-content: center;
+            overflow: visible;
+        }
+        .text-artboard {
+            position: relative; transform-origin: top center;
+            text-align: center; padding: 60px 0 80px;
+        }
+        .portfolio-title {
+            font-family: 'Bodoni Moda', serif;
+            font-size: 200px;
             font-weight: 400;
-            line-height: 1.5;
-            color: #000;
-            z-index: 20;
+            letter-spacing: -19px;
+            line-height: 1;
+            color: #1c4e89;
             opacity: 0;
-            white-space: pre-wrap;
-        }
-        .typewriter-text .cursor {
-            display: inline-block;
-            width: 2px; height: 1.15em;
-            background: #000;
-            vertical-align: text-bottom;
-            margin-left: 1px;
-            animation: blink 0.6s step-end infinite;
-        }
-        @keyframes blink { 0%, 100% { opacity: 1; } 50% { opacity: 0; } }
-
-        /* ── About me ────────────────────────────────────────── */
-        .about-text {
-            position: absolute;
-            font-family: 'Sometype Mono', monospace;
-            font-size: 30px;
-            font-weight: 400;
-            line-height: 1.5;
-            color: #000;
-            white-space: pre-wrap;
-            z-index: 20;
-            opacity: 0;
-        }
-        .about-text .cursor {
-            display: inline-block;
-            width: 2px; height: 1.15em;
-            background: #000;
-            vertical-align: text-bottom;
-            margin-left: 1px;
-            animation: blink 0.6s step-end infinite;
-        }
-        .about-el {
-            position: absolute;
-            pointer-events: none; user-select: none;
-        }
-        .about-el img {
-            width: 100%; height: 100%;
-            object-fit: contain; display: block;
-        }
-
-        /* ── About-me fade-in (smooth transition) ────────────── */
-        .about-fade {
-            opacity: 0;
-            transform: translateY(40px);
+            transform: translateY(30px);
             transition: opacity 0.8s ease, transform 0.8s ease;
         }
-        .about-fade.visible {
-            opacity: 1;
-            transform: translateY(0);
+        .portfolio-title.visible {
+            opacity: 1; transform: translateY(0);
+        }
+        .byline {
+            position: relative;
+            display: inline-block;
+            margin-top: 20px;
+            opacity: 0;
+            transform: translateY(30px);
+            transition: opacity 0.8s ease 0.2s, transform 0.8s ease 0.2s;
+        }
+        .byline.visible {
+            opacity: 1; transform: translateY(0);
+        }
+        .by-label {
+            font-family: 'Raleway', sans-serif;
+            font-size: 28px;
+            font-weight: 400;
+            text-transform: uppercase;
+            color: #1c4e89;
+            vertical-align: baseline;
+            margin-right: 12px;
+        }
+        .by-name {
+            font-family: 'Parisienne', cursive;
+            font-size: 59px;
+            font-weight: 400;
+            color: #1c4e89;
+        }
+        .by-underline {
+            display: block;
+            width: 312px;
+            height: 2px;
+            margin: -8px auto 0;
+            object-fit: contain;
+        }
+        .portfolio-desc {
+            font-family: 'Raleway', sans-serif;
+            font-size: 18.6px;
+            font-weight: 700;
+            line-height: 0.91;
+            color: #1c4e89;
+            text-transform: uppercase;
+            text-align: justify;
+            max-width: 535px;
+            margin: 40px auto 0;
+            opacity: 0;
+            transform: translateY(30px);
+            transition: opacity 0.8s ease 0.4s, transform 0.8s ease 0.4s;
+        }
+        .portfolio-desc.visible {
+            opacity: 1; transform: translateY(0);
         }
 
-        /* ── Phone mockup ────────────────────────────────────── */
-        .phone-mockup {
-            position: absolute;
+        /* ── About me view ───────────────────────────────────── */
+        #about-view {
+            background: #fffaed;
+            min-height: 100vh;
+        }
+        .about-frame {
+            width: 100%; display: flex; justify-content: center;
             overflow: visible;
+        }
+        .about-artboard {
+            position: relative; transform-origin: top center;
+            background: #fffaed;
+        }
+        .profile-pic {
+            position: absolute; overflow: hidden; border-radius: 12px;
+        }
+        .profile-pic img {
+            width: 100%; height: 115.46%;
+            object-fit: cover; display: block;
+            position: relative; top: -15.46%;
+        }
+        .about-title {
+            position: absolute;
+            font-family: 'Bodoni Moda', serif;
+            font-size: 250px;
+            font-weight: 400;
+            letter-spacing: -14px;
+            line-height: 1;
+            color: #1c4e89;
+            text-align: center;
+        }
+        .about-subtitle {
+            position: absolute;
+            font-family: 'Parisienne', cursive;
+            font-size: 70px;
+            font-weight: 400;
+            color: #1c4e89;
+            text-align: center;
+        }
+        .about-bio {
+            position: absolute;
+            font-family: 'Raleway', sans-serif;
+            font-size: 23.343px;
+            font-weight: 700;
+            line-height: 1.14;
+            color: #1c4e89;
+            text-transform: uppercase;
+            text-align: justify;
+        }
+        .about-linkedin-text {
+            position: absolute;
+            font-family: 'Raleway', sans-serif;
+            font-size: 23.343px;
+            font-weight: 700;
+            line-height: 1.14;
+            color: #1c4e89;
+            text-transform: uppercase;
+            text-align: justify;
+        }
+
+        /* ── Phone mockup (about page) ───────────────────────── */
+        .phone-mockup {
+            position: absolute; overflow: visible;
         }
         .phone-wallpaper {
             width: 100%; height: 100%;
-            border-radius: 54px;
-            object-fit: cover;
-            display: block;
+            border-radius: 54px; object-fit: cover; display: block;
         }
         .phone-bezel {
-            position: absolute;
-            pointer-events: none;
-            z-index: 3;
+            position: absolute; pointer-events: none; z-index: 3;
         }
-
-        /* ── Phone screen overlay (app icons) ────────────────── */
         .phone-screen {
-            position: absolute;
-            top: 0; left: 0;
+            position: absolute; top: 0; left: 0;
             width: 100%; height: 100%;
-            border-radius: 54px;
-            overflow: hidden;
-            z-index: 2;
+            border-radius: 54px; overflow: hidden; z-index: 2;
             pointer-events: none;
-            display: flex;
-            flex-direction: column;
+            display: flex; flex-direction: column;
             font-family: -apple-system, 'SF Pro', 'Helvetica Neue', sans-serif;
         }
-
         /* Status bar */
-        .status-bar {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            padding: 16px 30px 0;
-            color: #fff;
-            font-size: 17px;
-            font-weight: 600;
-        }
-        .status-bar-right { display: flex; gap: 6px; align-items: center; font-size: 14px; }
-        .dynamic-island {
-            width: 126px; height: 37px;
-            background: #000;
-            border-radius: 100px;
-            margin: 0 auto;
-        }
-
+        .sb { display:flex; align-items:center; justify-content:center; padding:0 10px; }
+        .sb-left, .sb-right { flex:1; display:flex; align-items:center; }
+        .sb-left { justify-content:center; padding:18px 0 13px; }
+        .sb-right { justify-content:center; padding:18px 0 13px; }
+        .sb-time { font-size:18px; font-weight:600; color:#fff; letter-spacing:-0.44px; }
+        .sb-island { width:126px; height:37px; background:#000; border-radius:100px; margin:11px 0 6px; flex-shrink:0; }
+        .sb-icons { display:flex; gap:1px; align-items:flex-end; }
+        .sb-icons img { display:block; }
         /* Widgets */
-        .widget-row {
-            display: flex;
-            gap: 16px;
-            padding: 12px 25px 0;
+        .wrow { display:flex; justify-content:space-between; padding:0 33px; }
+        .wcard {
+            width:170px; height:170px; background:#fff; border-radius:23px;
+            overflow:hidden; position:relative;
+            font-family: -apple-system, 'SF Pro Display', 'SF Pro', sans-serif;
         }
-        .widget-card {
-            width: 170px; height: 170px;
-            background: #fff;
-            border-radius: 23px;
-            padding: 12px 16px;
-            font-size: 13px;
-            overflow: hidden;
+        .wcard-rem .wc-title { position:absolute; left:16px; top:11px; font-size:17px; font-weight:600; color:#007bfe; line-height:22px; letter-spacing:0.38px; }
+        .wcard-rem .wc-count { position:absolute; right:17px; top:7px; font-size:24px; font-weight:600; color:#000; text-align:right; }
+        .wcard-rem .wc-item { position:absolute; left:51px; display:flex; align-items:center; gap:1px; font-size:15px; color:#000; letter-spacing:0.5px; }
+        .wcard-rem .wc-item .wc-emoji { font-size:19px; }
+        .wcard-rem .wc-radio { position:absolute; left:16px; width:24px; height:24px; border:1.5px solid #c7c7cc; border-radius:100px; }
+        .wcard-rem .wc-div { position:absolute; left:15px; width:138px; height:1px; background:#c7c7cc; }
+        .wcard-cal .wc-day { position:absolute; left:16px; top:14px; font-size:13px; font-weight:600; color:#ff382b; text-transform:uppercase; letter-spacing:-0.08px; line-height:16px; }
+        .wcard-cal .wc-date { position:absolute; left:16px; top:28px; font-size:34px; font-weight:400; color:#000; line-height:41px; letter-spacing:0.4px; }
+        .wcard-cal .wc-events { position:absolute; left:16px; top:73px; width:138px; display:flex; flex-direction:column; gap:4px; }
+        .wc-evt { display:flex; gap:3px; align-items:stretch; overflow:hidden; }
+        .wc-evt-line { width:4px; background:#1badf8; border-radius:100px; flex-shrink:0; }
+        .wc-evt-body { background:rgba(27,173,248,0.2); border-radius:4px; padding:0 4px 3px; flex:1; }
+        .wc-evt-title { font-size:15px; font-weight:600; color:#106895; line-height:20px; letter-spacing:-0.23px; }
+        .wc-evt-time { font-size:14px; font-weight:400; color:#168ac6; letter-spacing:-0.15px; }
+        .wc-evt-time small { font-size:12px; }
+        .wlabel-row { display:flex; justify-content:space-between; padding:4px 33px 0; }
+        .wlabel { width:170px; text-align:center; font-size:12px; font-weight:400; color:#fff; line-height:16px; }
+        /* App grid */
+        .agrid { display:flex; justify-content:space-between; padding:0 35px; }
+        .agrid.mt42 { margin-top:42px; }
+        .agrid.mt8 { margin-top:8px; }
+        .acell { display:flex; flex-direction:column; align-items:center; gap:4px; width:64px; }
+        .aicon {
+            width:64px; height:64px; border-radius:14px;
+            display:flex; align-items:center; justify-content:center;
+            overflow:hidden; position:relative;
         }
-        .widget-title {
-            font-weight: 600;
-            font-size: 17px;
-            color: #007bfe;
+        .aicon svg { width:100%; height:100%; display:block; }
+        .albl { font-size:12px; font-weight:400; color:#fff; text-align:center; line-height:16px; }
+        .acell.linkedin-app { pointer-events:auto; cursor:pointer; }
+        .acell.linkedin-app:hover .aicon {
+            box-shadow:0 0 20px 8px rgba(10,102,194,0.5);
+            transform:scale(1.08);
         }
-        .widget-title.red { color: #ff382b; text-transform: uppercase; font-size: 13px; }
-        .widget-big-num {
-            font-size: 34px;
-            font-weight: 300;
-            color: #000;
+        .acell.linkedin-app .aicon { transition:box-shadow 0.3s ease, transform 0.3s ease; }
+        /* Search */
+        .ph-search {
+            height:30px; padding:0 11px;
+            background:rgba(255,255,255,0.3); backdrop-filter:blur(40px); -webkit-backdrop-filter:blur(40px);
+            border-radius:40px;
+            display:flex; align-items:center; justify-content:center; gap:2px;
         }
-        .widget-count {
-            float: right;
-            font-size: 24px;
-            font-weight: 600;
-            color: #000;
-        }
-        .widget-item {
-            font-size: 15px;
-            color: #000;
-            padding: 2px 0;
-        }
-        .widget-label-row {
-            display: flex;
-            justify-content: space-between;
-            padding: 6px 25px 0;
-        }
-        .widget-label {
-            width: 170px;
-            text-align: center;
-            font-size: 12px;
-            font-weight: 600;
-            color: rgba(255,255,255,0.8);
-        }
-        .event-item {
-            border-left: 3px solid #1badf8;
-            background: rgba(27,173,248,0.2);
-            padding: 2px 6px;
-            border-radius: 0 4px 4px 0;
-            margin: 3px 0;
-            font-size: 12px;
-        }
-        .event-title { font-weight: 600; color: #106895; }
-        .event-time { color: #1badf8; font-size: 11px; }
-
-        /* App icon grid */
-        .app-grid {
-            display: grid;
-            grid-template-columns: repeat(4, 64px);
-            gap: 14px 35px;
-            justify-content: center;
-            padding-top: 14px;
-        }
-        .app-cell {
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            gap: 4px;
-        }
-        .app-icon-sq {
-            width: 64px; height: 64px;
-            border-radius: 14px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            overflow: hidden;
-        }
-        .app-icon-sq svg { width: 36px; height: 36px; }
-        .app-icon-sq span { font-size: 28px; line-height: 1; }
-        .app-lbl {
-            font-size: 11px;
-            color: #fff;
-            text-align: center;
-            font-weight: 500;
-            text-shadow: 0 1px 3px rgba(0,0,0,0.3);
-        }
-
-        /* LinkedIn app — ONLY interactive icon */
-        .app-cell.linkedin-app {
-            pointer-events: auto;
-            cursor: pointer;
-        }
-        .app-cell.linkedin-app:hover .app-icon-sq {
-            box-shadow: 0 0 20px 8px rgba(10, 102, 194, 0.5);
-            transform: scale(1.08);
-        }
-        .app-cell.linkedin-app .app-icon-sq {
-            transition: box-shadow 0.3s ease, transform 0.3s ease;
-        }
-
-        /* Phone dock */
-        .phone-dock {
-            position: absolute;
-            bottom: 14px;
-            left: 15px; right: 15px;
-            height: 96px;
-            background: rgba(255,255,255,0.25);
-            backdrop-filter: blur(40px);
-            -webkit-backdrop-filter: blur(40px);
-            border-radius: 40px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            gap: 20px;
+        .ph-search span { font-size:12px; font-weight:600; color:#fff; }
+        .ph-search .ph-s-icon { font-size:10px; }
+        /* Dock */
+        .ph-dock {
+            position:absolute; bottom:14px; left:15px; right:15px; height:106px;
+            background:rgba(255,255,255,0.3); backdrop-filter:blur(40px); -webkit-backdrop-filter:blur(40px);
+            border-radius:40px;
+            display:flex; align-items:center; justify-content:space-between;
+            padding:0 20px;
         }
         .dock-icon {
-            width: 64px; height: 64px;
-            border-radius: 14px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-size: 28px;
-            font-weight: 700;
-            color: #fff;
+            width:64px; height:64px; border-radius:14px;
+            display:flex; align-items:center; justify-content:center;
+            overflow:hidden;
         }
-
-        /* Phone search bar */
-        .phone-search {
-            position: absolute;
-            bottom: 120px;
-            left: 50%;
-            transform: translateX(-50%);
-            width: 80%;
-            height: 30px;
-            background: rgba(255,255,255,0.25);
-            backdrop-filter: blur(40px);
-            -webkit-backdrop-filter: blur(40px);
-            border-radius: 40px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-size: 12px;
-            font-weight: 600;
-            color: #fff;
-            gap: 4px;
-        }
-
-        /* ── Character idle animation ────────────────────────── */
-        @keyframes breathe {
-            0%, 100% { transform: translateY(0); }
-            50% { transform: translateY(-8px); }
-        }
-        .character {
-            animation: breathe 4s ease-in-out infinite;
-        }
-
-        /* ── Book animation ──────────────────────────────────── */
-        .book-container {
-            position: absolute;
-            perspective: 2000px;
-        }
-        .book-spread {
-            position: relative;
-            width: 100%; height: 100%;
-            transform-style: preserve-3d;
-            transform: rotateY(-70deg) scale(0.9);
-            transform-origin: 50% 50%;
-            transition: transform 2s cubic-bezier(0.22, 1, 0.36, 1);
-        }
-        .book-spread.open {
-            transform: rotateY(0deg) scale(1);
-        }
-        .book-spread > img:first-child {
-            width: 100%; height: 100%;
-            object-fit: contain;
-            display: block;
-        }
-
-        /* ── Book stickers (diary content) ───────────────────── */
-        .book-sticker {
-            position: absolute;
-            pointer-events: none;
-            opacity: 0;
-            transform: scale(0.6);
-            transition: opacity 0.5s ease, transform 0.5s ease;
-        }
-        .book-spread.open .book-sticker {
-            opacity: 1;
-            transform: scale(1);
-        }
-        .book-sticker img {
-            width: 100%; height: 100%;
-            object-fit: contain;
-            display: block;
-        }
-        /* Stagger sticker pop-in */
-        .book-spread.open .book-sticker:nth-child(2) { transition-delay: 0.4s; }
-        .book-spread.open .book-sticker:nth-child(3) { transition-delay: 0.7s; }
-        .book-spread.open .book-sticker:nth-child(4) { transition-delay: 1.0s; }
-        .book-spread.open .book-sticker:nth-child(5) { transition-delay: 1.3s; }
-        .book-spread.open .book-sticker:nth-child(6) { transition-delay: 1.5s; }
-        .book-spread.open .book-sticker:nth-child(7) { transition-delay: 1.7s; }
-        .book-spread.open .book-sticker:nth-child(8) { transition-delay: 1.9s; }
+        .dock-icon svg { width:100%; height:100%; display:block; }
 
         /* ── Scroll hint ─────────────────────────────────────── */
         .scroll-hint {
             position: fixed; bottom: 32px; left: 50%;
             transform: translateX(-50%);
             z-index: 100;
-            font-family: 'Sometype Mono', monospace;
-            font-size: 13px; color: #aaa;
+            font-family: 'Raleway', sans-serif;
+            font-size: 13px; color: #1c4e89;
             letter-spacing: 0.12em; text-transform: lowercase;
+            opacity: 0.5;
             transition: opacity 0.5s ease;
         }
         .scroll-hint.hidden { opacity: 0; pointer-events: none; }
@@ -425,211 +349,220 @@
 </head>
 <body>
 
-<!-- ═══ HOME SCROLL ANIMATION ZONE ═══ -->
-<div class="scroll-zone" id="scroll-zone">
-    <div class="artboard-frame" id="artboard-frame">
-        <div class="artboard" id="artboard">
+<!-- ═══ HOME VIEW ═══ -->
+<div id="home-view">
 
-            <!-- WELCOME balloon letters (W E L C O M E) -->
-            <div class="letter" id="let-0">
-                <img src="https://www.figma.com/api/mcp/asset/e9194d00-260a-4044-b3bf-848a1ba98240" alt="W" draggable="false">
+    <!-- Scroll animation zone -->
+    <div class="scroll-zone" id="scroll-zone">
+        <div class="artboard-frame" id="artboard-frame">
+            <div class="artboard" id="artboard">
+
+                <!-- WELCOME balloon letters -->
+                <div class="letter" id="let-0"><img src="./assets/balloon-w.png" alt="W" draggable="false"></div>
+                <div class="letter" id="let-1"><img src="./assets/balloon-e.png" alt="E" draggable="false"></div>
+                <div class="letter" id="let-2"><img src="./assets/balloon-l.png" alt="L" draggable="false"></div>
+                <div class="letter" id="let-3"><img src="./assets/balloon-c.png" alt="C" draggable="false"></div>
+                <div class="letter" id="let-4"><img src="./assets/balloon-o.png" alt="O" draggable="false"></div>
+                <div class="letter" id="let-5"><img src="./assets/balloon-m.png" alt="M" draggable="false"></div>
+                <div class="letter" id="let-6"><img src="./assets/balloon-e.png" alt="E" draggable="false"></div>
+
+                <!-- Objects -->
+                <div class="object" id="tube"><img src="./assets/tube.png" alt="Cosmetic tube" draggable="false"></div>
+                <div class="object" id="receipt"><img src="./assets/receipt.png" alt="Receipt" draggable="false"></div>
+                <div class="object" id="phone-case"><img src="./assets/phone-case.png" alt="Phone case" draggable="false"></div>
+                <div class="object" id="todo"><img src="./assets/todo.png" alt="To-Do List" draggable="false"></div>
+
+                <!-- Hover labels -->
+                <div class="hover-label" id="label-tube" style="left:150px;top:378px;width:110px;">BEAUTY<br><strong>BRAND GROWTH</strong></div>
+                <div class="hover-label" id="label-receipt" style="left:454px;top:201px;width:161px;">A CRYPTO<br><strong>COFFEE CASE</strong></div>
+                <div class="hover-label" id="label-todo" style="left:710px;top:228px;width:130px;">A SMART<br><strong>CALENDAR</strong></div>
+                <div class="hover-label" id="label-phone-case" style="left:1192px;top:273px;width:90px;">ABOUT<br><strong>ME</strong></div>
+
+                <!-- Denim pocket -->
+                <div class="pocket" id="pocket"><img src="./assets/denim-pocket.png" alt="Denim pocket" draggable="false"></div>
+
             </div>
-            <div class="letter" id="let-1">
-                <img src="https://www.figma.com/api/mcp/asset/e66f7c15-da7c-4c02-8404-0b9df8b336bb" alt="E" draggable="false">
+        </div>
+    </div>
+
+    <!-- Text section below scroll zone -->
+    <div class="text-section" id="text-section">
+        <div class="text-artboard" id="text-artboard">
+            <h1 class="portfolio-title" id="portfolio-title">To My Portfolio</h1>
+            <div class="byline" id="byline">
+                <span class="by-label">BY:</span>
+                <span class="by-name">Anisha Subberwal</span>
+                <img class="by-underline" src="./assets/byline-underline.svg" alt="">
             </div>
-            <div class="letter" id="let-2">
-                <img src="https://www.figma.com/api/mcp/asset/49fbabda-ea16-4837-966b-0623e7088d2b" alt="L" draggable="false">
-            </div>
-            <div class="letter" id="let-3">
-                <img src="https://www.figma.com/api/mcp/asset/e93e33b3-3e39-46d3-8954-17cb2d340e64" alt="C" draggable="false">
-            </div>
-            <div class="letter" id="let-4">
-                <img src="https://www.figma.com/api/mcp/asset/9679fd30-a64e-4bae-bfbc-18b1fb8af1fc" alt="O" draggable="false">
-            </div>
-            <div class="letter" id="let-5">
-                <img src="https://www.figma.com/api/mcp/asset/9bc588e8-00d0-4b75-8ee3-d855ee3704e3" alt="M" draggable="false">
-            </div>
-            <div class="letter" id="let-6">
-                <img src="https://www.figma.com/api/mcp/asset/e66f7c15-da7c-4c02-8404-0b9df8b336bb" alt="E" draggable="false">
+            <p class="portfolio-desc" id="portfolio-desc">WELCOME TO ALL THE SKILLS IN MY BACK POCKET. CLICK ON AN OBJECT TO TAKE YOU TO A PROJECT.</p>
+        </div>
+    </div>
+
+</div>
+
+<!-- ═══ ABOUT VIEW ═══ -->
+<div id="about-view" style="display:none">
+    <div class="about-frame" id="about-frame-inner">
+        <div class="about-artboard" id="about-artboard-inner">
+
+            <!-- Profile photo -->
+            <div class="profile-pic" id="profile-pic" style="left:72px;top:200px;width:584px;height:754px;">
+                <img src="./assets/profile-photo.jpg" alt="Anisha Subberwal">
             </div>
 
-            <!-- Interactive objects -->
-            <div class="object" id="tube">
-                <img src="https://www.figma.com/api/mcp/asset/ccbe5517-d28b-4b4b-8a10-47ac3fe93be1" alt="Cosmetic tube" draggable="false">
-            </div>
-            <div class="object" id="receipt">
-                <img src="https://www.figma.com/api/mcp/asset/9bb44d7a-0c0a-46b9-8185-30fa1f23b42e" alt="Receipt" draggable="false">
-            </div>
-            <div class="object" id="phone-case">
-                <img src="https://www.figma.com/api/mcp/asset/8d5a000c-54af-40c3-803f-dad9addf3dd4" alt="Phone case" draggable="false">
-            </div>
-            <div class="object" id="todo">
-                <img src="https://www.figma.com/api/mcp/asset/147c68be-f05a-4c2a-8390-dfbe97b3111a" alt="To-Do List" draggable="false">
+            <!-- Welcome title -->
+            <h1 class="about-title" id="about-welcome" style="left:571px;top:177px;width:876px;">Welcome</h1>
+
+            <!-- Hi I'm Anisha -->
+            <p class="about-subtitle" id="about-hi" style="left:685px;top:449px;width:646px;">Hi! I'm Anisha</p>
+
+            <!-- Bio text -->
+            <div class="about-bio" id="about-bio" style="left:743px;top:607px;width:553px;">
+                <p style="margin-bottom:12px;">I'm a content creator passionate about fashion, known for curating authentic, visually compelling stories that connect with a highly engaged audience.</p>
+                <p>With a strong focus on relatable storytelling, high-quality visuals, and a genuine voice, I collaborate with brands to bring their message to life &mdash; in a way that resonates.</p>
             </div>
 
-            <!-- Denim pocket (SINGLE instance) -->
-            <div class="pocket" id="pocket">
-                <img src="https://www.figma.com/api/mcp/asset/90b71cb6-83d0-4c94-a720-82fcf2451320" alt="Denim pocket" draggable="false">
+            <!-- LinkedIn instruction text -->
+            <p class="about-linkedin-text" id="about-linkedin-text" style="left:83px;top:1094px;width:553px;">THESE ARE ALL THE APPS I WASTE MY TIME ON. CLICK ON THE LINKEDIN TO TAKE YOU TO MY ACTUAL LINKEDIN.</p>
+
+            <!-- Phone mockup -->
+            <div class="phone-mockup" id="about-phone" style="left:856px;top:965px;width:430px;height:932px;">
+                <img class="phone-wallpaper" src="./assets/wallpaper.png" alt="Phone screen">
+
+                <div class="phone-screen">
+                    <!-- Status bar with Figma assets -->
+                    <div class="sb">
+                        <div class="sb-left"><span class="sb-time">1:47</span></div>
+                        <div class="sb-island"></div>
+                        <div class="sb-right">
+                            <div class="sb-icons">
+                                <img src="./assets/cellular-1.svg" alt="" style="width:4px;height:14px;">
+                                <img src="./assets/cellular-2.svg" alt="" style="width:4px;height:12px;">
+                                <img src="./assets/cellular-3.svg" alt="" style="width:4px;height:9px;">
+                                <img src="./assets/cellular-4.svg" alt="" style="width:4px;height:6px;">
+                                <img src="./assets/wifi.svg" alt="" style="width:19px;height:14px;margin-left:3px;">
+                                <img src="./assets/battery.svg" alt="" style="width:31px;height:14px;margin-left:3px;">
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Widgets row -->
+                    <div class="wrow">
+                        <!-- Reminders widget -->
+                        <div class="wcard wcard-rem">
+                            <span class="wc-title">Reminders</span>
+                            <span class="wc-count">73</span>
+                            <div class="wc-radio" style="top:43px;"></div>
+                            <div class="wc-item" style="top:44px;"><span class="wc-emoji">&#x1F9D8;&#x1F3FB;&#x200D;&#x2642;&#xFE0F;</span> Yoga</div>
+                            <div class="wc-div" style="top:74px;"></div>
+                            <div class="wc-radio" style="top:85px;"></div>
+                            <div class="wc-item" style="top:86px;"><span class="wc-emoji">&#x1F6B6;&#x1F3FB;&#x200D;</span> Walk</div>
+                            <div class="wc-div" style="top:116px;"></div>
+                            <div class="wc-radio" style="top:126px;"></div>
+                            <div class="wc-item" style="top:127px;"><span class="wc-emoji">&#x1F989;</span> Book flights</div>
+                        </div>
+                        <!-- Calendar widget -->
+                        <div class="wcard wcard-cal">
+                            <span class="wc-day">Monday</span>
+                            <span class="wc-date">26</span>
+                            <div class="wc-events">
+                                <div class="wc-evt">
+                                    <div class="wc-evt-line"></div>
+                                    <div class="wc-evt-body">
+                                        <div class="wc-evt-title">Minerva Dinner</div>
+                                        <div class="wc-evt-time">5:00–5:30<small>PM</small></div>
+                                    </div>
+                                </div>
+                                <div class="wc-evt">
+                                    <div class="wc-evt-line"></div>
+                                    <div class="wc-evt-body">
+                                        <div class="wc-evt-title">In-N-Out</div>
+                                        <div class="wc-evt-time">7–8<small>PM</small></div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="wlabel-row">
+                        <span class="wlabel">Reminders</span>
+                        <span class="wlabel">Calendar</span>
+                    </div>
+
+                    <!-- App row 1: LinkedIn, Instagram, TikTok, Classpass -->
+                    <div class="agrid mt42">
+                        <a class="acell linkedin-app" href="https://www.linkedin.com/in/anisha-subberwal-434346126" target="_blank" rel="noopener noreferrer">
+                            <div class="aicon" style="background:#0A66C2;">
+                                <svg viewBox="0 0 64 64" fill="none"><rect width="64" height="64" rx="14" fill="#0A66C2"/><path d="M21 27h5v16h-5V27zm2.5-8a2.9 2.9 0 110 5.8 2.9 2.9 0 010-5.8zM29 27h4.8v2.2h.07c.67-1.27 2.3-2.6 4.73-2.6 5.06 0 5.99 3.33 5.99 7.66V43h-5v-7.8c0-1.86-.03-4.25-2.59-4.25-2.6 0-2.99 2.03-2.99 4.12V43H29V27z" fill="white"/></svg>
+                            </div>
+                            <span class="albl">LinkedIn</span>
+                        </a>
+                        <div class="acell">
+                            <div class="aicon" style="background:radial-gradient(circle at 30% 110%,#fdf497 0%,#fd5949 45%,#d6249f 60%,#285AEB 90%);">
+                                <svg viewBox="0 0 64 64" fill="none"><rect width="64" height="64" rx="14" fill="url(#ig)"/><defs><radialGradient id="ig" cx="30%" cy="110%" r="150%"><stop offset="0%" stop-color="#fdf497"/><stop offset="45%" stop-color="#fd5949"/><stop offset="60%" stop-color="#d6249f"/><stop offset="90%" stop-color="#285AEB"/></radialGradient></defs><rect x="16" y="16" width="32" height="32" rx="10" stroke="white" stroke-width="3" fill="none"/><circle cx="32" cy="32" r="8" stroke="white" stroke-width="3" fill="none"/><circle cx="43" cy="21" r="2.5" fill="white"/></svg>
+                            </div>
+                            <span class="albl">Instagram</span>
+                        </div>
+                        <div class="acell">
+                            <div class="aicon" style="background:#000;">
+                                <svg viewBox="0 0 64 64" fill="none"><rect width="64" height="64" rx="14" fill="black"/><path d="M44.4 23.4c-2.6-1.2-5.2-4.7-5.2-8.4h-5.6v24.5c0 3.1-2.5 5.6-5.6 5.6s-5.6-2.5-5.6-5.6 2.5-5.6 5.6-5.6c.5 0 1 .1 1.4.2v-5.7c-.5-.1-1-.1-1.4-.1-6.2 0-11.2 5-11.2 11.2s5 11.2 11.2 11.2 11.2-5 11.2-11.2V29.6c2 1.6 4.5 2.5 7.2 2.5v-5.6c-1 0-1.8-.2-2-.3" fill="white"/><path d="M44.4 23.4c-2.6-1.2-5.2-4.7-5.2-8.4" stroke="rgba(0,232,216,0.6)" stroke-width="1.5" fill="none"/><path d="M39.2 39.1c0 3.1-2.5 5.6-5.6 5.6s-5.6-2.5-5.6-5.6" stroke="rgba(255,0,80,0.6)" stroke-width="1.5" fill="none"/></svg>
+                            </div>
+                            <span class="albl">Tiktok</span>
+                        </div>
+                        <div class="acell">
+                            <div class="aicon" style="background:#3681C7;">
+                                <svg viewBox="0 0 64 64" fill="none"><rect width="64" height="64" rx="14" fill="#3681C7"/><path d="M22 32c0-3.3 2.7-6 6-6s6 2.7 6 6-2.7 6-6 6-6-2.7-6-6zm14 0c0-3.3 2.7-6 6-6s6 2.7 6 6-2.7 6-6 6-6-2.7-6-6z" stroke="white" stroke-width="3" fill="none"/></svg>
+                            </div>
+                            <span class="albl">Classpass</span>
+                        </div>
+                    </div>
+
+                    <!-- App row 2: Notes -->
+                    <div class="agrid mt8" style="justify-content:flex-start;">
+                        <div class="acell">
+                            <div class="aicon" style="background:linear-gradient(180deg,#FFFC00 0%,#FFFFFF 28%);border:1px solid #e0e0e0;">
+                                <svg viewBox="0 0 64 64" fill="none"><rect x="16" y="22" width="32" height="2" rx="1" fill="#e0e0e0"/><rect x="16" y="30" width="32" height="2" rx="1" fill="#e0e0e0"/><rect x="16" y="38" width="24" height="2" rx="1" fill="#e0e0e0"/></svg>
+                            </div>
+                            <span class="albl">Notes</span>
+                        </div>
+                    </div>
+
+                    <!-- Search -->
+                    <div class="ph-search" style="position:absolute;bottom:149px;left:50%;transform:translateX(-50%);">
+                        <span class="ph-s-icon">&#x1F50D;</span>
+                        <span>Search</span>
+                    </div>
+
+                    <!-- Dock -->
+                    <div class="ph-dock">
+                        <div class="dock-icon" style="background:#E60023;">
+                            <svg viewBox="0 0 64 64" fill="none"><rect width="64" height="64" rx="14" fill="#E60023"/><path d="M32.5 14c-9.4 0-17 7.6-17 17 0 7.2 4.5 13.4 10.8 15.8l2-7.8c-.7-.9-1.3-2.4-1.3-3.9 0-3.1 1.8-5.4 4-5.4 1.9 0 2.8 1.4 2.8 3.1 0 1.9-1.2 4.7-1.8 7.3-.5 2.2 1.1 3.9 3.2 3.9 3.8 0 6.7-4 6.7-9.8 0-5.1-3.7-8.7-8.9-8.7-6.1 0-9.7 4.5-9.7 9.3 0 1.8.7 3.8 1.6 4.9l-.6 2.4c-2.7-1.3-4.4-5.1-4.4-8.3 0-6.7 4.9-12.9 14.1-12.9 7.4 0 13.2 5.3 13.2 12.4 0 7.4-4.6 13.3-11.1 13.3-2.2 0-4.2-1.1-4.9-2.5l-1.3 5.1c-.5 1.9-1.8 4.2-2.7 5.6" fill="white"/></svg>
+                        </div>
+                        <div class="dock-icon" style="background:#BF0000;">
+                            <svg viewBox="0 0 64 64" fill="none"><rect width="64" height="64" rx="14" fill="#BF0000"/><text x="32" y="44" text-anchor="middle" fill="white" font-family="serif" font-size="36" font-weight="900">R</text></svg>
+                        </div>
+                        <div class="dock-icon" style="background:#1DB954;">
+                            <svg viewBox="0 0 64 64" fill="none"><rect width="64" height="64" rx="14" fill="#1DB954"/><path d="M32 18c-7.7 0-14 6.3-14 14s6.3 14 14 14 14-6.3 14-14-6.3-14-14-14zm6.4 20.2c-.3.4-.8.6-1.2.3-3.4-2.1-7.7-2.5-12.7-1.4-.5.1-.9-.2-1-.7-.1-.5.2-.9.7-1 5.5-1.3 10.2-.7 14 1.6.5.2.5.8.2 1.2zm1.7-3.8c-.4.5-1 .7-1.5.4-3.9-2.4-9.8-3.1-14.3-1.7-.6.2-1.2-.2-1.4-.7-.2-.6.1-1.2.7-1.4 5.2-1.6 11.6-.8 16.1 1.9.5.3.7 1 .4 1.5zm.2-4c-4.6-2.8-12.3-3-16.8-1.7-.7.2-1.4-.2-1.6-.9-.2-.7.2-1.4.9-1.6 5.1-1.5 13.6-1.2 18.9 2 .6.4.8 1.2.5 1.9-.4.5-1.2.7-1.9.3z" fill="white"/></svg>
+                        </div>
+                        <div class="dock-icon" style="background:linear-gradient(145deg,#868686 0%,#3d3d3d 100%);">
+                            <svg viewBox="0 0 64 64" fill="none"><rect width="64" height="64" rx="14" fill="url(#cam)"/><defs><linearGradient id="cam" x1="0" y1="0" x2="64" y2="64"><stop offset="0%" stop-color="#868686"/><stop offset="100%" stop-color="#3d3d3d"/></linearGradient></defs><circle cx="32" cy="35" r="8" stroke="white" stroke-width="2.5" fill="none"/><circle cx="32" cy="35" r="4" fill="white" opacity="0.4"/><path d="M22 24l3-4h14l3 4h6a3 3 0 013 3v18a3 3 0 01-3 3H16a3 3 0 01-3-3V27a3 3 0 013-3h6z" stroke="white" stroke-width="2" fill="none"/></svg>
+                        </div>
+                    </div>
+                </div>
+
+                <img class="phone-bezel" src="./assets/bezel.png" alt="Phone frame"
+                     style="left:-40px;top:-40px;width:510px;height:1012px;">
             </div>
 
-            <!-- Title text (typewriter) — centered per Figma home_2 -->
-            <div class="typewriter-text" id="title-text"></div>
-
-            <!-- Click instruction text (typewriter) — left aligned per Figma home_2 -->
-            <div class="typewriter-text" id="click-text"></div>
         </div>
     </div>
 </div>
 
-<!-- ═══ ABOUT ME SECTION ═══ -->
-<div class="section-frame" id="about-frame">
-    <div class="section-artboard" id="about-artboard">
-
-        <!-- Phone mockup with full screen + app icons -->
-        <div class="phone-mockup about-fade" id="phone-mockup">
-            <img class="phone-wallpaper" src="https://www.figma.com/api/mcp/asset/53e0f5ce-b64f-49bd-8f3a-e4e2091ab031" alt="Phone screen">
-
-            <!-- Phone screen overlay: all apps visible, only LinkedIn interactive -->
-            <div class="phone-screen" id="phone-screen">
-                <!-- Status bar -->
-                <div class="status-bar">
-                    <span>1:47</span>
-                    <div class="dynamic-island"></div>
-                    <div class="status-bar-right">
-                        <span>||||</span>
-                        <svg width="16" height="12" viewBox="0 0 16 12" fill="white"><path d="M8 3.6C9.8 3.6 11.4 4.3 12.6 5.5L14.1 4C12.5 2.4 10.4 1.4 8 1.4S3.5 2.4 1.9 4L3.4 5.5C4.6 4.3 6.2 3.6 8 3.6zM8 7C9.1 7 10.1 7.4 10.8 8.2L8 11L5.2 8.2C5.9 7.4 6.9 7 8 7z"/></svg>
-                        <svg width="24" height="12" viewBox="0 0 24 12" fill="white"><rect x="1" y="1" width="19" height="10" rx="2" stroke="white" fill="none" stroke-width="1.5"/><rect x="2.5" y="2.5" width="16" height="7" rx="1" fill="white"/><rect x="21" y="4" width="2" height="4" rx="1" fill="white"/></svg>
-                    </div>
-                </div>
-
-                <!-- Widget row -->
-                <div class="widget-row">
-                    <div class="widget-card">
-                        <div><span class="widget-title">Reminders</span><span class="widget-count">73</span></div>
-                        <div class="widget-item">&#x1F9D8; Yoga</div>
-                        <div class="widget-item">&#x1F6B6; Walk</div>
-                        <div class="widget-item">&#x1F4DA; Book flights</div>
-                    </div>
-                    <div class="widget-card">
-                        <div class="widget-title red">MONDAY</div>
-                        <div class="widget-big-num">26</div>
-                        <div class="event-item"><div class="event-title">Minerva Dinner</div><div class="event-time">5:00–5:30PM</div></div>
-                        <div class="event-item"><div class="event-title">In-N-Out</div><div class="event-time">7–8PM</div></div>
-                    </div>
-                </div>
-                <div class="widget-label-row">
-                    <span class="widget-label">Reminders</span>
-                    <span class="widget-label">Calendar</span>
-                </div>
-
-                <!-- App row 1: LinkedIn Instagram TikTok Classpass -->
-                <div class="app-grid">
-                    <a class="app-cell linkedin-app" href="https://www.linkedin.com/in/anisha-subberwal-434346126" target="_blank" rel="noopener noreferrer">
-                        <div class="app-icon-sq" style="background:#0A66C2;">
-                            <svg viewBox="0 0 24 24" fill="white"><path d="M20.447 20.452h-3.554v-5.569c0-1.328-.027-3.037-1.852-3.037-1.853 0-2.136 1.445-2.136 2.939v5.667H9.351V9h3.414v1.561h.046c.477-.9 1.637-1.85 3.37-1.85 3.601 0 4.267 2.37 4.267 5.455v6.286zM5.337 7.433a2.062 2.062 0 01-2.063-2.065 2.064 2.064 0 112.063 2.065zm1.782 13.019H3.555V9h3.564v11.452zM22.225 0H1.771C.792 0 0 .774 0 1.729v20.542C0 23.227.792 24 1.771 24h20.451C23.2 24 24 23.227 24 22.271V1.729C24 .774 23.2 0 22.222 0h.003z"/></svg>
-                        </div>
-                        <span class="app-lbl">LinkedIn</span>
-                    </a>
-                    <div class="app-cell">
-                        <div class="app-icon-sq" style="background:radial-gradient(circle at 30% 110%,#fdf497 0%,#fd5949 45%,#d6249f 60%,#285AEB 90%); border-radius:14px;">
-                            <svg viewBox="0 0 24 24" fill="white" width="36" height="36"><path d="M12 2.163c3.204 0 3.584.012 4.85.07 3.252.148 4.771 1.691 4.919 4.919.058 1.265.069 1.645.069 4.849 0 3.205-.012 3.584-.069 4.849-.149 3.225-1.664 4.771-4.919 4.919-1.266.058-1.644.07-4.85.07-3.204 0-3.584-.012-4.849-.07-3.26-.149-4.771-1.699-4.919-4.92-.058-1.265-.07-1.644-.07-4.849 0-3.204.013-3.583.07-4.849.149-3.227 1.664-4.771 4.919-4.919 1.266-.057 1.645-.069 4.849-.069zM12 0C8.741 0 8.333.014 7.053.072 2.695.272.273 2.69.073 7.052.014 8.333 0 8.741 0 12c0 3.259.014 3.668.072 4.948.2 4.358 2.618 6.78 6.98 6.98C8.333 23.986 8.741 24 12 24c3.259 0 3.668-.014 4.948-.072 4.354-.2 6.782-2.618 6.979-6.98.059-1.28.073-1.689.073-4.948 0-3.259-.014-3.667-.072-4.947-.196-4.354-2.617-6.78-6.979-6.98C15.668.014 15.259 0 12 0zm0 5.838a6.162 6.162 0 100 12.324 6.162 6.162 0 000-12.324zM12 16a4 4 0 110-8 4 4 0 010 8zm6.406-11.845a1.44 1.44 0 100 2.881 1.44 1.44 0 000-2.881z"/></svg>
-                        </div>
-                        <span class="app-lbl">Instagram</span>
-                    </div>
-                    <div class="app-cell">
-                        <div class="app-icon-sq" style="background:#000;">
-                            <svg viewBox="0 0 24 24" fill="white" width="32" height="32"><path d="M19.59 6.69a4.83 4.83 0 01-3.77-4.25V2h-3.45v13.67a2.89 2.89 0 01-2.88 2.5 2.89 2.89 0 01-2.89-2.89 2.89 2.89 0 012.89-2.89c.28 0 .54.04.79.1V9.01a6.27 6.27 0 00-.79-.05 6.34 6.34 0 00-6.34 6.34 6.34 6.34 0 006.34 6.34 6.34 6.34 0 006.34-6.34V8.75a8.18 8.18 0 004.77 1.52V6.84a4.84 4.84 0 01-1.01-.15z"/></svg>
-                        </div>
-                        <span class="app-lbl">Tiktok</span>
-                    </div>
-                    <div class="app-cell">
-                        <div class="app-icon-sq" style="background:#36a1e8;">
-                            <svg viewBox="0 0 24 24" fill="white" width="32" height="32"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-1 14H9v-2h2v2zm4 0h-2v-2h2v2zm-2-4c-1.1 0-2-.9-2-2V8c0-1.1.9-2 2-2s2 .9 2 2v2c0 1.1-.9 2-2 2z"/></svg>
-                        </div>
-                        <span class="app-lbl">Classpass</span>
-                    </div>
-                </div>
-
-                <!-- App row 2: Notes -->
-                <div class="app-grid" style="grid-template-columns: repeat(4, 64px); padding-top:8px;">
-                    <div class="app-cell">
-                        <div class="app-icon-sq" style="background:linear-gradient(180deg,#FFFC00 0%,#FFF 30%); border:1px solid #ddd;">
-                            <svg viewBox="0 0 24 24" fill="#888" width="28" height="28"><path d="M3 3h18v2H3V3zm0 4h18v2H3V7zm0 4h12v2H3v-2zm0 4h18v2H3v-2zm0 4h12v2H3v-2z"/></svg>
-                        </div>
-                        <span class="app-lbl">Notes</span>
-                    </div>
-                </div>
-
-                <!-- Search bar -->
-                <div class="phone-search">
-                    <svg width="12" height="12" viewBox="0 0 24 24" fill="white"><path d="M15.5 14h-.79l-.28-.27A6.47 6.47 0 0016 9.5 6.5 6.5 0 109.5 16c1.61 0 3.09-.59 4.23-1.57l.27.28v.79l5 4.99L20.49 19l-4.99-5zm-6 0C7.01 14 5 11.99 5 9.5S7.01 5 9.5 5 14 7.01 14 9.5 11.99 14 9.5 14z"/></svg>
-                    Search
-                </div>
-
-                <!-- Dock -->
-                <div class="phone-dock">
-                    <div class="dock-icon" style="background:#E60023;">
-                        <svg viewBox="0 0 24 24" fill="white" width="32" height="32"><path d="M12.017 0C5.396 0 .029 5.367.029 11.987c0 5.079 3.158 9.417 7.618 11.162-.105-.949-.199-2.403.041-3.439.219-.937 1.406-5.957 1.406-5.957s-.359-.72-.359-1.781c0-1.668.967-2.914 2.171-2.914 1.023 0 1.518.769 1.518 1.69 0 1.029-.655 2.568-.994 3.995-.283 1.194.599 2.169 1.777 2.169 2.133 0 3.772-2.249 3.772-5.495 0-2.873-2.064-4.882-5.012-4.882-3.414 0-5.418 2.561-5.418 5.207 0 1.031.397 2.138.893 2.738.098.119.112.224.083.345l-.333 1.36c-.053.22-.174.267-.402.161-1.499-.698-2.436-2.889-2.436-4.649 0-3.785 2.75-7.262 7.929-7.262 4.163 0 7.398 2.967 7.398 6.931 0 4.136-2.607 7.464-6.227 7.464-1.216 0-2.359-.631-2.75-1.378l-.748 2.853c-.271 1.043-1.002 2.35-1.492 3.146C9.57 23.812 10.763 24 12.017 24c6.624 0 11.99-5.367 11.99-11.988C24.007 5.367 18.641 0 12.017 0z"/></svg>
-                    </div>
-                    <div class="dock-icon" style="background:#BF0000;">
-                        <span style="font-size:28px;font-weight:900;font-family:serif;color:#fff;">R</span>
-                    </div>
-                    <div class="dock-icon" style="background:#1DB954;">
-                        <svg viewBox="0 0 24 24" fill="white" width="32" height="32"><path d="M12 0C5.4 0 0 5.4 0 12s5.4 12 12 12 12-5.4 12-12S18.66 0 12 0zm5.521 17.34c-.24.359-.66.48-1.021.24-2.82-1.74-6.36-2.101-10.561-1.141-.418.122-.779-.179-.899-.539-.12-.421.18-.78.54-.9 4.56-1.021 8.52-.6 11.64 1.32.42.18.479.659.301 1.02zm1.44-3.3c-.301.42-.841.6-1.262.3-3.239-1.98-8.159-2.58-11.939-1.38-.479.12-1.02-.12-1.14-.6-.12-.48.12-1.021.6-1.141C9.6 9.9 15 10.561 18.72 12.84c.361.181.54.78.241 1.2zm.12-3.36C15.24 8.4 8.82 8.16 5.16 9.301c-.6.179-1.2-.181-1.38-.721-.18-.601.18-1.2.72-1.381 4.26-1.26 11.28-1.02 15.721 1.621.539.3.719 1.02.419 1.56-.299.421-1.02.599-1.559.3z"/></svg>
-                    </div>
-                    <div class="dock-icon" style="background:linear-gradient(135deg,#6b6b6b,#3d3d3d);">
-                        <svg viewBox="0 0 24 24" fill="white" width="28" height="28"><path d="M12 15.2a3.2 3.2 0 100-6.4 3.2 3.2 0 000 6.4z"/><path d="M9 2L7.17 4H4c-1.1 0-2 .9-2 2v12c0 1.1.9 2 2 2h16c1.1 0 2-.9 2-2V6c0-1.1-.9-2-2-2h-3.17L15 2H9zm3 15c-2.76 0-5-2.24-5-5s2.24-5 5-5 5 2.24 5 5-2.24 5-5 5z"/></svg>
-                    </div>
-                </div>
-            </div>
-
-            <img class="phone-bezel" src="https://www.figma.com/api/mcp/asset/2214654a-f8d2-47ce-9a05-7d154f88df17" alt="Phone frame">
-        </div>
-
-        <!-- Text: screen time -->
-        <p class="about-text about-fade" id="about-text-1"></p>
-
-        <!-- Text: MBA -->
-        <p class="about-text about-fade" id="about-text-2"></p>
-
-        <!-- 3D Character Avatar -->
-        <div class="about-el character about-fade" id="about-avatar">
-            <img src="https://www.figma.com/api/mcp/asset/e5a0d7a6-a8d4-44e3-9fa2-6f84ef775611" alt="3D Avatar">
-        </div>
-
-        <!-- Text: product designer -->
-        <p class="about-text about-fade" id="about-text-3"></p>
-
-        <!-- Book collage with opening animation + diary stickers -->
-        <div class="book-container about-fade" id="book-container">
-            <div class="book-spread" id="book-spread">
-                <!-- Base: open book background -->
-                <img src="https://www.figma.com/api/mcp/asset/2add6c70-beee-4647-bbe2-2414660cad67" alt="Open book">
-
-                <!-- Diary stickers — positioned relative to 1024×1024 book -->
-                <div class="book-sticker" style="left:3.8%; top:23.1%; width:43.3%; height:43.3%; transform:rotate(-10.16deg);">
-                    <img src="https://www.figma.com/api/mcp/asset/9cc2b5cb-d34d-4546-8895-a1c3ff47ea6f" alt="To-Do List sticker">
-                </div>
-                <div class="book-sticker" style="left:67%; top:48.5%; width:34.1%; height:34.1%; transform:rotate(17.83deg);">
-                    <img src="https://www.figma.com/api/mcp/asset/8a60eb0b-625d-41df-9ee9-a243d5016cee" alt="Lipstick & coffee sticker">
-                </div>
-                <div class="book-sticker" style="left:11.2%; top:54.6%; width:19.1%; height:19.6%;">
-                    <img src="https://www.figma.com/api/mcp/asset/9814cd0f-4f05-4513-8332-7c65a5ce3b6f" alt="My Story heart sticker">
-                </div>
-                <div class="book-sticker" style="left:29.9%; top:47.9%; width:24.7%; height:35.3%; transform:rotate(13.38deg);">
-                    <img src="https://www.figma.com/api/mcp/asset/9814cd0f-4f05-4513-8332-7c65a5ce3b6f" alt="Compact mirror">
-                </div>
-                <div class="book-sticker" style="left:65.4%; top:23.8%; width:21.4%; height:14.9%;">
-                    <img src="https://www.figma.com/api/mcp/asset/70cf5260-5f01-4de4-97ab-0d5daf7b8142" alt="Inde Wild sticker">
-                </div>
-                <div class="book-sticker" style="left:13.3%; top:64.7%; width:15%; height:11.4%;">
-                    <img src="https://www.figma.com/api/mcp/asset/70cf5260-5f01-4de4-97ab-0d5daf7b8142" alt="Small sticker">
-                </div>
-                <div class="book-sticker" style="left:72.3%; top:34.5%; width:7.7%; height:6.5%;">
-                    <img src="https://www.figma.com/api/mcp/asset/70cf5260-5f01-4de4-97ab-0d5daf7b8142" alt="Small sticker">
-                </div>
-            </div>
-        </div>
+<!-- PocketMenu (fixed, always visible) -->
+<div class="pocket-menu" id="pocket-menu">
+    <div class="pocket-menu-icon">
+        <img class="menu-v1" src="./assets/pocket-v1.svg" alt="">
+        <img class="menu-v2" src="./assets/pocket-v2.svg" alt="">
+        <img class="menu-v3" src="./assets/pocket-v3.svg" alt="">
     </div>
 </div>
 
@@ -640,14 +573,12 @@
     'use strict';
 
     /* ================================================================
-       NAMED CONSTANTS — all coordinates from Figma @ 1440px artboard
+       CONSTANTS — coordinates from updated Figma @ 1440px
        ================================================================ */
-    var ARTBOARD_W    = 1440;
-    var HOME_FRAME_H  = 946;
-    var ABOUT_H       = 2478;
-
-    var POCKET = { x: 475, y: 608, w: 490, h: 490 };
-    var HOME_ARTBOARD_H = POCKET.y + POCKET.h; // 1098
+    var ARTBOARD_W     = 1440;
+    var ABOUT_H        = 2049;
+    var POCKET         = { x: 475, y: 647, w: 490, h: 490 };
+    var HOME_ARTBOARD_H = POCKET.y + POCKET.h; // 1137
 
     var LETTERS = [
         { x: 84,   y: 304, w: 203, h: 203 },
@@ -662,45 +593,25 @@
     var OBJECTS = {
         tube: {
             start: { x: 497, y: 497, w: 201, h: 336 },
-            end:   { x: 384, y: 237, w: 97,  h: 326 },
+            end:   { x: 283, y: 237, w: 97,  h: 326 },
             startRot: -18.77, endRot: 0
         },
         receipt: {
             start: { x: 584, y: 495, w: 151, h: 300 },
-            end:   { x: 560, y: 273, w: 151, h: 300 },
+            end:   { x: 459, y: 273, w: 151, h: 300 },
             startRot: 0, endRot: 0
         },
         'phone-case': {
             start: { x: 679, y: 427, w: 221, h: 436 },
-            end:   { x: 1036, y: 187, w: 221, h: 436 },
+            end:   { x: 935, y: 187, w: 221, h: 436 },
             startRot: 0, endRot: 0
         },
         todo: {
             start: { x: 614, y: 543, w: 218, h: 257 },
-            end:   { x: 754, y: 308, w: 201, h: 239 },
+            end:   { x: 653, y: 308, w: 201, h: 239 },
             startRot: 0, endRot: 0
         }
     };
-
-    var TITLE_POS = { x: 560, y: 113, w: 320 };
-    var CLICK_POS = { x: 73,  y: 450, w: 232 };
-
-    var ABOUT = {
-        phone:   { x: 165, y: 216,  w: 430, h: 932 },
-        bezelW:  510,
-        bezelH:  1012,
-        text1:   { x: 779, y: 303,  w: 479 },
-        text2:   { x: 779, y: 618,  w: 512 },
-        avatar:  { x: 673, y: 731,  w: 692, h: 692 },
-        text3:   { x: 169, y: 1298, w: 717 },
-        book:    { x: 208, y: 1350, w: 1024, h: 1024 }
-    };
-
-    var ABOUT_TEXTS = [
-        'so a little bit about me...\n\nyes my screen time is high\nand these are the apps that\ntake up my time',
-        "I'm currently an MBA student\nat Columbia Business School",
-        'but before that I was a Product Designer.\nAn artist even if you will'
-    ];
 
     var SCROLL_VH = 3;
 
@@ -719,45 +630,39 @@
     var scrollZone    = document.getElementById('scroll-zone');
     var artboardFrame = document.getElementById('artboard-frame');
     var artboard      = document.getElementById('artboard');
-    var aboutFrame    = document.getElementById('about-frame');
-    var aboutArtboard = document.getElementById('about-artboard');
     var pocketEl      = document.getElementById('pocket');
-    var titleTextEl   = document.getElementById('title-text');
-    var clickTextEl   = document.getElementById('click-text');
     var hintEl        = document.getElementById('scroll-hint');
+    var homeView      = document.getElementById('home-view');
+    var aboutView     = document.getElementById('about-view');
+    var aboutFrameEl  = document.getElementById('about-frame-inner');
+    var aboutArtboard = document.getElementById('about-artboard-inner');
+    var pocketMenu    = document.getElementById('pocket-menu');
+    var textArtboard  = document.getElementById('text-artboard');
 
     var letterEls = [];
     for (var i = 0; i < 7; i++) letterEls.push(document.getElementById('let-' + i));
 
     var objectEls = {
-        tube:          document.getElementById('tube'),
-        receipt:       document.getElementById('receipt'),
-        'phone-case':  document.getElementById('phone-case'),
-        todo:          document.getElementById('todo')
+        tube:         document.getElementById('tube'),
+        receipt:      document.getElementById('receipt'),
+        'phone-case': document.getElementById('phone-case'),
+        todo:         document.getElementById('todo')
     };
 
-    var phoneMockupEl  = document.getElementById('phone-mockup');
-    var aboutTextEls   = [
-        document.getElementById('about-text-1'),
-        document.getElementById('about-text-2'),
-        document.getElementById('about-text-3')
-    ];
-    var aboutAvatarEl  = document.getElementById('about-avatar');
-    var bookContainer  = document.getElementById('book-container');
-    var bookSpread     = document.getElementById('book-spread');
+    var labelEls = {
+        tube:         document.getElementById('label-tube'),
+        receipt:      document.getElementById('label-receipt'),
+        'phone-case': document.getElementById('label-phone-case'),
+        todo:         document.getElementById('label-todo')
+    };
 
     /* ================================================================
        STATE
        ================================================================ */
-    var scale                  = 1;
-    var balloonsPlayed         = false;   // FIX #1: one-time flag
-    var titleTypewriterDone      = false;
-    var titleTypewriterCompleted = false;
-    var clickTypewriterQueued    = false;
-    var clickTypewriterDone      = false;
-    var objectsClickable       = false;
-    var aboutTypeStarted       = [false, false, false];
-    var bookOpened             = false;
+    var scale              = 1;
+    var balloonsPlayed     = false;
+    var objectsClickable   = false;
+    var currentView        = 'home'; // 'home' or 'about'
 
     /* ================================================================
        RESPONSIVE SCALING
@@ -770,17 +675,21 @@
         artboard.style.transform = 'scale(' + scale + ')';
         artboardFrame.style.height = Math.ceil(HOME_ARTBOARD_H * scale) + 'px';
 
+        var vh = window.innerHeight;
+        scrollZone.style.height = Math.ceil(vh * SCROLL_VH + HOME_ARTBOARD_H * scale) + 'px';
+
+        textArtboard.style.width     = ARTBOARD_W + 'px';
+        textArtboard.style.transform = 'scale(' + scale + ')';
+        textArtboard.parentElement.style.height = Math.ceil(500 * scale) + 'px';
+
         aboutArtboard.style.width     = ARTBOARD_W + 'px';
         aboutArtboard.style.height    = ABOUT_H + 'px';
         aboutArtboard.style.transform = 'scale(' + scale + ')';
-        aboutFrame.style.height       = Math.ceil(ABOUT_H * scale) + 'px';
-
-        var vh = window.innerHeight;
-        scrollZone.style.height = Math.ceil(vh * SCROLL_VH + HOME_ARTBOARD_H * scale) + 'px';
+        aboutFrameEl.style.height     = Math.ceil(ABOUT_H * scale) + 'px';
     }
 
     /* ================================================================
-       PLACEMENT HELPERS
+       PLACEMENT
        ================================================================ */
     function setBox(el, cfg) {
         el.style.left   = cfg.x + 'px';
@@ -789,64 +698,26 @@
         el.style.height = cfg.h + 'px';
     }
 
-    function setPos(el, cfg) {
-        el.style.left  = cfg.x + 'px';
-        el.style.top   = cfg.y + 'px';
-        el.style.width = cfg.w + 'px';
-    }
-
-    /* ================================================================
-       INITIAL PLACEMENT
-       ================================================================ */
     function initPlacement() {
         setBox(pocketEl, POCKET);
-
-        for (var i = 0; i < LETTERS.length; i++) {
-            setBox(letterEls[i], LETTERS[i]);
-        }
-
+        for (var i = 0; i < LETTERS.length; i++) setBox(letterEls[i], LETTERS[i]);
         for (var key in OBJECTS) {
             var cfg = OBJECTS[key];
             var el  = objectEls[key];
             setBox(el, cfg.start);
             el.style.transform = 'rotate(' + cfg.startRot + 'deg)';
         }
-
-        setPos(titleTextEl, TITLE_POS);
-        setPos(clickTextEl, CLICK_POS);
-
-        // About: phone mockup
-        phoneMockupEl.style.left   = ABOUT.phone.x + 'px';
-        phoneMockupEl.style.top    = ABOUT.phone.y + 'px';
-        phoneMockupEl.style.width  = ABOUT.phone.w + 'px';
-        phoneMockupEl.style.height = ABOUT.phone.h + 'px';
-
-        var bezelOffX = (ABOUT.phone.w - ABOUT.bezelW) / 2;
-        var bezelOffY = (ABOUT.phone.h - ABOUT.bezelH) / 2;
-        var bezelEl = phoneMockupEl.querySelector('.phone-bezel');
-        bezelEl.style.left   = bezelOffX + 'px';
-        bezelEl.style.top    = bezelOffY + 'px';
-        bezelEl.style.width  = ABOUT.bezelW + 'px';
-        bezelEl.style.height = ABOUT.bezelH + 'px';
-
-        setPos(aboutTextEls[0], ABOUT.text1);
-        setPos(aboutTextEls[1], ABOUT.text2);
-        setPos(aboutTextEls[2], ABOUT.text3);
-
-        setBox(aboutAvatarEl, ABOUT.avatar);
-        setBox(bookContainer, ABOUT.book);
     }
 
     /* ================================================================
-       FIX #1: TIME-BASED BALLOON ANIMATION (not scroll-bound)
-       Fires once on page load, removes balloons from DOM when done.
+       BALLOON ANIMATION (time-based, fires once)
        ================================================================ */
     function startBalloonAnimation() {
         if (balloonsPlayed) return;
         balloonsPlayed = true;
 
         var startTime = null;
-        var DURATION  = 7000; // ms for full exit
+        var DURATION  = 7000;
 
         function tick(timestamp) {
             if (!startTime) startTime = timestamp;
@@ -854,10 +725,10 @@
             var progress = Math.min(elapsed / DURATION, 1);
 
             for (var i = 0; i < letterEls.length; i++) {
-                var el      = letterEls[i];
+                var el = letterEls[i];
                 if (!el) continue;
                 var dist    = Math.abs(i - 3);
-                var stagger = dist * 500; // ms per distance from center
+                var stagger = dist * 500;
                 var local   = clamp((elapsed - stagger) / (DURATION - stagger * 0.5), 0, 1);
                 var lp      = easeOutCubic(local);
                 var yUp     = -900 * lp;
@@ -869,56 +740,38 @@
             if (progress < 1) {
                 requestAnimationFrame(tick);
             } else {
-                // Remove from DOM — balloons can never reappear
                 for (var j = 0; j < letterEls.length; j++) {
                     if (letterEls[j] && letterEls[j].parentNode) {
                         letterEls[j].parentNode.removeChild(letterEls[j]);
                     }
                 }
                 letterEls = [];
-                // After balloons exit → start title typewriter
-                if (!titleTypewriterDone) {
-                    titleTypewriterDone = true;
-                    runTypewriter(titleTextEl, 'to my portfolio...', function () {
-                        titleTypewriterCompleted = true;
-                    });
-                }
             }
         }
 
-        // Brief pause so user sees the balloons before they float off
         setTimeout(function () {
             requestAnimationFrame(tick);
         }, 2500);
     }
 
     /* ================================================================
-       TYPEWRITER
+       HOVER LABELS
        ================================================================ */
-    function runTypewriter(el, text, onComplete) {
-        el.style.opacity = '1';
-        var chars = text.split('');
-        var idx   = 0;
-        var cursor = document.createElement('span');
-        cursor.className = 'cursor';
-        el.textContent = '';
-        el.appendChild(cursor);
-
-        function tick() {
-            if (idx < chars.length) {
-                el.insertBefore(document.createTextNode(chars[idx]), cursor);
-                idx++;
-                var ch = chars[idx - 1];
-                var delay = ch === '\n' ? 120 : ch === '.' ? 100 : 45;
-                setTimeout(tick, delay);
-            } else {
-                setTimeout(function () {
-                    if (cursor.parentNode) cursor.parentNode.removeChild(cursor);
-                }, 2000);
-                if (onComplete) onComplete();
-            }
+    function setupHoverLabels() {
+        for (var key in objectEls) {
+            (function (k) {
+                objectEls[k].addEventListener('mouseenter', function () {
+                    if (objectsClickable && labelEls[k]) {
+                        labelEls[k].classList.add('visible');
+                    }
+                });
+                objectEls[k].addEventListener('mouseleave', function () {
+                    if (labelEls[k]) {
+                        labelEls[k].classList.remove('visible');
+                    }
+                });
+            })(key);
         }
-        tick();
     }
 
     /* ================================================================
@@ -929,26 +782,24 @@
         objectsClickable = true;
         for (var k in objectEls) objectEls[k].classList.add('clickable');
     }
-
     function disableClicking() {
         if (!objectsClickable) return;
         objectsClickable = false;
         for (var k in objectEls) objectEls[k].classList.remove('clickable');
+        for (var k in labelEls) labelEls[k].classList.remove('visible');
     }
 
     /* ================================================================
-       SCROLL-DRIVEN ANIMATION (objects only — balloons are separate)
+       SCROLL-DRIVEN ANIMATION
        ================================================================ */
     function animate() {
         var vh        = window.innerHeight;
         var maxScroll = vh * SCROLL_VH;
         var raw       = clamp(window.scrollY / maxScroll, 0, 1);
 
-        // Scroll hint
         if (raw > 0.01) hintEl.classList.add('hidden');
         else            hintEl.classList.remove('hidden');
 
-        // Objects: pocket → spread (phase 0.20 → 1.0)
         var oPhase = phase(raw, 0.20, 1.0);
         var ep     = easeInOutCubic(oPhase);
 
@@ -963,17 +814,6 @@
             objEl.style.transform = 'rotate(' + rot + 'deg)';
         }
 
-        // Click text typewriter — after objects settle
-        if (oPhase > 0.95 && !clickTypewriterQueued && titleTypewriterCompleted) {
-            clickTypewriterQueued = true;
-            setTimeout(function () {
-                if (!clickTypewriterDone) {
-                    clickTypewriterDone = true;
-                    runTypewriter(clickTextEl, 'click on an object\nto see the project');
-                }
-            }, 300);
-        }
-
         if (oPhase > 0.95) enableClicking();
         else               disableClicking();
 
@@ -981,70 +821,65 @@
     }
 
     /* ================================================================
-       FIX #3: SMOOTH ABOUT-ME TRANSITIONS (IntersectionObserver)
+       TEXT SECTION FADE-IN
        ================================================================ */
-    function setupObservers() {
-        var textContents = ABOUT_TEXTS;
-
-        // Fade-in all .about-fade elements when they enter viewport
-        var fadeEls = document.querySelectorAll('.about-fade');
-        fadeEls.forEach(function (el) {
-            var fadeObs = new IntersectionObserver(function (entries) {
+    function setupTextObservers() {
+        var els = [
+            document.getElementById('portfolio-title'),
+            document.getElementById('byline'),
+            document.getElementById('portfolio-desc')
+        ];
+        els.forEach(function (el) {
+            var obs = new IntersectionObserver(function (entries) {
                 entries.forEach(function (entry) {
                     if (entry.isIntersecting) {
                         el.classList.add('visible');
-                        fadeObs.unobserve(el);
+                        obs.unobserve(el);
                     }
                 });
             }, { threshold: 0.1 });
-            fadeObs.observe(el);
+            obs.observe(el);
         });
+    }
 
-        // About text typewriters (triggered after fade-in)
-        aboutTextEls.forEach(function (el, idx) {
-            var observer = new IntersectionObserver(function (entries) {
-                entries.forEach(function (entry) {
-                    if (entry.isIntersecting && !aboutTypeStarted[idx]) {
-                        aboutTypeStarted[idx] = true;
-                        setTimeout(function () {
-                            runTypewriter(el, textContents[idx]);
-                        }, 400);
-                        observer.unobserve(el);
-                    }
-                });
-            }, { threshold: 0.15 });
-            observer.observe(el);
-        });
+    /* ================================================================
+       PAGE NAVIGATION
+       ================================================================ */
+    function showAbout() {
+        currentView = 'about';
+        homeView.style.display = 'none';
+        aboutView.style.display = 'block';
+        hintEl.style.display = 'none';
+        window.scrollTo(0, 0);
+        updateLayout();
+    }
 
-        // Book opening animation
-        var bookObserver = new IntersectionObserver(function (entries) {
-            entries.forEach(function (entry) {
-                if (entry.isIntersecting && !bookOpened) {
-                    bookOpened = true;
-                    bookSpread.classList.add('open');
-                    bookObserver.unobserve(bookContainer);
-                }
-            });
-        }, { threshold: 0.1 });
-        bookObserver.observe(bookContainer);
+    function showHome() {
+        currentView = 'home';
+        aboutView.style.display = 'none';
+        homeView.style.display = 'block';
+        hintEl.style.display = '';
+        updateLayout();
     }
 
     /* ================================================================
        CLICK HANDLERS
        ================================================================ */
     objectEls['phone-case'].addEventListener('click', function () {
-        if (objectsClickable) {
-            aboutFrame.scrollIntoView({ behavior: 'smooth' });
-        }
+        if (objectsClickable) showAbout();
     });
     objectEls.tube.addEventListener('click', function () {
-        if (objectsClickable) console.log('Navigate → Cosmetic / Beauty project');
+        if (objectsClickable) window.location.href = 'inde-wild-case-study/index.html';
     });
     objectEls.receipt.addEventListener('click', function () {
-        if (objectsClickable) console.log('Navigate → Receipt / Coffee project');
+        if (objectsClickable) window.location.href = 'coffeechain/index.html';
     });
     objectEls.todo.addEventListener('click', function () {
-        if (objectsClickable) console.log('Navigate → To-Do List project');
+        if (objectsClickable) window.location.href = 'kaisey/index.html';
+    });
+
+    pocketMenu.addEventListener('click', function () {
+        if (currentView === 'about') showHome();
     });
 
     /* ================================================================
@@ -1052,10 +887,11 @@
        ================================================================ */
     initPlacement();
     updateLayout();
+    setupHoverLabels();
+    setupTextObservers();
     window.addEventListener('resize', updateLayout);
     requestAnimationFrame(animate);
-    setupObservers();
-    startBalloonAnimation();   // FIX #1: time-based, fires once
+    startBalloonAnimation();
 
 })();
 </script>
