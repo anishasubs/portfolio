@@ -378,15 +378,15 @@
         .scroll-hint {
             position: fixed; bottom: 32px; left: 50%;
             transform: translateX(-50%);
-            z-index: 100;
+            z-index: 199;
             font-family: 'Raleway', sans-serif;
-            font-size: 14px; color: #1c4e89;
+            font-size: 15px; color: #1c4e89;
             letter-spacing: 0.15em; text-transform: lowercase;
             opacity: 0;
             transition: opacity 0.6s ease;
+            pointer-events: none;
         }
-        .scroll-hint.visible { opacity: 0.7; }
-        .scroll-hint.hidden { opacity: 0; pointer-events: none; }
+        .scroll-hint.visible { opacity: 0.85; }
         .scroll-hint span {
             display: inline-block;
             animation: bob 1.6s ease-in-out infinite;
@@ -857,8 +857,8 @@
         var maxScroll = vh * SCROLL_VH;
         var raw       = clamp(window.scrollY / maxScroll, 0, 1);
 
-        if (raw > 0.01) { hintEl.classList.remove('visible'); hintEl.classList.add('hidden'); }
-        else            { hintEl.classList.remove('hidden'); if (balloonsPlayed) hintEl.classList.add('visible'); }
+        if (raw > 0.01) hintEl.classList.remove('visible');
+        else if (balloonsPlayed) hintEl.classList.add('visible');
 
         var oPhase = phase(raw, 0.20, 1.0);
         var ep     = easeInOutCubic(oPhase);
