@@ -1,0 +1,95 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="302" height="600" viewBox="0 0 302 600">
+  <!-- Receipt paper -->
+  <rect width="302" height="600" rx="4" fill="#faf8f2"/>
+  <rect x="1" y="1" width="300" height="598" rx="3" fill="none" stroke="#e8e2d4" stroke-width="1"/>
+
+  <!-- Top torn edge -->
+  <path d="M0,8 Q10,0 20,8 Q30,14 40,8 Q50,2 60,8 Q70,14 80,8 Q90,2 100,8 Q110,14 120,8 Q130,2 140,8 Q150,14 160,8 Q170,2 180,8 Q190,14 200,8 Q210,2 220,8 Q230,14 240,8 Q250,2 260,8 Q270,14 280,8 Q290,2 302,8 L302,0 L0,0 Z" fill="#fff"/>
+
+  <!-- Coffee cup icon -->
+  <g transform="translate(118, 40)">
+    <rect x="12" y="8" width="42" height="46" rx="4" fill="none" stroke="#1c4e89" stroke-width="3"/>
+    <path d="M54,20 Q70,20 70,34 Q70,48 54,48" fill="none" stroke="#1c4e89" stroke-width="3"/>
+    <path d="M24,8 Q26,-4 33,-4 Q36,-4 36,2" fill="none" stroke="#1c4e89" stroke-width="2.5" opacity="0.5"/>
+    <path d="M33,8 Q35,-6 42,-6 Q45,-6 45,0" fill="none" stroke="#1c4e89" stroke-width="2.5" opacity="0.5"/>
+  </g>
+
+  <!-- Shop name -->
+  <text x="151" y="120" text-anchor="middle" font-family="Georgia, serif" font-size="22" font-weight="bold" fill="#1c4e89" letter-spacing="3">COFFEE CO.</text>
+  <text x="151" y="146" text-anchor="middle" font-family="Arial, sans-serif" font-size="12" fill="#8a9bb5">New York, NY</text>
+
+  <!-- Divider -->
+  <line x1="30" y1="168" x2="272" y2="168" stroke="#1c4e89" stroke-width="0.5" stroke-dasharray="4,3" opacity="0.3"/>
+
+  <!-- Order number -->
+  <text x="151" y="198" text-anchor="middle" font-family="Arial, sans-serif" font-size="12" fill="#8a9bb5" letter-spacing="1">ORDER #4821</text>
+
+  <!-- Divider -->
+  <line x1="30" y1="218" x2="272" y2="218" stroke="#1c4e89" stroke-width="0.5" stroke-dasharray="4,3" opacity="0.3"/>
+
+  <!-- Items -->
+  <text x="38" y="252" font-family="Arial, sans-serif" font-size="16" fill="#3d6088">1 Oat Latte</text>
+  <text x="264" y="252" text-anchor="end" font-family="Arial, sans-serif" font-size="16" fill="#3d6088">$5.50</text>
+
+  <text x="38" y="284" font-family="Arial, sans-serif" font-size="16" fill="#3d6088">1 Croissant</text>
+  <text x="264" y="284" text-anchor="end" font-family="Arial, sans-serif" font-size="16" fill="#3d6088">$4.50</text>
+
+  <text x="38" y="316" font-family="Arial, sans-serif" font-size="16" fill="#3d6088">1 Cold Brew</text>
+  <text x="264" y="316" text-anchor="end" font-family="Arial, sans-serif" font-size="16" fill="#3d6088">$4.75</text>
+
+  <!-- Divider -->
+  <line x1="30" y1="340" x2="272" y2="340" stroke="#1c4e89" stroke-width="0.5" stroke-dasharray="4,3" opacity="0.3"/>
+
+  <!-- Tax -->
+  <text x="38" y="370" font-family="Arial, sans-serif" font-size="13" fill="#8a9bb5">Tax</text>
+  <text x="264" y="370" text-anchor="end" font-family="Arial, sans-serif" font-size="13" fill="#8a9bb5">$1.29</text>
+
+  <!-- Total divider -->
+  <line x1="30" y1="392" x2="272" y2="392" stroke="#1c4e89" stroke-width="1" opacity="0.4"/>
+
+  <!-- Total -->
+  <text x="38" y="426" font-family="Georgia, serif" font-size="20" font-weight="bold" fill="#1c4e89">Total</text>
+  <text x="264" y="426" text-anchor="end" font-family="Georgia, serif" font-size="24" font-weight="bold" fill="#1c4e89">$16.04</text>
+
+  <!-- Bottom divider -->
+  <line x1="30" y1="452" x2="272" y2="452" stroke="#1c4e89" stroke-width="0.5" stroke-dasharray="4,3" opacity="0.3"/>
+
+  <!-- Thank you -->
+  <text x="151" y="490" text-anchor="middle" font-family="Georgia, serif" font-size="18" font-style="italic" fill="#cc99ff">Thank you!</text>
+
+  <!-- Barcode lines (decorative) -->
+  <g transform="translate(76, 518)" opacity="0.25">
+    <rect x="0" y="0" width="3" height="40" fill="#1c4e89"/>
+    <rect x="6" y="0" width="1.5" height="40" fill="#1c4e89"/>
+    <rect x="10" y="0" width="4" height="40" fill="#1c4e89"/>
+    <rect x="17" y="0" width="2" height="40" fill="#1c4e89"/>
+    <rect x="22" y="0" width="1.5" height="40" fill="#1c4e89"/>
+    <rect x="26" y="0" width="3.5" height="40" fill="#1c4e89"/>
+    <rect x="33" y="0" width="1" height="40" fill="#1c4e89"/>
+    <rect x="37" y="0" width="3" height="40" fill="#1c4e89"/>
+    <rect x="43" y="0" width="2" height="40" fill="#1c4e89"/>
+    <rect x="48" y="0" width="1.5" height="40" fill="#1c4e89"/>
+    <rect x="52" y="0" width="4" height="40" fill="#1c4e89"/>
+    <rect x="59" y="0" width="1.5" height="40" fill="#1c4e89"/>
+    <rect x="63" y="0" width="3" height="40" fill="#1c4e89"/>
+    <rect x="69" y="0" width="2" height="40" fill="#1c4e89"/>
+    <rect x="74" y="0" width="1" height="40" fill="#1c4e89"/>
+    <rect x="78" y="0" width="3.5" height="40" fill="#1c4e89"/>
+    <rect x="84" y="0" width="2" height="40" fill="#1c4e89"/>
+    <rect x="89" y="0" width="1.5" height="40" fill="#1c4e89"/>
+    <rect x="94" y="0" width="3" height="40" fill="#1c4e89"/>
+    <rect x="100" y="0" width="2" height="40" fill="#1c4e89"/>
+    <rect x="105" y="0" width="4" height="40" fill="#1c4e89"/>
+    <rect x="112" y="0" width="1.5" height="40" fill="#1c4e89"/>
+    <rect x="116" y="0" width="3" height="40" fill="#1c4e89"/>
+    <rect x="122" y="0" width="2" height="40" fill="#1c4e89"/>
+    <rect x="127" y="0" width="1" height="40" fill="#1c4e89"/>
+    <rect x="131" y="0" width="3.5" height="40" fill="#1c4e89"/>
+    <rect x="137" y="0" width="2" height="40" fill="#1c4e89"/>
+    <rect x="142" y="0" width="3" height="40" fill="#1c4e89"/>
+    <rect x="148" y="0" width="1.5" height="40" fill="#1c4e89"/>
+  </g>
+
+  <!-- Bottom torn edge -->
+  <path d="M0,592 Q10,600 20,592 Q30,586 40,592 Q50,598 60,592 Q70,586 80,592 Q90,598 100,592 Q110,586 120,592 Q130,598 140,592 Q150,586 160,592 Q170,598 180,592 Q190,586 200,592 Q210,598 220,592 Q230,586 240,592 Q250,598 260,592 Q270,586 280,592 Q290,598 302,592 L302,600 L0,600 Z" fill="#fff"/>
+</svg>

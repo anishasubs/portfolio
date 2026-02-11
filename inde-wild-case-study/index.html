@@ -4,7 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Indē Wild Labor Day Campaign - Case Study by Anisha Subberwal</title>
-    <link href="https://fonts.googleapis.com/css2?family=Libre+Franklin:wght@400;600;700&family=Red+Hat+Mono:wght@400;600&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Bodoni+Moda:ital,wght@0,400;0,700;1,400&family=Parisienne&family=Raleway:wght@400;500;600;700&display=swap" rel="stylesheet">
     <style>
         * {
             margin: 0;
@@ -17,9 +17,9 @@
         }
         
         body {
-            font-family: 'Libre Franklin', sans-serif;
+            font-family: 'Raleway', sans-serif;
             background: #fffaed;
-            color: #1a1a1a;
+            color: #1c4e89;
             line-height: 1.6;
         }
         
@@ -30,18 +30,47 @@
 
         .pocket-menu {
             position: fixed; top: 28px; left: 28px; z-index: 200;
-            width: 64px; height: 64px; cursor: pointer;
+            cursor: pointer; text-decoration: none;
+        }
+        .pocket-menu-icon {
+            position: relative; width: 64px; height: 64px;
+            filter: drop-shadow(0px 2px 4px rgba(0,0,0,0.12));
             transition: transform 0.3s ease;
         }
-        .pocket-menu:hover { transform: scale(1.08); }
-        .pocket-menu-icon {
-            position: relative; width: 100%; height: 100%;
-            filter: drop-shadow(0px 2px 4px rgba(0,0,0,0.12));
-        }
+        .pocket-menu:hover .pocket-menu-icon { transform: scale(1.08); }
         .pocket-menu-icon img {
             position: absolute; display: block;
         }
         .menu-v1 { inset: 15% 10% 10% 10%; width: 80%; height: 75%; }
+        .pocket-nav {
+            position: absolute; top: 60px; left: 0;
+            opacity: 0; pointer-events: none;
+            transform: translateY(-8px);
+            transition: opacity 0.25s ease, transform 0.25s ease;
+        }
+        .pocket-menu:hover .pocket-nav {
+            opacity: 1; pointer-events: auto;
+            transform: translateY(0);
+        }
+        .pocket-nav-list {
+            list-style: none; margin: 0; padding: 8px 0;
+            background: rgba(255, 250, 237, 0.95);
+            backdrop-filter: blur(12px);
+            border: 1px solid rgba(28, 78, 137, 0.12);
+            border-radius: 12px;
+            box-shadow: 0 8px 32px rgba(28, 78, 137, 0.12), 0 2px 8px rgba(0,0,0,0.06);
+            min-width: 200px;
+        }
+        .pocket-nav-item {
+            display: block; padding: 10px 20px;
+            font-family: 'Raleway', sans-serif; font-size: 13px; font-weight: 500;
+            letter-spacing: 0.08em; text-transform: lowercase;
+            color: #1c4e89; text-decoration: none;
+            transition: background 0.15s ease, color 0.15s ease;
+            cursor: pointer; white-space: nowrap;
+        }
+        .pocket-nav-item:hover { background: rgba(28, 78, 137, 0.08); color: #cc99ff; }
+        .pocket-nav-item.active { font-weight: 700; color: #cc99ff; }
         .menu-v2 { inset: 13% 30% auto 30%; width: 40%; height: 6%; }
         .menu-v3 { inset: 21% auto auto 46%; width: 8%; height: 8%; }
         
@@ -75,27 +104,33 @@
         }
         
         .hero h1 {
-            font-size: 72px;
-            font-weight: 700;
+            font-family: 'Bodoni Moda', serif;
+            font-size: 80px;
+            font-weight: 400;
             margin-bottom: 20px;
             line-height: 1.1;
+            letter-spacing: -2px;
         }
         
         .hero .brand {
+            font-family: 'Parisienne', cursive;
             color: #cc99ff;
+            font-size: 88px;
         }
         
         .hero p {
             font-size: 24px;
-            color: #666;
+            color: #5a7a94;
             max-width: 800px;
             margin: 0 auto 40px;
         }
         
         .hero .meta {
-            font-family: 'Red Hat Mono', monospace;
+            font-family: 'Raleway', sans-serif;
             font-size: 14px;
-            color: #999;
+            color: #8a9bb5;
+            text-transform: uppercase;
+            letter-spacing: 0.12em;
             margin-bottom: 60px;
         }
         
@@ -151,12 +186,12 @@
             font-size: 18px;
             font-weight: 700;
             margin-bottom: 10px;
-            color: #1a1a1a;
+            color: #1c4e89;
         }
-        
+
         .hero-product p {
             font-size: 14px;
-            color: #666;
+            color: #5a7a94;
             margin: 0;
         }
         
@@ -175,14 +210,17 @@
         }
         
         h2 {
-            font-size: 48px;
-            font-weight: 700;
+            font-family: 'Bodoni Moda', serif;
+            font-size: 52px;
+            font-weight: 400;
             margin-bottom: 30px;
+            letter-spacing: -1px;
         }
-        
+
         h3 {
-            font-size: 28px;
-            font-weight: 600;
+            font-family: 'Bodoni Moda', serif;
+            font-size: 30px;
+            font-weight: 400;
             margin-bottom: 20px;
         }
         
@@ -213,30 +251,31 @@
         }
         
         .stat-card.orange {
-            border-color: #ff9933;
+            border-color: #d4a76a;
         }
-        
+
         .stat-card.blue {
-            border-color: #d4e4ff;
+            border-color: #c4b3e0;
         }
-        
+
         .stat-card.pink {
-            border-color: #ffc9e0;
+            border-color: #e0c4d4;
         }
         
         .stat-number {
-            font-size: 56px;
-            font-weight: 700;
-            font-family: 'Red Hat Mono', monospace;
+            font-size: 60px;
+            font-weight: 400;
+            font-family: 'Bodoni Moda', serif;
             margin-bottom: 10px;
-            color: #1a1a1a;
+            color: #1c4e89;
         }
-        
+
         .stat-label {
+            font-family: 'Raleway', sans-serif;
             font-size: 14px;
-            color: #666;
+            color: #5a7a94;
             text-transform: uppercase;
-            letter-spacing: 1px;
+            letter-spacing: 0.12em;
         }
         
         /* Two Column Layout */
@@ -255,11 +294,11 @@
         }
         
         .tier-box.orange {
-            border-color: #ff9933;
+            border-color: #d4a76a;
         }
-        
+
         .tier-box.blue {
-            border-color: #d4e4ff;
+            border-color: #c4b3e0;
         }
         
         .tier-title {
@@ -268,7 +307,7 @@
             text-transform: uppercase;
             letter-spacing: 1px;
             margin-bottom: 20px;
-            color: #2d2d2d;
+            color: #1c4e89;
         }
         
         .video-container {
@@ -288,7 +327,7 @@
         
         .video-container p {
             font-size: 16px;
-            color: #666;
+            color: #5a7a94;
             margin-bottom: 25px;
         }
         
@@ -316,19 +355,19 @@
         
         li {
             margin-bottom: 12px;
-            color: #444;
+            color: #3d6088;
         }
         
         /* Challenge Section */
         .challenge {
-            background: linear-gradient(135deg, #fff5e6 0%, #fffaed 100%);
+            background: linear-gradient(135deg, #f5ede0 0%, #fffaed 100%);
         }
-        
+
         .challenge-box {
             background: white;
             padding: 50px;
             border-radius: 16px;
-            border-left: 6px solid #ff9933;
+            border-left: 6px solid #d4a76a;
             margin: 40px 0;
         }
         
@@ -368,15 +407,15 @@
             position: relative;
             width: 100%;
             height: 600px;
-            border-left: 3px solid #2d2d2d;
-            border-bottom: 3px solid #2d2d2d;
+            border-left: 3px solid #1c4e89;
+            border-bottom: 3px solid #1c4e89;
         }
-        
+
         .axis-label {
             position: absolute;
             font-size: 16px;
             font-weight: 600;
-            color: #2d2d2d;
+            color: #1c4e89;
         }
         
         .x-axis-label {
@@ -396,8 +435,9 @@
         .axis-tick {
             position: absolute;
             font-size: 13px;
-            color: #666;
-            font-family: 'Red Hat Mono', monospace;
+            color: #5a7a94;
+            font-family: 'Raleway', sans-serif;
+            letter-spacing: 0.05em;
         }
         
         .x-tick {
@@ -445,13 +485,13 @@
         }
         
         .south-asian .dot {
-            background: #ff9933;
-            border-color: #cc6600;
+            background: #d4a76a;
+            border-color: #b08a4e;
         }
-        
+
         .global .dot {
-            background: #d4e4ff;
-            border-color: #8fb3e8;
+            background: #c4b3e0;
+            border-color: #9988b8;
         }
         
         .highlight .dot {
@@ -465,7 +505,7 @@
         .brand-label {
             font-size: 14px;
             font-weight: 600;
-            color: #1a1a1a;
+            color: #1c4e89;
             white-space: nowrap;
             padding: 6px 12px;
             background: rgba(250, 248, 243, 0.98);
@@ -476,7 +516,7 @@
         
         .grid-line {
             position: absolute;
-            background: #e5e5e5;
+            background: #e8ddd0;
         }
         
         .grid-line.vertical {
@@ -515,27 +555,27 @@
         
         /* Learnings Section */
         .learnings {
-            background: linear-gradient(135deg, #e6f7ff 0%, #fffaed 100%);
+            background: linear-gradient(135deg, #ede6f5 0%, #fffaed 100%);
         }
-        
+
         .learning-card {
             background: white;
             padding: 30px;
             border-radius: 12px;
             margin-bottom: 20px;
-            border-left: 4px solid #d4e4ff;
+            border-left: 4px solid #c4b3e0;
         }
-        
+
         .learning-card h4 {
             font-size: 20px;
             font-weight: 700;
             margin-bottom: 10px;
-            color: #2d2d2d;
+            color: #1c4e89;
         }
         
         /* Footer */
         footer {
-            background: #2d2d2d;
+            background: #1c4e89;
             color: white;
             padding: 60px 40px;
             text-align: center;
@@ -580,7 +620,8 @@
         
         @media (max-width: 768px) {
             .hero h1 {
-                font-size: 40px;
+                font-size: 44px;
+                letter-spacing: -1px;
             }
             
             .hero p {
@@ -605,11 +646,11 @@
             }
             
             h2 {
-                font-size: 36px;
+                font-size: 38px;
             }
-            
+
             h3 {
-                font-size: 22px;
+                font-size: 24px;
             }
             
             .stats-grid,
@@ -810,13 +851,22 @@
 <body>
     <!-- Navigation -->
     <nav></nav>
-    <a class="pocket-menu" href="../index.html">
+    <div class="pocket-menu">
         <div class="pocket-menu-icon">
             <img class="menu-v1" src="../assets/pocket-v1.svg" alt="">
             <img class="menu-v2" src="../assets/pocket-v2.svg" alt="">
             <img class="menu-v3" src="../assets/pocket-v3.svg" alt="">
         </div>
-    </a>
+        <nav class="pocket-nav">
+            <ul class="pocket-nav-list">
+                <li><a class="pocket-nav-item" href="../index.html">home</a></li>
+                <li><a class="pocket-nav-item active" href="#">beauty brand growth</a></li>
+                <li><a class="pocket-nav-item" href="../coffeechain/index.html">crypto coffee case</a></li>
+                <li><a class="pocket-nav-item" href="../kaisey/index.html">smart calendar</a></li>
+                <li><a class="pocket-nav-item" data-nav="about" href="../index.html#about">about me</a></li>
+            </ul>
+        </nav>
+    </div>
 
     <!-- Hero Section with Products -->
     <div class="hero">
@@ -880,7 +930,7 @@
                         </ul>
                     </div>
                 </div>
-                <p style="margin-top: 30px; padding-top: 30px; border-top: 1px solid #e0e0e0; font-size: 18px; color: #666;">
+                <p style="margin-top: 30px; padding-top: 30px; border-top: 1px solid #e8ddd0; font-size: 18px; color: #5a7a94;">
                     <strong>My Role:</strong> U.S. Growth Lead (Summer 2025) - Led monetization, GTM strategy, and TikTok Shop creator commerce campaigns ahead of retail expansion.
                 </p>
             </div>
@@ -891,19 +941,19 @@
     <section class="results fade-in" id="positioning">
         <div class="container">
             <h2>Competitive Positioning</h2>
-            <p style="font-size: 20px; color: #666; margin-bottom: 40px;">Where Indē Wild sits in the beauty landscape</p>
+            <p style="font-size: 20px; color: #5a7a94; margin-bottom: 40px;">Where Indē Wild sits in the beauty landscape</p>
             
             <div class="graph-embed">
                 <h3 style="text-align: center; margin-bottom: 20px;">Heritage vs. Modernity Matrix</h3>
-                <p style="text-align: center; color: #666; margin-bottom: 40px;">Indē Wild uniquely balances cultural heritage with modern clean beauty trends</p>
+                <p style="text-align: center; color: #5a7a94; margin-bottom: 40px;">Indē Wild uniquely balances cultural heritage with modern clean beauty trends</p>
                 
                 <div class="legend">
                     <div class="legend-item">
-                        <div class="legend-dot" style="background: #ff9933; border-color: #cc6600;"></div>
+                        <div class="legend-dot" style="background: #d4a76a; border-color: #b08a4e;"></div>
                         <span>South Asian Brands</span>
                     </div>
                     <div class="legend-item">
-                        <div class="legend-dot" style="background: #d4e4ff; border-color: #8fb3e8;"></div>
+                        <div class="legend-dot" style="background: #c4b3e0; border-color: #9988b8;"></div>
                         <span>Global Competitors</span>
                     </div>
                     <div class="legend-item">
@@ -1007,7 +1057,7 @@
                 
                 <div style="background: white; padding: 40px; border-radius: 12px; margin-top: 40px;">
                     <h4 style="font-size: 20px; margin-bottom: 20px; color: #cc99ff;">Strategic Sweet Spot</h4>
-                    <p style="font-size: 16px; color: #666;">Indē Wild occupies a unique position - high on both heritage authenticity and modern appeal. Unlike traditional Ayurvedic brands (Forest Essentials, Kama Ayurveda) that skew heavily traditional, or global clean beauty brands (Summer Fridays) with minimal cultural depth, Indē Wild bridges both worlds. This positioning creates opportunities for TikTok Shop success by appealing to both heritage-seeking and trend-forward consumers.</p>
+                    <p style="font-size: 16px; color: #5a7a94;">Indē Wild occupies a unique position - high on both heritage authenticity and modern appeal. Unlike traditional Ayurvedic brands (Forest Essentials, Kama Ayurveda) that skew heavily traditional, or global clean beauty brands (Summer Fridays) with minimal cultural depth, Indē Wild bridges both worlds. This positioning creates opportunities for TikTok Shop success by appealing to both heritage-seeking and trend-forward consumers.</p>
                 </div>
             </div>
         </div>
@@ -1020,10 +1070,10 @@
             <div class="challenge-box">
                 <h3>3 Days to Execute a Complex Creator Campaign</h3>
                 <p style="font-size: 18px; margin-bottom: 30px;">With only 3 days until Labor Day sale (Aug 30-31), design and execute a creator-led commerce campaign to drive TikTok Shop revenue and build brand awareness ahead of Sephora launch (Feb 2026).</p>
-                <div style="display: flex; gap: 40px; font-family: 'Red Hat Mono', monospace; font-size: 14px; color: #666; flex-wrap: wrap;">
-                    <div><strong style="color: #1a1a1a;">Campaign Launch:</strong> August 27, 2025</div>
-                    <div><strong style="color: #1a1a1a;">Sale Dates:</strong> August 30-31, 2025</div>
-                    <div><strong style="color: #1a1a1a;">Timeline:</strong> 72-hour sprint</div>
+                <div style="display: flex; gap: 40px; font-family: 'Raleway', sans-serif; font-size: 14px; color: #5a7a94; text-transform: uppercase; letter-spacing: 0.12em; flex-wrap: wrap;">
+                    <div><strong style="color: #1c4e89;">Campaign Launch:</strong> August 27, 2025</div>
+                    <div><strong style="color: #1c4e89;">Sale Dates:</strong> August 30-31, 2025</div>
+                    <div><strong style="color: #1c4e89;">Timeline:</strong> 72-hour sprint</div>
                 </div>
             </div>
         </div>
@@ -1054,15 +1104,15 @@
             
             <div style="background: white; padding: 40px; border-radius: 12px; margin-bottom: 40px;">
                 <h4 style="font-size: 20px; font-weight: 600; color: #cc99ff; margin-bottom: 20px;">Multi-Channel Outreach Strategy</h4>
-                <p style="font-size: 16px; color: #666; line-height: 1.8;">To activate 160 creators across two distinct tiers within 72 hours, I deployed a tailored communication strategy for each audience:</p>
+                <p style="font-size: 16px; color: #5a7a94; line-height: 1.8;">To activate 160 creators across two distinct tiers within 72 hours, I deployed a tailored communication strategy for each audience:</p>
                 <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 30px; margin-top: 30px;">
                     <div>
-                        <p style="font-size: 16px; color: #2d2d2d; margin-bottom: 10px;"><strong>Tier 1 Community (105 creators):</strong></p>
-                        <p style="font-size: 15px; color: #666;">Outreach via <strong>TikTok video post</strong> explaining the challenge mechanics, incentives, and creative opportunities - creating excitement and transparency at scale.</p>
+                        <p style="font-size: 16px; color: #1c4e89; margin-bottom: 10px;"><strong>Tier 1 Community (105 creators):</strong></p>
+                        <p style="font-size: 15px; color: #5a7a94;">Outreach via <strong>TikTok video post</strong> explaining the challenge mechanics, incentives, and creative opportunities - creating excitement and transparency at scale.</p>
                     </div>
                     <div>
-                        <p style="font-size: 16px; color: #2d2d2d; margin-bottom: 10px;"><strong>Tier 2 Influencers (55 creators, 6K+):</strong></p>
-                        <p style="font-size: 15px; color: #666;">Personalized outreach via <strong>email and direct messages</strong>, highlighting commission structure, Spark Ads support, and partnership benefits.</p>
+                        <p style="font-size: 16px; color: #1c4e89; margin-bottom: 10px;"><strong>Tier 2 Influencers (55 creators, 6K+):</strong></p>
+                        <p style="font-size: 15px; color: #5a7a94;">Personalized outreach via <strong>email and direct messages</strong>, highlighting commission structure, Spark Ads support, and partnership benefits.</p>
                     </div>
                 </div>
             </div>
@@ -1073,7 +1123,7 @@
                     <p><strong>Incentive:</strong> $10-50 gift cards based on view tiers</p>
                     <p><strong>Approach:</strong> Top 3 most creative ads get featured on PR list</p>
                     <p><strong>Goal:</strong> Generate authentic UGC at scale, fast</p>
-                    <p style="margin-top: 20px; color: #666;"><strong>Result:</strong> 31,837 views from community creators</p>
+                    <p style="margin-top: 20px; color: #5a7a94;"><strong>Result:</strong> 31,837 views from community creators</p>
                 </div>
                 
                 <div class="tier-box blue">
@@ -1081,7 +1131,7 @@
                     <p><strong>Incentive:</strong> 10% TikTok Shop commission + Spark Ads boost</p>
                     <p><strong>Approach:</strong> Shoppable content with direct attribution</p>
                     <p><strong>Goal:</strong> Drive immediate conversions during sale window</p>
-                    <p style="margin-top: 20px; color: #666;"><strong>Result:</strong> 450,052 views from macro influencers</p>
+                    <p style="margin-top: 20px; color: #5a7a94;"><strong>Result:</strong> 450,052 views from macro influencers</p>
                 </div>
             </div>
             
@@ -1098,12 +1148,12 @@
                         Your browser doesn't support video playback. <a href="https://www.tiktok.com/@indewildofficial/video/7543368825828429069" target="_blank">Watch on TikTok</a>
                     </video>
                 </div>
-                <p style="font-size: 13px; color: #999; margin-top: 10px; text-align: center;">Click to play • <a href="https://www.tiktok.com/@indewildofficial/video/7543368825828429069" target="_blank" style="color: #cc99ff;">View on TikTok ↗</a></p>
+                <p style="font-size: 13px; color: #8a9bb5; margin-top: 10px; text-align: center;">Click to play • <a href="https://www.tiktok.com/@indewildofficial/video/7543368825828429069" target="_blank" style="color: #cc99ff;">View on TikTok ↗</a></p>
             </div>
             
             <div style="background: white; padding: 40px; border-radius: 12px; margin-top: 40px;">
                 <h4 style="font-size: 20px; font-weight: 600; color: #cc99ff; margin-bottom: 10px; text-align: center;">Top 3 Winning Creative Submissions</h4>
-                <p style="font-size: 16px; color: #666; margin-bottom: 30px; text-align: center;">Most creative ads from Tier 1 community featured on PR list</p>
+                <p style="font-size: 16px; color: #5a7a94; margin-bottom: 30px; text-align: center;">Most creative ads from Tier 1 community featured on PR list</p>
                 <div class="winners-grid">
                     <div class="winner-video">
                         <video 
@@ -1113,7 +1163,7 @@
                             <source src="Winner-1.mp4" type="video/mp4">
                             Your browser doesn't support video playback. <a href="https://www.tiktok.com/@indewildofficial/video/7548183293317975326" target="_blank">Watch on TikTok</a>
                         </video>
-                        <p style="font-size: 12px; color: #999; margin-top: 8px; text-align: center;">Winner #1 • <a href="https://www.tiktok.com/@indewildofficial/video/7548183293317975326" target="_blank" style="color: #cc99ff;">View on TikTok ↗</a></p>
+                        <p style="font-size: 12px; color: #8a9bb5; margin-top: 8px; text-align: center;">Winner #1 • <a href="https://www.tiktok.com/@indewildofficial/video/7548183293317975326" target="_blank" style="color: #cc99ff;">View on TikTok ↗</a></p>
                     </div>
                     <div class="winner-video">
                         <video 
@@ -1123,7 +1173,7 @@
                             <source src="Winner-2.mp4" type="video/mp4">
                             Your browser doesn't support video playback. <a href="https://www.tiktok.com/@indewildofficial/video/7548264253535309086" target="_blank">Watch on TikTok</a>
                         </video>
-                        <p style="font-size: 12px; color: #999; margin-top: 8px; text-align: center;">Winner #2 • <a href="https://www.tiktok.com/@indewildofficial/video/7548264253535309086" target="_blank" style="color: #cc99ff;">View on TikTok ↗</a></p>
+                        <p style="font-size: 12px; color: #8a9bb5; margin-top: 8px; text-align: center;">Winner #2 • <a href="https://www.tiktok.com/@indewildofficial/video/7548264253535309086" target="_blank" style="color: #cc99ff;">View on TikTok ↗</a></p>
                     </div>
                     <div class="winner-video">
                         <video 
@@ -1133,15 +1183,15 @@
                             <source src="Winner 3.mp4" type="video/mp4">
                             Your browser doesn't support video playback. <a href="https://www.tiktok.com/@indewildofficial/video/7548477368399039775" target="_blank">Watch on TikTok</a>
                         </video>
-                        <p style="font-size: 12px; color: #999; margin-top: 8px; text-align: center;">Winner #3 • <a href="https://www.tiktok.com/@indewildofficial/video/7548477368399039775" target="_blank" style="color: #cc99ff;">View on TikTok ↗</a></p>
+                        <p style="font-size: 12px; color: #8a9bb5; margin-top: 8px; text-align: center;">Winner #3 • <a href="https://www.tiktok.com/@indewildofficial/video/7548477368399039775" target="_blank" style="color: #cc99ff;">View on TikTok ↗</a></p>
                     </div>
                 </div>
             </div>
             
             <div style="background: white; padding: 40px; border-radius: 12px; margin-top: 40px; text-align: center;">
-                <p style="font-size: 18px; color: #666;">45 sale posts from 160 pre-seeded creators within 72-hour window</p>
+                <p style="font-size: 18px; color: #5a7a94;">45 sale posts from 160 pre-seeded creators within 72-hour window</p>
                 <p style="font-size: 48px; font-weight: 700; color: #cc99ff; margin-top: 20px;">28% Activation Rate</p>
-                <p style="font-size: 16px; color: #666; margin-top: 15px;">Nearly 2x industry standard for rapid campaigns</p>
+                <p style="font-size: 16px; color: #5a7a94; margin-top: 15px;">Nearly 2x industry standard for rapid campaigns</p>
             </div>
         </div>
     </section>
@@ -1150,9 +1200,9 @@
     <section class="results fade-in" id="results">
         <div class="container">
             <h2>Campaign Impact</h2>
-            <p style="font-size: 20px; color: #666; margin-bottom: 60px;">Comprehensive campaign summary: execution, reach, and business results</p>
+            <p style="font-size: 20px; color: #5a7a94; margin-bottom: 60px;">Comprehensive campaign summary: execution, reach, and business results</p>
             
-            <h3 style="font-size: 18px; color: #666; margin-bottom: 30px; font-weight: 600;">Campaign Execution</h3>
+            <h3 style="font-size: 18px; color: #5a7a94; margin-bottom: 30px; font-weight: 600;">Campaign Execution</h3>
             <div class="stats-grid">
                 <div class="stat-card purple">
                     <div class="stat-number">72</div>
@@ -1172,7 +1222,7 @@
                 </div>
             </div>
             
-            <h3 style="font-size: 18px; color: #666; margin: 50px 0 30px; font-weight: 600;">Business Results</h3>
+            <h3 style="font-size: 18px; color: #5a7a94; margin: 50px 0 30px; font-weight: 600;">Business Results</h3>
             <div class="stats-grid">
                 <div class="stat-card purple">
                     <div class="stat-number">$344K</div>
@@ -1194,35 +1244,35 @@
             
             <!-- Revenue Distribution Chart -->
             <div style="background: white; padding: 50px; border-radius: 12px; margin-top: 60px;">
-                <h3 style="font-size: 24px; font-weight: 700; color: #2d2d2d; margin-bottom: 20px;">Campaign Analytics</h3>
+                <h3 style="font-size: 24px; font-weight: 700; color: #1c4e89; margin-bottom: 20px;">Campaign Analytics</h3>
                 
                 <!-- Chart Title -->
                 <h4 style="font-size: 18px; font-weight: 600; color: #cc99ff; margin-bottom: 10px;">Complete Shopify Dashboard: Labor Day Campaign Impact</h4>
-                <p style="font-size: 14px; color: #666; margin-bottom: 30px;">Real-time data from Indē Wild Shopify Analytics (Jul 1 - Sep 10, 2025)</p>
+                <p style="font-size: 14px; color: #5a7a94; margin-bottom: 30px;">Real-time data from Indē Wild Shopify Analytics (Jul 1 - Sep 10, 2025)</p>
                 
                 <!-- Shopify Analytics Dashboard -->
                 <div style="margin-bottom: 40px;">
                     <img src="shopify-analytics.png" 
                          alt="Shopify Analytics Dashboard showing Labor Day campaign spike with $344,729.80 in total sales (+30% YoY), conversion rate improvements, and sales channel breakdown" 
                          style="width: 100%; height: auto; border-radius: 8px; box-shadow: 0 4px 20px rgba(0,0,0,0.1);">
-                    <p style="font-size: 13px; color: #999; margin-top: 15px; text-align: center; font-style: italic;">The spike on August 30-31 shows the direct impact of the Labor Day creator campaign across all key metrics.</p>
+                    <p style="font-size: 13px; color: #8a9bb5; margin-top: 15px; text-align: center; font-style: italic;">The spike on August 30-31 shows the direct impact of the Labor Day creator campaign across all key metrics.</p>
                 </div>
                 
                 <!-- Key Insights -->
                 <div class="strategy-comparison" style="display: grid; grid-template-columns: 1fr 1fr; gap: 30px; margin-top: 30px;">
-                    <div style="background: #f0f8ff; padding: 25px; border-radius: 8px; border-left: 4px solid #4da6ff;">
-                        <h5 style="font-size: 16px; font-weight: 700; color: #4da6ff; margin-bottom: 10px;">📈 Revenue Spike</h5>
-                        <p style="font-size: 14px; color: #666; margin-bottom: 10px;">The Labor Day campaign (Aug 30-31) created a clear revenue spike visible in the "Total sales over time" graph, with sustained momentum carrying into early September.</p>
-                        <p style="font-size: 14px; color: #2d2d2d; font-weight: 600;">→ Result: $344,729.80 total sales (+30% YoY)</p>
+                    <div style="background: #f0edf5; padding: 25px; border-radius: 8px; border-left: 4px solid #1c4e89;">
+                        <h5 style="font-size: 16px; font-weight: 700; color: #1c4e89; margin-bottom: 10px;">📈 Revenue Spike</h5>
+                        <p style="font-size: 14px; color: #5a7a94; margin-bottom: 10px;">The Labor Day campaign (Aug 30-31) created a clear revenue spike visible in the "Total sales over time" graph, with sustained momentum carrying into early September.</p>
+                        <p style="font-size: 14px; color: #1c4e89; font-weight: 600;">→ Result: $344,729.80 total sales (+30% YoY)</p>
                     </div>
-                    <div style="background: #fff0f5; padding: 25px; border-radius: 8px; border-left: 4px solid #ff69b4;">
+                    <div style="background: #f5eef3; padding: 25px; border-radius: 8px; border-left: 4px solid #cc99ff;">
                         <h5 style="font-size: 16px; font-weight: 700; color: #cc99ff; margin-bottom: 10px;">🎯 Multi-Channel Success</h5>
-                        <p style="font-size: 14px; color: #666; margin-bottom: 10px;">TikTok Shop drove significant sales ($676.65 shown in breakdown), complementing online store performance and demonstrating effective creator commerce strategy.</p>
-                        <p style="font-size: 14px; color: #2d2d2d; font-weight: 600;">→ Result: Diversified revenue streams established</p>
+                        <p style="font-size: 14px; color: #5a7a94; margin-bottom: 10px;">TikTok Shop drove significant sales ($676.65 shown in breakdown), complementing online store performance and demonstrating effective creator commerce strategy.</p>
+                        <p style="font-size: 14px; color: #1c4e89; font-weight: 600;">→ Result: Diversified revenue streams established</p>
                     </div>
                 </div>
                 
-                <p style="font-size: 14px; color: #666; margin-top: 30px; padding-top: 20px; border-top: 1px solid #e0e0e0; text-align: center;">Campaign contributed to strong Q3 performance across key metrics: $344,729.80 total sales (+30% YoY)</p>
+                <p style="font-size: 14px; color: #5a7a94; margin-top: 30px; padding-top: 20px; border-top: 1px solid #e8ddd0; text-align: center;">Campaign contributed to strong Q3 performance across key metrics: $344,729.80 total sales (+30% YoY)</p>
             </div>
         </div>
     </section>
@@ -1252,7 +1302,7 @@
                 <p>4+ organic tags/day post-campaign shows creator relationships drive long-term value</p>
             </div>
             
-            <div style="background: white; padding: 50px; border-radius: 16px; margin-top: 60px; border: 3px solid #cc99ff;">
+            <div style="background: white; padding: 50px; border-radius: 16px; margin-top: 60px; border: 3px solid #cc99ff; box-shadow: 0 4px 20px rgba(204, 153, 255, 0.12);">
                 <h3 style="color: #cc99ff; margin-bottom: 20px;">Applying to TikTok Shop Merchant Success</h3>
                 <p style="font-size: 18px; margin-bottom: 30px;">This creator-led commerce model transfers directly to category management:</p>
                 <div class="two-col" style="margin-top: 30px;">

@@ -26,20 +26,63 @@
         /* ── PocketMenu (fixed) ─────────────────────────────── */
         .pocket-menu {
             position: fixed; top: 28px; left: 28px; z-index: 200;
-            width: 64px; height: 64px; cursor: pointer;
+            cursor: pointer;
+        }
+        .pocket-menu-icon {
+            position: relative; width: 64px; height: 64px;
+            filter: drop-shadow(0px 2px 4px rgba(0,0,0,0.12));
             transition: transform 0.3s ease;
         }
-        .pocket-menu:hover { transform: scale(1.08); }
-        .pocket-menu-icon {
-            position: relative; width: 100%; height: 100%;
-            filter: drop-shadow(0px 2px 4px rgba(0,0,0,0.12));
-        }
+        .pocket-menu:hover .pocket-menu-icon { transform: scale(1.08); }
         .pocket-menu-icon img {
             position: absolute; display: block;
         }
         .menu-v1 { inset: 15% 10% 10% 10%; width: 80%; height: 75%; }
         .menu-v2 { inset: 13% 30% auto 30%; width: 40%; height: 6%; }
         .menu-v3 { inset: 21% auto auto 46%; width: 8%; height: 8%; }
+
+        /* ── Pocket flyout nav ──────────────────────────────── */
+        .pocket-nav {
+            position: absolute; top: 60px; left: 0;
+            opacity: 0; pointer-events: none;
+            transform: translateY(-8px);
+            transition: opacity 0.25s ease, transform 0.25s ease;
+        }
+        .pocket-menu:hover .pocket-nav {
+            opacity: 1; pointer-events: auto;
+            transform: translateY(0);
+        }
+        .pocket-nav-list {
+            list-style: none; margin: 0; padding: 8px 0;
+            background: rgba(255, 250, 237, 0.95);
+            backdrop-filter: blur(12px);
+            border: 1px solid rgba(28, 78, 137, 0.12);
+            border-radius: 12px;
+            box-shadow: 0 8px 32px rgba(28, 78, 137, 0.12), 0 2px 8px rgba(0,0,0,0.06);
+            min-width: 200px;
+        }
+        .pocket-nav-item {
+            display: block;
+            padding: 10px 20px;
+            font-family: 'Raleway', sans-serif;
+            font-size: 13px;
+            font-weight: 500;
+            letter-spacing: 0.08em;
+            text-transform: lowercase;
+            color: #1c4e89;
+            text-decoration: none;
+            transition: background 0.15s ease, color 0.15s ease;
+            cursor: pointer;
+            white-space: nowrap;
+        }
+        .pocket-nav-item:hover {
+            background: rgba(28, 78, 137, 0.08);
+            color: #cc99ff;
+        }
+        .pocket-nav-item.active {
+            font-weight: 700;
+            color: #cc99ff;
+        }
 
         /* ── Balloon letters ─────────────────────────────────── */
         .letter {
@@ -56,12 +99,12 @@
             will-change: left, top, width, height, transform;
             overflow: hidden;
             pointer-events: none; user-select: none;
-            transition: box-shadow 0.3s ease, filter 0.3s ease;
+            transition: filter 0.3s ease, transform 0.3s ease;
         }
         .object.clickable { pointer-events: auto; cursor: pointer; }
         .object.clickable:hover {
-            box-shadow: 6px 7px 5px 3px rgba(0,0,0,0.25);
-            filter: brightness(1.02);
+            filter: drop-shadow(4px 6px 4px rgba(0,0,0,0.25)) brightness(1.02);
+            transform: translateY(-2px);
         }
         .object img {
             width: 100%; height: 100%;
@@ -70,17 +113,20 @@
         #tube       { border-radius: 24px; z-index: 5; }
         #receipt    { border-radius: 4px;  z-index: 6; }
         #phone-case { border-radius: 24px; z-index: 7; }
+        #phone-case.clickable:hover {
+            filter: drop-shadow(6px 8px 6px rgba(0,0,0,0.3)) brightness(1.02);
+        }
         #todo       { border-radius: 8px;  z-index: 8; }
 
         /* ── Hover labels ────────────────────────────────────── */
         .hover-label {
             position: absolute;
             font-family: 'Raleway', sans-serif;
-            font-size: 23.667px;
-            line-height: 1.0;
+            font-size: 18px;
+            line-height: 1.15;
             color: #1c4e89;
             text-transform: uppercase;
-            white-space: pre-wrap;
+            text-align: center;
             z-index: 25;
             opacity: 0;
             pointer-events: none;
@@ -334,11 +380,12 @@
             transform: translateX(-50%);
             z-index: 100;
             font-family: 'Raleway', sans-serif;
-            font-size: 13px; color: #1c4e89;
-            letter-spacing: 0.12em; text-transform: lowercase;
-            opacity: 0.5;
-            transition: opacity 0.5s ease;
+            font-size: 14px; color: #1c4e89;
+            letter-spacing: 0.15em; text-transform: lowercase;
+            opacity: 0;
+            transition: opacity 0.6s ease;
         }
+        .scroll-hint.visible { opacity: 0.7; }
         .scroll-hint.hidden { opacity: 0; pointer-events: none; }
         .scroll-hint span {
             display: inline-block;
@@ -368,15 +415,15 @@
 
                 <!-- Objects -->
                 <div class="object" id="tube"><img src="./assets/tube.png" alt="Cosmetic tube" draggable="false"></div>
-                <div class="object" id="receipt"><img src="./assets/receipt.png" alt="Receipt" draggable="false"></div>
+                <div class="object" id="receipt"><img src="./assets/receipt.svg" alt="Receipt" draggable="false"></div>
                 <div class="object" id="phone-case"><img src="./assets/phone-case.png" alt="Phone case" draggable="false"></div>
                 <div class="object" id="todo"><img src="./assets/todo.png" alt="To-Do List" draggable="false"></div>
 
                 <!-- Hover labels -->
-                <div class="hover-label" id="label-tube" style="left:150px;top:378px;width:110px;">BEAUTY<br><strong>BRAND GROWTH</strong></div>
-                <div class="hover-label" id="label-receipt" style="left:454px;top:201px;width:161px;">A CRYPTO<br><strong>COFFEE CASE</strong></div>
-                <div class="hover-label" id="label-todo" style="left:710px;top:228px;width:130px;">A SMART<br><strong>CALENDAR</strong></div>
-                <div class="hover-label" id="label-phone-case" style="left:1192px;top:273px;width:90px;">ABOUT<br><strong>ME</strong></div>
+                <div class="hover-label" id="label-tube" style="left:112px;top:170px;width:200px;">BEAUTY<br><strong>BRAND GROWTH</strong></div>
+                <div class="hover-label" id="label-receipt" style="left:424px;top:199px;width:151px;">A CRYPTO<br><strong>COFFEE CASE</strong></div>
+                <div class="hover-label" id="label-todo" style="left:747px;top:231px;width:201px;">A SMART<br><strong>CALENDAR</strong></div>
+                <div class="hover-label" id="label-phone-case" style="left:1120px;top:195px;width:150px;">ABOUT<br><strong>ME</strong></div>
 
                 <!-- Denim pocket -->
                 <div class="pocket" id="pocket"><img src="./assets/denim-pocket.png" alt="Denim pocket" draggable="false"></div>
@@ -564,6 +611,15 @@
         <img class="menu-v2" src="./assets/pocket-v2.svg" alt="">
         <img class="menu-v3" src="./assets/pocket-v3.svg" alt="">
     </div>
+    <nav class="pocket-nav">
+        <ul class="pocket-nav-list">
+            <li><a class="pocket-nav-item active" data-nav="home">home</a></li>
+            <li><a class="pocket-nav-item" data-nav="tube">beauty brand growth</a></li>
+            <li><a class="pocket-nav-item" data-nav="receipt">crypto coffee case</a></li>
+            <li><a class="pocket-nav-item" data-nav="todo">smart calendar</a></li>
+            <li><a class="pocket-nav-item" data-nav="about">about me</a></li>
+        </ul>
+    </nav>
 </div>
 
 <div class="scroll-hint" id="scroll-hint">scroll <span>&darr;</span></div>
@@ -592,23 +648,23 @@
 
     var OBJECTS = {
         tube: {
-            start: { x: 497, y: 497, w: 201, h: 336 },
-            end:   { x: 283, y: 237, w: 97,  h: 326 },
+            start: { x: 497, y: 450, w: 85,  h: 350 },
+            end:   { x: 172, y: 236, w: 80,   h: 329 },
             startRot: -18.77, endRot: 0
         },
         receipt: {
             start: { x: 584, y: 495, w: 151, h: 300 },
-            end:   { x: 459, y: 273, w: 151, h: 300 },
+            end:   { x: 424, y: 250, w: 151, h: 300 },
             startRot: 0, endRot: 0
         },
         'phone-case': {
-            start: { x: 679, y: 427, w: 221, h: 436 },
-            end:   { x: 935, y: 187, w: 221, h: 436 },
+            start: { x: 679, y: 427, w: 150, h: 307 },
+            end:   { x: 1120, y: 246, w: 150, h: 307 },
             startRot: 0, endRot: 0
         },
         todo: {
-            start: { x: 614, y: 543, w: 218, h: 257 },
-            end:   { x: 653, y: 308, w: 201, h: 239 },
+            start: { x: 614, y: 543, w: 201, h: 237 },
+            end:   { x: 747, y: 282, w: 201, h: 237 },
             startRot: 0, endRot: 0
         }
     };
@@ -717,7 +773,7 @@
         balloonsPlayed = true;
 
         var startTime = null;
-        var DURATION  = 7000;
+        var DURATION  = 4000;
 
         function tick(timestamp) {
             if (!startTime) startTime = timestamp;
@@ -728,7 +784,7 @@
                 var el = letterEls[i];
                 if (!el) continue;
                 var dist    = Math.abs(i - 3);
-                var stagger = dist * 500;
+                var stagger = dist * 250;
                 var local   = clamp((elapsed - stagger) / (DURATION - stagger * 0.5), 0, 1);
                 var lp      = easeOutCubic(local);
                 var yUp     = -900 * lp;
@@ -746,12 +802,16 @@
                     }
                 }
                 letterEls = [];
+                // Show scroll hint after balloons finish
+                if (window.scrollY < 10) {
+                    hintEl.classList.add('visible');
+                }
             }
         }
 
         setTimeout(function () {
             requestAnimationFrame(tick);
-        }, 2500);
+        }, 800);
     }
 
     /* ================================================================
@@ -797,8 +857,8 @@
         var maxScroll = vh * SCROLL_VH;
         var raw       = clamp(window.scrollY / maxScroll, 0, 1);
 
-        if (raw > 0.01) hintEl.classList.add('hidden');
-        else            hintEl.classList.remove('hidden');
+        if (raw > 0.01) { hintEl.classList.remove('visible'); hintEl.classList.add('hidden'); }
+        else            { hintEl.classList.remove('hidden'); if (balloonsPlayed) hintEl.classList.add('visible'); }
 
         var oPhase = phase(raw, 0.20, 1.0);
         var ep     = easeInOutCubic(oPhase);
@@ -878,9 +938,28 @@
         if (objectsClickable) window.location.href = 'kaisey/index.html';
     });
 
-    pocketMenu.addEventListener('click', function () {
-        if (currentView === 'about') showHome();
-    });
+    /* Pocket nav click handlers */
+    var navItems = document.querySelectorAll('.pocket-nav-item');
+    for (var i = 0; i < navItems.length; i++) {
+        (function (item) {
+            item.addEventListener('click', function (e) {
+                e.stopPropagation();
+                var target = item.getAttribute('data-nav');
+                if (target === 'home') {
+                    if (currentView === 'about') showHome();
+                    else window.scrollTo({ top: 0, behavior: 'smooth' });
+                } else if (target === 'about') {
+                    showAbout();
+                } else if (target === 'tube') {
+                    window.location.href = 'inde-wild-case-study/index.html';
+                } else if (target === 'receipt') {
+                    window.location.href = 'coffeechain/index.html';
+                } else if (target === 'todo') {
+                    window.location.href = 'kaisey/index.html';
+                }
+            });
+        })(navItems[i]);
+    }
 
     /* ================================================================
        BOOT
