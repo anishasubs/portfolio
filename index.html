@@ -240,35 +240,33 @@
             width: 100%; height: 115.46%;
             object-fit: cover; display: block;
             position: relative; top: -15.46%;
+            filter: grayscale(1);
         }
         .about-title {
             position: absolute;
             font-family: 'Bodoni Moda', serif;
-            font-size: 250px;
+            font-size: 140px;
             font-weight: 400;
-            letter-spacing: -14px;
+            letter-spacing: -6px;
             line-height: 1;
             color: #1c4e89;
-            text-align: center;
         }
         .about-subtitle {
             position: absolute;
             font-family: 'Parisienne', cursive;
-            font-size: 70px;
+            font-size: 48px;
             font-weight: 400;
-            color: #1c4e89;
-            text-align: center;
+            color: #cc99ff;
         }
         .about-bio {
             position: absolute;
             font-family: 'Raleway', sans-serif;
-            font-size: 23.343px;
-            font-weight: 700;
-            line-height: 1.14;
-            color: #1c4e89;
-            text-transform: uppercase;
-            text-align: justify;
+            font-size: 16.5px;
+            font-weight: 400;
+            line-height: 1.65;
+            color: #3d6088;
         }
+        .about-bio p { margin-bottom: 14px; }
         .about-linkedin-text {
             position: absolute;
             font-family: 'Raleway', sans-serif;
@@ -453,27 +451,29 @@
         <div class="about-artboard" id="about-artboard-inner">
 
             <!-- Profile photo -->
-            <div class="profile-pic" id="profile-pic" style="left:72px;top:200px;width:584px;height:754px;">
+            <div class="profile-pic" id="profile-pic" style="left:100px;top:160px;width:400px;height:520px;">
                 <img src="./assets/profile-photo.jpg" alt="Anisha Subberwal">
             </div>
 
             <!-- Welcome title -->
-            <h1 class="about-title" id="about-welcome" style="left:571px;top:177px;width:876px;">Welcome</h1>
+            <h1 class="about-title" id="about-welcome" style="left:560px;top:160px;width:780px;">Welcome</h1>
 
             <!-- Hi I'm Anisha -->
-            <p class="about-subtitle" id="about-hi" style="left:685px;top:449px;width:646px;">Hi! I'm Anisha</p>
+            <p class="about-subtitle" id="about-hi" style="left:560px;top:310px;width:700px;">Hi &mdash; I'm Anisha</p>
 
             <!-- Bio text -->
-            <div class="about-bio" id="about-bio" style="left:743px;top:607px;width:553px;">
-                <p style="margin-bottom:12px;">I'm a content creator passionate about fashion, known for curating authentic, visually compelling stories that connect with a highly engaged audience.</p>
-                <p>With a strong focus on relatable storytelling, high-quality visuals, and a genuine voice, I collaborate with brands to bring their message to life &mdash; in a way that resonates.</p>
+            <div class="about-bio" id="about-bio" style="left:560px;top:390px;width:740px;">
+                <p>I've always been shaped by movement &mdash; across cultures, cities, and disciplines. Growing up South Asian and living in different parts of the world taught me early that context matters. The same idea, product, or story can resonate differently depending on who it's for and where it lives. That perspective continues to shape how I build.</p>
+                <p>I began my journey at Parsons School of Design, where I learned to see the world through emotion, form, and narrative &mdash; how things feel before how they function. That creative foundation eventually led me to ask bigger questions about systems, scale, and impact.</p>
+                <p>Today, I'm an MBA candidate at Columbia Business School, focused on product strategy, digital innovation, and intelligent systems. My work sits at the intersection of culture and technology:</p>
+                <p style="padding-left:16px;">Scaling a heritage-driven beauty brand (Ind&#275; Wild) through data-led growth strategy<br>Designing a blockchain-powered model to bring transparency to global coffee supply chains<br>Building Kaisey, an AI-powered productivity companion for MBA students</p>
             </div>
 
             <!-- LinkedIn instruction text -->
-            <p class="about-linkedin-text" id="about-linkedin-text" style="left:83px;top:1094px;width:553px;">THESE ARE ALL THE APPS I WASTE MY TIME ON. CLICK ON THE LINKEDIN TO TAKE YOU TO MY ACTUAL LINKEDIN.</p>
+            <p class="about-linkedin-text" id="about-linkedin-text" style="left:100px;top:870px;width:500px;">THESE ARE ALL THE APPS I WASTE MY TIME ON. CLICK ON THE LINKEDIN TO TAKE YOU TO MY ACTUAL LINKEDIN.</p>
 
             <!-- Phone mockup -->
-            <div class="phone-mockup" id="about-phone" style="left:856px;top:965px;width:430px;height:932px;">
+            <div class="phone-mockup" id="about-phone" style="left:856px;top:850px;width:380px;height:822px;">
                 <img class="phone-wallpaper" src="./assets/wallpaper.png" alt="Phone screen">
 
                 <div class="phone-screen">
@@ -632,7 +632,7 @@
        CONSTANTS — coordinates from updated Figma @ 1440px
        ================================================================ */
     var ARTBOARD_W     = 1440;
-    var ABOUT_H        = 2049;
+    var ABOUT_H        = 1750;
     var POCKET         = { x: 475, y: 647, w: 490, h: 490 };
     var HOME_ARTBOARD_H = POCKET.y + POCKET.h; // 1137
 
