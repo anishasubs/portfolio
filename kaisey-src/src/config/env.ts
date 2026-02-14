@@ -13,7 +13,7 @@ export const env = {
   // Google OAuth
   google: {
     clientId: import.meta.env.VITE_GOOGLE_CLIENT_ID || "439791456473-9icvss2jens8jvnb0v3ne2nhdodqjbd1.apps.googleusercontent.com",
-    redirectUri: import.meta.env.VITE_GOOGLE_REDIRECT_URI || window.location.origin,
+    redirectUri: import.meta.env.PROD ? window.location.origin + '/portfolio/kaisey' : (import.meta.env.VITE_GOOGLE_REDIRECT_URI || window.location.origin),
     scopes: "https://www.googleapis.com/auth/calendar.readonly https://www.googleapis.com/auth/calendar.events https://www.googleapis.com/auth/userinfo.profile https://www.googleapis.com/auth/userinfo.email",
   },
 
