@@ -117,6 +117,8 @@
             filter: drop-shadow(6px 8px 6px rgba(0,0,0,0.3)) brightness(1.02);
         }
         #todo       { border-radius: 8px;  z-index: 8; }
+        #rollon     { border-radius: 0; z-index: 9; overflow: visible; }
+        #rollon img { object-fit: cover; }
 
         /* ── Hover labels ────────────────────────────────────── */
         .hover-label {
@@ -131,6 +133,8 @@
             opacity: 0;
             pointer-events: none;
             transition: opacity 0.25s ease;
+            transform: translateX(-50%);
+            white-space: nowrap;
         }
         .hover-label.visible { opacity: 1; }
         .hover-label strong {
@@ -416,12 +420,14 @@
                 <div class="object" id="receipt"><img src="./assets/receipt.svg" alt="Receipt" draggable="false"></div>
                 <div class="object" id="phone-case"><img src="./assets/phone-case.png" alt="Phone case" draggable="false"></div>
                 <div class="object" id="todo"><img src="./assets/todo.png" alt="To-Do List" draggable="false"></div>
+                <div class="object" id="rollon"><img src="./assets/perfume-bottle.png" alt="Perfume bottle" draggable="false"></div>
 
                 <!-- Hover labels -->
-                <div class="hover-label" id="label-tube" style="left:112px;top:170px;width:200px;">BEAUTY<br><strong>BRAND GROWTH</strong></div>
-                <div class="hover-label" id="label-receipt" style="left:424px;top:199px;width:151px;">A CRYPTO<br><strong>COFFEE CASE</strong></div>
-                <div class="hover-label" id="label-todo" style="left:747px;top:231px;width:201px;">A SMART<br><strong>CALENDAR</strong></div>
-                <div class="hover-label" id="label-phone-case" style="left:1120px;top:195px;width:150px;">ABOUT<br><strong>ME</strong></div>
+                <div class="hover-label" id="label-tube">BEAUTY<br><strong>BRAND GROWTH</strong></div>
+                <div class="hover-label" id="label-receipt">A CRYPTO<br><strong>COFFEE CASE</strong></div>
+                <div class="hover-label" id="label-todo">A SMART<br><strong>CALENDAR</strong></div>
+                <div class="hover-label" id="label-rollon">PERFUME<br><strong>RECOMMENDER</strong></div>
+                <div class="hover-label" id="label-phone-case">ABOUT<br><strong>ME</strong></div>
 
                 <!-- Denim pocket -->
                 <div class="pocket" id="pocket"><img src="./assets/denim-pocket.png" alt="Denim pocket" draggable="false"></div>
@@ -469,136 +475,6 @@
                 <p style="padding-left:16px;">Scaling a heritage-driven beauty brand (Ind&#275; Wild) through data-led growth strategy<br>Designing a blockchain-powered model to bring transparency to global coffee supply chains<br>Building Kaisey, an AI-powered productivity companion for MBA students</p>
             </div>
 
-            <!-- LinkedIn instruction text -->
-            <p class="about-linkedin-text" id="about-linkedin-text" style="left:100px;top:870px;width:500px;">THESE ARE ALL THE APPS I WASTE MY TIME ON. CLICK ON THE LINKEDIN TO TAKE YOU TO MY ACTUAL LINKEDIN.</p>
-
-            <!-- Phone mockup -->
-            <div class="phone-mockup" id="about-phone" style="left:856px;top:850px;width:380px;height:822px;">
-                <img class="phone-wallpaper" src="./assets/wallpaper.png" alt="Phone screen">
-
-                <div class="phone-screen">
-                    <!-- Status bar with Figma assets -->
-                    <div class="sb">
-                        <div class="sb-left"><span class="sb-time">1:47</span></div>
-                        <div class="sb-island"></div>
-                        <div class="sb-right">
-                            <div class="sb-icons">
-                                <img src="./assets/cellular-1.svg" alt="" style="width:4px;height:14px;">
-                                <img src="./assets/cellular-2.svg" alt="" style="width:4px;height:12px;">
-                                <img src="./assets/cellular-3.svg" alt="" style="width:4px;height:9px;">
-                                <img src="./assets/cellular-4.svg" alt="" style="width:4px;height:6px;">
-                                <img src="./assets/wifi.svg" alt="" style="width:19px;height:14px;margin-left:3px;">
-                                <img src="./assets/battery.svg" alt="" style="width:31px;height:14px;margin-left:3px;">
-                            </div>
-                        </div>
-                    </div>
-
-                    <!-- Widgets row -->
-                    <div class="wrow">
-                        <!-- Reminders widget -->
-                        <div class="wcard wcard-rem">
-                            <span class="wc-title">Reminders</span>
-                            <span class="wc-count">73</span>
-                            <div class="wc-radio" style="top:43px;"></div>
-                            <div class="wc-item" style="top:44px;"><span class="wc-emoji">&#x1F9D8;&#x1F3FB;&#x200D;&#x2642;&#xFE0F;</span> Yoga</div>
-                            <div class="wc-div" style="top:74px;"></div>
-                            <div class="wc-radio" style="top:85px;"></div>
-                            <div class="wc-item" style="top:86px;"><span class="wc-emoji">&#x1F6B6;&#x1F3FB;&#x200D;</span> Walk</div>
-                            <div class="wc-div" style="top:116px;"></div>
-                            <div class="wc-radio" style="top:126px;"></div>
-                            <div class="wc-item" style="top:127px;"><span class="wc-emoji">&#x1F989;</span> Book flights</div>
-                        </div>
-                        <!-- Calendar widget -->
-                        <div class="wcard wcard-cal">
-                            <span class="wc-day">Monday</span>
-                            <span class="wc-date">26</span>
-                            <div class="wc-events">
-                                <div class="wc-evt">
-                                    <div class="wc-evt-line"></div>
-                                    <div class="wc-evt-body">
-                                        <div class="wc-evt-title">Minerva Dinner</div>
-                                        <div class="wc-evt-time">5:00–5:30<small>PM</small></div>
-                                    </div>
-                                </div>
-                                <div class="wc-evt">
-                                    <div class="wc-evt-line"></div>
-                                    <div class="wc-evt-body">
-                                        <div class="wc-evt-title">In-N-Out</div>
-                                        <div class="wc-evt-time">7–8<small>PM</small></div>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="wlabel-row">
-                        <span class="wlabel">Reminders</span>
-                        <span class="wlabel">Calendar</span>
-                    </div>
-
-                    <!-- App row 1: LinkedIn, Instagram, TikTok, Classpass -->
-                    <div class="agrid mt42">
-                        <a class="acell linkedin-app" href="https://www.linkedin.com/in/anisha-subberwal-434346126" target="_blank" rel="noopener noreferrer">
-                            <div class="aicon" style="background:#0A66C2;">
-                                <svg viewBox="0 0 64 64" fill="none"><rect width="64" height="64" rx="14" fill="#0A66C2"/><path d="M21 27h5v16h-5V27zm2.5-8a2.9 2.9 0 110 5.8 2.9 2.9 0 010-5.8zM29 27h4.8v2.2h.07c.67-1.27 2.3-2.6 4.73-2.6 5.06 0 5.99 3.33 5.99 7.66V43h-5v-7.8c0-1.86-.03-4.25-2.59-4.25-2.6 0-2.99 2.03-2.99 4.12V43H29V27z" fill="white"/></svg>
-                            </div>
-                            <span class="albl">LinkedIn</span>
-                        </a>
-                        <div class="acell">
-                            <div class="aicon" style="background:radial-gradient(circle at 30% 110%,#fdf497 0%,#fd5949 45%,#d6249f 60%,#285AEB 90%);">
-                                <svg viewBox="0 0 64 64" fill="none"><rect width="64" height="64" rx="14" fill="url(#ig)"/><defs><radialGradient id="ig" cx="30%" cy="110%" r="150%"><stop offset="0%" stop-color="#fdf497"/><stop offset="45%" stop-color="#fd5949"/><stop offset="60%" stop-color="#d6249f"/><stop offset="90%" stop-color="#285AEB"/></radialGradient></defs><rect x="16" y="16" width="32" height="32" rx="10" stroke="white" stroke-width="3" fill="none"/><circle cx="32" cy="32" r="8" stroke="white" stroke-width="3" fill="none"/><circle cx="43" cy="21" r="2.5" fill="white"/></svg>
-                            </div>
-                            <span class="albl">Instagram</span>
-                        </div>
-                        <div class="acell">
-                            <div class="aicon" style="background:#000;">
-                                <svg viewBox="0 0 64 64" fill="none"><rect width="64" height="64" rx="14" fill="black"/><path d="M44.4 23.4c-2.6-1.2-5.2-4.7-5.2-8.4h-5.6v24.5c0 3.1-2.5 5.6-5.6 5.6s-5.6-2.5-5.6-5.6 2.5-5.6 5.6-5.6c.5 0 1 .1 1.4.2v-5.7c-.5-.1-1-.1-1.4-.1-6.2 0-11.2 5-11.2 11.2s5 11.2 11.2 11.2 11.2-5 11.2-11.2V29.6c2 1.6 4.5 2.5 7.2 2.5v-5.6c-1 0-1.8-.2-2-.3" fill="white"/><path d="M44.4 23.4c-2.6-1.2-5.2-4.7-5.2-8.4" stroke="rgba(0,232,216,0.6)" stroke-width="1.5" fill="none"/><path d="M39.2 39.1c0 3.1-2.5 5.6-5.6 5.6s-5.6-2.5-5.6-5.6" stroke="rgba(255,0,80,0.6)" stroke-width="1.5" fill="none"/></svg>
-                            </div>
-                            <span class="albl">Tiktok</span>
-                        </div>
-                        <div class="acell">
-                            <div class="aicon" style="background:#3681C7;">
-                                <svg viewBox="0 0 64 64" fill="none"><rect width="64" height="64" rx="14" fill="#3681C7"/><path d="M22 32c0-3.3 2.7-6 6-6s6 2.7 6 6-2.7 6-6 6-6-2.7-6-6zm14 0c0-3.3 2.7-6 6-6s6 2.7 6 6-2.7 6-6 6-6-2.7-6-6z" stroke="white" stroke-width="3" fill="none"/></svg>
-                            </div>
-                            <span class="albl">Classpass</span>
-                        </div>
-                    </div>
-
-                    <!-- App row 2: Notes -->
-                    <div class="agrid mt8" style="justify-content:flex-start;">
-                        <div class="acell">
-                            <div class="aicon" style="background:linear-gradient(180deg,#FFFC00 0%,#FFFFFF 28%);border:1px solid #e0e0e0;">
-                                <svg viewBox="0 0 64 64" fill="none"><rect x="16" y="22" width="32" height="2" rx="1" fill="#e0e0e0"/><rect x="16" y="30" width="32" height="2" rx="1" fill="#e0e0e0"/><rect x="16" y="38" width="24" height="2" rx="1" fill="#e0e0e0"/></svg>
-                            </div>
-                            <span class="albl">Notes</span>
-                        </div>
-                    </div>
-
-                    <!-- Search -->
-                    <div class="ph-search" style="position:absolute;bottom:149px;left:50%;transform:translateX(-50%);">
-                        <span class="ph-s-icon">&#x1F50D;</span>
-                        <span>Search</span>
-                    </div>
-
-                    <!-- Dock -->
-                    <div class="ph-dock">
-                        <div class="dock-icon" style="background:#E60023;">
-                            <svg viewBox="0 0 64 64" fill="none"><rect width="64" height="64" rx="14" fill="#E60023"/><path d="M32.5 14c-9.4 0-17 7.6-17 17 0 7.2 4.5 13.4 10.8 15.8l2-7.8c-.7-.9-1.3-2.4-1.3-3.9 0-3.1 1.8-5.4 4-5.4 1.9 0 2.8 1.4 2.8 3.1 0 1.9-1.2 4.7-1.8 7.3-.5 2.2 1.1 3.9 3.2 3.9 3.8 0 6.7-4 6.7-9.8 0-5.1-3.7-8.7-8.9-8.7-6.1 0-9.7 4.5-9.7 9.3 0 1.8.7 3.8 1.6 4.9l-.6 2.4c-2.7-1.3-4.4-5.1-4.4-8.3 0-6.7 4.9-12.9 14.1-12.9 7.4 0 13.2 5.3 13.2 12.4 0 7.4-4.6 13.3-11.1 13.3-2.2 0-4.2-1.1-4.9-2.5l-1.3 5.1c-.5 1.9-1.8 4.2-2.7 5.6" fill="white"/></svg>
-                        </div>
-                        <div class="dock-icon" style="background:#BF0000;">
-                            <svg viewBox="0 0 64 64" fill="none"><rect width="64" height="64" rx="14" fill="#BF0000"/><text x="32" y="44" text-anchor="middle" fill="white" font-family="serif" font-size="36" font-weight="900">R</text></svg>
-                        </div>
-                        <div class="dock-icon" style="background:#1DB954;">
-                            <svg viewBox="0 0 64 64" fill="none"><rect width="64" height="64" rx="14" fill="#1DB954"/><path d="M32 18c-7.7 0-14 6.3-14 14s6.3 14 14 14 14-6.3 14-14-6.3-14-14-14zm6.4 20.2c-.3.4-.8.6-1.2.3-3.4-2.1-7.7-2.5-12.7-1.4-.5.1-.9-.2-1-.7-.1-.5.2-.9.7-1 5.5-1.3 10.2-.7 14 1.6.5.2.5.8.2 1.2zm1.7-3.8c-.4.5-1 .7-1.5.4-3.9-2.4-9.8-3.1-14.3-1.7-.6.2-1.2-.2-1.4-.7-.2-.6.1-1.2.7-1.4 5.2-1.6 11.6-.8 16.1 1.9.5.3.7 1 .4 1.5zm.2-4c-4.6-2.8-12.3-3-16.8-1.7-.7.2-1.4-.2-1.6-.9-.2-.7.2-1.4.9-1.6 5.1-1.5 13.6-1.2 18.9 2 .6.4.8 1.2.5 1.9-.4.5-1.2.7-1.9.3z" fill="white"/></svg>
-                        </div>
-                        <div class="dock-icon" style="background:linear-gradient(145deg,#868686 0%,#3d3d3d 100%);">
-                            <svg viewBox="0 0 64 64" fill="none"><rect width="64" height="64" rx="14" fill="url(#cam)"/><defs><linearGradient id="cam" x1="0" y1="0" x2="64" y2="64"><stop offset="0%" stop-color="#868686"/><stop offset="100%" stop-color="#3d3d3d"/></linearGradient></defs><circle cx="32" cy="35" r="8" stroke="white" stroke-width="2.5" fill="none"/><circle cx="32" cy="35" r="4" fill="white" opacity="0.4"/><path d="M22 24l3-4h14l3 4h6a3 3 0 013 3v18a3 3 0 01-3 3H16a3 3 0 01-3-3V27a3 3 0 013-3h6z" stroke="white" stroke-width="2" fill="none"/></svg>
-                        </div>
-                    </div>
-                </div>
-
-                <img class="phone-bezel" src="./assets/bezel.png" alt="Phone frame"
-                     style="left:-40px;top:-40px;width:510px;height:1012px;">
-            </div>
 
         </div>
     </div>
@@ -617,6 +493,7 @@
             <li><a class="pocket-nav-item" data-nav="tube">beauty brand growth</a></li>
             <li><a class="pocket-nav-item" data-nav="receipt">crypto coffee case</a></li>
             <li><a class="pocket-nav-item" data-nav="todo">smart calendar</a></li>
+            <li><a class="pocket-nav-item" data-nav="rollon">perfume scent quiz</a></li>
             <li><a class="pocket-nav-item" data-nav="about">about me</a></li>
         </ul>
     </nav>
@@ -648,23 +525,28 @@
 
     var OBJECTS = {
         tube: {
-            start: { x: 497, y: 450, w: 85,  h: 350 },
-            end:   { x: 172, y: 236, w: 80,   h: 329 },
+            start: { x: 497, y: 450, w: 85, h: 350 },
+            end:   { x: 182, y: 237, w: 97, h: 326 },
             startRot: -18.77, endRot: 0
         },
         receipt: {
             start: { x: 584, y: 495, w: 151, h: 300 },
-            end:   { x: 424, y: 250, w: 151, h: 300 },
+            end:   { x: 340, y: 273, w: 151, h: 300 },
             startRot: 0, endRot: 0
         },
         'phone-case': {
             start: { x: 679, y: 427, w: 150, h: 307 },
-            end:   { x: 1120, y: 246, w: 150, h: 307 },
+            end:   { x: 1039, y: 240, w: 150, h: 307 },
             startRot: 0, endRot: 0
         },
         todo: {
-            start: { x: 614, y: 543, w: 201, h: 237 },
-            end:   { x: 747, y: 282, w: 201, h: 237 },
+            start: { x: 614, y: 543, w: 218, h: 257 },
+            end:   { x: 553, y: 308, w: 201, h: 239 },
+            startRot: 0, endRot: 0
+        },
+        rollon: {
+            start: { x: 740, y: 580, w: 159, h: 270 },
+            end:   { x: 821, y: 277, w: 159, h: 270 },
             startRot: 0, endRot: 0
         }
     };
@@ -702,14 +584,16 @@
         tube:         document.getElementById('tube'),
         receipt:      document.getElementById('receipt'),
         'phone-case': document.getElementById('phone-case'),
-        todo:         document.getElementById('todo')
+        todo:         document.getElementById('todo'),
+        rollon:       document.getElementById('rollon')
     };
 
     var labelEls = {
         tube:         document.getElementById('label-tube'),
         receipt:      document.getElementById('label-receipt'),
         'phone-case': document.getElementById('label-phone-case'),
-        todo:         document.getElementById('label-todo')
+        todo:         document.getElementById('label-todo'),
+        rollon:       document.getElementById('label-rollon')
     };
 
     /* ================================================================
@@ -863,15 +747,25 @@
         var oPhase = phase(raw, 0.20, 1.0);
         var ep     = easeInOutCubic(oPhase);
 
+        var LABEL_GAP = 12;
         for (var key in OBJECTS) {
             var cfg   = OBJECTS[key];
             var objEl = objectEls[key];
-            objEl.style.left   = lerp(cfg.start.x, cfg.end.x, ep) + 'px';
-            objEl.style.top    = lerp(cfg.start.y, cfg.end.y, ep) + 'px';
-            objEl.style.width  = lerp(cfg.start.w, cfg.end.w, ep) + 'px';
-            objEl.style.height = lerp(cfg.start.h, cfg.end.h, ep) + 'px';
+            var curX  = lerp(cfg.start.x, cfg.end.x, ep);
+            var curY  = lerp(cfg.start.y, cfg.end.y, ep);
+            var curW  = lerp(cfg.start.w, cfg.end.w, ep);
+            var curH  = lerp(cfg.start.h, cfg.end.h, ep);
+            objEl.style.left   = curX + 'px';
+            objEl.style.top    = curY + 'px';
+            objEl.style.width  = curW + 'px';
+            objEl.style.height = curH + 'px';
             var rot = lerp(cfg.startRot, cfg.endRot, ep);
             objEl.style.transform = 'rotate(' + rot + 'deg)';
+
+            if (labelEls[key]) {
+                labelEls[key].style.left = (curX + curW / 2) + 'px';
+                labelEls[key].style.top  = (curY - LABEL_GAP - labelEls[key].offsetHeight) + 'px';
+            }
         }
 
         if (oPhase > 0.95) enableClicking();
@@ -937,6 +831,9 @@
     objectEls.todo.addEventListener('click', function () {
         if (objectsClickable) window.location.href = 'kaisey/index.html';
     });
+    objectEls.rollon.addEventListener('click', function () {
+        if (objectsClickable) window.open('https://whifff.vercel.app', '_blank');
+    });
 
     /* Pocket nav click handlers */
     var navItems = document.querySelectorAll('.pocket-nav-item');
@@ -956,6 +853,8 @@
                     window.location.href = 'coffeechain/index.html';
                 } else if (target === 'todo') {
                     window.location.href = 'kaisey/index.html';
+                } else if (target === 'rollon') {
+                    window.open('https://whifff.vercel.app', '_blank');
                 }
             });
         })(navItems[i]);
