@@ -110,7 +110,8 @@
             width: 100%; height: 100%;
             object-fit: cover; pointer-events: none; display: block;
         }
-        #tube       { border-radius: 24px; z-index: 5; }
+        #tube       { border-radius: 0; z-index: 5; overflow: visible; }
+        #tube img   { object-fit: contain; }
         #receipt    { border-radius: 4px;  z-index: 6; }
         #phone-case { border-radius: 24px; z-index: 7; }
         #phone-case.clickable:hover {
@@ -526,7 +527,7 @@
     var OBJECTS = {
         tube: {
             start: { x: 497, y: 450, w: 85, h: 350 },
-            end:   { x: 182, y: 237, w: 97, h: 326 },
+            end:   { x: 182, y: 237, w: 85, h: 350 },
             startRot: -18.77, endRot: 0
         },
         receipt: {
