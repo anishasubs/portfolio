@@ -474,6 +474,163 @@
             animation: bob 1.6s ease-in-out infinite;
         }
         @keyframes bob { 0%, 100% { transform: translateY(0); } 50% { transform: translateY(5px); } }
+
+        /* ── Mobile-only elements (hidden by default) ─────── */
+        .mobile-grid { display: none; }
+        .mobile-pocket { display: none; }
+
+        /* ── Mobile responsive (≤768px) ─────────────────────── */
+        @media (max-width: 768px) {
+            /* About section — convert absolute positioning to stacked flexbox */
+            .about-artboard {
+                position: relative !important;
+                width: 100% !important;
+                height: auto !important;
+                transform: none !important;
+                display: flex;
+                flex-direction: column;
+                align-items: center;
+                padding: 80px 0 60px;
+            }
+            .about-frame {
+                height: auto !important;
+            }
+            .profile-pic {
+                position: static !important;
+                width: 100% !important;
+                height: 280px !important;
+                left: auto !important;
+                top: auto !important;
+                border-radius: 0 !important;
+            }
+            .profile-pic img {
+                height: 100% !important;
+                top: 0 !important;
+            }
+            .about-title {
+                position: static !important;
+                width: auto !important;
+                left: auto !important;
+                top: auto !important;
+                font-size: 56px !important;
+                letter-spacing: -2px !important;
+                padding: 28px 24px 0;
+                text-align: center;
+            }
+            .about-subtitle {
+                position: static !important;
+                width: auto !important;
+                left: auto !important;
+                top: auto !important;
+                font-size: 28px !important;
+                padding: 8px 24px 0;
+                text-align: center;
+            }
+            .about-bio {
+                position: static !important;
+                width: 100% !important;
+                left: auto !important;
+                top: auto !important;
+                padding: 24px 24px 0 !important;
+            }
+            .about-highlights {
+                position: static !important;
+                width: 100% !important;
+                left: auto !important;
+                top: auto !important;
+                padding: 16px 24px 0 !important;
+            }
+            .about-linkedin-text {
+                position: static !important;
+                left: auto !important;
+                top: auto !important;
+                width: auto !important;
+                padding: 24px;
+                text-align: center;
+            }
+            /* Phone mockup — hide on mobile for cleaner layout */
+            .phone-mockup {
+                display: none;
+            }
+
+            /* Text section — responsive type */
+            .portfolio-title {
+                font-size: clamp(48px, 12vw, 200px) !important;
+                letter-spacing: -4px !important;
+            }
+            .text-artboard {
+                width: 100% !important;
+                transform: none !important;
+                padding: 40px 24px 60px !important;
+            }
+            .text-section {
+                height: auto !important;
+            }
+            .by-label {
+                font-size: 18px;
+            }
+            .by-name {
+                font-size: clamp(32px, 8vw, 59px);
+            }
+            .by-underline {
+                width: 200px;
+            }
+            .portfolio-desc {
+                font-size: 15px;
+                padding: 0;
+                max-width: 100%;
+                text-align: center;
+            }
+
+            /* Mobile artboard — pocket + objects visible, animated like desktop */
+            .letter {
+                display: none !important;
+            }
+            /* Fix cropping — contain all images, allow overflow */
+            .object {
+                overflow: visible !important;
+                border-radius: 0 !important;
+            }
+            .object img {
+                object-fit: contain !important;
+            }
+            #phone-case {
+                border-radius: 10px !important;
+            }
+            #phone-case img {
+                border-radius: 10px;
+            }
+            /* Hover labels on mobile — smaller, below objects */
+            .hover-label {
+                font-size: 10px;
+                white-space: nowrap;
+                line-height: 1.2;
+                transform: translateX(-50%);
+            }
+            .hover-label .metric-subtitle {
+                display: none;
+            }
+
+            /* Hide the CSS grid and standalone pocket on mobile — artboard handles everything */
+            .mobile-grid {
+                display: none !important;
+            }
+            .mobile-pocket {
+                display: none !important;
+            }
+
+            /* Nav — ensure tap targets */
+            .site-nav-links a {
+                min-height: 44px;
+                display: flex;
+                align-items: center;
+            }
+
+            /* Artboard frame — let mobile JS handle sizing */
+            .artboard-frame {
+                overflow: hidden;
+            }
+        }
     </style>
 </head>
 <body>
@@ -544,6 +701,35 @@
 
             </div>
         </div>
+    </div>
+
+    <!-- Mobile grid (hidden on desktop, shown on mobile after scroll) -->
+    <div class="mobile-grid" id="mobile-grid">
+        <div class="mg-cell" id="mg-tube">
+            <img src="./assets/tube.png" alt="Cosmetic tube" draggable="false">
+            <span class="mg-label">BEAUTY<br><strong>BRAND GROWTH</strong></span>
+        </div>
+        <div class="mg-cell" id="mg-receipt">
+            <img src="./assets/receipt.svg" alt="Receipt" draggable="false">
+            <span class="mg-label">A CRYPTO<br><strong>COFFEE CASE</strong></span>
+        </div>
+        <div class="mg-cell" id="mg-rollon">
+            <img src="./assets/perfume-bottle.png" alt="Perfume bottle" draggable="false">
+            <span class="mg-label">PERFUME<br><strong>RECOMMENDER</strong></span>
+        </div>
+        <div class="mg-cell" id="mg-todo">
+            <img src="./assets/todo.png" alt="To-Do List" draggable="false">
+            <span class="mg-label">A SMART<br><strong>CALENDAR</strong></span>
+        </div>
+        <div class="mg-cell" id="mg-phone-case">
+            <img src="./assets/phone-case.png" alt="Phone case" draggable="false">
+            <span class="mg-label">ABOUT<br><strong>ME</strong></span>
+        </div>
+    </div>
+
+    <!-- Mobile pocket (visible only on mobile, below the grid) -->
+    <div class="mobile-pocket">
+        <img src="./assets/denim-pocket.png" alt="Denim pocket" draggable="false">
     </div>
 
     <!-- Text section below scroll zone -->
@@ -653,6 +839,59 @@
 
     var SCROLL_VH = 3;
 
+    /* ── Mobile constants ─────────────────────────────────── */
+    var MOBILE_BREAKPOINT = 768;
+    var MOBILE_ARTBOARD_W = 375;
+    var MOBILE_ARTBOARD_H = 760;
+    var MOBILE_SCROLL_VH  = 2.5;
+
+    // Pocket: centered horizontally, starts near bottom, ends further down
+    var M_PKT_W = 240, M_PKT_H = 240;
+    var M_PKT_X = Math.round((MOBILE_ARTBOARD_W - M_PKT_W) / 2); // 67
+    var M_PKT_START_Y = 340;
+    var M_PKT_END_Y   = 500;
+
+    // Grid-like end positions computed from a 3-col / 2-col layout
+    var M_PAD = 16, M_GAP = 12;
+    var M_COL_W = Math.round((MOBILE_ARTBOARD_W - 2 * M_PAD - 2 * M_GAP) / 3); // ~105
+    var M_ROW1_Y = 70;   // top of row 1 (clears nav)
+    var M_ROW2_Y = 310;  // top of row 2 (below row 1 + labels + gap)
+
+    // Row 2: 2 items centered
+    var M_R2_TOTAL = 2 * M_COL_W + M_GAP; // ~222
+    var M_R2_X0 = Math.round((MOBILE_ARTBOARD_W - M_R2_TOTAL) / 2); // ~76
+
+    // Objects peek ABOVE the pocket at FULL grid size (no scaling, just move — like desktop)
+    var MOBILE_OBJECTS = {
+        tube: {
+            start: { x: M_PKT_X - 10,  y: M_PKT_START_Y - 140, w: M_COL_W, h: 180 },
+            end:   { x: M_PAD,          y: M_ROW1_Y,             w: M_COL_W, h: 180 },
+            startRot: -15, endRot: 0
+        },
+        receipt: {
+            start: { x: M_PKT_X + 45,  y: M_PKT_START_Y - 110, w: M_COL_W, h: 180 },
+            end:   { x: M_PAD + M_COL_W + M_GAP, y: M_ROW1_Y,   w: M_COL_W, h: 180 },
+            startRot: 0, endRot: 0
+        },
+        rollon: {
+            start: { x: M_PKT_X + 130, y: M_PKT_START_Y - 40, w: M_COL_W, h: 180 },
+            end:   { x: M_PAD + 2*(M_COL_W + M_GAP), y: M_ROW1_Y, w: M_COL_W, h: 180 },
+            startRot: 0, endRot: 0
+        },
+        todo: {
+            start: { x: M_PKT_X + 70,  y: M_PKT_START_Y - 20,  w: M_COL_W, h: 140 },
+            end:   { x: M_R2_X0,        y: M_ROW2_Y,             w: M_COL_W, h: 140 },
+            startRot: 0, endRot: 0
+        },
+        'phone-case': {
+            start: { x: M_PKT_X + 110, y: M_PKT_START_Y - 50,  w: M_COL_W, h: 140 },
+            end:   { x: M_R2_X0 + M_COL_W + M_GAP, y: M_ROW2_Y, w: M_COL_W, h: 140 },
+            startRot: 0, endRot: 0
+        }
+    };
+
+    var isMobile = false;
+
     /* ================================================================
        EASING / MATH
        ================================================================ */
@@ -675,6 +914,8 @@
     var aboutFrameEl  = document.getElementById('about-frame-inner');
     var aboutArtboard = document.getElementById('about-artboard-inner');
     var textArtboard  = document.getElementById('text-artboard');
+
+    var mobileGridEl = document.getElementById('mobile-grid');
 
     var letterEls = [];
     for (var i = 0; i < 7; i++) letterEls.push(document.getElementById('let-' + i));
@@ -707,24 +948,51 @@
        RESPONSIVE SCALING
        ================================================================ */
     function updateLayout() {
-        scale = Math.min(1, window.innerWidth / ARTBOARD_W);
+        isMobile = window.innerWidth <= MOBILE_BREAKPOINT;
 
-        artboard.style.width     = ARTBOARD_W + 'px';
-        artboard.style.height    = HOME_ARTBOARD_H + 'px';
-        artboard.style.transform = 'scale(' + scale + ')';
-        artboardFrame.style.height = Math.ceil(HOME_ARTBOARD_H * scale) + 'px';
+        if (isMobile) {
+            var aw = MOBILE_ARTBOARD_W;
+            var ah = MOBILE_ARTBOARD_H;
+            scale = Math.min(1, window.innerWidth / aw);
 
-        var vh = window.innerHeight;
-        scrollZone.style.height = Math.ceil(vh * SCROLL_VH + HOME_ARTBOARD_H * scale) + 'px';
+            artboard.style.width     = aw + 'px';
+            artboard.style.height    = ah + 'px';
+            artboard.style.transform = 'scale(' + scale + ')';
+            artboardFrame.style.height = Math.ceil(ah * scale) + 'px';
 
-        textArtboard.style.width     = ARTBOARD_W + 'px';
-        textArtboard.style.transform = 'scale(' + scale + ')';
-        textArtboard.parentElement.style.height = Math.ceil(500 * scale) + 'px';
+            var vh = window.innerHeight;
+            scrollZone.style.height = Math.ceil(vh * MOBILE_SCROLL_VH + ah * scale) + 'px';
 
-        aboutArtboard.style.width     = ARTBOARD_W + 'px';
-        aboutArtboard.style.height    = ABOUT_H + 'px';
-        aboutArtboard.style.transform = 'scale(' + scale + ')';
-        aboutFrameEl.style.height     = Math.ceil(ABOUT_H * scale) + 'px';
+            // Text section — no scaling on mobile, CSS handles it
+            textArtboard.style.width     = '100%';
+            textArtboard.style.transform = 'none';
+            textArtboard.parentElement.style.height = 'auto';
+
+            // About — CSS flexbox handles layout
+            aboutArtboard.style.width     = '100%';
+            aboutArtboard.style.height    = 'auto';
+            aboutArtboard.style.transform = 'none';
+            aboutFrameEl.style.height     = 'auto';
+        } else {
+            scale = Math.min(1, window.innerWidth / ARTBOARD_W);
+
+            artboard.style.width     = ARTBOARD_W + 'px';
+            artboard.style.height    = HOME_ARTBOARD_H + 'px';
+            artboard.style.transform = 'scale(' + scale + ')';
+            artboardFrame.style.height = Math.ceil(HOME_ARTBOARD_H * scale) + 'px';
+
+            var vh = window.innerHeight;
+            scrollZone.style.height = Math.ceil(vh * SCROLL_VH + HOME_ARTBOARD_H * scale) + 'px';
+
+            textArtboard.style.width     = ARTBOARD_W + 'px';
+            textArtboard.style.transform = 'scale(' + scale + ')';
+            textArtboard.parentElement.style.height = Math.ceil(500 * scale) + 'px';
+
+            aboutArtboard.style.width     = ARTBOARD_W + 'px';
+            aboutArtboard.style.height    = ABOUT_H + 'px';
+            aboutArtboard.style.transform = 'scale(' + scale + ')';
+            aboutFrameEl.style.height     = Math.ceil(ABOUT_H * scale) + 'px';
+        }
     }
 
     /* ================================================================
@@ -738,13 +1006,29 @@
     }
 
     function initPlacement() {
-        setBox(pocketEl, POCKET);
-        for (var i = 0; i < LETTERS.length; i++) setBox(letterEls[i], LETTERS[i]);
-        for (var key in OBJECTS) {
-            var cfg = OBJECTS[key];
-            var el  = objectEls[key];
-            setBox(el, cfg.start);
-            el.style.transform = 'rotate(' + cfg.startRot + 'deg)';
+        if (isMobile) {
+            setBox(pocketEl, { x: M_PKT_X, y: M_PKT_START_Y, w: M_PKT_W, h: M_PKT_H });
+            for (var key in MOBILE_OBJECTS) {
+                var cfg = MOBILE_OBJECTS[key];
+                var el  = objectEls[key];
+                if (el) {
+                    setBox(el, cfg.start);
+                    el.style.transform = 'rotate(' + cfg.startRot + 'deg)';
+                }
+            }
+        } else {
+            setBox(pocketEl, POCKET);
+            for (var i = 0; i < LETTERS.length && i < letterEls.length; i++) {
+                if (letterEls[i]) setBox(letterEls[i], LETTERS[i]);
+            }
+            for (var key in OBJECTS) {
+                var cfg = OBJECTS[key];
+                var el  = objectEls[key];
+                if (el) {
+                    setBox(el, cfg.start);
+                    el.style.transform = 'rotate(' + cfg.startRot + 'deg)';
+                }
+            }
         }
     }
 
@@ -754,9 +1038,12 @@
     function startBalloonAnimation() {
         if (balloonsPlayed) return;
         balloonsPlayed = true;
+        if (isMobile) return;
 
         var startTime = null;
-        var DURATION  = 4000;
+        var DURATION  = isMobile ? 3000 : 4000;
+        var Y_TRAVEL  = isMobile ? -400 : -900;
+        var X_DRIFT   = isMobile ? 20 : 50;
 
         function tick(timestamp) {
             if (!startTime) startTime = timestamp;
@@ -767,11 +1054,11 @@
                 var el = letterEls[i];
                 if (!el) continue;
                 var dist    = Math.abs(i - 3);
-                var stagger = dist * 250;
+                var stagger = dist * (isMobile ? 150 : 250);
                 var local   = clamp((elapsed - stagger) / (DURATION - stagger * 0.5), 0, 1);
                 var lp      = easeOutCubic(local);
-                var yUp     = -900 * lp;
-                var xDrift  = (i - 3) * 50 * lp;
+                var yUp     = Y_TRAVEL * lp;
+                var xDrift  = (i - 3) * X_DRIFT * lp;
                 var scl     = 1 + 0.15 * lp;
                 el.style.transform = 'translate(' + xDrift + 'px,' + yUp + 'px) scale(' + scl + ')';
             }
@@ -801,6 +1088,7 @@
        HOVER LABELS
        ================================================================ */
     function setupHoverLabels() {
+        if (isMobile) return; // Mobile labels handled in animate()
         for (var key in objectEls) {
             (function (k) {
                 objectEls[k].addEventListener('mouseenter', function () {
@@ -837,38 +1125,88 @@
        ================================================================ */
     function animate() {
         var vh        = window.innerHeight;
-        var maxScroll = vh * SCROLL_VH;
+        var svh       = isMobile ? MOBILE_SCROLL_VH : SCROLL_VH;
+        var maxScroll = vh * svh;
         var raw       = clamp(window.scrollY / maxScroll, 0, 1);
 
         if (raw > 0.01) hintEl.classList.remove('visible');
         else if (balloonsPlayed) hintEl.classList.add('visible');
 
-        var oPhase = phase(raw, 0.20, 1.0);
-        var ep     = easeInOutCubic(oPhase);
+        if (isMobile) {
+            // Objects move from pocket to grid positions
+            var oPhase = phase(raw, 0.15, 0.85);
+            var ep     = easeInOutCubic(oPhase);
 
-        var LABEL_GAP = 12;
-        for (var key in OBJECTS) {
-            var cfg   = OBJECTS[key];
-            var objEl = objectEls[key];
-            var curX  = lerp(cfg.start.x, cfg.end.x, ep);
-            var curY  = lerp(cfg.start.y, cfg.end.y, ep);
-            var curW  = lerp(cfg.start.w, cfg.end.w, ep);
-            var curH  = lerp(cfg.start.h, cfg.end.h, ep);
-            objEl.style.left   = curX + 'px';
-            objEl.style.top    = curY + 'px';
-            objEl.style.width  = curW + 'px';
-            objEl.style.height = curH + 'px';
-            var rot = lerp(cfg.startRot, cfg.endRot, ep);
-            objEl.style.transform = 'rotate(' + rot + 'deg)';
+            // Pocket slides down
+            var pktY = lerp(M_PKT_START_Y, M_PKT_END_Y, ep);
+            pocketEl.style.top = pktY + 'px';
 
-            if (labelEls[key]) {
-                labelEls[key].style.left = (curX + curW / 2) + 'px';
-                labelEls[key].style.top  = (curY - LABEL_GAP - labelEls[key].offsetHeight) + 'px';
+            // Animate objects
+            var LABEL_GAP = 6;
+            for (var key in MOBILE_OBJECTS) {
+                var cfg   = MOBILE_OBJECTS[key];
+                var objEl = objectEls[key];
+                if (!objEl) continue;
+                var curX = lerp(cfg.start.x, cfg.end.x, ep);
+                var curY = lerp(cfg.start.y, cfg.end.y, ep);
+                var curW = lerp(cfg.start.w, cfg.end.w, ep);
+                var curH = lerp(cfg.start.h, cfg.end.h, ep);
+                objEl.style.left   = curX + 'px';
+                objEl.style.top    = curY + 'px';
+                objEl.style.width  = curW + 'px';
+                objEl.style.height = curH + 'px';
+                var rot = lerp(cfg.startRot, cfg.endRot, ep);
+                objEl.style.transform = 'rotate(' + rot + 'deg)';
+
+                // Labels below objects on mobile
+                if (labelEls[key]) {
+                    labelEls[key].style.left = (curX + curW / 2) + 'px';
+                    labelEls[key].style.top  = (curY + curH + LABEL_GAP) + 'px';
+                }
             }
-        }
 
-        if (oPhase > 0.95) enableClicking();
-        else               disableClicking();
+            // Show labels + enable clicking when settled
+            if (oPhase > 0.95) {
+                enableClicking();
+                for (var lk in labelEls) {
+                    if (labelEls[lk]) labelEls[lk].classList.add('visible');
+                }
+            } else {
+                disableClicking();
+                for (var lk in labelEls) {
+                    if (labelEls[lk]) labelEls[lk].classList.remove('visible');
+                }
+            }
+        } else {
+            // Desktop: position-based animation
+            var oPhase = phase(raw, 0.20, 1.0);
+            var ep     = easeInOutCubic(oPhase);
+
+            var LABEL_GAP = 12;
+            for (var key in OBJECTS) {
+                var cfg   = OBJECTS[key];
+                var objEl = objectEls[key];
+                if (!objEl) continue;
+                var curX  = lerp(cfg.start.x, cfg.end.x, ep);
+                var curY  = lerp(cfg.start.y, cfg.end.y, ep);
+                var curW  = lerp(cfg.start.w, cfg.end.w, ep);
+                var curH  = lerp(cfg.start.h, cfg.end.h, ep);
+                objEl.style.left   = curX + 'px';
+                objEl.style.top    = curY + 'px';
+                objEl.style.width  = curW + 'px';
+                objEl.style.height = curH + 'px';
+                var rot = lerp(cfg.startRot, cfg.endRot, ep);
+                objEl.style.transform = 'rotate(' + rot + 'deg)';
+
+                if (labelEls[key]) {
+                    labelEls[key].style.left = (curX + curW / 2) + 'px';
+                    labelEls[key].style.top  = (curY - LABEL_GAP - labelEls[key].offsetHeight) + 'px';
+                }
+            }
+
+            if (oPhase > 0.95) enableClicking();
+            else disableClicking();
+        }
 
         requestAnimationFrame(animate);
     }
@@ -904,6 +1242,12 @@
         aboutView.style.display = 'block';
         hintEl.style.display = 'none';
         window.scrollTo(0, 0);
+        if (isMobile) {
+            aboutArtboard.style.transform = 'none';
+            aboutArtboard.style.width = '100%';
+            aboutArtboard.style.height = 'auto';
+            aboutFrameEl.style.height = 'auto';
+        }
         updateLayout();
     }
 
@@ -918,6 +1262,7 @@
     /* ================================================================
        CLICK HANDLERS
        ================================================================ */
+    // Desktop object clicks
     objectEls['phone-case'].addEventListener('click', function () {
         if (objectsClickable) showAbout();
     });
@@ -934,6 +1279,23 @@
         if (objectsClickable) window.open('https://whifff.vercel.app', '_blank');
     });
 
+    // Mobile grid clicks
+    document.getElementById('mg-tube').addEventListener('click', function () {
+        window.location.href = 'inde-wild-case-study/index.html';
+    });
+    document.getElementById('mg-receipt').addEventListener('click', function () {
+        window.location.href = 'coffeechain/index.html';
+    });
+    document.getElementById('mg-todo').addEventListener('click', function () {
+        window.location.href = 'kaisey/index.html';
+    });
+    document.getElementById('mg-rollon').addEventListener('click', function () {
+        window.open('https://whifff.vercel.app', '_blank');
+    });
+    document.getElementById('mg-phone-case').addEventListener('click', function () {
+        showAbout();
+    });
+
     /* ================================================================
        BOOT
        ================================================================ */
@@ -945,6 +1307,13 @@
     hamburger.addEventListener('click', function () {
         navLinks.classList.toggle('open');
     });
+    // Close mobile menu on any link click
+    var allNavLinks = navLinks.querySelectorAll('a');
+    for (var nl = 0; nl < allNavLinks.length; nl++) {
+        allNavLinks[nl].addEventListener('click', function () {
+            navLinks.classList.remove('open');
+        });
+    }
     var navAbout = document.getElementById('nav-about-link');
     navAbout.addEventListener('click', function (e) {
         e.preventDefault();
@@ -952,13 +1321,24 @@
         showAbout();
     });
 
+    isMobile = window.innerWidth <= MOBILE_BREAKPOINT;
     initPlacement();
     updateLayout();
     setupHoverLabels();
     setupTextObservers();
-    window.addEventListener('resize', updateLayout);
+    window.addEventListener('resize', function () {
+        var wasMobile = isMobile;
+        updateLayout();
+        if (wasMobile !== isMobile) {
+            initPlacement();
+        }
+    });
     requestAnimationFrame(animate);
     startBalloonAnimation();
+    // Show scroll hint immediately on mobile (no balloons to wait for)
+    if (isMobile) {
+        hintEl.classList.add('visible');
+    }
 
 })();
 </script>
