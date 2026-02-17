@@ -15,6 +15,8 @@ import { SettingsPage } from "@/app/components/SettingsPage";
 import { ProfileSection } from "@/app/components/ProfileSection";
 import { toast } from "sonner";
 import { validateEnv } from "@/config/env";
+import { PrioritySelector } from "@/app/components/PrioritySelector";
+import { type PriorityMode, PRIORITY_STORAGE_KEY } from "@/app/components/priority";
 
 // Helper function to fetch Google user profile
 async function fetchGoogleUserProfile(accessToken: string): Promise<{ name: string; email: string; picture?: string } | null> {
@@ -267,6 +269,11 @@ export default function App() {
     googleCredentials: "",
   });
   const [suggestions, setSuggestions] = useState<Array<{id: string; type: "conflict" | "optimization" | "alert" | "success"; title: string; description: string; actions?: CalendarAction[]}>>([]);
+  const [userPriority, setUserPriority] = useState<PriorityMode | null>(() => {
+    const stored = localStorage.getItem(PRIORITY_STORAGE_KEY);
+    return stored ? (stored as PriorityMode) : null;
+  });
+  const [needsPrioritySelection, setNeedsPrioritySelection] = useState(false);
 
   const now = new Date();
   const today = `${now.getFullYear()}-${String(now.getMonth() + 1).padStart(2, '0')}-${String(now.getDate()).padStart(2, '0')}`;
@@ -391,9 +398,24 @@ export default function App() {
     return `${String(h).padStart(2, '0')}:${String(m).padStart(2, '0')}`;
   }
 
+  const handlePrioritySelect = (priority: PriorityMode) => {
+    const isChange = userPriority !== null && userPriority !== priority;
+    setUserPriority(priority);
+    localStorage.setItem(PRIORITY_STORAGE_KEY, priority);
+    setNeedsPrioritySelection(false);
+    if (isChange) {
+      toast.success(`Priority updated to ${priority}`);
+    }
+  };
+
   const handleLogin = async (openaiKey: string, googleCreds: string) => {
     setCredentials({ openaiKey, googleCredentials: googleCreds });
     setIsLoggedIn(true);
+
+    // Trigger priority onboarding if user hasn't set one
+    if (!localStorage.getItem(PRIORITY_STORAGE_KEY)) {
+      setNeedsPrioritySelection(true);
+    }
 
     // Try to fetch real calendar events and user profile if we have Google credentials
     if (googleCreds) {
@@ -620,9 +642,13 @@ export default function App() {
       <SettingsPage
         credentials={credentials}
         onSave={(newCreds) => {
+          const justAddedKey = !credentials.openaiKey && newCreds.openaiKey && newCreds.openaiKey.startsWith("sk-");
           setCredentials(newCreds);
           setShowSettings(false);
           toast.success("Settings saved successfully");
+          if (justAddedKey && !userPriority) {
+            setNeedsPrioritySelection(true);
+          }
         }}
         onClose={() => setShowSettings(false)}
         onLogout={() => {
@@ -633,10 +659,27 @@ export default function App() {
           setSuggestions([]);
           setUserProfile(null);
           setUserFocus(null);
+          setUserPriority(null);
+          setNeedsPrioritySelection(false);
+          localStorage.removeItem(PRIORITY_STORAGE_KEY);
           localStorage.removeItem("google_calendar_token");
           toast.success("Logged out successfully");
         }}
       />
+    );
+  }
+
+  // Show priority onboarding overlay
+  if (isLoggedIn && needsPrioritySelection) {
+    return (
+      <>
+        <PrioritySelector
+          mode="onboarding"
+          currentPriority={userPriority}
+          onSelect={handlePrioritySelect}
+        />
+        <Toaster />
+      </>
     );
   }
 
@@ -679,7 +722,7 @@ export default function App() {
       <main className="max-w-7xl mx-auto px-6 py-6">
         {/* Quick Insight of the Day */}
         <div className="mb-6">
-          <CommandCenter events={calendarEvents} userFocus={userFocus} userName={userProfile?.name} />
+          <CommandCenter events={calendarEvents} userFocus={userFocus} userName={userProfile?.name} priority={userPriority} onPriorityChange={handlePrioritySelect} />
         </div>
 
         {/* Brain Dump Planner */}
@@ -690,6 +733,7 @@ export default function App() {
             onScheduleChange={handleScheduleChange}
             onSuggestionsGenerated={handleBrainDumpSuggestions}
             onApiKeyRequest={() => setShowSettings(true)}
+            priority={userPriority}
           />
         </div>
 
@@ -737,6 +781,7 @@ export default function App() {
         onFocusChange={setUserFocus}
         variant="floating"
         openaiKey={credentials.openaiKey}
+        priority={userPriority}
       />
 
       {/* Toast Notifications */}

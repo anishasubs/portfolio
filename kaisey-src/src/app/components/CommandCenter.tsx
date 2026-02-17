@@ -1,6 +1,8 @@
 import { Sparkles, Target, Calendar, Clock, ChevronRight } from "lucide-react";
 import { Card } from "@/app/components/ui/card";
 import { Badge } from "@/app/components/ui/badge";
+import { PrioritySelector } from "@/app/components/PrioritySelector";
+import { type PriorityMode, PRIORITY_CONFIG } from "@/app/components/priority";
 
 interface CalendarEvent {
   id: string;
@@ -16,6 +18,8 @@ interface CommandCenterProps {
   events: CalendarEvent[];
   userFocus?: string | null;
   userName?: string;
+  priority?: PriorityMode | null;
+  onPriorityChange?: (priority: PriorityMode) => void;
 }
 
 // Format time from 24h to 12h format
@@ -26,7 +30,7 @@ function formatTime(time: string): string {
   return `${displayHours}:${minutes.toString().padStart(2, '0')} ${period}`;
 }
 
-export function CommandCenter({ events, userFocus, userName }: CommandCenterProps) {
+export function CommandCenter({ events, userFocus, userName, priority, onPriorityChange }: CommandCenterProps) {
   // Get current time-based greeting
   const now = new Date();
   const currentHour = now.getHours();
@@ -122,7 +126,11 @@ export function CommandCenter({ events, userFocus, userName }: CommandCenterProp
                 Up Next
               </div>
               <div className="flex items-center gap-3">
-                <div className={`w-2 h-2 rounded-full ${nextEvent.color}`}></div>
+                <div className={`w-2 h-2 rounded-full ${nextEvent.color} ${
+                  priority && PRIORITY_CONFIG[priority].eventTypes.includes(nextEvent.type)
+                    ? `ring-2 ${PRIORITY_CONFIG[priority].ringColor} ring-offset-1`
+                    : ""
+                }`}></div>
                 <span className="font-mono text-xs text-muted-foreground w-16">
                   {formatTime(nextEvent.time)}
                 </span>
@@ -142,9 +150,17 @@ export function CommandCenter({ events, userFocus, userName }: CommandCenterProp
 
           <div className="flex items-start gap-2">
             <Target className="w-4 h-4 text-blue-500 mt-0.5 shrink-0" />
-            <div>
-              <div className="text-xs text-muted-foreground">Today's Focus</div>
-              <div className="text-sm font-semibold">{focus}</div>
+            <div className="flex-1">
+              <div className="text-xs text-muted-foreground mb-1.5">Today's Focus</div>
+              {onPriorityChange ? (
+                <PrioritySelector
+                  mode="inline"
+                  currentPriority={priority ?? null}
+                  onSelect={onPriorityChange}
+                />
+              ) : (
+                <div className="text-sm font-semibold">{focus}</div>
+              )}
             </div>
           </div>
         </div>

@@ -208,7 +208,7 @@ export function CalendarView({ events, onScheduleChange }: CalendarViewProps) {
           <p className="text-xs text-muted-foreground">{event.duration} min &middot; {event.type}</p>
         </div>
         {onScheduleChange && (
-          <div className="flex items-center gap-1 opacity-0 group-hover:opacity-100 transition-opacity">
+          <div className="flex items-center gap-1">
             <button
               onClick={() => handleEditStart(event)}
               className="w-7 h-7 rounded-md flex items-center justify-center text-muted-foreground hover:text-blue-500 hover:bg-blue-500/10 transition-colors"
@@ -289,17 +289,30 @@ export function CalendarView({ events, onScheduleChange }: CalendarViewProps) {
                     </div>
                     <div className="space-y-2">
                       {dayEvts.map((event) => (
-                        <div key={event.id} className={`p-2 rounded text-xs ${event.color} text-white relative group`}>
+                        <div key={event.id} className={`p-2 rounded text-xs ${event.color} text-white relative`}>
                           <div className="font-semibold truncate">{event.title}</div>
-                          <div className="opacity-90">{event.time}</div>
+                          <div className="opacity-90">{event.time} &middot; {event.duration}m</div>
                           {onScheduleChange && (
-                            <button
-                              onClick={() => handleDelete(event)}
-                              className="absolute -top-1 -right-1 w-5 h-5 rounded-full bg-white text-red-500 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity shadow-sm"
-                              title="Delete event"
-                            >
-                              <X className="w-3 h-3" />
-                            </button>
+                            <div className="flex gap-0.5 mt-1">
+                              <button
+                                onClick={() => {
+                                  handleEditStart(event);
+                                  setView("day");
+                                  setCurrentDate(new Date(event.date + "T00:00:00"));
+                                }}
+                                className="w-5 h-5 rounded flex items-center justify-center bg-white/20 hover:bg-white/40 transition-colors"
+                                title="Edit event"
+                              >
+                                <Pencil className="w-3 h-3" />
+                              </button>
+                              <button
+                                onClick={() => handleDelete(event)}
+                                className="w-5 h-5 rounded flex items-center justify-center bg-white/20 hover:bg-red-400/80 transition-colors"
+                                title="Delete event"
+                              >
+                                <Trash2 className="w-3 h-3" />
+                              </button>
+                            </div>
                           )}
                         </div>
                       ))}
@@ -340,6 +353,12 @@ export function CalendarView({ events, onScheduleChange }: CalendarViewProps) {
                 return (
                   <div
                     key={index}
+                    onClick={() => {
+                      if (day) {
+                        setCurrentDate(new Date(currentDate.getFullYear(), currentDate.getMonth(), day));
+                        setView("day");
+                      }
+                    }}
                     className={`min-h-[80px] p-2 border-r border-b last:border-r-0 ${
                       day ? "hover:bg-muted/50 cursor-pointer" : "bg-muted/20"
                     } ${isToday ? "bg-blue-500/10 border-blue-500" : ""}`}

@@ -9,6 +9,7 @@ import { Progress } from "@/app/components/ui/progress";
 import { Textarea } from "@/app/components/ui/textarea";
 import { motion, AnimatePresence } from "motion/react";
 import { toast } from "sonner";
+import { type PriorityMode, PRIORITY_CONFIG, PRIORITY_MODES } from "@/app/components/priority";
 
 // --- Type Definitions ---
 
@@ -51,6 +52,7 @@ interface ExtractedTask {
   preferredTime: string | null; // HH:MM 24h format, if user specified a time
   priority: "high" | "medium" | "low";
   category: "class" | "meeting" | "study" | "workout" | "networking" | "recruiting";
+  priorityCategory: "Academics" | "Recruiting" | "Social" | "Wellness";
 }
 
 interface ClarificationQuestion {
@@ -95,6 +97,7 @@ interface BrainDumpPlannerProps {
   onScheduleChange: (action: CalendarAction) => void;
   onSuggestionsGenerated: (suggestions: PlannerSuggestion[]) => void;
   onApiKeyRequest: () => void;
+  priority?: PriorityMode | null;
 }
 
 // --- Color mapping for task categories ---
@@ -105,6 +108,14 @@ const categoryColors: Record<string, string> = {
   workout: "bg-green-500",
   networking: "bg-orange-500",
   recruiting: "bg-red-500",
+};
+
+// Map priority category to default calendar category
+const priorityCategoryToCalCategory: Record<string, ExtractedTask["category"]> = {
+  Academics: "study",
+  Recruiting: "recruiting",
+  Social: "networking",
+  Wellness: "workout",
 };
 
 const priorityColors: Record<string, string> = {
@@ -119,6 +130,7 @@ export function BrainDumpPlanner({
   onScheduleChange,
   onSuggestionsGenerated,
   onApiKeyRequest,
+  priority,
 }: BrainDumpPlannerProps) {
   // --- State ---
   const [phase, setPhase] = useState<PlannerPhase>(
@@ -151,7 +163,7 @@ export function BrainDumpPlanner({
       throw new Error("Valid OpenAI API key required");
     }
 
-    const todayISO = new Date().toISOString().slice(0, 10);
+    const todayISO = localToday();
 
     const response = await fetch("https://api.openai.com/v1/chat/completions", {
       method: "POST",
@@ -164,27 +176,33 @@ export function BrainDumpPlanner({
         messages: [
           {
             role: "system",
-            content: `You are a task extraction assistant for an MBA student planning tool called Kaisey.
-The user will provide a brain dump - unstructured text about everything they need to do.
+            content: `You are a task extraction assistant for Kaisey, an MBA student planning tool.
+The user will brain dump everything they need to do. Extract ALL of them as tasks — even short or vague items like "send email" or "apply for job" are valid schedulable tasks.
 
-Your job is to:
-1. Extract individual SCHEDULABLE tasks from the brain dump text - things the user needs to DO that take time
-2. For each task, determine a category, priority, duration (if inferrable), due date (if mentioned), and preferred time (if the user specified one)
-3. If the user mentions a specific time for a task (e.g., "nail appointment at 6pm", "gym at 7"), capture it as preferredTime in HH:MM 24h format (e.g., "18:00", "07:00")
-4. If duration or due date cannot be determined from the text, set them to null
-5. Generate clarification questions for tasks where duration is null. If a task has a preferred time but no duration, ask about duration specifically.
-6. Do NOT ask about due date if the task has a preferred time - assume it's for today.
+Rules:
+1. Extract every actionable item. Writing emails, sending messages, applying for positions, making calls — these are ALL schedulable tasks. When in doubt, extract it.
+2. For each task: set category, priorityCategory, priority, duration (null if unknown), dueDate (null if unknown), preferredTime (HH:MM 24h if user specified, else null).
+3. Generate clarification questions ONLY for tasks where duration is null.
+4. The ONLY things to ignore are calendar management commands like "delete my events" or "clear my schedule."
 
-IMPORTANT: Do NOT extract calendar management commands as tasks. If the user says things like "delete events", "remove everything from my calendar", "cancel my meeting", "clear my schedule", "reschedule X", or "move my appointment" — these are NOT schedulable tasks. Ignore them and return an empty tasks array. The user should use the calendar view or chatbot for managing existing events.
+Today: ${todayISO}
 
-Only extract things that represent NEW work to be done or NEW events to schedule.
+priorityCategory (REQUIRED for every task):
+- Academics: classes, studying, exams, assignments, homework, reading
+- Recruiting: job applications, interviews, info sessions, resume/cover letter work, emailing recruiters
+- Social: coffee chats, networking, group hangouts, thank-you emails, relationship building
+- Wellness: gym, yoga, meditation, walks, rest, health appointments
 
-Today's date is: ${todayISO}
+category (for calendar color — must align with priorityCategory):
+- Academics → "class" or "study"
+- Recruiting → "recruiting" or "networking"
+- Social → "networking" or "meeting"
+- Wellness → "workout"
 
-Categories: class, meeting, study, workout, networking, recruiting
-Priorities: high (due soon or critical), medium (important but flexible), low (nice to have)
+priority: high / medium / low
+${priority ? `\n${PRIORITY_CONFIG[priority].promptHint}` : ""}
 
-Return ONLY by calling the extract_tasks function.`,
+Call extract_tasks with ALL items.`,
           },
           {
             role: "user",
@@ -219,12 +237,18 @@ Return ONLY by calling the extract_tasks function.`,
                           description: "HH:MM in 24h format if the user specified a time (e.g. 'at 6pm' -> '18:00'), or null if no time was mentioned",
                         },
                         priority: { type: "string", enum: ["high", "medium", "low"] },
+                        priorityCategory: {
+                          type: "string",
+                          enum: ["Academics", "Recruiting", "Social", "Wellness"],
+                          description: "Which priority bucket this task belongs to",
+                        },
                         category: {
                           type: "string",
                           enum: ["class", "meeting", "study", "workout", "networking", "recruiting"],
+                          description: "Calendar category for coloring. Must align with priorityCategory.",
                         },
                       },
-                      required: ["title", "estimatedDuration", "dueDate", "preferredTime", "priority", "category"],
+                      required: ["title", "estimatedDuration", "dueDate", "preferredTime", "priority", "priorityCategory", "category"],
                     },
                   },
                   clarification_questions: {
@@ -247,7 +271,7 @@ Return ONLY by calling the extract_tasks function.`,
         ],
         tool_choice: { type: "function", function: { name: "extract_tasks" } },
         temperature: 0.3,
-        max_tokens: 1500,
+        max_tokens: 2000,
       }),
     });
 
@@ -269,6 +293,7 @@ Return ONLY by calling the extract_tasks function.`,
         dueDate: string | null;
         preferredTime: string | null;
         priority: "high" | "medium" | "low";
+        priorityCategory: "Academics" | "Recruiting" | "Social" | "Wellness";
         category: "class" | "meeting" | "study" | "workout" | "networking" | "recruiting";
       }>;
       clarification_questions: Array<{
@@ -290,7 +315,7 @@ Return ONLY by calling the extract_tasks function.`,
     }
 
     const now = new Date();
-    const todayISO = now.toISOString().slice(0, 10);
+    const todayISO = localToday();
     const currentTime = `${String(now.getHours()).padStart(2, "0")}:${String(now.getMinutes()).padStart(2, "0")}`;
     const todayEvents = existingEvents
       .filter((e) => e.date === todayISO)
@@ -324,6 +349,7 @@ CRITICAL RULES:
 
 Today's date is: ${todayISO}
 Current time is: ${currentTime}
+${priority ? `\n${PRIORITY_CONFIG[priority].promptHint}` : ""}
 
 Existing calendar events for today:
 ${JSON.stringify(todayEvents, null, 2)}
@@ -347,7 +373,7 @@ Return ONLY by calling the propose_schedule function.`,
     } else {
       messages.push({
         role: "user",
-        content: "Please create an optimized schedule for today fitting these tasks around my existing calendar events.",
+        content: `Please create an optimized schedule for today fitting these tasks around my existing calendar events.${priority ? ` My current priority is ${priority}.` : ""}`,
       });
     }
 
@@ -442,18 +468,21 @@ Return ONLY by calling the propose_schedule function.`,
     try {
       const result = await callExtractTasks(brainDumpText);
 
-      const todayISO = new Date().toISOString().slice(0, 10);
-      const tasks: ExtractedTask[] = result.tasks.map((t, i) => ({
+      const todayISO = localToday();
+      const rawTasks = result.tasks || [];
+      const tasks: ExtractedTask[] = rawTasks.map((t, i) => ({
         id: `task-${i}`,
         title: t.title,
         estimatedDuration: t.estimatedDuration,
         dueDate: t.preferredTime ? (t.dueDate || todayISO) : t.dueDate,
         preferredTime: t.preferredTime || null,
-        priority: t.priority,
-        category: t.category,
+        priority: t.priority || "medium",
+        priorityCategory: (t.priorityCategory && PRIORITY_CONFIG[t.priorityCategory]) ? t.priorityCategory : "Academics",
+        category: t.category || "study",
       }));
 
-      const questions: ClarificationQuestion[] = result.clarification_questions.map((q, i) => {
+      const rawQuestions = result.clarification_questions || [];
+      const questions: ClarificationQuestion[] = rawQuestions.map((q, i) => {
         const matchingTask = tasks.find((t) => t.title === q.task_title);
         return {
           taskId: matchingTask?.id || `task-${i}`,
@@ -531,7 +560,7 @@ Return ONLY by calling the propose_schedule function.`,
     try {
       const result = await callProposeSchedule(tasks, calendarEvents);
 
-      const todayISO = new Date().toISOString().slice(0, 10);
+      const todayISO = localToday();
       const todayExisting: ProposedScheduleBlock[] = calendarEvents
         .filter((e) => e.date === todayISO)
         .map((e) => ({
@@ -607,7 +636,7 @@ Return ONLY by calling the propose_schedule function.`,
         proposedSchedule
       );
 
-      const todayISO = new Date().toISOString().slice(0, 10);
+      const todayISO = localToday();
       const todayExisting: ProposedScheduleBlock[] = calendarEvents
         .filter((e) => e.date === todayISO)
         .map((e) => ({
@@ -645,6 +674,21 @@ Return ONLY by calling the propose_schedule function.`,
     }
   };
 
+  const handleCyclePriorityCategory = (taskId: string) => {
+    setExtractedTasks((prev) =>
+      prev.map((task) => {
+        if (task.id !== taskId) return task;
+        const currentIndex = PRIORITY_MODES.indexOf(task.priorityCategory as PriorityMode);
+        const nextCategory = PRIORITY_MODES[(currentIndex + 1) % PRIORITY_MODES.length];
+        return {
+          ...task,
+          priorityCategory: nextCategory,
+          category: priorityCategoryToCalCategory[nextCategory],
+        };
+      })
+    );
+  };
+
   const handleReset = () => {
     setBrainDumpText("");
     setExtractedTasks([]);
@@ -671,6 +715,12 @@ Return ONLY by calling the propose_schedule function.`,
         },
       });
     }
+  };
+
+  // --- Helper: local today string YYYY-MM-DD ---
+  const localToday = () => {
+    const d = new Date();
+    return `${d.getFullYear()}-${String(d.getMonth() + 1).padStart(2, "0")}-${String(d.getDate()).padStart(2, "0")}`;
   };
 
   // --- Helper: format time for display ---
@@ -721,6 +771,11 @@ Return ONLY by calling the propose_schedule function.`,
             <Brain className="w-6 h-6 text-purple-500" />
           </div>
           <h3 className="font-semibold text-lg mb-2">Brain Dump Planner</h3>
+          {priority && (
+            <Badge className={`mb-2 ${PRIORITY_CONFIG[priority].bgColor} ${PRIORITY_CONFIG[priority].textColor} border ${PRIORITY_CONFIG[priority].borderColor}`}>
+              Focus: {priority}
+            </Badge>
+          )}
           <p className="text-sm text-muted-foreground mb-4">
             Dump everything on your mind and I'll extract tasks, ask clarifying questions, and build an optimized schedule around your existing calendar.
           </p>
@@ -743,6 +798,11 @@ Return ONLY by calling the propose_schedule function.`,
         <div className="flex items-center gap-2 mb-4">
           <Brain className="w-5 h-5 text-purple-500" />
           <h3 className="font-semibold">Brain Dump</h3>
+          {priority && (
+            <Badge className={`${PRIORITY_CONFIG[priority].bgColor} ${PRIORITY_CONFIG[priority].textColor} border ${PRIORITY_CONFIG[priority].borderColor} text-xs`}>
+              {priority}
+            </Badge>
+          )}
         </div>
         <p className="text-sm text-muted-foreground mb-3">
           Write everything you need to do today. Don't worry about structure - just dump it all out.
@@ -826,6 +886,13 @@ Return ONLY by calling the propose_schedule function.`,
                     {isComplete && <Check className="w-3 h-3 text-white" />}
                   </div>
                   <span className="text-sm flex-1">{task.title}</span>
+                  <Badge
+                    className={`text-[10px] cursor-pointer hover:opacity-80 transition-opacity ${PRIORITY_CONFIG[task.priorityCategory].bgColor} ${PRIORITY_CONFIG[task.priorityCategory].textColor} border ${PRIORITY_CONFIG[task.priorityCategory].borderColor}`}
+                    onClick={() => handleCyclePriorityCategory(task.id)}
+                    title="Click to change category"
+                  >
+                    {task.priorityCategory}
+                  </Badge>
                   <Badge className={`text-[10px] ${priorityColors[task.priority]}`}>
                     {task.priority}
                   </Badge>
@@ -901,7 +968,7 @@ Return ONLY by calling the propose_schedule function.`,
           <Loader2 className="w-8 h-8 text-purple-500 animate-spin mx-auto mb-3" />
           <h3 className="font-semibold mb-1">Building your optimized schedule...</h3>
           <p className="text-sm text-muted-foreground">
-            Fitting {extractedTasks.length} tasks around your {calendarEvents.filter((e) => e.date === new Date().toISOString().slice(0, 10)).length} existing events
+            Fitting {extractedTasks.length} tasks around your {calendarEvents.filter((e) => e.date === localToday()).length} existing events
           </p>
         </div>
       </Card>
