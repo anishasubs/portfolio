@@ -1,27 +1,609 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Kaisey — AI Chief of Staff for MBA Life | Anisha Subberwal</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Bodoni+Moda:ital,wght@0,400;0,700;1,400&family=Parisienne&family=Raleway:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        *, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
+        html { scroll-behavior: smooth; }
+        body {
+            font-family: 'Raleway', sans-serif;
+            background: #fffaed;
+            color: #1c4e89;
+            line-height: 1.6;
+            overflow-x: hidden;
+        }
 
-  <!DOCTYPE html>
-  <html lang="en">
-    <head>
-      <meta charset="UTF-8" />
-      <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-      <title>Kaisey</title>
-      <link href="https://fonts.googleapis.com/css2?family=Parisienne&family=Raleway:wght@400;600;700&display=swap" rel="stylesheet">
-      <script type="module" crossorigin src="/portfolio/kaisey/assets/index-CGzg99tA.js"></script>
-      <link rel="stylesheet" crossorigin href="/portfolio/kaisey/assets/index--y3r-nFJ.css">
-    </head>
+        /* ── Sticky nav ─────────────────────────────────────── */
+        .site-nav {
+            position: fixed; top: 0; left: 0; right: 0;
+            height: 52px; z-index: 300;
+            background: rgba(255, 250, 237, 0.85);
+            backdrop-filter: blur(12px); -webkit-backdrop-filter: blur(12px);
+            border-bottom: 1px solid rgba(28, 78, 137, 0.08);
+            display: flex; align-items: center; justify-content: space-between;
+            padding: 0 32px;
+            font-family: 'Raleway', sans-serif;
+        }
+        .site-nav-name {
+            font-family: 'Parisienne', cursive;
+            font-size: 22px; color: #1c4e89;
+            text-decoration: none;
+            display: flex; align-items: center; gap: 10px;
+        }
+        .site-nav-name:hover { color: #cc99ff; }
+        .nav-pocket-icon {
+            position: relative; width: 36px; height: 36px;
+            display: inline-block; flex-shrink: 0;
+            filter: drop-shadow(0px 1px 2px rgba(0,0,0,0.10));
+            transition: transform 0.3s ease;
+        }
+        .nav-pocket-icon:hover { transform: scale(1.08); }
+        .nav-pocket-icon img { position: absolute; display: block; }
+        .nav-pocket-icon .menu-v1 { inset: 15% 10% 10% 10%; width: 80%; height: 75%; }
+        .nav-pocket-icon .menu-v2 { inset: 13% 30% auto 30%; width: 40%; height: 6%; }
+        .nav-pocket-icon .menu-v3 { inset: 21% auto auto 46%; width: 8%; height: 8%; }
+        .site-nav-links {
+            display: flex; align-items: center; gap: 28px;
+            list-style: none;
+        }
+        .site-nav-links a {
+            font-size: 12px; font-weight: 600;
+            letter-spacing: 0.1em; text-transform: uppercase;
+            color: #1c4e89; text-decoration: none;
+            transition: color 0.2s ease;
+        }
+        .site-nav-links a:hover { color: #cc99ff; }
+        .nav-work-wrap { position: relative; }
+        .nav-work-dropdown {
+            position: absolute; top: 100%; left: 50%; transform: translateX(-50%);
+            min-width: 200px; padding: 8px 0; margin-top: 0; padding-top: 12px;
+            background: rgba(255, 250, 237, 0.95);
+            backdrop-filter: blur(12px); -webkit-backdrop-filter: blur(12px);
+            border: 1px solid rgba(28, 78, 137, 0.12);
+            border-radius: 10px;
+            box-shadow: 0 8px 32px rgba(28, 78, 137, 0.12), 0 2px 8px rgba(0,0,0,0.06);
+            opacity: 0; pointer-events: none;
+            transform: translateX(-50%);
+            transition: opacity 0.25s ease;
+            list-style: none;
+        }
+        .nav-work-wrap:hover .nav-work-dropdown {
+            opacity: 1; pointer-events: auto;
+        }
+        .nav-work-dropdown a {
+            display: block; padding: 9px 20px;
+            font-size: 12px !important; font-weight: 500 !important;
+            letter-spacing: 0.06em !important; text-transform: lowercase !important;
+            color: #1c4e89; text-decoration: none; white-space: nowrap;
+            transition: background 0.15s ease, color 0.15s ease;
+        }
+        .nav-work-dropdown a:hover { background: rgba(28, 78, 137, 0.06); color: #cc99ff; }
+        .nav-hamburger {
+            display: none; background: none; border: none; cursor: pointer;
+            width: 28px; height: 28px; position: relative;
+            flex-direction: column; justify-content: center; align-items: center; gap: 5px;
+        }
+        .nav-hamburger span {
+            display: block; width: 20px; height: 2px;
+            background: #1c4e89; border-radius: 1px;
+        }
+        @media (max-width: 680px) {
+            .site-nav-links {
+                position: fixed; top: 52px; left: 0; right: 0;
+                flex-direction: column; gap: 0;
+                background: rgba(255, 250, 237, 0.95);
+                backdrop-filter: blur(12px); -webkit-backdrop-filter: blur(12px);
+                border-bottom: 1px solid rgba(28, 78, 137, 0.08);
+                max-height: 0; overflow: hidden;
+                transition: max-height 0.3s ease;
+            }
+            .site-nav-links.open { max-height: 400px; }
+            .site-nav-links a { display: block; padding: 14px 32px; width: 100%; }
+            .site-nav-links a:hover { background: rgba(28, 78, 137, 0.05); }
+            .nav-hamburger { display: flex; }
+            .nav-work-dropdown {
+                position: static; opacity: 1; pointer-events: auto;
+                transform: none; background: none; backdrop-filter: none;
+                border: none; border-radius: 0; box-shadow: none;
+                min-width: 0; margin: 0; padding: 0;
+            }
+            .nav-work-dropdown a { padding: 10px 32px 10px 48px; }
+        }
 
-    <body>
-      <nav style="position:fixed;top:0;left:0;right:0;height:52px;z-index:300;background:rgba(255,250,237,0.85);backdrop-filter:blur(12px);-webkit-backdrop-filter:blur(12px);border-bottom:1px solid rgba(28,78,137,0.08);display:flex;align-items:center;justify-content:space-between;padding:0 32px;font-family:'Raleway',sans-serif;">
-        <a href="../index.html" style="font-family:'Parisienne',cursive;font-size:22px;color:#1c4e89;text-decoration:none;display:flex;align-items:center;gap:10px;"><span style="position:relative;width:36px;height:36px;display:inline-block;flex-shrink:0;filter:drop-shadow(0px 1px 2px rgba(0,0,0,0.10));"><img src="../assets/pocket-v1.svg" style="position:absolute;inset:15% 10% 10% 10%;width:80%;height:75%;display:block;" alt=""><img src="../assets/pocket-v2.svg" style="position:absolute;inset:13% 30% auto 30%;width:40%;height:6%;display:block;" alt=""><img src="../assets/pocket-v3.svg" style="position:absolute;inset:21% auto auto 46%;width:8%;height:8%;display:block;" alt=""></span>Anisha Subberwal</a>
-        <ul style="display:flex;align-items:center;gap:28px;list-style:none;margin:0;padding:0;">
-          <li><a href="../index.html" style="font-size:12px;font-weight:600;letter-spacing:0.1em;text-transform:uppercase;color:#1c4e89;text-decoration:none;">Work</a></li>
-          <li><a href="../index.html#about" style="font-size:12px;font-weight:600;letter-spacing:0.1em;text-transform:uppercase;color:#1c4e89;text-decoration:none;">About</a></li>
-          <li><a href="../assets/Anisha_Subberwal_Resume.pdf" target="_blank" style="font-size:12px;font-weight:600;letter-spacing:0.1em;text-transform:uppercase;color:#1c4e89;text-decoration:none;">Resume</a></li>
-          <li><a href="https://www.linkedin.com/in/anisha-subberwal-434346126/" target="_blank" style="font-size:12px;font-weight:600;letter-spacing:0.1em;text-transform:uppercase;color:#1c4e89;text-decoration:none;">LinkedIn</a></li>
-          <li><a href="mailto:as7689@columbia.edu" style="font-size:12px;font-weight:600;letter-spacing:0.1em;text-transform:uppercase;color:#1c4e89;text-decoration:none;">Email</a></li>
-        </ul>
-      </nav>
-      <div id="root"></div>
-    </body>
-  </html>
-  
+        /* ── Sections ───────────────────────────────────────── */
+        .section {
+            padding: 120px 40px;
+            max-width: 1100px;
+            margin: 0 auto;
+        }
+        .section-tag {
+            display: inline-block;
+            font-family: 'Raleway', sans-serif;
+            font-size: 12px; font-weight: 700;
+            letter-spacing: 0.15em; text-transform: uppercase;
+            color: #cc99ff;
+            margin-bottom: 16px;
+        }
+        .section-title {
+            font-family: 'Bodoni Moda', serif;
+            font-size: 48px; font-weight: 400;
+            letter-spacing: -1px; line-height: 1.1;
+            color: #1c4e89;
+            margin-bottom: 24px;
+        }
+        .section-body {
+            font-size: 17px; line-height: 1.7;
+            color: #3d6088; max-width: 720px;
+        }
+        .section-body p { margin-bottom: 16px; }
+
+        /* ── Hero ────────────────────────────────────────────── */
+        .hero {
+            min-height: 100vh;
+            display: flex; align-items: center; justify-content: center;
+            text-align: center;
+            padding: 140px 40px 100px;
+            position: relative; overflow: hidden;
+        }
+        .hero::before {
+            content: '';
+            position: absolute; top: 0; left: 0; right: 0; bottom: 0;
+            background: linear-gradient(135deg, rgba(240, 230, 255, 0.25) 0%, rgba(250, 248, 243, 0.25) 100%);
+            z-index: 0;
+        }
+        .hero-content { position: relative; z-index: 1; max-width: 800px; }
+        .hero-content .section-tag { font-size: 13px; margin-bottom: 20px; }
+        .hero h1 {
+            font-family: 'Bodoni Moda', serif;
+            font-size: 64px; font-weight: 400;
+            letter-spacing: -2px; line-height: 1.05;
+            color: #1c4e89; margin-bottom: 12px;
+        }
+        .hero h1 .brand {
+            font-family: 'Parisienne', cursive;
+            color: #cc99ff; font-size: 72px;
+        }
+        .hero .subtitle {
+            font-size: 20px; color: #3d6088;
+            max-width: 640px; margin: 0 auto 40px;
+            line-height: 1.6;
+        }
+        .hero .meta {
+            font-size: 13px; color: #8a9bb5;
+            text-transform: uppercase; letter-spacing: 0.12em;
+            margin-bottom: 40px;
+        }
+        .cta-btn {
+            display: inline-block;
+            padding: 14px 36px;
+            background: #1c4e89; color: #fffaed;
+            font-family: 'Raleway', sans-serif;
+            font-size: 13px; font-weight: 700;
+            letter-spacing: 0.12em; text-transform: uppercase;
+            text-decoration: none;
+            border-radius: 8px;
+            transition: background 0.3s ease, transform 0.2s ease;
+        }
+        .cta-btn:hover { background: #cc99ff; transform: translateY(-2px); }
+
+        /* ── Cards grid ──────────────────────────────────────── */
+        .cards-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 28px; margin-top: 48px;
+        }
+        .card {
+            background: #fff; padding: 36px 28px;
+            border-radius: 14px;
+            border: 1px solid rgba(28, 78, 137, 0.08);
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+        }
+        .card:hover {
+            transform: translateY(-4px);
+            box-shadow: 0 12px 36px rgba(28, 78, 137, 0.10);
+        }
+        .card-icon {
+            font-size: 32px; margin-bottom: 16px;
+        }
+        .card h3 {
+            font-family: 'Raleway', sans-serif;
+            font-size: 16px; font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 0.06em;
+            color: #1c4e89; margin-bottom: 10px;
+        }
+        .card p {
+            font-size: 15px; line-height: 1.6;
+            color: #3d6088;
+        }
+        .card-accent { border-top: 3px solid #cc99ff; }
+        .card-accent-gold { border-top: 3px solid #d4a76a; }
+        .card-accent-blue { border-top: 3px solid #5a8ec4; }
+
+        /* ── Feature blocks ──────────────────────────────────── */
+        .feature-block {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 60px; align-items: center;
+            margin-top: 60px;
+        }
+        .feature-block.reverse { direction: rtl; }
+        .feature-block.reverse > * { direction: ltr; }
+        .feature-visual {
+            background: linear-gradient(135deg, #1c4e89 0%, #3d6088 100%);
+            border-radius: 16px;
+            padding: 48px; text-align: center;
+            color: #fffaed;
+            min-height: 280px;
+            display: flex; flex-direction: column;
+            align-items: center; justify-content: center;
+        }
+        .feature-visual .emoji { font-size: 56px; margin-bottom: 16px; }
+        .feature-visual .label {
+            font-family: 'Raleway', sans-serif;
+            font-size: 14px; font-weight: 600;
+            letter-spacing: 0.1em; text-transform: uppercase;
+            opacity: 0.8;
+        }
+        .feature-text h3 {
+            font-family: 'Bodoni Moda', serif;
+            font-size: 32px; font-weight: 400;
+            color: #1c4e89; margin-bottom: 16px;
+        }
+        .feature-text p {
+            font-size: 16px; line-height: 1.7;
+            color: #3d6088;
+        }
+
+        /* ── Tech stack pills ────────────────────────────────── */
+        .tech-stack {
+            display: flex; flex-wrap: wrap; gap: 10px;
+            margin-top: 40px;
+        }
+        .tech-pill {
+            display: inline-flex; align-items: center; gap: 6px;
+            padding: 8px 16px;
+            background: #fff;
+            border: 1px solid rgba(28, 78, 137, 0.12);
+            border-radius: 100px;
+            font-size: 13px; font-weight: 600;
+            color: #1c4e89;
+            letter-spacing: 0.03em;
+        }
+        .tech-pill .tech-label {
+            font-weight: 400; color: #8a9bb5;
+            margin-right: 2px;
+        }
+
+        /* ── Decision cards ──────────────────────────────────── */
+        .decisions-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 28px; margin-top: 48px;
+        }
+        .decision-card {
+            background: #fff; padding: 32px 24px;
+            border-radius: 14px;
+            border-left: 4px solid #cc99ff;
+        }
+        .decision-card h4 {
+            font-family: 'Raleway', sans-serif;
+            font-size: 15px; font-weight: 700;
+            color: #1c4e89; margin-bottom: 10px;
+        }
+        .decision-card p {
+            font-size: 14px; line-height: 1.6;
+            color: #3d6088;
+        }
+
+        /* ── Video section ───────────────────────────────────── */
+        .video-wrap {
+            max-width: 900px; margin: 48px auto 0;
+            border-radius: 16px; overflow: hidden;
+            background: #fff;
+            box-shadow: 0 8px 40px rgba(204, 153, 255, 0.12);
+        }
+        .video-wrap video {
+            width: 100%; height: auto; display: block;
+        }
+        .try-app {
+            text-align: center; margin-top: 32px;
+        }
+        .try-app .note {
+            font-size: 13px; color: #8a9bb5;
+            margin-top: 12px;
+        }
+
+        /* ── Persona cards ───────────────────────────────────── */
+        .persona-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 28px; margin-top: 48px;
+        }
+        .persona-card {
+            background: #fff; padding: 36px 28px;
+            border-radius: 14px;
+            border: 1px solid rgba(28, 78, 137, 0.08);
+            text-align: center;
+        }
+        .persona-card .persona-emoji { font-size: 40px; margin-bottom: 14px; }
+        .persona-card h4 {
+            font-family: 'Raleway', sans-serif;
+            font-size: 15px; font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 0.06em;
+            color: #1c4e89; margin-bottom: 10px;
+        }
+        .persona-card p {
+            font-size: 14px; line-height: 1.6;
+            color: #3d6088;
+        }
+
+        /* ── What's Next ─────────────────────────────────────── */
+        .roadmap-list {
+            list-style: none; margin-top: 32px;
+        }
+        .roadmap-list li {
+            padding: 14px 0;
+            border-bottom: 1px solid rgba(28, 78, 137, 0.08);
+            font-size: 16px; color: #3d6088;
+            display: flex; align-items: baseline; gap: 12px;
+        }
+        .roadmap-list li::before {
+            content: '';
+            width: 8px; height: 8px; flex-shrink: 0;
+            background: #cc99ff;
+            border-radius: 50%;
+            margin-top: 6px;
+        }
+        .closing-line {
+            font-family: 'Parisienne', cursive;
+            font-size: 28px; color: #cc99ff;
+            margin-top: 40px; line-height: 1.4;
+        }
+
+        /* ── Responsive ──────────────────────────────────────── */
+        @media (max-width: 768px) {
+            .hero h1 { font-size: 40px; }
+            .hero h1 .brand { font-size: 48px; }
+            .hero .subtitle { font-size: 17px; }
+            .section { padding: 80px 24px; }
+            .section-title { font-size: 36px; }
+            .cards-grid, .decisions-grid, .persona-grid {
+                grid-template-columns: 1fr;
+            }
+            .feature-block, .feature-block.reverse {
+                grid-template-columns: 1fr;
+                direction: ltr;
+            }
+            .feature-visual { min-height: 200px; }
+        }
+
+        /* ── Fade-in ─────────────────────────────────────────── */
+        .fade-in {
+            opacity: 0; transform: translateY(24px);
+            transition: opacity 0.7s ease, transform 0.7s ease;
+        }
+        .fade-in.visible {
+            opacity: 1; transform: translateY(0);
+        }
+    </style>
+</head>
+<body>
+
+<!-- ═══ NAV ═══ -->
+<nav class="site-nav">
+    <a class="site-nav-name" href="../index.html">
+        <span class="nav-pocket-icon">
+            <img class="menu-v1" src="../assets/pocket-v1.svg" alt="">
+            <img class="menu-v2" src="../assets/pocket-v2.svg" alt="">
+            <img class="menu-v3" src="../assets/pocket-v3.svg" alt="">
+        </span>
+        Anisha Subberwal
+    </a>
+    <button class="nav-hamburger" onclick="document.getElementById('nav-links').classList.toggle('open')" aria-label="Menu">
+        <span></span><span></span><span></span>
+    </button>
+    <ul class="site-nav-links" id="nav-links">
+        <li class="nav-work-wrap">
+            <a href="../index.html">Work</a>
+            <ul class="nav-work-dropdown">
+                <li><a href="../inde-wild-case-study/index.html">beauty brand growth</a></li>
+                <li><a href="../coffeechain/index.html">crypto coffee case</a></li>
+                <li><a href="../kaisey/index.html">smart calendar</a></li>
+                <li><a href="https://whifff.vercel.app" target="_blank">perfume scent quiz</a></li>
+            </ul>
+        </li>
+        <li><a href="../index.html#about">About</a></li>
+        <li><a href="../assets/Anisha_Subberwal_Resume.pdf" target="_blank">Resume</a></li>
+        <li><a href="https://www.linkedin.com/in/anisha-subberwal-434346126/" target="_blank">LinkedIn</a></li>
+        <li><a href="mailto:as7689@columbia.edu">Email</a></li>
+    </ul>
+</nav>
+
+<!-- ═══ HERO ═══ -->
+<div class="hero">
+    <div class="hero-content fade-in">
+        <span class="section-tag">Case Study</span>
+        <h1><span class="brand">Kaisey</span><br>Your AI Chief of Staff<br>for MBA Life</h1>
+        <p class="subtitle">An intelligent productivity companion that manages your calendar, prioritizes tasks, and surfaces insights — so you can focus on what matters.</p>
+        <div class="meta">Built by Anisha Subberwal | Columbia Business School MBA 2026</div>
+        <a class="cta-btn" href="#demo">Watch Demo</a>
+    </div>
+</div>
+
+<!-- ═══ THE PROBLEM ═══ -->
+<div class="section fade-in">
+    <span class="section-tag">The Problem</span>
+    <h2 class="section-title">The Triple Bind</h2>
+    <div class="section-body">
+        <p>MBA students juggle 60+ weekly commitments across three competing priorities — and the tools they rely on don't talk to each other. Google Calendar handles recruiting. Canvas tracks academics. Club events live in GroupMe. The result: constant context-switching, missed deadlines, and a creeping sense that something important is always falling through the cracks.</p>
+        <p>When priorities shift — grades slipping right as recruiting peaks — realigning everything manually is a recipe for burnout.</p>
+    </div>
+    <div class="cards-grid">
+        <div class="card card-accent">
+            <div class="card-icon">📚</div>
+            <h3>Academics</h3>
+            <p>Classes, team projects, cold calls, exams — tracked in Canvas but disconnected from everything else.</p>
+        </div>
+        <div class="card card-accent-gold">
+            <div class="card-icon">💼</div>
+            <h3>Recruiting</h3>
+            <p>Networking coffees, applications, firm events, interview prep — scattered across Google Calendar and spreadsheets.</p>
+        </div>
+        <div class="card card-accent-blue">
+            <div class="card-icon">🎉</div>
+            <h3>Social</h3>
+            <p>Club leadership, events, relationships — the stuff that makes MBA life worth it, always the first to get cut.</p>
+        </div>
+    </div>
+</div>
+
+<!-- ═══ THE SOLUTION ═══ -->
+<div class="section fade-in">
+    <span class="section-tag">The Solution</span>
+    <h2 class="section-title">What I Built</h2>
+
+    <!-- Feature 1: Priority Toggle -->
+    <div class="feature-block">
+        <div class="feature-visual">
+            <div class="emoji">🎛️</div>
+            <div class="label">Core Feature</div>
+        </div>
+        <div class="feature-text">
+            <h3>Dynamic Priority Toggle</h3>
+            <p>The core interaction. Set what matters this week — Academics? Recruiting? Social? — and Kaisey instantly rewires its recommendations. Move "Studies" to #1 and Kaisey will prioritize library time over coffee chats, flag exam conflicts with networking events, and restructure your entire week.</p>
+            <p>No ranking 47 individual tasks. Just tell Kaisey what mode you're in.</p>
+        </div>
+    </div>
+
+    <!-- Feature 2: MCP -->
+    <div class="feature-block reverse">
+        <div class="feature-visual" style="background: linear-gradient(135deg, #3d6088 0%, #5a8ec4 100%);">
+            <div class="emoji">🔗</div>
+            <div class="label">Connected Stack</div>
+        </div>
+        <div class="feature-text">
+            <h3>Live Data via MCP</h3>
+            <p>Live read-write access to the student's world via Model Context Protocol. Pulls assignment deadlines from Canvas, syncs with Google Calendar, integrates with recruiting trackers. Doesn't just see your schedule — it can reschedule.</p>
+        </div>
+    </div>
+
+    <!-- Feature 3: RAG -->
+    <div class="feature-block">
+        <div class="feature-visual" style="background: linear-gradient(135deg, #cc99ff 0%, #c4b3e0 100%);">
+            <div class="emoji">🧠</div>
+            <div class="label">MBA Playbook</div>
+        </div>
+        <div class="feature-text">
+            <h3>RAG-Powered Guidance</h3>
+            <p>Powered by Retrieval-Augmented Generation trained on a curated MBA guide. Knows how to prep for case-method cold calls, when to skip a club event for a corporate presentation, and how to manage recruiting stress.</p>
+        </div>
+    </div>
+
+    <!-- Tech Stack -->
+    <div class="tech-stack">
+        <span class="tech-pill"><span class="tech-label">Frontend</span> React</span>
+        <span class="tech-pill"><span class="tech-label">Frontend</span> TypeScript</span>
+        <span class="tech-pill"><span class="tech-label">Frontend</span> Tailwind CSS</span>
+        <span class="tech-pill"><span class="tech-label">Backend</span> Node.js</span>
+        <span class="tech-pill"><span class="tech-label">Backend</span> Express</span>
+        <span class="tech-pill"><span class="tech-label">AI</span> OpenAI GPT-4</span>
+        <span class="tech-pill"><span class="tech-label">Auth</span> OAuth 2.0</span>
+        <span class="tech-pill"><span class="tech-label">APIs</span> Google Calendar</span>
+        <span class="tech-pill"><span class="tech-label">APIs</span> Canvas LMS</span>
+    </div>
+</div>
+
+<!-- ═══ KEY DECISIONS ═══ -->
+<div class="section fade-in">
+    <span class="section-tag">Product Thinking</span>
+    <h2 class="section-title">Key Decisions</h2>
+    <div class="decisions-grid">
+        <div class="decision-card">
+            <h4>Why OAuth over email/password?</h4>
+            <p>Reduces friction — MBA students already live in Google. Enables instant calendar integration on first login. No new password to remember, no verification email to wait for.</p>
+        </div>
+        <div class="decision-card">
+            <h4>Why a toggle, not manual task ranking?</h4>
+            <p>MBA priorities shift weekly. A toggle maps to how students actually think: "This week is about recruiting" vs. ranking 47 individual tasks. One interaction, total rewrite of recommendations.</p>
+        </div>
+        <div class="decision-card">
+            <h4>Privacy-first architecture</h4>
+            <p>Zero permanent storage of calendar data. All processing happens in real-time. Users can revoke access anytime via Google. Trust is the product — especially with personal schedule data.</p>
+        </div>
+    </div>
+</div>
+
+<!-- ═══ DEMO ═══ -->
+<div class="section fade-in" id="demo">
+    <span class="section-tag">See It In Action</span>
+    <h2 class="section-title">Demo</h2>
+    <div class="video-wrap">
+        <video controls preload="metadata" poster="">
+            <source src="kaisey-demo.mp4" type="video/mp4">
+            Your browser does not support the video tag.
+        </video>
+    </div>
+    <div class="try-app">
+        <a class="cta-btn" href="app.html">Try Kaisey Live</a>
+        <p class="note">Sign in with Google to try the live app — your data is never stored.</p>
+    </div>
+</div>
+
+<!-- ═══ WHO NEEDS KAISEY ═══ -->
+<div class="section fade-in">
+    <span class="section-tag">Target Users</span>
+    <h2 class="section-title">Who Needs Kaisey</h2>
+    <div class="persona-grid">
+        <div class="persona-card">
+            <div class="persona-emoji">🔄</div>
+            <h4>The Career Pivoter</h4>
+            <p>Transitioning from consulting to tech PM, juggling 60+ networking coffees with an entirely new technical curriculum.</p>
+        </div>
+        <div class="persona-card">
+            <div class="persona-emoji">📈</div>
+            <h4>The Academic Rescuer</h4>
+            <p>Needs to raise their GPA from 3.4 to 3.7 before recruiting without sacrificing firm outreach.</p>
+        </div>
+        <div class="persona-card">
+            <div class="persona-emoji">🌍</div>
+            <h4>The International Student</h4>
+            <p>Navigating U.S. business culture and requiring constant guidance on networking norms and recruiting protocols.</p>
+        </div>
+    </div>
+</div>
+
+<!-- ═══ WHAT'S NEXT ═══ -->
+<div class="section fade-in">
+    <span class="section-tag">Roadmap</span>
+    <h2 class="section-title">What's Next</h2>
+    <ul class="roadmap-list">
+        <li>Beta pilot at Columbia Business School</li>
+        <li>Canvas-Calendar deep sync — assignment due date changes auto-trigger focus block suggestions</li>
+        <li>Stress-testing the priority toggle logic during peak recruiting season</li>
+    </ul>
+    <p class="closing-line">Kaisey gives MBA students the strategic clarity of someone with a full-time chief of staff — because they deserve to thrive, not just survive.</p>
+</div>
+
+<script>
+// Fade-in on scroll
+var faders = document.querySelectorAll('.fade-in');
+var observer = new IntersectionObserver(function (entries) {
+    entries.forEach(function (entry) {
+        if (entry.isIntersecting) {
+            entry.target.classList.add('visible');
+            observer.unobserve(entry.target);
+        }
+    });
+}, { threshold: 0.1 });
+faders.forEach(function (el) { observer.observe(el); });
+</script>
+
+</body>
+</html>
