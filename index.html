@@ -237,6 +237,27 @@
             color: #3d6088;
         }
         .about-bio p { margin-bottom: 14px; }
+        .about-highlights {
+            position: absolute;
+            font-family: 'Raleway', sans-serif;
+            font-size: 14px;
+            font-weight: 400;
+            line-height: 1.65;
+            color: #3d6088;
+            list-style: none;
+        }
+        .about-highlights li {
+            padding: 10px 0;
+            border-bottom: 1px solid rgba(28, 78, 137, 0.08);
+            display: flex; align-items: baseline; gap: 10px;
+        }
+        .about-highlights li::before {
+            content: '';
+            width: 6px; height: 6px; flex-shrink: 0;
+            background: #cc99ff;
+            border-radius: 50%;
+            margin-top: 5px;
+        }
         .about-linkedin-text {
             position: absolute;
             font-family: 'Raleway', sans-serif;
@@ -565,6 +586,13 @@
                 <p>I'm looking for product and strategy roles where that kind of thinking matters &mdash; where understanding people isn't a nice-to-have, it's the whole point.</p>
             </div>
 
+            <!-- Impact highlights -->
+            <ul class="about-highlights" id="about-highlights" style="left:560px;top:1050px;width:740px;">
+                <li>Led growth marketing for Ind&#275; Wild's TikTok Shop launch &mdash; $344K quarterly revenue, 160+ creators activated, 28% activation rate (vs. 15&ndash;20% industry average)</li>
+                <li>Currently a Student PM for the NBA &mdash; working on retention strategy for League Pass, focused on subscriber engagement and premium conversion</li>
+                <li>3 years at Deloitte Digital as Product Designer &mdash; built FedNow instant payments onboarding and WNBA digital platforms (40% CTR lift, 20% repeat visit increase)</li>
+                <li>Built Kaisey, an AI-powered Chief of Staff for MBA students &mdash; React, OAuth, Google Calendar API integration</li>
+            </ul>
 
         </div>
     </div>
@@ -581,7 +609,7 @@
        CONSTANTS — coordinates from updated Figma @ 1440px
        ================================================================ */
     var ARTBOARD_W     = 1440;
-    var ABOUT_H        = 1750;
+    var ABOUT_H        = 1950;
     var POCKET         = { x: 475, y: 647, w: 490, h: 490 };
     var HOME_ARTBOARD_H = POCKET.y + POCKET.h; // 1137
 
