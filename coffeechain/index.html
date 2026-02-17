@@ -982,8 +982,63 @@
             transform: translateY(-2px);
             box-shadow: 0 8px 30px rgba(204, 153, 255, 0.4) !important;
         }
+        /* ── Sticky top nav ──────────────────────────────────── */
+        .site-nav {
+            position: fixed; top: 0; left: 0; right: 0;
+            height: 52px; z-index: 300;
+            background: rgba(255, 250, 237, 0.85);
+            backdrop-filter: blur(12px); -webkit-backdrop-filter: blur(12px);
+            border-bottom: 1px solid rgba(28, 78, 137, 0.08);
+            display: flex; align-items: center; justify-content: space-between;
+            padding: 0 32px;
+            font-family: 'Raleway', sans-serif;
+        }
+        .site-nav-name {
+            font-family: 'Parisienne', cursive;
+            font-size: 22px; color: #1c4e89;
+            text-decoration: none;
+        }
+        .site-nav-name:hover { color: #cc99ff; }
+        .site-nav-links {
+            display: flex; align-items: center; gap: 28px;
+            list-style: none;
+        }
+        .site-nav-links a {
+            font-size: 12px; font-weight: 600;
+            letter-spacing: 0.1em; text-transform: uppercase;
+            color: #1c4e89; text-decoration: none;
+            transition: color 0.2s ease;
+        }
+        .site-nav-links a:hover { color: #cc99ff; }
+        .nav-hamburger {
+            display: none; background: none; border: none; cursor: pointer;
+            width: 28px; height: 28px; position: relative;
+            flex-direction: column; justify-content: center; align-items: center; gap: 5px;
+        }
+        .nav-hamburger span {
+            display: block; width: 20px; height: 2px;
+            background: #1c4e89; border-radius: 1px;
+            transition: transform 0.3s ease, opacity 0.3s ease;
+        }
+        @media (max-width: 680px) {
+            .site-nav-links {
+                position: fixed; top: 52px; left: 0; right: 0;
+                flex-direction: column; gap: 0;
+                background: rgba(255, 250, 237, 0.95);
+                backdrop-filter: blur(12px); -webkit-backdrop-filter: blur(12px);
+                border-bottom: 1px solid rgba(28, 78, 137, 0.08);
+                max-height: 0; overflow: hidden;
+                transition: max-height 0.3s ease;
+            }
+            .site-nav-links.open { max-height: 300px; }
+            .site-nav-links a {
+                display: block; padding: 14px 32px; width: 100%;
+            }
+            .site-nav-links a:hover { background: rgba(28, 78, 137, 0.05); }
+            .nav-hamburger { display: flex; }
+        }
         .pocket-menu {
-            position: fixed; top: 28px; left: 28px; z-index: 200;
+            position: fixed; top: 64px; left: 28px; z-index: 200;
             cursor: pointer; text-decoration: none;
         }
         .pocket-menu-icon {
@@ -1028,6 +1083,20 @@
     </style>
 </head>
 <body>
+    <!-- Sticky Nav -->
+    <nav class="site-nav">
+        <a class="site-nav-name" href="../index.html">Anisha Subberwal</a>
+        <button class="nav-hamburger" onclick="document.getElementById('nav-links').classList.toggle('open')" aria-label="Menu">
+            <span></span><span></span><span></span>
+        </button>
+        <ul class="site-nav-links" id="nav-links">
+            <li><a href="../index.html">Work</a></li>
+            <li><a href="../index.html#about">About</a></li>
+            <li><a href="../assets/Anisha_Subberwal_Resume.pdf" target="_blank">Resume</a></li>
+            <li><a href="https://www.linkedin.com/in/anishasubberwal/" target="_blank">LinkedIn</a></li>
+            <li><a href="mailto:anishasubberwal@gmail.com">Email</a></li>
+        </ul>
+    </nav>
     <div class="pocket-menu">
         <div class="pocket-menu-icon">
             <img class="menu-v1" src="../assets/pocket-v1.svg" alt="">
