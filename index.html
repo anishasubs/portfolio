@@ -23,66 +23,20 @@
             position: relative; background: #fffaed; transform-origin: top center;
         }
 
-        /* ── PocketMenu (fixed) ─────────────────────────────── */
-        .pocket-menu {
-            position: fixed; top: 64px; left: 28px; z-index: 200;
-            cursor: pointer;
-        }
-        .pocket-menu-icon {
-            position: relative; width: 64px; height: 64px;
-            filter: drop-shadow(0px 2px 4px rgba(0,0,0,0.12));
+        /* ── Nav pocket icon ─────────────────────────────────── */
+        .nav-pocket-icon {
+            position: relative; width: 36px; height: 36px;
+            display: inline-block; flex-shrink: 0;
+            filter: drop-shadow(0px 1px 2px rgba(0,0,0,0.10));
             transition: transform 0.3s ease;
         }
-        .pocket-menu:hover .pocket-menu-icon { transform: scale(1.08); }
-        .pocket-menu-icon img {
+        .nav-pocket-icon:hover { transform: scale(1.08); }
+        .nav-pocket-icon img {
             position: absolute; display: block;
         }
-        .menu-v1 { inset: 15% 10% 10% 10%; width: 80%; height: 75%; }
-        .menu-v2 { inset: 13% 30% auto 30%; width: 40%; height: 6%; }
-        .menu-v3 { inset: 21% auto auto 46%; width: 8%; height: 8%; }
-
-        /* ── Pocket flyout nav ──────────────────────────────── */
-        .pocket-nav {
-            position: absolute; top: 60px; left: 0;
-            opacity: 0; pointer-events: none;
-            transform: translateY(-8px);
-            transition: opacity 0.25s ease, transform 0.25s ease;
-        }
-        .pocket-menu:hover .pocket-nav {
-            opacity: 1; pointer-events: auto;
-            transform: translateY(0);
-        }
-        .pocket-nav-list {
-            list-style: none; margin: 0; padding: 8px 0;
-            background: rgba(255, 250, 237, 0.95);
-            backdrop-filter: blur(12px);
-            border: 1px solid rgba(28, 78, 137, 0.12);
-            border-radius: 12px;
-            box-shadow: 0 8px 32px rgba(28, 78, 137, 0.12), 0 2px 8px rgba(0,0,0,0.06);
-            min-width: 200px;
-        }
-        .pocket-nav-item {
-            display: block;
-            padding: 10px 20px;
-            font-family: 'Raleway', sans-serif;
-            font-size: 13px;
-            font-weight: 500;
-            letter-spacing: 0.08em;
-            text-transform: lowercase;
-            color: #1c4e89;
-            text-decoration: none;
-            transition: background 0.15s ease, color 0.15s ease;
-            cursor: pointer;
-            white-space: nowrap;
-        }
-        .pocket-nav-item:hover {
-            background: rgba(28, 78, 137, 0.08);
-            color: #cc99ff;
-        }
-        .pocket-nav-item.active {
-            font-weight: 700;
-            color: #cc99ff;
-        }
+        .nav-pocket-icon .menu-v1 { inset: 15% 10% 10% 10%; width: 80%; height: 75%; }
+        .nav-pocket-icon .menu-v2 { inset: 13% 30% auto 30%; width: 40%; height: 6%; }
+        .nav-pocket-icon .menu-v3 { inset: 21% auto auto 46%; width: 8%; height: 8%; }
 
         /* ── Balloon letters ─────────────────────────────────── */
         .letter {
@@ -235,37 +189,6 @@
             opacity: 1; transform: translateY(0);
         }
 
-        /* ── Positioning headline ───────────────────────────── */
-        .positioning-headline {
-            font-family: 'Raleway', sans-serif;
-            font-size: 24px;
-            font-weight: 700;
-            letter-spacing: 0.18em;
-            text-transform: uppercase;
-            color: #1c4e89;
-            margin: 36px auto 0;
-            opacity: 0;
-            transform: translateY(30px);
-            transition: opacity 0.8s ease 0.5s, transform 0.8s ease 0.5s;
-        }
-        .positioning-headline.visible {
-            opacity: 1; transform: translateY(0);
-        }
-        .positioning-subline {
-            font-family: 'Raleway', sans-serif;
-            font-size: 14px;
-            font-weight: 400;
-            line-height: 1.5;
-            color: #3d6088;
-            max-width: 560px;
-            margin: 12px auto 0;
-            opacity: 0;
-            transform: translateY(30px);
-            transition: opacity 0.8s ease 0.6s, transform 0.8s ease 0.6s;
-        }
-        .positioning-subline.visible {
-            opacity: 1; transform: translateY(0);
-        }
 
         /* ── About me view ───────────────────────────────────── */
         #about-view {
@@ -434,6 +357,7 @@
             font-family: 'Parisienne', cursive;
             font-size: 22px; color: #1c4e89;
             text-decoration: none;
+            display: flex; align-items: center; gap: 10px;
         }
         .site-nav-name:hover { color: #cc99ff; }
         .site-nav-links {
@@ -447,6 +371,35 @@
             transition: color 0.2s ease;
         }
         .site-nav-links a:hover { color: #cc99ff; }
+        /* Work dropdown */
+        .nav-work-wrap { position: relative; }
+        .nav-work-dropdown {
+            position: absolute; top: 100%; left: 50%; transform: translateX(-50%);
+            min-width: 200px; padding: 8px 0; margin-top: 0; padding-top: 12px;
+            background: rgba(255, 250, 237, 0.95);
+            backdrop-filter: blur(12px); -webkit-backdrop-filter: blur(12px);
+            border: 1px solid rgba(28, 78, 137, 0.12);
+            border-radius: 10px;
+            box-shadow: 0 8px 32px rgba(28, 78, 137, 0.12), 0 2px 8px rgba(0,0,0,0.06);
+            opacity: 0; pointer-events: none;
+            transform: translateX(-50%);
+            transition: opacity 0.25s ease;
+            list-style: none;
+        }
+        .nav-work-wrap:hover .nav-work-dropdown {
+            opacity: 1; pointer-events: auto;
+        }
+        .nav-work-dropdown a {
+            display: block; padding: 9px 20px;
+            font-size: 12px !important; font-weight: 500 !important;
+            letter-spacing: 0.06em !important; text-transform: lowercase !important;
+            color: #1c4e89; text-decoration: none;
+            white-space: nowrap;
+            transition: background 0.15s ease, color 0.15s ease;
+        }
+        .nav-work-dropdown a:hover {
+            background: rgba(28, 78, 137, 0.06); color: #cc99ff;
+        }
         .nav-hamburger {
             display: none; background: none; border: none; cursor: pointer;
             width: 28px; height: 28px; position: relative;
@@ -473,6 +426,13 @@
             }
             .site-nav-links a:hover { background: rgba(28, 78, 137, 0.05); }
             .nav-hamburger { display: flex; }
+            .nav-work-dropdown {
+                position: static; opacity: 1; pointer-events: auto;
+                transform: none; background: none; backdrop-filter: none;
+                border: none; border-radius: 0; box-shadow: none;
+                min-width: 0; margin: 0; padding: 0;
+            }
+            .nav-work-dropdown a { padding: 10px 32px 10px 48px; }
         }
 
         /* ── Scroll hint ─────────────────────────────────────── */
@@ -499,16 +459,31 @@
 
 <!-- ═══ STICKY NAV ═══ -->
 <nav class="site-nav">
-    <a class="site-nav-name" href="index.html">Anisha Subberwal</a>
+    <a class="site-nav-name" href="index.html">
+        <span class="nav-pocket-icon">
+            <img class="menu-v1" src="./assets/pocket-v1.svg" alt="">
+            <img class="menu-v2" src="./assets/pocket-v2.svg" alt="">
+            <img class="menu-v3" src="./assets/pocket-v3.svg" alt="">
+        </span>
+        Anisha Subberwal
+    </a>
     <button class="nav-hamburger" id="nav-hamburger" aria-label="Menu">
         <span></span><span></span><span></span>
     </button>
     <ul class="site-nav-links" id="nav-links">
-        <li><a href="index.html">Work</a></li>
+        <li class="nav-work-wrap">
+            <a href="index.html">Work</a>
+            <ul class="nav-work-dropdown">
+                <li><a href="inde-wild-case-study/index.html">beauty brand growth</a></li>
+                <li><a href="coffeechain/index.html">crypto coffee case</a></li>
+                <li><a href="kaisey/index.html">smart calendar</a></li>
+                <li><a href="https://whifff.vercel.app" target="_blank">perfume scent quiz</a></li>
+            </ul>
+        </li>
         <li><a href="#about" id="nav-about-link">About</a></li>
         <li><a href="./assets/Anisha_Subberwal_Resume.pdf" target="_blank">Resume</a></li>
-        <li><a href="https://www.linkedin.com/in/anishasubberwal/" target="_blank">LinkedIn</a></li>
-        <li><a href="mailto:anishasubberwal@gmail.com">Email</a></li>
+        <li><a href="https://www.linkedin.com/in/anisha-subberwal-434346126/" target="_blank">LinkedIn</a></li>
+        <li><a href="mailto:as7689@columbia.edu">Email</a></li>
     </ul>
 </nav>
 
@@ -560,8 +535,6 @@
                 <img class="by-underline" src="./assets/byline-underline.svg" alt="">
             </div>
             <p class="portfolio-desc" id="portfolio-desc">WELCOME TO ALL THE SKILLS IN MY BACK POCKET. CLICK ON AN OBJECT TO TAKE YOU TO A PROJECT.</p>
-            <p class="positioning-headline" id="positioning-headline">Product Strategist · Culture × Technology</p>
-            <p class="positioning-subline" id="positioning-subline">MBA Candidate at Columbia Business School | Ex-Deloitte Digital | Building at the intersection of design, data, and digital products</p>
         </div>
     </div>
 
@@ -585,10 +558,11 @@
 
             <!-- Bio text -->
             <div class="about-bio" id="about-bio" style="left:560px;top:390px;width:740px;">
-                <p>I've always been shaped by movement &mdash; across cultures, cities, and disciplines. Growing up South Asian and living in different parts of the world taught me early that context matters. The same idea, product, or story can resonate differently depending on who it's for and where it lives. That perspective continues to shape how I build.</p>
-                <p>I began my journey at Parsons School of Design, where I learned to see the world through emotion, form, and narrative &mdash; how things feel before how they function. That creative foundation eventually led me to ask bigger questions about systems, scale, and impact.</p>
-                <p>Today, I'm an MBA candidate at Columbia Business School, focused on product strategy, digital innovation, and intelligent systems. My work sits at the intersection of culture and technology:</p>
-                <p style="padding-left:16px;">Scaling a heritage-driven beauty brand (Ind&#275; Wild) through data-led growth strategy<br>Designing a blockchain-powered model to bring transparency to global coffee supply chains<br>Building Kaisey, an AI-powered productivity companion for MBA students</p>
+                <p>I build products, but I came to it sideways &mdash; through design school, through living in different countries, through caring maybe too much about why people like what they like.</p>
+                <p>These days I'm at Columbia Business School finishing my MBA. I'm a Student PM for the NBA working on League Pass retention (why do subscribers leave? how do you make them stay?), I teach Product Management, and I'm building Kaisey &mdash; an AI chief of staff for MBA students who are trying to recruit, study, and have a social life without completely falling apart.</p>
+                <p>Before school, I spent the summer running growth for Ind&#275; Wild, a beauty brand launching in Sephora. Built their TikTok Shop from nothing &mdash; activated 160+ creators, $344K in quarterly sales, 28% activation rate when most brands are lucky to hit 15&ndash;20%. And before that, three years at Deloitte Digital designing fintech and entertainment products &mdash; FedNow's instant payments onboarding, the WNBA's digital experience (40% CTR lift, 20% repeat visit increase).</p>
+                <p>I started at Parsons School of Design. That's where I learned to think about emotion and narrative first, systems second. Growing up South Asian and constantly code-switching between cultures gave me something similar &mdash; this instinct that context is everything. The same product, same message, same feature can mean totally different things depending on who's on the other end.</p>
+                <p>I'm looking for product and strategy roles where that kind of thinking matters &mdash; where understanding people isn't a nice-to-have, it's the whole point.</p>
             </div>
 
 
@@ -596,24 +570,6 @@
     </div>
 </div>
 
-<!-- PocketMenu (fixed, always visible) -->
-<div class="pocket-menu" id="pocket-menu">
-    <div class="pocket-menu-icon">
-        <img class="menu-v1" src="./assets/pocket-v1.svg" alt="">
-        <img class="menu-v2" src="./assets/pocket-v2.svg" alt="">
-        <img class="menu-v3" src="./assets/pocket-v3.svg" alt="">
-    </div>
-    <nav class="pocket-nav">
-        <ul class="pocket-nav-list">
-            <li><a class="pocket-nav-item active" data-nav="home">home</a></li>
-            <li><a class="pocket-nav-item" data-nav="tube">beauty brand growth</a></li>
-            <li><a class="pocket-nav-item" data-nav="receipt">crypto coffee case</a></li>
-            <li><a class="pocket-nav-item" data-nav="todo">smart calendar</a></li>
-            <li><a class="pocket-nav-item" data-nav="rollon">perfume scent quiz</a></li>
-            <li><a class="pocket-nav-item" data-nav="about">about me</a></li>
-        </ul>
-    </nav>
-</div>
 
 <div class="scroll-hint" id="scroll-hint">scroll <span>&darr;</span></div>
 
@@ -690,7 +646,6 @@
     var aboutView     = document.getElementById('about-view');
     var aboutFrameEl  = document.getElementById('about-frame-inner');
     var aboutArtboard = document.getElementById('about-artboard-inner');
-    var pocketMenu    = document.getElementById('pocket-menu');
     var textArtboard  = document.getElementById('text-artboard');
 
     var letterEls = [];
@@ -736,7 +691,7 @@
 
         textArtboard.style.width     = ARTBOARD_W + 'px';
         textArtboard.style.transform = 'scale(' + scale + ')';
-        textArtboard.parentElement.style.height = Math.ceil(600 * scale) + 'px';
+        textArtboard.parentElement.style.height = Math.ceil(500 * scale) + 'px';
 
         aboutArtboard.style.width     = ARTBOARD_W + 'px';
         aboutArtboard.style.height    = ABOUT_H + 'px';
@@ -897,9 +852,7 @@
         var els = [
             document.getElementById('portfolio-title'),
             document.getElementById('byline'),
-            document.getElementById('portfolio-desc'),
-            document.getElementById('positioning-headline'),
-            document.getElementById('positioning-subline')
+            document.getElementById('portfolio-desc')
         ];
         els.forEach(function (el) {
             var obs = new IntersectionObserver(function (entries) {
@@ -952,31 +905,6 @@
     objectEls.rollon.addEventListener('click', function () {
         if (objectsClickable) window.open('https://whifff.vercel.app', '_blank');
     });
-
-    /* Pocket nav click handlers */
-    var navItems = document.querySelectorAll('.pocket-nav-item');
-    for (var i = 0; i < navItems.length; i++) {
-        (function (item) {
-            item.addEventListener('click', function (e) {
-                e.stopPropagation();
-                var target = item.getAttribute('data-nav');
-                if (target === 'home') {
-                    if (currentView === 'about') showHome();
-                    else window.scrollTo({ top: 0, behavior: 'smooth' });
-                } else if (target === 'about') {
-                    showAbout();
-                } else if (target === 'tube') {
-                    window.location.href = 'inde-wild-case-study/index.html';
-                } else if (target === 'receipt') {
-                    window.location.href = 'coffeechain/index.html';
-                } else if (target === 'todo') {
-                    window.location.href = 'kaisey/index.html';
-                } else if (target === 'rollon') {
-                    window.open('https://whifff.vercel.app', '_blank');
-                }
-            });
-        })(navItems[i]);
-    }
 
     /* ================================================================
        BOOT

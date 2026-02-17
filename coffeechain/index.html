@@ -997,8 +997,20 @@
             font-family: 'Parisienne', cursive;
             font-size: 22px; color: #1c4e89;
             text-decoration: none;
+            display: flex; align-items: center; gap: 10px;
         }
         .site-nav-name:hover { color: #cc99ff; }
+        .nav-pocket-icon {
+            position: relative; width: 36px; height: 36px;
+            display: inline-block; flex-shrink: 0;
+            filter: drop-shadow(0px 1px 2px rgba(0,0,0,0.10));
+            transition: transform 0.3s ease;
+        }
+        .nav-pocket-icon:hover { transform: scale(1.08); }
+        .nav-pocket-icon img { position: absolute; display: block; }
+        .nav-pocket-icon .menu-v1 { inset: 15% 10% 10% 10%; width: 80%; height: 75%; }
+        .nav-pocket-icon .menu-v2 { inset: 13% 30% auto 30%; width: 40%; height: 6%; }
+        .nav-pocket-icon .menu-v3 { inset: 21% auto auto 46%; width: 8%; height: 8%; }
         .site-nav-links {
             display: flex; align-items: center; gap: 28px;
             list-style: none;
@@ -1010,6 +1022,31 @@
             transition: color 0.2s ease;
         }
         .site-nav-links a:hover { color: #cc99ff; }
+        .nav-work-wrap { position: relative; }
+        .nav-work-dropdown {
+            position: absolute; top: 100%; left: 50%; transform: translateX(-50%);
+            min-width: 200px; padding: 8px 0; margin-top: 0; padding-top: 12px;
+            background: rgba(255, 250, 237, 0.95);
+            backdrop-filter: blur(12px); -webkit-backdrop-filter: blur(12px);
+            border: 1px solid rgba(28, 78, 137, 0.12);
+            border-radius: 10px;
+            box-shadow: 0 8px 32px rgba(28, 78, 137, 0.12), 0 2px 8px rgba(0,0,0,0.06);
+            opacity: 0; pointer-events: none;
+            transform: translateX(-50%);
+            transition: opacity 0.25s ease;
+            list-style: none;
+        }
+        .nav-work-wrap:hover .nav-work-dropdown {
+            opacity: 1; pointer-events: auto;
+        }
+        .nav-work-dropdown a {
+            display: block; padding: 9px 20px;
+            font-size: 12px !important; font-weight: 500 !important;
+            letter-spacing: 0.06em !important; text-transform: lowercase !important;
+            color: #1c4e89; text-decoration: none; white-space: nowrap;
+            transition: background 0.15s ease, color 0.15s ease;
+        }
+        .nav-work-dropdown a:hover { background: rgba(28, 78, 137, 0.06); color: #cc99ff; }
         .nav-hamburger {
             display: none; background: none; border: none; cursor: pointer;
             width: 28px; height: 28px; position: relative;
@@ -1036,83 +1073,39 @@
             }
             .site-nav-links a:hover { background: rgba(28, 78, 137, 0.05); }
             .nav-hamburger { display: flex; }
+            .nav-work-dropdown {
+                position: static; opacity: 1; pointer-events: auto;
+                transform: none; background: none; backdrop-filter: none;
+                border: none; border-radius: 0; box-shadow: none;
+                min-width: 0; margin: 0; padding: 0;
+            }
+            .nav-work-dropdown a { padding: 10px 32px 10px 48px; }
         }
-        .pocket-menu {
-            position: fixed; top: 64px; left: 28px; z-index: 200;
-            cursor: pointer; text-decoration: none;
-        }
-        .pocket-menu-icon {
-            position: relative; width: 64px; height: 64px;
-            filter: drop-shadow(0px 2px 4px rgba(0,0,0,0.12));
-            transition: transform 0.3s ease;
-        }
-        .pocket-menu:hover .pocket-menu-icon { transform: scale(1.08); }
-        .pocket-menu-icon img { position: absolute; display: block; }
-        .menu-v1 { inset: 15% 10% 10% 10%; width: 80%; height: 75%; }
-        .menu-v2 { inset: 13% 30% auto 30%; width: 40%; height: 6%; }
-        .menu-v3 { inset: 21% auto auto 46%; width: 8%; height: 8%; }
-        .pocket-nav {
-            position: absolute; top: 60px; left: 0;
-            opacity: 0; pointer-events: none;
-            transform: translateY(-8px);
-            transition: opacity 0.25s ease, transform 0.25s ease;
-        }
-        .pocket-menu:hover .pocket-nav {
-            opacity: 1; pointer-events: auto;
-            transform: translateY(0);
-        }
-        .pocket-nav-list {
-            list-style: none; margin: 0; padding: 8px 0;
-            background: rgba(255, 250, 237, 0.95);
-            backdrop-filter: blur(12px);
-            border: 1px solid rgba(28, 78, 137, 0.12);
-            border-radius: 12px;
-            box-shadow: 0 8px 32px rgba(28, 78, 137, 0.12), 0 2px 8px rgba(0,0,0,0.06);
-            min-width: 200px;
-        }
-        .pocket-nav-item {
-            display: block; padding: 10px 20px;
-            font-family: 'Raleway', sans-serif; font-size: 13px; font-weight: 500;
-            letter-spacing: 0.08em; text-transform: lowercase;
-            color: #1c4e89; text-decoration: none;
-            transition: background 0.15s ease, color 0.15s ease;
-            cursor: pointer; white-space: nowrap;
-        }
-        .pocket-nav-item:hover { background: rgba(28, 78, 137, 0.08); color: #cc99ff; }
-        .pocket-nav-item.active { font-weight: 700; color: #cc99ff; }
     </style>
 </head>
 <body>
     <!-- Sticky Nav -->
     <nav class="site-nav">
-        <a class="site-nav-name" href="../index.html">Anisha Subberwal</a>
+        <a class="site-nav-name" href="../index.html"><span class="nav-pocket-icon"><img class="menu-v1" src="../assets/pocket-v1.svg" alt=""><img class="menu-v2" src="../assets/pocket-v2.svg" alt=""><img class="menu-v3" src="../assets/pocket-v3.svg" alt=""></span>Anisha Subberwal</a>
         <button class="nav-hamburger" onclick="document.getElementById('nav-links').classList.toggle('open')" aria-label="Menu">
             <span></span><span></span><span></span>
         </button>
         <ul class="site-nav-links" id="nav-links">
-            <li><a href="../index.html">Work</a></li>
+            <li class="nav-work-wrap">
+                <a href="../index.html">Work</a>
+                <ul class="nav-work-dropdown">
+                    <li><a href="../inde-wild-case-study/index.html">beauty brand growth</a></li>
+                    <li><a href="../coffeechain/index.html">crypto coffee case</a></li>
+                    <li><a href="../kaisey/index.html">smart calendar</a></li>
+                    <li><a href="https://whifff.vercel.app" target="_blank">perfume scent quiz</a></li>
+                </ul>
+            </li>
             <li><a href="../index.html#about">About</a></li>
             <li><a href="../assets/Anisha_Subberwal_Resume.pdf" target="_blank">Resume</a></li>
-            <li><a href="https://www.linkedin.com/in/anishasubberwal/" target="_blank">LinkedIn</a></li>
-            <li><a href="mailto:anishasubberwal@gmail.com">Email</a></li>
+            <li><a href="https://www.linkedin.com/in/anisha-subberwal-434346126/" target="_blank">LinkedIn</a></li>
+            <li><a href="mailto:as7689@columbia.edu">Email</a></li>
         </ul>
     </nav>
-    <div class="pocket-menu">
-        <div class="pocket-menu-icon">
-            <img class="menu-v1" src="../assets/pocket-v1.svg" alt="">
-            <img class="menu-v2" src="../assets/pocket-v2.svg" alt="">
-            <img class="menu-v3" src="../assets/pocket-v3.svg" alt="">
-        </div>
-        <nav class="pocket-nav">
-            <ul class="pocket-nav-list">
-                <li><a class="pocket-nav-item" href="../index.html">home</a></li>
-                <li><a class="pocket-nav-item" href="../inde-wild-case-study/index.html">beauty brand growth</a></li>
-                <li><a class="pocket-nav-item active" href="#">crypto coffee case</a></li>
-                <li><a class="pocket-nav-item" href="../kaisey/index.html">smart calendar</a></li>
-                <li><a class="pocket-nav-item" data-nav="about" href="../index.html#about">about me</a></li>
-            </ul>
-        </nav>
-    </div>
 
     <!-- Hero Section -->
     <section class="hero">
