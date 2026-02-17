@@ -1,0 +1,881 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Whifff — AI Perfume Quiz Case Study by Anisha Subberwal</title>
+    <link href="https://fonts.googleapis.com/css2?family=Bodoni+Moda:ital,wght@0,400;0,700;1,400&family=Parisienne&family=Raleway:wght@400;500;600;700&family=Caprasimo&family=Pacifico&family=Nunito:wght@400;500;600;700;800&family=Playfair+Display:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        html {
+            scroll-behavior: smooth;
+        }
+
+        body {
+            font-family: 'Nunito', sans-serif;
+            background: #DCF0FF;
+            color: #1B3A5C;
+            line-height: 1.6;
+        }
+
+        /* ── Nav pocket icon ─────────────────────────────────── */
+        .nav-pocket-icon {
+            position: relative; width: 36px; height: 36px;
+            display: inline-block; flex-shrink: 0;
+            filter: drop-shadow(0px 1px 2px rgba(0,0,0,0.10));
+            transition: transform 0.3s ease;
+        }
+        .nav-pocket-icon:hover { transform: scale(1.08); }
+        .nav-pocket-icon img { position: absolute; display: block; }
+        .nav-pocket-icon .menu-v1 { inset: 15% 10% 10% 10%; width: 80%; height: 75%; }
+        .nav-pocket-icon .menu-v2 { inset: 13% 30% auto 30%; width: 40%; height: 6%; }
+        .nav-pocket-icon .menu-v3 { inset: 21% auto auto 46%; width: 8%; height: 8%; }
+
+        /* ── Container ───────────────────────────────────────── */
+        .container {
+            max-width: 1000px;
+            margin: 0 auto;
+            padding: 0 40px;
+        }
+
+        /* ── Section spacing ─────────────────────────────────── */
+        section {
+            padding: 80px 0;
+        }
+
+        .section-tag {
+            display: inline-block;
+            font-size: 11px;
+            font-weight: 800;
+            letter-spacing: 0.15em;
+            text-transform: uppercase;
+            color: #4A8EC2;
+            margin-bottom: 16px;
+        }
+
+        section h2 {
+            font-family: 'Playfair Display', serif;
+            font-size: 44px;
+            font-weight: 700;
+            line-height: 1.15;
+            margin-bottom: 24px;
+            letter-spacing: -0.5px;
+            color: #1B3A5C;
+        }
+
+        section p.section-desc {
+            font-size: 17px;
+            color: #5A7D99;
+            max-width: 700px;
+            line-height: 1.7;
+        }
+
+        /* ── Hero ────────────────────────────────────────────── */
+        .hero {
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            text-align: center;
+            padding: 120px 40px 80px;
+            position: relative;
+            overflow: hidden;
+            background: linear-gradient(180deg, #3A7CB8 0%, #4A90C4 20%, #6AADDA 45%, #8FC5E8 65%, #B8DCF2 82%, #DCF0FF 100%);
+        }
+
+        /* Floating clouds */
+        .cloud {
+            position: absolute;
+            opacity: 0.15;
+            z-index: 0;
+        }
+        .cloud-1 { top: 15%; left: 5%; animation: float 6s ease-in-out infinite; }
+        .cloud-2 { top: 30%; right: 8%; animation: float 8s ease-in-out infinite 1s; }
+        .cloud-3 { top: 55%; left: 15%; animation: float 7s ease-in-out infinite 2s; }
+
+        @keyframes float {
+            0%, 100% { transform: translateY(0); }
+            50% { transform: translateY(-10px); }
+        }
+
+        .hero-content {
+            position: relative;
+            z-index: 1;
+            max-width: 800px;
+        }
+
+        .hero-logo {
+            font-family: 'Caprasimo', cursive;
+            font-size: clamp(56px, 14vw, 96px);
+            color: white;
+            margin-bottom: 12px;
+            line-height: 1;
+            letter-spacing: 2px;
+            text-shadow: 0 4px 20px rgba(0,40,80,0.15);
+        }
+
+        .hero-tagline {
+            font-family: 'Pacifico', cursive;
+            font-size: clamp(16px, 3.5vw, 22px);
+            color: white;
+            opacity: 0.85;
+            margin-bottom: 16px;
+            text-shadow: 0 2px 10px rgba(0,40,80,0.1);
+        }
+
+        .hero-subtitle {
+            font-size: 17px;
+            color: rgba(255,255,255,0.8);
+            max-width: 520px;
+            margin: 0 auto 12px;
+            font-weight: 500;
+        }
+
+        .hero .meta {
+            font-size: 12px;
+            color: rgba(255,255,255,0.55);
+            text-transform: uppercase;
+            letter-spacing: 0.12em;
+            margin-bottom: 36px;
+            font-weight: 600;
+        }
+
+        .hero-ctas {
+            display: flex;
+            gap: 14px;
+            justify-content: center;
+            flex-wrap: wrap;
+        }
+
+        .btn {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            padding: 15px 32px;
+            border-radius: 50px;
+            font-family: 'Nunito', sans-serif;
+            font-size: 14px;
+            font-weight: 800;
+            letter-spacing: 0.04em;
+            text-decoration: none;
+            transition: all 0.25s ease;
+            cursor: pointer;
+            border: none;
+        }
+
+        .btn-primary {
+            background: white;
+            color: #4A8EC2;
+            box-shadow: 0 4px 16px rgba(0,40,80,0.1);
+        }
+        .btn-primary:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 30px rgba(0,40,80,0.18);
+        }
+
+        .btn-secondary {
+            background: transparent;
+            color: white;
+            border: 2px solid rgba(255,255,255,0.5);
+        }
+        .btn-secondary:hover {
+            background: rgba(255,255,255,0.15);
+            transform: translateY(-2px);
+        }
+
+        /* ── Glass card (shared) ─────────────────────────────── */
+        .glass-card {
+            background: rgba(255,255,255,0.93);
+            border-radius: 22px;
+            box-shadow: 0 4px 24px rgba(0,40,80,0.08);
+            transition: all 0.25s cubic-bezier(0.34, 1.56, 0.64, 1);
+        }
+        .glass-card:hover {
+            transform: translateY(-4px);
+            box-shadow: 0 16px 40px rgba(0,40,80,0.12);
+        }
+
+        /* ── Gradient section backgrounds ────────────────────── */
+        .bg-sky {
+            background: linear-gradient(180deg, #B8DCF2 0%, #DCF0FF 100%);
+        }
+        .bg-light {
+            background: #DCF0FF;
+        }
+        .bg-sky-deep {
+            background: linear-gradient(180deg, #8FC5E8 0%, #B8DCF2 100%);
+        }
+
+        /* ── Problem Section ─────────────────────────────────── */
+        .pain-cards {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 20px;
+            margin-top: 40px;
+        }
+
+        .pain-card {
+            background: rgba(255,255,255,0.88);
+            padding: 28px 28px 28px 32px;
+            border-radius: 18px;
+            border-left: 4px solid #4A8EC2;
+            box-shadow: 0 2px 12px rgba(0,40,80,0.06);
+            transition: all 0.25s cubic-bezier(0.34, 1.56, 0.64, 1);
+        }
+        .pain-card:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 8px 30px rgba(0,40,80,0.12);
+        }
+
+        .pain-card h4 {
+            font-size: 16px;
+            font-weight: 700;
+            margin-bottom: 8px;
+            color: #1B3A5C;
+        }
+
+        .pain-card p {
+            font-size: 14px;
+            color: #5A7D99;
+            line-height: 1.65;
+        }
+
+        /* ── Ad / Demo Section ───────────────────────────────── */
+        .demo-section {
+            text-align: center;
+        }
+
+        .video-container {
+            max-width: 700px;
+            margin: 40px auto;
+            border-radius: 22px;
+            overflow: hidden;
+            background: rgba(255,255,255,0.93);
+            box-shadow: 0 8px 40px rgba(0,40,80,0.12);
+        }
+
+        .video-container video {
+            width: 100%;
+            height: auto;
+            display: block;
+        }
+
+        /* ── How It Works ────────────────────────────────────── */
+        .steps-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 20px;
+            margin-top: 40px;
+        }
+
+        .step-card {
+            background: rgba(255,255,255,0.88);
+            padding: 32px 24px;
+            border-radius: 18px;
+            box-shadow: 0 2px 8px rgba(0,40,80,0.04);
+            text-align: center;
+            transition: all 0.25s cubic-bezier(0.34, 1.56, 0.64, 1);
+        }
+
+        .step-card:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 8px 30px rgba(0,40,80,0.12);
+        }
+
+        .step-num {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            background: linear-gradient(135deg, #5BA3D9, #4A8EC2);
+            color: white;
+            font-size: 16px;
+            font-weight: 800;
+            margin-bottom: 16px;
+        }
+
+        .step-card h4 {
+            font-size: 16px;
+            font-weight: 700;
+            color: #1B3A5C;
+            margin-bottom: 8px;
+        }
+
+        .step-card p {
+            font-size: 14px;
+            color: #5A7D99;
+            line-height: 1.65;
+        }
+
+        /* ── Engine / Tech Section ───────────────────────────── */
+        .engine-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 20px;
+            margin-top: 40px;
+        }
+
+        .engine-card {
+            background: rgba(255,255,255,0.93);
+            padding: 32px;
+            border-radius: 22px;
+            box-shadow: 0 4px 20px rgba(0,40,80,0.08);
+            transition: all 0.25s cubic-bezier(0.34, 1.56, 0.64, 1);
+        }
+        .engine-card:hover {
+            transform: translateY(-4px);
+            box-shadow: 0 16px 40px rgba(0,40,80,0.12);
+        }
+
+        .engine-card h4 {
+            font-size: 16px;
+            font-weight: 700;
+            color: #1B3A5C;
+            margin-bottom: 8px;
+        }
+
+        .engine-card p {
+            font-size: 14px;
+            color: #5A7D99;
+            line-height: 1.65;
+        }
+
+        .tech-pills {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 8px;
+            margin-top: 40px;
+            justify-content: center;
+        }
+
+        .tech-pill {
+            padding: 8px 16px;
+            border-radius: 20px;
+            font-size: 12px;
+            font-weight: 700;
+            letter-spacing: 0.03em;
+            background: #EDF3F9;
+            color: #3A6B8C;
+        }
+
+        /* ── Decisions Section ───────────────────────────────── */
+        .decisions-grid {
+            display: grid;
+            gap: 20px;
+            margin-top: 40px;
+        }
+
+        .decision-card {
+            background: rgba(255,255,255,0.93);
+            padding: 32px 32px 32px 36px;
+            border-radius: 22px;
+            border-left: 4px solid #5BA3D9;
+            box-shadow: 0 4px 20px rgba(0,40,80,0.08);
+            transition: all 0.25s ease;
+        }
+        .decision-card:hover {
+            transform: translateY(-4px);
+            box-shadow: 0 16px 40px rgba(0,40,80,0.12);
+        }
+
+        .decision-card h4 {
+            font-size: 17px;
+            font-weight: 700;
+            color: #1B3A5C;
+            margin-bottom: 8px;
+        }
+
+        .decision-card p {
+            font-size: 14px;
+            color: #5A7D99;
+            line-height: 1.7;
+        }
+
+        /* ── What's Next ─────────────────────────────────────── */
+        .vision-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 20px;
+            margin-top: 40px;
+        }
+
+        .vision-card {
+            background: rgba(255,255,255,0.88);
+            padding: 32px 24px;
+            border-radius: 18px;
+            box-shadow: 0 2px 8px rgba(0,40,80,0.04);
+            text-align: center;
+            transition: all 0.25s cubic-bezier(0.34, 1.56, 0.64, 1);
+        }
+
+        .vision-card:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 8px 30px rgba(0,40,80,0.12);
+        }
+
+        .vision-icon {
+            font-size: 32px;
+            margin-bottom: 16px;
+        }
+
+        .vision-card h4 {
+            font-size: 16px;
+            font-weight: 700;
+            color: #1B3A5C;
+            margin-bottom: 8px;
+        }
+
+        .vision-card p {
+            font-size: 14px;
+            color: #5A7D99;
+            line-height: 1.65;
+        }
+
+        /* ── Final CTA ───────────────────────────────────────── */
+        .final-cta {
+            text-align: center;
+            padding: 100px 40px;
+            background: linear-gradient(180deg, #DCF0FF 0%, #8FC5E8 50%, #6AADDA 100%);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .final-cta h2 {
+            font-family: 'Caprasimo', cursive;
+            font-size: 52px;
+            color: white;
+            margin-bottom: 12px;
+            text-shadow: 0 4px 20px rgba(0,40,80,0.15);
+        }
+
+        .final-cta p {
+            font-size: 18px;
+            color: rgba(255,255,255,0.8);
+            margin-bottom: 32px;
+            font-weight: 500;
+        }
+
+        /* Sparkle decorations for CTA */
+        .sparkle {
+            position: absolute;
+            width: 8px;
+            height: 8px;
+            border-radius: 50%;
+            background: rgba(255,255,255,0.6);
+            animation: twinkle 2s ease-in-out infinite;
+        }
+        .sparkle:nth-child(1) { top: 20%; left: 15%; animation-delay: 0s; }
+        .sparkle:nth-child(2) { top: 35%; right: 20%; animation-delay: 0.5s; }
+        .sparkle:nth-child(3) { bottom: 30%; left: 25%; animation-delay: 1s; }
+        .sparkle:nth-child(4) { bottom: 20%; right: 15%; animation-delay: 1.5s; }
+
+        @keyframes twinkle {
+            0%, 100% { opacity: 0.3; transform: scale(0.8); }
+            50% { opacity: 1; transform: scale(1.1); }
+        }
+
+        /* ── Footer ──────────────────────────────────────────── */
+        footer {
+            background: #1B3A5C;
+            color: white;
+            padding: 60px 40px;
+            text-align: center;
+        }
+
+        footer a {
+            color: #8FC5E8;
+            text-decoration: none;
+        }
+        footer a:hover {
+            text-decoration: underline;
+        }
+
+        /* ── Fade-in animation ───────────────────────────────── */
+        .fade-in {
+            opacity: 0;
+            transform: translateY(20px);
+            transition: opacity 0.5s ease-out, transform 0.5s ease-out;
+        }
+        .fade-in.visible {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        /* ── Sticky top nav ──────────────────────────────────── */
+        .site-nav {
+            position: fixed; top: 0; left: 0; right: 0;
+            height: 52px; z-index: 300;
+            background: rgba(220, 240, 255, 0.85);
+            backdrop-filter: blur(12px); -webkit-backdrop-filter: blur(12px);
+            border-bottom: 1px solid rgba(0, 40, 80, 0.08);
+            display: flex; align-items: center; justify-content: space-between;
+            padding: 0 32px;
+            font-family: 'Nunito', sans-serif;
+        }
+        .site-nav-name {
+            font-family: 'Parisienne', cursive;
+            font-size: 22px; color: #1B3A5C;
+            text-decoration: none;
+        }
+        .site-nav-name:hover { color: #4A8EC2; }
+        .site-nav-links {
+            display: flex; align-items: center; gap: 28px;
+            list-style: none;
+        }
+        .site-nav-links a {
+            font-size: 12px; font-weight: 700;
+            letter-spacing: 0.1em; text-transform: uppercase;
+            color: #1B3A5C; text-decoration: none;
+            transition: color 0.2s ease;
+        }
+        .site-nav-links a:hover { color: #4A8EC2; }
+        .nav-work-wrap { position: relative; }
+        .nav-work-dropdown {
+            position: absolute; top: 100%; left: 50%; transform: translateX(-50%);
+            min-width: 200px; padding: 8px 0; margin-top: 0; padding-top: 12px;
+            background: rgba(220, 240, 255, 0.95);
+            backdrop-filter: blur(12px); -webkit-backdrop-filter: blur(12px);
+            border: 1px solid rgba(0, 40, 80, 0.12);
+            border-radius: 10px;
+            box-shadow: 0 8px 32px rgba(0, 40, 80, 0.12), 0 2px 8px rgba(0,0,0,0.06);
+            opacity: 0; pointer-events: none;
+            transform: translateX(-50%);
+            transition: opacity 0.25s ease;
+            list-style: none;
+        }
+        .nav-work-wrap:hover .nav-work-dropdown {
+            opacity: 1; pointer-events: auto;
+        }
+        .nav-work-dropdown a {
+            display: block; padding: 9px 20px;
+            font-size: 12px !important; font-weight: 500 !important;
+            letter-spacing: 0.06em !important; text-transform: lowercase !important;
+            color: #1B3A5C; text-decoration: none; white-space: nowrap;
+            transition: background 0.15s ease, color 0.15s ease;
+        }
+        .nav-work-dropdown a:hover { background: rgba(0, 40, 80, 0.06); color: #4A8EC2; }
+        .nav-hamburger {
+            display: none; background: none; border: none; cursor: pointer;
+            width: 28px; height: 28px; position: relative;
+            flex-direction: column; justify-content: center; align-items: center; gap: 5px;
+        }
+        .nav-hamburger span {
+            display: block; width: 20px; height: 2px;
+            background: #1B3A5C; border-radius: 1px;
+            transition: transform 0.3s ease, opacity 0.3s ease;
+        }
+        @media (max-width: 680px) {
+            .site-nav-links {
+                position: fixed; top: 52px; left: 0; right: 0;
+                flex-direction: column; gap: 0;
+                background: rgba(220, 240, 255, 0.95);
+                backdrop-filter: blur(12px); -webkit-backdrop-filter: blur(12px);
+                border-bottom: 1px solid rgba(0, 40, 80, 0.08);
+                max-height: 0; overflow: hidden;
+                transition: max-height 0.3s ease;
+            }
+            .site-nav-links.open { max-height: 300px; }
+            .site-nav-links a {
+                display: block; padding: 14px 32px; width: 100%;
+            }
+            .site-nav-links a:hover { background: rgba(0, 40, 80, 0.05); }
+            .nav-hamburger { display: flex; }
+            .nav-work-dropdown {
+                position: static; opacity: 1; pointer-events: auto;
+                transform: none; background: none; backdrop-filter: none;
+                border: none; border-radius: 0; box-shadow: none;
+                min-width: 0; margin: 0; padding: 0;
+            }
+            .nav-work-dropdown a { padding: 10px 32px 10px 48px; }
+        }
+
+        /* ── Mobile responsive ───────────────────────────────── */
+        @media (max-width: 680px) {
+            .hero { padding: 100px 24px 60px; }
+            .hero-subtitle { font-size: 15px; }
+            section { padding: 60px 0; }
+            .container { padding: 0 24px; }
+            section h2 { font-size: 30px; }
+            .pain-cards { grid-template-columns: 1fr; }
+            .steps-grid { grid-template-columns: 1fr; }
+            .engine-grid { grid-template-columns: 1fr; }
+            .vision-grid { grid-template-columns: 1fr; }
+            .final-cta h2 { font-size: 36px; }
+            .final-cta { padding: 60px 24px; }
+            .cloud { display: none; }
+        }
+    </style>
+</head>
+<body>
+    <!-- Sticky Nav -->
+    <nav class="site-nav">
+        <a class="site-nav-name" href="../index.html" style="display:flex;align-items:center;gap:10px;"><span class="nav-pocket-icon"><img class="menu-v1" src="../assets/pocket-v1.svg" alt=""><img class="menu-v2" src="../assets/pocket-v2.svg" alt=""><img class="menu-v3" src="../assets/pocket-v3.svg" alt=""></span>Anisha Subberwal</a>
+        <button class="nav-hamburger" onclick="document.getElementById('nav-links').classList.toggle('open')" aria-label="Menu">
+            <span></span><span></span><span></span>
+        </button>
+        <ul class="site-nav-links" id="nav-links">
+            <li class="nav-work-wrap">
+                <a href="../index.html">Work</a>
+                <ul class="nav-work-dropdown">
+                    <li><a href="../inde-wild-case-study/index.html">beauty brand growth</a></li>
+                    <li><a href="../coffeechain/index.html">crypto coffee case</a></li>
+                    <li><a href="../kaisey/index.html">smart calendar</a></li>
+                    <li><a href="../whifff-case-study/index.html">perfume scent quiz</a></li>
+                </ul>
+            </li>
+            <li><a href="../index.html#about">About</a></li>
+            <li><a href="../assets/Anisha_Subberwal_Resume.pdf" target="_blank">Resume</a></li>
+            <li><a href="https://www.linkedin.com/in/anisha-subberwal-434346126/" target="_blank">LinkedIn</a></li>
+            <li><a href="mailto:as7689@columbia.edu">Email</a></li>
+        </ul>
+    </nav>
+
+    <!-- 1. Hero -->
+    <div class="hero">
+        <!-- Floating clouds -->
+        <svg class="cloud cloud-1" width="200" height="80" viewBox="0 0 200 80" fill="white">
+            <ellipse cx="60" cy="50" rx="60" ry="28"/>
+            <ellipse cx="110" cy="40" rx="50" ry="25"/>
+            <ellipse cx="150" cy="50" rx="40" ry="20"/>
+            <ellipse cx="85" cy="35" rx="40" ry="22"/>
+            <ellipse cx="130" cy="48" rx="35" ry="18"/>
+        </svg>
+        <svg class="cloud cloud-2" width="160" height="65" viewBox="0 0 160 65" fill="white">
+            <ellipse cx="50" cy="40" rx="45" ry="22"/>
+            <ellipse cx="90" cy="32" rx="40" ry="20"/>
+            <ellipse cx="120" cy="40" rx="35" ry="18"/>
+            <ellipse cx="70" cy="30" rx="30" ry="18"/>
+        </svg>
+        <svg class="cloud cloud-3" width="180" height="70" viewBox="0 0 180 70" fill="white">
+            <ellipse cx="55" cy="45" rx="50" ry="24"/>
+            <ellipse cx="100" cy="36" rx="45" ry="22"/>
+            <ellipse cx="140" cy="44" rx="38" ry="19"/>
+            <ellipse cx="80" cy="32" rx="35" ry="20"/>
+        </svg>
+
+        <div class="hero-content">
+            <div class="hero-logo">whifff</div>
+            <div class="hero-tagline">your next favorite scent is one quiz away</div>
+            <p class="hero-subtitle">An AI-powered perfume quiz that decodes your scent personality and finds your perfect fragrance match.</p>
+            <div class="meta">Case Study by Anisha Subberwal | Columbia Business School MBA 2026</div>
+            <div class="hero-ctas">
+                <a href="https://whifff.vercel.app" target="_blank" class="btn btn-primary">Take the Quiz &rarr;</a>
+                <a href="#demo" class="btn btn-secondary">Watch the Ad &darr;</a>
+            </div>
+        </div>
+    </div>
+
+    <!-- 2. The Problem -->
+    <section class="bg-light fade-in">
+        <div class="container">
+            <span class="section-tag">The Problem</span>
+            <h2>Perfume Shopping Is Broken</h2>
+            <p class="section-desc">Finding a fragrance you love shouldn't require a chemistry degree or dozens of regretful blind buys.</p>
+            <div class="pain-cards">
+                <div class="pain-card">
+                    <h4>Overwhelming Choice</h4>
+                    <p>There are thousands of fragrances on the market. Without guidance, shoppers default to bestseller lists and celebrity endorsements that have nothing to do with personal preference.</p>
+                </div>
+                <div class="pain-card">
+                    <h4>Nose Fatigue Is Real</h4>
+                    <p>After testing 3-4 scents in store, your sense of smell shuts down. You leave confused, or worse, buy something you can't return.</p>
+                </div>
+                <div class="pain-card">
+                    <h4>Descriptions Are Useless</h4>
+                    <p>"Top notes of bergamot with a heart of tuberose" means nothing to most people. The language of fragrance excludes the average shopper.</p>
+                </div>
+                <div class="pain-card">
+                    <h4>Expensive Mistakes</h4>
+                    <p>At $80-300+ per bottle, a bad purchase stings. Most perfumes can't be returned once opened, so buyers stick to safe choices instead of exploring.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- 3. The Ad / Demo -->
+    <section class="bg-sky demo-section fade-in" id="demo">
+        <div class="container">
+            <span class="section-tag">The Ad</span>
+            <h2>See Whifff in Action</h2>
+            <p class="section-desc" style="margin: 0 auto;">A 40-second ad showcasing the quiz experience from first question to personalized result.</p>
+            <div class="video-container">
+                <video autoplay muted loop playsinline>
+                    <source src="whifff-ad.mp4" type="video/mp4">
+                </video>
+            </div>
+            <a href="https://whifff.vercel.app" target="_blank" class="btn btn-primary" style="margin-top: 24px;">Try It Yourself &rarr;</a>
+        </div>
+    </section>
+
+    <!-- 4. How It Works -->
+    <section class="bg-light fade-in">
+        <div class="container">
+            <span class="section-tag">How It Works</span>
+            <h2>6 Questions to Your Perfect Scent</h2>
+            <p class="section-desc">Whifff translates lifestyle preferences into fragrance chemistry through a conversational quiz.</p>
+            <div class="steps-grid">
+                <div class="step-card">
+                    <div class="step-num">1</div>
+                    <h4>Pick Your Vibe</h4>
+                    <p>Choose the mood that matches your day &mdash; cozy, bold, fresh, or romantic &mdash; to set the scent direction.</p>
+                </div>
+                <div class="step-card">
+                    <div class="step-num">2</div>
+                    <h4>Scent Memories</h4>
+                    <p>Select smells you love from everyday life: fresh laundry, campfire, coffee, rain on pavement.</p>
+                </div>
+                <div class="step-card">
+                    <div class="step-num">3</div>
+                    <h4>Occasion &amp; Season</h4>
+                    <p>Tell us when and where you'll wear it &mdash; the algorithm weighs intensity and note profiles accordingly.</p>
+                </div>
+                <div class="step-card">
+                    <div class="step-num">4</div>
+                    <h4>Ingredient Preferences</h4>
+                    <p>Lean into florals, woods, gourmands, or fresh notes. This shapes the dominant accord in your match.</p>
+                </div>
+                <div class="step-card">
+                    <div class="step-num">5</div>
+                    <h4>Budget &amp; Brand</h4>
+                    <p>Set your price range and whether you prefer niche houses, designer labels, or don't care.</p>
+                </div>
+                <div class="step-card">
+                    <div class="step-num">6</div>
+                    <h4>AI Match &amp; Chat</h4>
+                    <p>Get your top 3 matches with explanations, then chat with the AI to refine or explore further.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- 5. What I Built — The Engine -->
+    <section class="bg-sky fade-in">
+        <div class="container">
+            <span class="section-tag">What I Built</span>
+            <h2>The Engine Behind the Quiz</h2>
+            <p class="section-desc">Whifff isn't just a form with pre-mapped answers. It's a real-time recommendation engine that combines structured data with AI reasoning.</p>
+            <div class="engine-grid">
+                <div class="engine-card">
+                    <h4>Structured Data Pipeline</h4>
+                    <p>20 perfumes catalogued with scent profiles, note breakdowns, accords, occasion tags, and price tiers. Each entry is normalized for vector comparison.</p>
+                </div>
+                <div class="engine-card">
+                    <h4>Vector Similarity Search</h4>
+                    <p>Quiz answers are embedded into a preference vector. Cosine similarity ranks all perfumes against your profile, surfacing the closest matches.</p>
+                </div>
+                <div class="engine-card">
+                    <h4>Post-Match Filtering</h4>
+                    <p>Hard filters (budget, brand preference) are applied after vector ranking to preserve serendipity while respecting constraints.</p>
+                </div>
+                <div class="engine-card">
+                    <h4>Conversational AI Chat</h4>
+                    <p>After results, users can ask follow-up questions via a chat UI powered by Claude. The AI explains why each match fits and suggests alternatives.</p>
+                </div>
+            </div>
+            <div class="tech-pills">
+                <span class="tech-pill">Next.js 16</span>
+                <span class="tech-pill">React 19</span>
+                <span class="tech-pill">TypeScript</span>
+                <span class="tech-pill">Tailwind v4</span>
+                <span class="tech-pill">Framer Motion</span>
+                <span class="tech-pill">Claude API</span>
+                <span class="tech-pill">Vercel</span>
+                <span class="tech-pill">App Router</span>
+            </div>
+        </div>
+    </section>
+
+    <!-- 6. Key Product Decisions -->
+    <section class="bg-light fade-in">
+        <div class="container">
+            <span class="section-tag">Product Decisions</span>
+            <h2>Why I Built It This Way</h2>
+            <div class="decisions-grid">
+                <div class="decision-card">
+                    <h4>Chat UI Over Static Results</h4>
+                    <p>A static results page feels like a dead end. The chat interface lets users dig deeper, ask "why this one?", and get alternatives &mdash; turning a one-shot quiz into a conversation. This increases engagement and trust in the recommendation.</p>
+                </div>
+                <div class="decision-card">
+                    <h4>Vectors Over Rule-Based Matching</h4>
+                    <p>Hard-coded if/then rules break when preferences are nuanced ("I want something woody but also sweet"). Vector similarity captures the continuous nature of scent preference, producing matches that feel intuitive rather than mechanical.</p>
+                </div>
+                <div class="decision-card">
+                    <h4>No Login Required</h4>
+                    <p>Fragrance discovery is impulse-driven. Requiring sign-up before seeing results would kill conversion. The quiz is fully anonymous with an optional save feature planned for returning users.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- 7. What's Next -->
+    <section class="bg-sky fade-in">
+        <div class="container">
+            <span class="section-tag">What's Next</span>
+            <h2>The Roadmap</h2>
+            <p class="section-desc">Whifff is a living product. Here's where it's headed.</p>
+            <div class="vision-grid">
+                <div class="vision-card">
+                    <div class="vision-icon">&#127804;</div>
+                    <h4>Scent Profiles</h4>
+                    <p>Save your quiz results, build a fragrance wardrobe, and get new recommendations as our database grows beyond 20 perfumes.</p>
+                </div>
+                <div class="vision-card">
+                    <div class="vision-icon">&#10024;</div>
+                    <h4>Scent Stacking</h4>
+                    <p>Layer two fragrances for a custom scent. The AI will suggest complementary pairings based on note chemistry.</p>
+                </div>
+                <div class="vision-card">
+                    <div class="vision-icon">&#127978;</div>
+                    <h4>In-Store Mode</h4>
+                    <p>Take your phone to Sephora. Scan a perfume, see how it compares to your profile, and get real-time opinions from the AI.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- 8. Final CTA -->
+    <section class="final-cta fade-in">
+        <div class="sparkle"></div>
+        <div class="sparkle"></div>
+        <div class="sparkle"></div>
+        <div class="sparkle"></div>
+        <h2>Find Your Scent</h2>
+        <p>The quiz takes two minutes. Your perfect fragrance is waiting.</p>
+        <a href="https://whifff.vercel.app" target="_blank" class="btn btn-primary" style="font-size: 16px; padding: 16px 40px;">Take the Quiz &rarr;</a>
+    </section>
+
+    <!-- Footer -->
+    <footer>
+        <h3>Anisha Subberwal</h3>
+        <p style="margin: 20px 0;">MBA Candidate, Columbia Business School 2026</p>
+        <p><a href="mailto:as7689@columbia.edu">as7689@columbia.edu</a> | +1 (646) 512-1483</p>
+    </footer>
+
+    <script>
+        // Fade in animations on scroll
+        const observerOptions = {
+            threshold: 0.1,
+            rootMargin: '0px 0px -100px 0px'
+        };
+
+        const observer = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    entry.target.classList.add('visible');
+                }
+            });
+        }, observerOptions);
+
+        document.querySelectorAll('.fade-in').forEach(el => {
+            observer.observe(el);
+        });
+    </script>
+</body>
+</html>
