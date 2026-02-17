@@ -1,0 +1,773 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Kaisey — AI Chief of Staff for MBA Life | Anisha Subberwal</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Bodoni+Moda:ital,wght@0,400;0,700;1,400&family=Parisienne&family=Raleway:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        html { scroll-behavior: smooth; }
+
+        :root {
+            --violet: #7C3AED;
+            --violet-dark: #5B21B6;
+            --violet-deep: #4C1D95;
+            --cream: #fffaed;
+            --cream-dark: #f0e8d8;
+            --navy: #1c4e89;
+            --text-secondary: #5a7a94;
+            --pill-bg: #f0eeff;
+            --pill-text: #5B21B6;
+        }
+
+        body {
+            font-family: 'Raleway', sans-serif;
+            background: var(--cream);
+            color: var(--navy);
+            line-height: 1.6;
+            overflow-x: hidden;
+        }
+
+        /* ── Nav pocket icon ─────────────────────────────────── */
+        .nav-pocket-icon {
+            position: relative; width: 36px; height: 36px;
+            display: inline-block; flex-shrink: 0;
+            filter: drop-shadow(0px 1px 2px rgba(0,0,0,0.10));
+            transition: transform 0.3s ease;
+        }
+        .nav-pocket-icon:hover { transform: scale(1.08); }
+        .nav-pocket-icon img { position: absolute; display: block; }
+        .nav-pocket-icon .menu-v1 { inset: 15% 10% 10% 10%; width: 80%; height: 75%; }
+        .nav-pocket-icon .menu-v2 { inset: 13% 30% auto 30%; width: 40%; height: 6%; }
+        .nav-pocket-icon .menu-v3 { inset: 21% auto auto 46%; width: 8%; height: 8%; }
+
+        /* ── Sticky top nav ──────────────────────────────────── */
+        .site-nav {
+            position: fixed; top: 0; left: 0; right: 0;
+            height: 52px; z-index: 300;
+            background: rgba(255, 250, 237, 0.85);
+            backdrop-filter: blur(12px); -webkit-backdrop-filter: blur(12px);
+            border-bottom: 1px solid rgba(28, 78, 137, 0.08);
+            display: flex; align-items: center; justify-content: space-between;
+            padding: 0 32px;
+            font-family: 'Raleway', sans-serif;
+        }
+        .site-nav-name {
+            font-family: 'Parisienne', cursive;
+            font-size: 22px; color: #1c4e89;
+            text-decoration: none;
+            display: flex; align-items: center; gap: 10px;
+        }
+        .site-nav-name:hover { color: var(--violet); }
+        .site-nav-links {
+            display: flex; align-items: center; gap: 28px;
+            list-style: none;
+        }
+        .site-nav-links a {
+            font-size: 12px; font-weight: 600;
+            letter-spacing: 0.1em; text-transform: uppercase;
+            color: #1c4e89; text-decoration: none;
+            transition: color 0.2s ease;
+        }
+        .site-nav-links a:hover { color: var(--violet); }
+        .nav-work-wrap { position: relative; }
+        .nav-work-dropdown {
+            position: absolute; top: 100%; left: 50%; transform: translateX(-50%);
+            min-width: 200px; padding: 8px 0; margin-top: 0; padding-top: 12px;
+            background: rgba(255, 250, 237, 0.95);
+            backdrop-filter: blur(12px); -webkit-backdrop-filter: blur(12px);
+            border: 1px solid rgba(28, 78, 137, 0.12);
+            border-radius: 10px;
+            box-shadow: 0 8px 32px rgba(28, 78, 137, 0.12), 0 2px 8px rgba(0,0,0,0.06);
+            opacity: 0; pointer-events: none;
+            transform: translateX(-50%);
+            transition: opacity 0.25s ease;
+            list-style: none;
+        }
+        .nav-work-wrap:hover .nav-work-dropdown {
+            opacity: 1; pointer-events: auto;
+        }
+        .nav-work-dropdown a {
+            display: block; padding: 9px 20px;
+            font-size: 12px !important; font-weight: 500 !important;
+            letter-spacing: 0.06em !important; text-transform: lowercase !important;
+            color: #1c4e89; text-decoration: none; white-space: nowrap;
+            transition: background 0.15s ease, color 0.15s ease;
+        }
+        .nav-work-dropdown a:hover { background: rgba(28, 78, 137, 0.06); color: var(--violet); }
+        .nav-hamburger {
+            display: none; background: none; border: none; cursor: pointer;
+            width: 28px; height: 28px; position: relative;
+            flex-direction: column; justify-content: center; align-items: center; gap: 5px;
+        }
+        .nav-hamburger span {
+            display: block; width: 20px; height: 2px;
+            background: #1c4e89; border-radius: 1px;
+            transition: transform 0.3s ease, opacity 0.3s ease;
+        }
+        @media (max-width: 680px) {
+            .site-nav-links {
+                position: fixed; top: 52px; left: 0; right: 0;
+                flex-direction: column; gap: 0;
+                background: rgba(255, 250, 237, 0.95);
+                backdrop-filter: blur(12px); -webkit-backdrop-filter: blur(12px);
+                border-bottom: 1px solid rgba(28, 78, 137, 0.08);
+                max-height: 0; overflow: hidden;
+                transition: max-height 0.3s ease;
+            }
+            .site-nav-links.open { max-height: 300px; }
+            .site-nav-links a {
+                display: block; padding: 14px 32px; width: 100%;
+            }
+            .site-nav-links a:hover { background: rgba(28, 78, 137, 0.05); }
+            .nav-hamburger { display: flex; }
+            .nav-work-dropdown {
+                position: static; opacity: 1; pointer-events: auto;
+                transform: none; background: none; backdrop-filter: none;
+                border: none; border-radius: 0; box-shadow: none;
+                min-width: 0; margin: 0; padding: 0;
+            }
+            .nav-work-dropdown a { padding: 10px 32px 10px 48px; }
+        }
+
+        /* ── Hero ────────────────────────────────────────────── */
+        .hero {
+            min-height: 100vh;
+            background: linear-gradient(160deg, var(--violet-deep) 0%, var(--violet) 45%, var(--cream) 100%);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            text-align: center;
+            padding: 120px 40px 80px;
+            position: relative;
+            overflow: hidden;
+        }
+        .hero::before {
+            content: '';
+            position: absolute; inset: 0;
+            background:
+                radial-gradient(circle at 25% 40%, rgba(255,255,255,0.08) 0%, transparent 50%),
+                radial-gradient(circle at 75% 70%, rgba(255,255,255,0.06) 0%, transparent 50%);
+            animation: heroPulse 8s ease-in-out infinite;
+        }
+        @keyframes heroPulse {
+            0%, 100% { opacity: 1; }
+            50% { opacity: 0.5; }
+        }
+        .hero-content {
+            position: relative; z-index: 2;
+            max-width: 800px;
+        }
+        .hero-tag {
+            display: inline-block;
+            padding: 0.5rem 1.5rem;
+            background: rgba(255, 255, 255, 0.12);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            border-radius: 50px;
+            color: var(--cream);
+            font-size: 0.85rem;
+            font-weight: 600;
+            letter-spacing: 0.1em;
+            text-transform: uppercase;
+            margin-bottom: 2rem;
+            backdrop-filter: blur(10px);
+            animation: fadeInDown 0.8s ease-out;
+        }
+        @keyframes fadeInDown {
+            from { opacity: 0; transform: translateY(-20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        .hero h1 {
+            font-family: 'Bodoni Moda', serif;
+            font-size: clamp(2.5rem, 6vw, 5rem);
+            color: var(--cream);
+            margin-bottom: 1.5rem;
+            line-height: 1.1;
+            animation: fadeInUp 0.8s ease-out 0.2s both;
+        }
+        .hero-subtitle {
+            font-size: clamp(1rem, 2.5vw, 1.35rem);
+            color: var(--cream-dark);
+            max-width: 650px;
+            margin: 0 auto 2.5rem;
+            font-weight: 300;
+            line-height: 1.7;
+            animation: fadeInUp 0.8s ease-out 0.4s both;
+        }
+        @keyframes fadeInUp {
+            from { opacity: 0; transform: translateY(30px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        .hero-ctas {
+            display: flex;
+            gap: 1rem;
+            justify-content: center;
+            flex-wrap: wrap;
+            animation: fadeInUp 0.8s ease-out 0.6s both;
+        }
+        .cta-btn {
+            display: inline-block;
+            padding: 14px 32px;
+            border-radius: 12px;
+            font-weight: 600;
+            font-size: 0.95rem;
+            text-decoration: none;
+            transition: all 0.3s ease;
+        }
+        .cta-primary {
+            background: white;
+            color: var(--violet-dark);
+            box-shadow: 0 4px 20px rgba(0,0,0,0.15);
+        }
+        .cta-primary:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 30px rgba(0,0,0,0.2);
+        }
+        .cta-secondary {
+            background: rgba(255,255,255,0.15);
+            color: white;
+            border: 1px solid rgba(255,255,255,0.3);
+            backdrop-filter: blur(10px);
+        }
+        .cta-secondary:hover {
+            background: rgba(255,255,255,0.25);
+            transform: translateY(-2px);
+        }
+        .scroll-indicator {
+            position: absolute;
+            bottom: 1.25rem; left: 50%;
+            transform: translateX(-50%);
+            color: var(--cream);
+            font-size: 0.85rem;
+            text-align: center;
+            animation: bounce 2s infinite;
+        }
+        @keyframes bounce {
+            0%, 20%, 50%, 80%, 100% { transform: translateX(-50%) translateY(0); }
+            40% { transform: translateX(-50%) translateY(-10px); }
+            60% { transform: translateX(-50%) translateY(-5px); }
+        }
+
+        /* ── Section base ────────────────────────────────────── */
+        .container {
+            max-width: 1100px;
+            margin: 0 auto;
+            padding: 0 40px;
+        }
+        section {
+            padding: 100px 0;
+        }
+        .section-tag {
+            display: inline-block;
+            font-size: 0.8rem;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+            color: var(--violet);
+            font-weight: 700;
+            margin-bottom: 1rem;
+        }
+        .section-title {
+            font-family: 'Bodoni Moda', serif;
+            font-size: clamp(2rem, 4vw, 3.2rem);
+            margin-bottom: 1.5rem;
+            color: var(--navy);
+            line-height: 1.15;
+        }
+        .section-desc {
+            font-size: 1.1rem;
+            color: var(--text-secondary);
+            max-width: 700px;
+            line-height: 1.8;
+        }
+
+        /* ── Cards shared ────────────────────────────────────── */
+        .cards-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 2rem;
+            margin-top: 2.5rem;
+        }
+        .card {
+            background: white;
+            border-radius: 16px;
+            padding: 2rem;
+            border-left: 4px solid var(--violet);
+            box-shadow: 0 4px 20px rgba(0,0,0,0.06);
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+        }
+        .card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 8px 30px rgba(0,0,0,0.1);
+        }
+        .card-icon {
+            font-size: 2rem;
+            margin-bottom: 0.75rem;
+        }
+        .card h3 {
+            font-size: 1.15rem;
+            font-weight: 700;
+            margin-bottom: 0.5rem;
+            color: var(--navy);
+        }
+        .card p {
+            font-size: 0.95rem;
+            color: var(--text-secondary);
+            line-height: 1.6;
+        }
+
+        /* ── Problem section ─────────────────────────────────── */
+        .problem {
+            background: var(--cream);
+        }
+        .problem-intro {
+            font-size: 1.15rem;
+            color: var(--text-secondary);
+            max-width: 700px;
+            line-height: 1.8;
+            margin-bottom: 2.5rem;
+        }
+
+        /* ── Solution section ────────────────────────────────── */
+        .solution {
+            background: white;
+        }
+        .tech-pills {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 0.5rem;
+            margin-top: 2rem;
+        }
+        .tech-pill {
+            display: inline-block;
+            padding: 6px 16px;
+            background: var(--pill-bg);
+            color: var(--pill-text);
+            border-radius: 50px;
+            font-size: 0.8rem;
+            font-weight: 600;
+            letter-spacing: 0.02em;
+        }
+
+        /* ── Decisions section ───────────────────────────────── */
+        .decisions {
+            background: var(--cream);
+        }
+        .decision-card {
+            background: white;
+            border-radius: 16px;
+            padding: 2rem;
+            border-left: 4px solid var(--violet);
+            box-shadow: 0 4px 20px rgba(0,0,0,0.06);
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+        }
+        .decision-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 8px 30px rgba(0,0,0,0.1);
+        }
+        .decision-card .label {
+            font-size: 0.75rem;
+            text-transform: uppercase;
+            letter-spacing: 0.1em;
+            color: var(--violet);
+            font-weight: 700;
+            margin-bottom: 0.5rem;
+        }
+        .decision-card h3 {
+            font-size: 1.15rem;
+            font-weight: 700;
+            margin-bottom: 0.5rem;
+            color: var(--navy);
+        }
+        .decision-card p {
+            font-size: 0.95rem;
+            color: var(--text-secondary);
+            line-height: 1.6;
+        }
+
+        /* ── Demo / Video section ────────────────────────────── */
+        .demo {
+            background: white;
+            text-align: center;
+        }
+        .video-wrapper {
+            max-width: 800px;
+            margin: 2.5rem auto;
+            border-radius: 16px;
+            overflow: hidden;
+            box-shadow: 0 10px 60px rgba(0,0,0,0.12);
+        }
+        .video-wrapper video {
+            width: 100%;
+            display: block;
+        }
+        .demo-note {
+            font-size: 0.9rem;
+            color: var(--text-secondary);
+            margin-top: 1.5rem;
+            font-style: italic;
+        }
+
+        /* ── Persona section ─────────────────────────────────── */
+        .personas {
+            background: var(--cream);
+        }
+        .persona-card {
+            background: white;
+            border-radius: 16px;
+            padding: 2rem;
+            box-shadow: 0 4px 20px rgba(0,0,0,0.06);
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+            text-align: center;
+        }
+        .persona-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 8px 30px rgba(0,0,0,0.1);
+        }
+        .persona-icon {
+            font-size: 3rem;
+            margin-bottom: 1rem;
+        }
+        .persona-card h3 {
+            font-size: 1.15rem;
+            font-weight: 700;
+            margin-bottom: 0.5rem;
+            color: var(--navy);
+        }
+        .persona-card p {
+            font-size: 0.95rem;
+            color: var(--text-secondary);
+            line-height: 1.6;
+        }
+
+        /* ── Roadmap section ─────────────────────────────────── */
+        .roadmap {
+            background: white;
+        }
+        .roadmap-list {
+            list-style: none;
+            margin-top: 2rem;
+        }
+        .roadmap-list li {
+            padding: 1.25rem 0;
+            border-bottom: 1px solid rgba(28, 78, 137, 0.08);
+            display: flex;
+            align-items: baseline;
+            gap: 1rem;
+            font-size: 1.05rem;
+            color: var(--navy);
+        }
+        .roadmap-list li::before {
+            content: '';
+            width: 10px; height: 10px;
+            flex-shrink: 0;
+            background: var(--violet);
+            border-radius: 50%;
+            margin-top: 6px;
+        }
+        .roadmap-closing {
+            margin-top: 3rem;
+            padding: 2rem;
+            background: var(--cream);
+            border-radius: 16px;
+            text-align: center;
+        }
+        .roadmap-closing p {
+            font-family: 'Bodoni Moda', serif;
+            font-size: 1.4rem;
+            font-style: italic;
+            color: var(--navy);
+            line-height: 1.5;
+        }
+
+        /* ── Footer ──────────────────────────────────────────── */
+        footer {
+            background: var(--navy);
+            color: var(--cream);
+            padding: 60px 40px;
+            text-align: center;
+        }
+        footer h3 {
+            font-family: 'Bodoni Moda', serif;
+            font-size: 1.8rem;
+            margin-bottom: 0.75rem;
+        }
+        footer p {
+            font-size: 1rem;
+            opacity: 0.85;
+        }
+        footer a {
+            color: #c4b3e0;
+            text-decoration: none;
+        }
+
+        /* ── Fade-in animation ───────────────────────────────── */
+        .fade-in {
+            opacity: 0;
+            transform: translateY(30px);
+            transition: opacity 0.8s ease, transform 0.8s ease;
+        }
+        .fade-in.visible {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        /* ── Responsive ──────────────────────────────────────── */
+        @media (max-width: 680px) {
+            .hero {
+                padding: 100px 24px 60px;
+                min-height: 90vh;
+            }
+            section { padding: 60px 0; }
+            .container { padding: 0 24px; }
+            .cards-grid {
+                grid-template-columns: 1fr;
+            }
+            .hero-ctas {
+                flex-direction: column;
+                align-items: center;
+            }
+            .cta-btn { width: 100%; max-width: 280px; text-align: center; }
+        }
+        @media (max-width: 480px) {
+            .hero { padding: 80px 16px 50px; }
+            .container { padding: 0 16px; }
+            .card, .decision-card, .persona-card { padding: 1.5rem; }
+        }
+    </style>
+</head>
+<body>
+
+    <!-- Sticky Nav -->
+    <nav class="site-nav">
+        <a class="site-nav-name" href="../index.html"><span class="nav-pocket-icon"><img class="menu-v1" src="../assets/pocket-v1.svg" alt=""><img class="menu-v2" src="../assets/pocket-v2.svg" alt=""><img class="menu-v3" src="../assets/pocket-v3.svg" alt=""></span>Anisha Subberwal</a>
+        <button class="nav-hamburger" onclick="document.getElementById('nav-links').classList.toggle('open')" aria-label="Menu">
+            <span></span><span></span><span></span>
+        </button>
+        <ul class="site-nav-links" id="nav-links">
+            <li class="nav-work-wrap">
+                <a href="../index.html">Work</a>
+                <ul class="nav-work-dropdown">
+                    <li><a href="../inde-wild-case-study/index.html">beauty brand growth</a></li>
+                    <li><a href="../coffeechain/index.html">crypto coffee case</a></li>
+                    <li><a href="../kaisey-case-study/index.html">smart calendar</a></li>
+                    <li><a href="../whifff-case-study/index.html">perfume scent quiz</a></li>
+                </ul>
+            </li>
+            <li><a href="../index.html#about">About</a></li>
+            <li><a href="../assets/Anisha_Subberwal_Resume.pdf" target="_blank">Resume</a></li>
+            <li><a href="https://www.linkedin.com/in/anisha-subberwal-434346126/" target="_blank">LinkedIn</a></li>
+            <li><a href="mailto:as7689@columbia.edu">Email</a></li>
+        </ul>
+    </nav>
+
+    <!-- ═══ 1. HERO ═══ -->
+    <section class="hero">
+        <div class="hero-content">
+            <span class="hero-tag">AI-Powered Productivity</span>
+            <h1>Kaisey: Your AI Chief of Staff for MBA Life</h1>
+            <p class="hero-subtitle">An intelligent calendar assistant that dynamically re-prioritizes your academics, recruiting, and social life &mdash; so you never have to choose which ball to drop.</p>
+            <div class="hero-ctas">
+                <a href="#demo" class="cta-btn cta-primary">Watch Demo</a>
+                <a href="../kaisey/app.html" class="cta-btn cta-secondary" target="_blank">Try Kaisey</a>
+            </div>
+        </div>
+        <div class="scroll-indicator">&darr;</div>
+    </section>
+
+    <!-- ═══ 2. THE PROBLEM ═══ -->
+    <section class="problem">
+        <div class="container fade-in">
+            <span class="section-tag">The Problem</span>
+            <h2 class="section-title">The Triple Bind</h2>
+            <p class="problem-intro">MBA students juggle three competing priorities every single day &mdash; academics, recruiting, and social life. The tools they use are just as fragmented as the demands on their time.</p>
+
+            <div class="cards-grid">
+                <div class="card">
+                    <div class="card-icon">&#128218;</div>
+                    <h3>Academics</h3>
+                    <p>Canvas deadlines, group projects, reading lists &mdash; all in one silo with no connection to the rest of your schedule.</p>
+                </div>
+                <div class="card">
+                    <div class="card-icon">&#128188;</div>
+                    <h3>Recruiting</h3>
+                    <p>Coffee chats, application deadlines, interview prep &mdash; scattered across email, spreadsheets, and calendar invites.</p>
+                </div>
+                <div class="card">
+                    <div class="card-icon">&#127881;</div>
+                    <h3>Social Life</h3>
+                    <p>Club events, networking dinners, weekend trips &mdash; the first thing to go when the workload spikes, but the hardest to get back.</p>
+                </div>
+            </div>
+
+            <p style="margin-top: 2rem; font-size: 1.05rem; color: var(--text-secondary); line-height: 1.7;">The result? Disconnected tools, context-switching burnout, and a constant feeling that something important is slipping through the cracks.</p>
+        </div>
+    </section>
+
+    <!-- ═══ 3. THE SOLUTION ═══ -->
+    <section class="solution">
+        <div class="container fade-in">
+            <span class="section-tag">The Solution</span>
+            <h2 class="section-title">What I Built</h2>
+            <p class="section-desc" style="margin-bottom: 2.5rem;">Kaisey is an AI chief of staff that connects your calendar, coursework, and career goals into a single intelligent layer &mdash; then helps you decide what matters most, right now.</p>
+
+            <div class="cards-grid">
+                <div class="card">
+                    <div class="card-icon">&#9889;</div>
+                    <h3>Dynamic Priority Toggle</h3>
+                    <p>Slide between Academics, Recruiting, and Social mode. Kaisey instantly re-ranks your day based on what matters most this week.</p>
+                </div>
+                <div class="card">
+                    <div class="card-icon">&#128279;</div>
+                    <h3>Connected Stack (MCP)</h3>
+                    <p>Google Calendar, Canvas, and email wired together through a Model Context Protocol &mdash; so Kaisey sees your full picture, not just fragments.</p>
+                </div>
+                <div class="card">
+                    <div class="card-icon">&#128214;</div>
+                    <h3>MBA Playbook (RAG)</h3>
+                    <p>Retrieval-augmented generation trained on MBA scheduling heuristics &mdash; Kaisey knows that finals week and recruiting week are different beasts.</p>
+                </div>
+            </div>
+
+            <div class="tech-pills">
+                <span class="tech-pill">React</span>
+                <span class="tech-pill">TypeScript</span>
+                <span class="tech-pill">Tailwind CSS</span>
+                <span class="tech-pill">Node.js</span>
+                <span class="tech-pill">Express</span>
+                <span class="tech-pill">OpenAI</span>
+                <span class="tech-pill">OAuth 2.0</span>
+                <span class="tech-pill">Google Calendar API</span>
+                <span class="tech-pill">Canvas LMS</span>
+            </div>
+        </div>
+    </section>
+
+    <!-- ═══ 4. KEY PRODUCT DECISIONS ═══ -->
+    <section class="decisions">
+        <div class="container fade-in">
+            <span class="section-tag">Product Decisions</span>
+            <h2 class="section-title">Key Product Decisions</h2>
+
+            <div class="cards-grid">
+                <div class="decision-card">
+                    <div class="label">Authentication</div>
+                    <h3>OAuth over Email/Password</h3>
+                    <p>Google OAuth gives instant calendar access with zero onboarding friction. Students sign in once and Kaisey is already reading their schedule. No extra setup, no permissions pop-ups later.</p>
+                </div>
+                <div class="decision-card">
+                    <div class="label">Prioritization</div>
+                    <h3>Toggle over Manual Ranking</h3>
+                    <p>A simple three-mode slider (Academics / Recruiting / Social) beats a complex manual ranking system. One tap shifts the entire priority stack &mdash; fast enough to switch mid-day.</p>
+                </div>
+                <div class="decision-card">
+                    <div class="label">Architecture</div>
+                    <h3>Privacy-First Design</h3>
+                    <p>Calendar data is processed in-session and never stored on our servers. The AI sees what it needs to prioritize, then forgets. Students control their data completely.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- ═══ 5. DEMO / VIDEO ═══ -->
+    <section class="demo" id="demo">
+        <div class="container fade-in">
+            <span class="section-tag">Demo</span>
+            <h2 class="section-title">See Kaisey in Action</h2>
+
+            <div class="video-wrapper">
+                <video controls preload="metadata" poster="">
+                    <source src="../kaisey/kaisey-demo.mp4" type="video/mp4">
+                    Your browser does not support the video tag.
+                </video>
+            </div>
+
+            <div style="margin-top: 2rem;">
+                <a href="../kaisey/app.html" class="cta-btn cta-primary" target="_blank" style="background: var(--violet); color: white;">Try the Live App &rarr;</a>
+            </div>
+            <p class="demo-note">Sign in with Google to try the live app &mdash; your data is never stored.</p>
+        </div>
+    </section>
+
+    <!-- ═══ 6. WHO NEEDS KAISEY ═══ -->
+    <section class="personas">
+        <div class="container fade-in">
+            <span class="section-tag">Who Needs This</span>
+            <h2 class="section-title">Who Needs Kaisey</h2>
+
+            <div class="cards-grid">
+                <div class="persona-card">
+                    <div class="persona-icon">&#128640;</div>
+                    <h3>The Career Pivoter</h3>
+                    <p>Switching from consulting to tech? Your calendar is a war zone of coffee chats, case prep, and club events. Kaisey keeps recruiting top-of-stack when it matters most.</p>
+                </div>
+                <div class="persona-card">
+                    <div class="persona-icon">&#128218;</div>
+                    <h3>The Academic Rescuer</h3>
+                    <p>Finals approaching and you have three group projects due the same week? Toggle to Academics mode and let Kaisey resurface the deadlines you buried under networking events.</p>
+                </div>
+                <div class="persona-card">
+                    <div class="persona-icon">&#127758;</div>
+                    <h3>The International Student</h3>
+                    <p>Navigating visa timelines, OPT deadlines, and cultural adjustment on top of coursework. Kaisey adds structure to chaos and ensures nothing critical falls off the radar.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- ═══ 7. WHAT'S NEXT ═══ -->
+    <section class="roadmap">
+        <div class="container fade-in">
+            <span class="section-tag">Roadmap</span>
+            <h2 class="section-title">What's Next</h2>
+
+            <ul class="roadmap-list">
+                <li>Beta pilot with 20 Columbia MBA students for real-world priority testing</li>
+                <li>Canvas &harr; Calendar sync for automatic deadline ingestion</li>
+                <li>Stress-testing the priority toggle with diverse student schedules and edge cases</li>
+                <li>Exploring Slack integration for team-based project coordination</li>
+            </ul>
+
+            <div class="roadmap-closing">
+                <p>&ldquo;The goal isn't another productivity app. It's a system that understands the rhythm of MBA life and adapts with you.&rdquo;</p>
+            </div>
+        </div>
+    </section>
+
+    <!-- ═══ 8. FOOTER ═══ -->
+    <footer>
+        <h3>Anisha Subberwal</h3>
+        <p style="margin: 16px 0;">MBA Candidate, Columbia Business School 2026</p>
+        <p><a href="mailto:as7689@columbia.edu">as7689@columbia.edu</a> | +1 (646) 512-1483</p>
+    </footer>
+
+    <!-- ═══ SCRIPTS ═══ -->
+    <script>
+        // Fade-in on scroll
+        var fadeEls = document.querySelectorAll('.fade-in');
+        var observer = new IntersectionObserver(function (entries) {
+            entries.forEach(function (entry) {
+                if (entry.isIntersecting) {
+                    entry.target.classList.add('visible');
+                    observer.unobserve(entry.target);
+                }
+            });
+        }, { threshold: 0.1, rootMargin: '0px 0px -60px 0px' });
+
+        fadeEls.forEach(function (el) { observer.observe(el); });
+
+        // Smooth scroll for anchor links
+        document.querySelectorAll('a[href^="#"]').forEach(function (a) {
+            a.addEventListener('click', function (e) {
+                var target = document.querySelector(a.getAttribute('href'));
+                if (target) {
+                    e.preventDefault();
+                    target.scrollIntoView({ behavior: 'smooth', block: 'start' });
+                }
+            });
+        });
+    </script>
+</body>
+</html>
