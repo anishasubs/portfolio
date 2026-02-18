@@ -1551,6 +1551,34 @@
         </div>
     </section>
 
+    <!-- Product Decisions -->
+    <section style="background: var(--cream); max-width: 1200px; margin: 0 auto;">
+        <div class="container">
+            <span class="section-tag">Product Decisions</span>
+            <h2 class="section-title">Why we made these calls</h2>
+
+            <div class="problem-points" style="margin-top: 2rem;">
+                <div style="padding: 2.5rem; background: white; border-radius: 20px; box-shadow: 0 4px 20px rgba(0,0,0,0.08); transition: transform 0.3s ease, box-shadow 0.3s ease;" onmouseover="this.style.transform='translateY(-5px)';this.style.boxShadow='0 8px 30px rgba(0,0,0,0.12)'" onmouseout="this.style.transform='translateY(0)';this.style.boxShadow='0 4px 20px rgba(0,0,0,0.08)'">
+                    <div style="font-family: 'Bodoni Moda', serif; font-size: 1.4rem; color: var(--coffee-dark); margin-bottom: 0.75rem;">Solana over Ethereum</div>
+                    <p style="color: var(--text-secondary); line-height: 1.7; margin-bottom: 1rem;">Coffee transactions need to be fast and cheap. Solana's ~400ms finality and sub-cent fees make it viable for a $5 latte. Ethereum L1 gas fees ($2-10) would eat the entire transaction. Even L2s like Polygon add unnecessary bridging complexity for merchants who just want it to work.</p>
+                    <p style="color: var(--text-secondary); font-style: italic; opacity: 0.75; font-size: 0.9rem;">What we'd revisit: If Ethereum L2 fees drop below $0.01 consistently, the larger developer ecosystem could make it worth switching.</p>
+                </div>
+
+                <div style="padding: 2.5rem; background: white; border-radius: 20px; box-shadow: 0 4px 20px rgba(0,0,0,0.08); transition: transform 0.3s ease, box-shadow 0.3s ease;" onmouseover="this.style.transform='translateY(-5px)';this.style.boxShadow='0 8px 30px rgba(0,0,0,0.12)'" onmouseout="this.style.transform='translateY(0)';this.style.boxShadow='0 4px 20px rgba(0,0,0,0.08)'">
+                    <div style="font-family: 'Bodoni Moda', serif; font-size: 1.4rem; color: var(--coffee-dark); margin-bottom: 0.75rem;">USDC-Backed, Not a Custom Token</div>
+                    <p style="color: var(--text-secondary); line-height: 1.7; margin-bottom: 1rem;">Merchants won't adopt a system where their revenue fluctuates with crypto markets. USDC backing means 1 BeanPoint = $0.01 always. No volatility risk, no token speculation — just a digital dollar for coffee. This also avoids SEC securities classification concerns that come with custom tokens.</p>
+                    <p style="color: var(--text-secondary); font-style: italic; opacity: 0.75; font-size: 0.9rem;">What we'd revisit: If stablecoin regulation changes significantly, we'd evaluate alternatives like USDT or a protocol-native stablecoin.</p>
+                </div>
+
+                <div style="padding: 2.5rem; background: white; border-radius: 20px; box-shadow: 0 4px 20px rgba(0,0,0,0.08); transition: transform 0.3s ease, box-shadow 0.3s ease;" onmouseover="this.style.transform='translateY(-5px)';this.style.boxShadow='0 8px 30px rgba(0,0,0,0.12)'" onmouseout="this.style.transform='translateY(0)';this.style.boxShadow='0 4px 20px rgba(0,0,0,0.08)'">
+                    <div style="font-family: 'Bodoni Moda', serif; font-size: 1.4rem; color: var(--coffee-dark); margin-bottom: 0.75rem;">Non-Transferable Loyalty Points</div>
+                    <p style="color: var(--text-secondary); line-height: 1.7; margin-bottom: 1rem;">This was the hardest call. Universal redemption sounds better for users, but merchants would never opt in — they'd be subsidizing competitors' customers. Non-transferability means each merchant controls their own economics, which is essential for adoption. The universal wallet still lets users pay anywhere; it's only earned rewards that stay merchant-specific.</p>
+                    <p style="color: var(--text-secondary); font-style: italic; opacity: 0.75; font-size: 0.9rem;">What we'd revisit: Once network density is high enough, a shared rewards pool with merchant opt-in could unlock cross-promotion.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
     <!-- App Showcase -->
     <section class="app-showcase">
         <div class="container">
@@ -1733,35 +1761,50 @@
                 <div style="text-align: center;">CoffeeChain</div>
             </div>
             <div class="comparison-row">
-                <div class="feature-name">Decentralized & Permissionless</div>
+                <div class="feature-name">Established user base & brand trust</div>
+                <div style="text-align: center;"><span class="check">✓</span></div>
+                <div style="text-align: center;"><span class="cross">✗</span> <span style="font-size: 0.85rem; color: var(--text-secondary);">Requires merchant & user acquisition</span></div>
+            </div>
+            <div class="comparison-row">
+                <div class="feature-name">Zero onboarding friction</div>
+                <div style="text-align: center;"><span class="check">✓</span></div>
+                <div style="text-align: center;"><span class="cross">✗</span> <span style="font-size: 0.85rem; color: var(--text-secondary);">Requires wallet setup (though abstracted)</span></div>
+            </div>
+            <div class="comparison-row">
+                <div class="feature-name">Available to independent cafes</div>
                 <div style="text-align: center;"><span class="cross">✗</span></div>
                 <div style="text-align: center;"><span class="check">✓</span></div>
             </div>
             <div class="comparison-row">
-                <div class="feature-name">Available to Independent Cafés</div>
+                <div class="feature-name">Universal wallet across cafes</div>
                 <div style="text-align: center;"><span class="cross">✗</span></div>
                 <div style="text-align: center;"><span class="check">✓</span></div>
             </div>
             <div class="comparison-row">
-                <div class="feature-name">Universal Wallet (Earn & Redeem Everywhere)</div>
+                <div class="feature-name">Stablecoin-backed (no volatility)</div>
                 <div style="text-align: center;"><span class="cross">✗</span></div>
                 <div style="text-align: center;"><span class="check">✓</span></div>
             </div>
             <div class="comparison-row">
-                <div class="feature-name">Stablecoin-Backed (No Volatility)</div>
+                <div class="feature-name">Transparent, on-chain point ledger</div>
                 <div style="text-align: center;"><span class="cross">✗</span></div>
                 <div style="text-align: center;"><span class="check">✓</span></div>
             </div>
             <div class="comparison-row">
-                <div class="feature-name">Transparent Point Ledger</div>
+                <div class="feature-name">Decentralized & permissionless</div>
                 <div style="text-align: center;"><span class="cross">✗</span></div>
                 <div style="text-align: center;"><span class="check">✓</span></div>
+            </div>
+            <div class="comparison-row">
+                <div class="feature-name">Interoperable rewards potential</div>
+                <div style="text-align: center;"><span class="cross">✗</span></div>
+                <div style="text-align: center;"><span class="check">✓</span> <span style="font-size: 0.85rem; color: var(--text-secondary);">Merchant opt-in roadmap</span></div>
             </div>
         </div>
 
         <div style="margin-top: 3rem; padding: 2rem; background: var(--cream); border-radius: 16px; text-align: center;">
             <p style="font-size: 1.3rem; font-weight: 500; color: var(--coffee-dark);">
-                <em>We are bullish on the future of independent cafes relative to the big chains</em>
+                <em>CoffeeChain doesn't need to beat Starbucks — it needs to give independent cafes tools they've never had access to.</em>
             </p>
         </div>
     </section>
