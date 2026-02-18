@@ -248,6 +248,7 @@ interface CalendarAction {
     time: string;
     duration: number;
     date?: string;
+    eventType?: CalendarEvent["type"];
   };
   recurrence?: {
     frequency: "daily" | "weekly" | "monthly";
@@ -507,6 +508,18 @@ export default function App() {
       // No valid credentials
     }
 
+    const getColorForType = (type: CalendarEvent["type"]): string => {
+      const map: Record<CalendarEvent["type"], string> = {
+        class: "bg-blue-500",
+        study: "bg-indigo-500",
+        recruiting: "bg-red-500",
+        networking: "bg-orange-500",
+        meeting: "bg-purple-500",
+        workout: "bg-green-500",
+      };
+      return map[type] || "bg-blue-500";
+    };
+
     // Determine event type and color based on title
     const getEventTypeAndColor = (title: string): { type: CalendarEvent["type"], color: string } => {
       const lowerTitle = title.toLowerCase();
@@ -573,7 +586,10 @@ export default function App() {
         e.title === calendarAction.event.title && e.time === calendarAction.event.time
       );
       const tempId = `local-${Date.now()}`;
-      const { type, color } = getEventTypeAndColor(calendarAction.replaceWith.title);
+      const explicitType = calendarAction.replaceWith.eventType;
+      const inferred = getEventTypeAndColor(calendarAction.replaceWith.title);
+      const type = explicitType || inferred.type;
+      const color = explicitType ? getColorForType(explicitType) : inferred.color;
 
       // Local update
       setCalendarEvents(prev => {

@@ -29,6 +29,7 @@ interface CalendarAction {
     title: string;
     time: string;
     duration: number;
+    eventType?: CalendarEvent["type"];
   };
 }
 
@@ -77,6 +78,7 @@ export function CalendarView({ events, onScheduleChange, priority }: CalendarVie
   const [editTitle, setEditTitle] = useState("");
   const [editTime, setEditTime] = useState("");
   const [editDuration, setEditDuration] = useState("");
+  const [editType, setEditType] = useState<CalendarEvent["type"]>("meeting");
 
   const todayKey = formatDateKey(new Date());
   const currentDateKey = formatDateKey(currentDate);
@@ -133,6 +135,7 @@ export function CalendarView({ events, onScheduleChange, priority }: CalendarVie
     setEditTitle(event.title);
     setEditTime(event.time);
     setEditDuration(String(event.duration));
+    setEditType(event.type);
   };
 
   const handleEditCancel = () => {
@@ -140,6 +143,7 @@ export function CalendarView({ events, onScheduleChange, priority }: CalendarVie
     setEditTitle("");
     setEditTime("");
     setEditDuration("");
+    setEditType("meeting");
   };
 
   const handleEditSave = (event: CalendarEvent) => {
@@ -157,6 +161,7 @@ export function CalendarView({ events, onScheduleChange, priority }: CalendarVie
         title: editTitle,
         time: editTime,
         duration: isNaN(newDuration) ? event.duration : newDuration,
+        eventType: editType,
       },
     });
 
@@ -178,7 +183,7 @@ export function CalendarView({ events, onScheduleChange, priority }: CalendarVie
               placeholder="Event title"
             />
           </div>
-          <div className="flex gap-2 items-center">
+          <div className="flex gap-2 items-center flex-wrap">
             <Input
               type="time"
               value={editTime}
@@ -193,6 +198,18 @@ export function CalendarView({ events, onScheduleChange, priority }: CalendarVie
               placeholder="min"
             />
             <span className="text-xs text-muted-foreground">min</span>
+            <select
+              value={editType}
+              onChange={(e) => setEditType(e.target.value as CalendarEvent["type"])}
+              className="h-8 text-xs rounded-md border border-input bg-background px-2"
+            >
+              <option value="class">Academics</option>
+              <option value="study">Study</option>
+              <option value="recruiting">Recruiting</option>
+              <option value="networking">Networking</option>
+              <option value="meeting">Meeting</option>
+              <option value="workout">Wellness</option>
+            </select>
             <div className="flex-1" />
             <Button size="sm" variant="ghost" onClick={handleEditCancel} className="h-7 w-7 p-0">
               <X className="w-4 h-4" />

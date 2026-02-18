@@ -39,8 +39,6 @@ export function ProfileSection({ userProfile: googleProfile }: ProfileSectionPro
           <h2 className="text-xl font-bold">{name}</h2>
           <p className="text-sm text-muted-foreground">{email}</p>
           <div className="flex gap-2 mt-2">
-            <Badge variant="outline" className="text-xs">MBA Class of 2026</Badge>
-            <Badge variant="outline" className="text-xs">Spring Semester</Badge>
           </div>
         </div>
       </div>
