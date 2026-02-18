@@ -365,6 +365,247 @@
             color: #3A6B8C;
         }
 
+        /* ── Under the Hood Section ─────────────────────────── */
+        .pipeline-steps {
+            display: flex;
+            flex-direction: column;
+            gap: 24px;
+            margin-top: 40px;
+        }
+
+        .pipeline-step {
+            background: rgba(255,255,255,0.93);
+            border-radius: 22px;
+            box-shadow: 0 4px 20px rgba(0,40,80,0.08);
+            padding: 36px;
+            position: relative;
+            transition: all 0.25s cubic-bezier(0.34, 1.56, 0.64, 1);
+        }
+        .pipeline-step:hover {
+            transform: translateY(-4px);
+            box-shadow: 0 16px 40px rgba(0,40,80,0.12);
+        }
+
+        .pipeline-step-header {
+            display: flex;
+            align-items: center;
+            gap: 16px;
+            margin-bottom: 16px;
+        }
+
+        .pipeline-step-num {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            width: 44px;
+            height: 44px;
+            border-radius: 50%;
+            background: linear-gradient(135deg, #5BA3D9, #4A8EC2);
+            color: white;
+            font-size: 18px;
+            font-weight: 800;
+            flex-shrink: 0;
+        }
+
+        .pipeline-step-header h4 {
+            font-family: 'Playfair Display', serif;
+            font-size: 20px;
+            font-weight: 700;
+            color: #1B3A5C;
+        }
+
+        .pipeline-step p {
+            font-size: 14px;
+            color: #5A7D99;
+            line-height: 1.7;
+            margin-bottom: 12px;
+        }
+
+        .pipeline-step p:last-child {
+            margin-bottom: 0;
+        }
+
+        .taste-signals {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 10px;
+            margin-top: 12px;
+        }
+
+        .taste-signal {
+            background: #EDF3F9;
+            padding: 14px 18px;
+            border-radius: 12px;
+        }
+
+        .taste-signal strong {
+            display: block;
+            font-size: 13px;
+            font-weight: 700;
+            color: #1B3A5C;
+            margin-bottom: 4px;
+        }
+
+        .taste-signal span {
+            font-size: 12px;
+            color: #5A7D99;
+            line-height: 1.5;
+        }
+
+        /* Scoring table */
+        .scoring-table {
+            width: 100%;
+            margin-top: 16px;
+            border-collapse: separate;
+            border-spacing: 0 6px;
+        }
+
+        .scoring-table thead th {
+            font-size: 11px;
+            font-weight: 800;
+            letter-spacing: 0.1em;
+            text-transform: uppercase;
+            color: #4A8EC2;
+            padding: 0 16px 8px;
+            text-align: left;
+        }
+
+        .scoring-table tbody tr {
+            background: #EDF3F9;
+            border-radius: 10px;
+        }
+
+        .scoring-table tbody td {
+            padding: 14px 16px;
+            font-size: 13px;
+            color: #5A7D99;
+            line-height: 1.5;
+        }
+
+        .scoring-table tbody td:first-child {
+            border-radius: 10px 0 0 10px;
+            font-weight: 700;
+            color: #1B3A5C;
+        }
+
+        .scoring-table tbody td:nth-child(2) {
+            font-weight: 700;
+            color: #4A8EC2;
+            white-space: nowrap;
+        }
+
+        .scoring-table tbody td:last-child {
+            border-radius: 0 10px 10px 0;
+        }
+
+        .filter-list {
+            list-style: none;
+            margin-top: 8px;
+        }
+
+        .filter-list li {
+            font-size: 14px;
+            color: #5A7D99;
+            line-height: 1.7;
+            padding-left: 20px;
+            position: relative;
+        }
+
+        .filter-list li::before {
+            content: '';
+            position: absolute;
+            left: 0;
+            top: 10px;
+            width: 8px;
+            height: 8px;
+            border-radius: 50%;
+            background: #5BA3D9;
+        }
+
+        .result-features {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 8px;
+            margin-top: 12px;
+        }
+
+        .result-feature {
+            background: #EDF3F9;
+            padding: 10px 14px;
+            border-radius: 10px;
+            font-size: 13px;
+            color: #5A7D99;
+            line-height: 1.5;
+        }
+
+        /* Vector callout */
+        .vector-callout {
+            margin-top: 32px;
+            background: linear-gradient(135deg, #1B3A5C 0%, #2A5478 100%);
+            border-radius: 22px;
+            padding: 36px;
+            color: white;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .vector-callout::before {
+            content: '';
+            position: absolute;
+            top: -40px;
+            right: -40px;
+            width: 160px;
+            height: 160px;
+            border-radius: 50%;
+            background: rgba(91,163,217,0.15);
+        }
+
+        .vector-callout-title {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            font-family: 'Playfair Display', serif;
+            font-size: 18px;
+            font-weight: 700;
+            margin-bottom: 12px;
+        }
+
+        .vector-callout p {
+            font-size: 14px;
+            line-height: 1.75;
+            color: rgba(255,255,255,0.85);
+            position: relative;
+        }
+
+        .vector-callout code {
+            background: rgba(255,255,255,0.15);
+            padding: 2px 8px;
+            border-radius: 4px;
+            font-size: 13px;
+            font-family: monospace;
+        }
+
+        /* Pipeline connector arrows between steps */
+        .pipeline-connector {
+            display: flex;
+            justify-content: center;
+            margin: -8px 0;
+        }
+
+        .pipeline-connector svg {
+            width: 24px;
+            height: 24px;
+            color: #5BA3D9;
+        }
+
+        @media (max-width: 680px) {
+            .taste-signals { grid-template-columns: 1fr; }
+            .result-features { grid-template-columns: 1fr; }
+            .scoring-table { display: block; overflow-x: auto; }
+            .pipeline-step { padding: 24px; }
+            .vector-callout { padding: 24px; }
+        }
+
         /* ── Decisions Section ───────────────────────────────── */
         .decisions-grid {
             display: grid;
@@ -798,6 +1039,151 @@
                 <span class="tech-pill">Claude API</span>
                 <span class="tech-pill">Vercel</span>
                 <span class="tech-pill">App Router</span>
+            </div>
+        </div>
+    </section>
+
+    <!-- 5b. Under the Hood — How the Matching Works -->
+    <section class="bg-light fade-in">
+        <div class="container">
+            <span class="section-tag">Under the Hood</span>
+            <h2>How the Matching Actually Works</h2>
+            <p class="section-desc">From quiz answers to your top 3 &mdash; here's what happens in the 4 seconds while the flask is mixing.</p>
+
+            <div class="pipeline-steps">
+                <!-- Step 1 -->
+                <div class="pipeline-step">
+                    <div class="pipeline-step-header">
+                        <div class="pipeline-step-num">1</div>
+                        <h4>Build Your Taste Profile</h4>
+                    </div>
+                    <p>Your quiz answers get translated into a structured preference object. Each input maps to concrete fragrance data:</p>
+                    <div class="taste-signals">
+                        <div class="taste-signal">
+                            <strong>Past perfumes you love</strong>
+                            <span>We extract every note and accord from those perfumes. Love Glossier You and Le Labo Santal 33? We now know you gravitate toward white musk, ambrette, iris root, sandalwood, cardamom, violet, papyrus, leather.</span>
+                        </div>
+                        <div class="taste-signal">
+                            <strong>Scent families you picked</strong>
+                            <span>Mapped to specific ingredient families &mdash; e.g., Woody maps to sandalwood, cedar, vetiver, oud; Gourmand maps to vanilla, caramel, chocolate, tonka bean.</span>
+                        </div>
+                        <div class="taste-signal">
+                            <strong>Occasion</strong>
+                            <span>Mapped to accords that perform well in context &mdash; Date Night maps to warm spicy, gourmand, amber; Office maps to fresh, aquatic, clean.</span>
+                        </div>
+                        <div class="taste-signal">
+                            <strong>Sillage &amp; Price</strong>
+                            <span>Sillage stored as a strength target (intimate / moderate / loud / beast mode). Price stored as a budget tier filter.</span>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="pipeline-connector">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"></polyline></svg>
+                </div>
+
+                <!-- Step 2 -->
+                <div class="pipeline-step">
+                    <div class="pipeline-step-header">
+                        <div class="pipeline-step-num">2</div>
+                        <h4>Score Every Perfume</h4>
+                    </div>
+                    <p>Each perfume in the database gets a relevance score calculated from multiple weighted signals:</p>
+                    <table class="scoring-table">
+                        <thead>
+                            <tr>
+                                <th>Signal</th>
+                                <th>Points</th>
+                                <th>How It Works</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td>Accord match</td>
+                                <td>+4 / match</td>
+                                <td>Candidate shares accords with perfumes you already love &mdash; strongest signal</td>
+                            </tr>
+                            <tr>
+                                <td>Note match</td>
+                                <td>+3 / match</td>
+                                <td>Specific notes overlap (e.g., both have vanilla, both have bergamot)</td>
+                            </tr>
+                            <tr>
+                                <td>Scent family match</td>
+                                <td>+3 / match</td>
+                                <td>Candidate's accords align with your selected scent families</td>
+                            </tr>
+                            <tr>
+                                <td>Family sub-note</td>
+                                <td>+2 / match</td>
+                                <td>Candidate's notes match example notes within your chosen families</td>
+                            </tr>
+                            <tr>
+                                <td>Occasion accord</td>
+                                <td>+1 / match</td>
+                                <td>Candidate fits the occasion you picked via occasion-to-accord mapping</td>
+                            </tr>
+                            <tr>
+                                <td>Sillage match</td>
+                                <td>+3 or +1</td>
+                                <td>Exact match scores +3; one step away gets partial credit at +1</td>
+                            </tr>
+                            <tr>
+                                <td>Price range</td>
+                                <td>+2</td>
+                                <td>Bonus if the perfume falls within your selected budget tier</td>
+                            </tr>
+                            <tr>
+                                <td>Rating boost</td>
+                                <td>+0.5 x rating</td>
+                                <td>Higher-rated perfumes get a small quality bump</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+
+                <div class="pipeline-connector">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"></polyline></svg>
+                </div>
+
+                <!-- Step 3 -->
+                <div class="pipeline-step">
+                    <div class="pipeline-step-header">
+                        <div class="pipeline-step-num">3</div>
+                        <h4>Filter &amp; Rank</h4>
+                    </div>
+                    <ul class="filter-list">
+                        <li>Exclude any perfumes you already told us you love (no point recommending what you own)</li>
+                        <li>Apply hard price filter if set</li>
+                        <li>Sort all candidates by total score</li>
+                        <li>Take the top 3</li>
+                    </ul>
+                </div>
+
+                <div class="pipeline-connector">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"></polyline></svg>
+                </div>
+
+                <!-- Step 4 -->
+                <div class="pipeline-step">
+                    <div class="pipeline-step-header">
+                        <div class="pipeline-step-num">4</div>
+                        <h4>Serve Results with Context</h4>
+                    </div>
+                    <p>Each result card shows everything you need to make a confident decision:</p>
+                    <div class="result-features">
+                        <div class="result-feature">Perfume name, brand, and image</div>
+                        <div class="result-feature">Star rating and sillage badge</div>
+                        <div class="result-feature">Full note breakdown (top, heart, base)</div>
+                        <div class="result-feature">Why it matched &mdash; tied back to your quiz answers</div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Vector upgrade callout -->
+            <div class="vector-callout">
+                <div class="vector-callout-title">Scaling to 20K+ perfumes: the vector upgrade</div>
+                <p>The scoring engine above works great for the curated MVP database. For production scale (20,000+ perfumes from Fragrantica), the keyword-matching engine gets replaced with vector similarity search via pgvector. Each perfume's notes and accords are embedded as a 384-dimensional vector using sentence-transformers. At quiz time, your answers generate a query vector, and pgvector runs a nearest-neighbor search (<code>ORDER BY note_vector &lt;=&gt; query_vector</code>) to find the top 20 candidates in under 100ms. Price, occasion, and sillage filters are then applied as post-filters &mdash; keeping the serendipity of vector search while respecting your hard constraints.</p>
             </div>
         </div>
     </section>
