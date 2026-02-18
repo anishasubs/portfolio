@@ -20,15 +20,9 @@ const STEPS: TourStep[] = [
   },
   {
     targetId: "brain-dump",
-    title: "Brain Dump Planner",
+    title: "Brain Dump & Chat",
     description:
-      "Dump everything on your mind — Kaisey extracts tasks, asks clarifying questions, and builds an optimized schedule around your existing calendar.",
-  },
-  {
-    targetId: "kaisey-chat",
-    title: "Chat with Kaisey",
-    description:
-      'Talk to Kaisey to add, move, or remove events. Try "Add a meeting with John on Thursday at 3pm" — it works for any day, not just today.',
+      "Two ways to manage your schedule: Brain Dump plans your whole day from a freeform text dump. Chat lets you make quick changes like \"add gym on Thursday at 9am.\"",
   },
   {
     targetId: "calendar-view",
