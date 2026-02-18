@@ -6,6 +6,7 @@ import { Input } from "@/app/components/ui/input";
 import { Badge } from "@/app/components/ui/badge";
 import { ScrollArea } from "@/app/components/ui/scroll-area";
 import { type PriorityMode, PRIORITY_CONFIG } from "@/app/components/priority";
+import { env } from "@/config/env";
 
 interface CalendarAction {
   type: "add" | "remove" | "replace";
@@ -13,11 +14,13 @@ interface CalendarAction {
     title: string;
     time: string;
     duration: number;
+    date?: string;
   };
   replaceWith?: {
     title: string;
     time: string;
     duration: number;
+    date?: string;
   };
   recurrence?: {
     frequency: "daily" | "weekly" | "monthly";
@@ -48,11 +51,10 @@ interface KaiseyChatbotProps {
   onScheduleChange: (action: CalendarAction) => void;
   onFocusChange?: (focus: string) => void;
   variant?: "widget" | "panel";
-  openaiKey?: string;
   priority?: PriorityMode | null;
 }
 
-export function KaiseyChatbot({ onScheduleChange, onFocusChange, variant = "floating", openaiKey, priority }: KaiseyChatbotProps) {
+export function KaiseyChatbot({ onScheduleChange, onFocusChange, variant = "floating", priority }: KaiseyChatbotProps) {
   const [isOpen, setIsOpen] = useState(variant === "widget");
   const [messages, setMessages] = useState<Message[]>([
     {
@@ -419,12 +421,8 @@ export function KaiseyChatbot({ onScheduleChange, onFocusChange, variant = "floa
     return responses;
   };
 
-  // Call OpenAI API for real AI responses with function calling
+  // Call OpenAI API via proxy for real AI responses with function calling
   const callOpenAI = async (userMessage: string, conversationHistory: Message[]): Promise<{ content: string; actions: CalendarAction[] }> => {
-    if (!openaiKey || !openaiKey.startsWith('sk-')) {
-      throw new Error('Valid OpenAI API key required');
-    }
-
     // Build conversation history for context (last 10 messages)
     const recentMessages = conversationHistory.slice(-10).map(msg => ({
       role: msg.type === 'user' ? 'user' as const : 'assistant' as const,
@@ -434,11 +432,10 @@ export function KaiseyChatbot({ onScheduleChange, onFocusChange, variant = "floa
     }));
 
     try {
-      const response = await fetch('https://api.openai.com/v1/chat/completions', {
+      const response = await fetch(env.openai.proxyUrl, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
-          'Authorization': `Bearer ${openaiKey}`,
         },
         body: JSON.stringify({
           model: 'gpt-4o-mini',
@@ -459,6 +456,7 @@ IMPORTANT RULES:
 5. If the user says something like "6pm - 9pm" that means 3 hours (180 minutes) duration starting at 18:00.
 6. Create ONLY ONE calendar_action with recurrence parameters, NOT multiple separate events.
 7. Once you have all the information, CREATE THE EVENT. Don't keep asking questions.
+8. When the user specifies a day (e.g. 'Thursday', 'next Monday', 'March 5th'), calculate the correct YYYY-MM-DD date and include it as event_date. If no day is specified, omit event_date (defaults to today).
 
 Example: If user says "Growth Hacking Class, 6pm-9pm, every Tuesday for 4 weeks" - you have everything:
 - Title: Growth Hacking Class
@@ -498,6 +496,10 @@ Example: If user says "Growth Hacking Class, 6pm-9pm, every Tuesday for 4 weeks"
                     event_duration: {
                       type: 'number',
                       description: 'Duration in minutes (default 60)'
+                    },
+                    event_date: {
+                      type: 'string',
+                      description: 'Date in YYYY-MM-DD format. Defaults to today if not specified.'
                     },
                     replace_with_title: {
                       type: 'string',
@@ -565,7 +567,8 @@ Example: If user says "Growth Hacking Class, 6pm-9pm, every Tuesday for 4 weeks"
                 event: {
                   title: args.event_title,
                   time: args.event_time,
-                  duration: args.event_duration || 60
+                  duration: args.event_duration || 60,
+                  date: args.event_date,
                 }
               };
 
@@ -620,70 +623,46 @@ Example: If user says "Growth Hacking Class, 6pm-9pm, every Tuesday for 4 weeks"
     };
     setMessages((prev) => [...prev, userMsg]);
 
-    // If OpenAI key is available, use real AI
-    if (openaiKey && openaiKey.startsWith('sk-')) {
-      try {
-        // Pass conversation history for context
-        const { content, actions } = await callOpenAI(userMessage, messages);
+    // Always try AI via proxy, fall back to keyword engine on error
+    try {
+      const { content, actions } = await callOpenAI(userMessage, messages);
 
-        const newMessages: Message[] = [];
+      const newMessages: Message[] = [];
 
-        // Add the AI text response
-        if (content) {
-          newMessages.push({
-            id: (Date.now() + 1).toString(),
-            type: "agent",
-            content: content,
-            timestamp: new Date(),
-          });
-        }
-
-        // Add action cards for each calendar action
-        actions.forEach((action, index) => {
-          newMessages.push({
-            id: (Date.now() + 2 + index).toString(),
-            type: "action",
-            content: "",
-            timestamp: new Date(),
-            action: {
-              ...action,
-              status: "pending",
-            },
-          });
-        });
-
-        setMessages((prev) => [...prev, ...newMessages]);
-        setIsTyping(false);
-
-        // Update memory
-        setMemory(prev => ({
-          ...prev,
-          recentActions: [...prev.recentActions, `AI conversation: ${userMessage.substring(0, 50)}...`]
-        }));
-
-      } catch (error) {
-        setIsTyping(false);
-        const errorMessage = error instanceof Error ? error.message : 'Unknown error occurred';
-        setApiError(errorMessage);
-
-        const errorMsg: Message = {
+      if (content) {
+        newMessages.push({
           id: (Date.now() + 1).toString(),
           type: "agent",
-          content: `⚠️ OpenAI API Error: ${errorMessage}\n\nFalling back to basic responses. Please check your API key in Settings.`,
+          content: content,
           timestamp: new Date(),
-        };
-        setMessages((prev) => [...prev, errorMsg]);
-
-        // Fall back to mocked responses after showing error
-        setTimeout(() => {
-          const newMessages = processUserRequest(userMessage);
-          setMessages((prev) => [...prev, ...newMessages.slice(1)]);
-        }, 1000);
+        });
       }
-    } else {
-      // Use mocked responses when no API key
+
+      actions.forEach((action, index) => {
+        newMessages.push({
+          id: (Date.now() + 2 + index).toString(),
+          type: "action",
+          content: "",
+          timestamp: new Date(),
+          action: {
+            ...action,
+            status: "pending",
+          },
+        });
+      });
+
+      setMessages((prev) => [...prev, ...newMessages]);
+      setIsTyping(false);
+
+      setMemory(prev => ({
+        ...prev,
+        recentActions: [...prev.recentActions, `AI conversation: ${userMessage.substring(0, 50)}...`]
+      }));
+
+    } catch (error) {
+      console.error("Proxy error, falling back to keyword engine:", error);
+      // Fall back to keyword-based responses
       const newMessages = processUserRequest(userMessage);
-      
       setTimeout(() => {
         setMessages((prev) => [...prev, ...newMessages.slice(1)]);
         setIsTyping(false);
@@ -874,23 +853,14 @@ Example: If user says "Growth Hacking Class, 6pm-9pm, every Tuesday for 4 weeks"
             <div>
               <h3 className="font-semibold flex items-center gap-2">
                 Chat with Kaisey
-                {openaiKey && openaiKey.startsWith('sk-') && (
-                  <Badge className="bg-green-500 text-white text-[10px] px-1.5 py-0">
-                    AI Active
-                  </Badge>
-                )}
+                <Badge className="bg-green-500 text-white text-[10px] px-1.5 py-0">
+                  AI Active
+                </Badge>
               </h3>
               <p className="text-xs text-muted-foreground">Tell me your priority and I'll optimize your schedule</p>
             </div>
           </div>
         </div>
-
-        {/* Security Warning when API key is active */}
-        {openaiKey && openaiKey.startsWith('sk-') && (
-          <div className="mb-3 p-2 bg-amber-50 border border-amber-200 rounded text-xs text-amber-800">
-            <span className="font-semibold">⚠️ Security:</span> Your API key is stored in browser memory. API costs apply.
-          </div>
-        )}
 
         <div className="flex gap-2 mb-4">
           <Input
@@ -967,7 +937,7 @@ Example: If user says "Growth Hacking Class, 6pm-9pm, every Tuesday for 4 weeks"
   return (
     <>
       {!isOpen && (
-        <div className="fixed bottom-6 right-24 z-50">
+        <div className="fixed bottom-6 right-24 z-50" data-tour-id="kaisey-chat">
           <Button
             onClick={() => setIsOpen(true)}
             className="h-14 w-14 rounded-full shadow-lg bg-gradient-to-br from-blue-500 to-purple-500 hover:from-blue-600 hover:to-purple-600 relative group"

@@ -1,4 +1,4 @@
-import { useState, useEffect } from "react";
+import { useState } from "react";
 import { Brain, Send, Check, Loader2, ListTodo, Clock, CalendarPlus, Sparkles, RefreshCw, ChevronRight, AlertCircle, X } from "lucide-react";
 import { Button } from "@/app/components/ui/button";
 import { Card } from "@/app/components/ui/card";
@@ -10,6 +10,7 @@ import { Textarea } from "@/app/components/ui/textarea";
 import { motion, AnimatePresence } from "motion/react";
 import { toast } from "sonner";
 import { type PriorityMode, PRIORITY_CONFIG, PRIORITY_MODES } from "@/app/components/priority";
+import { env } from "@/config/env";
 
 // --- Type Definitions ---
 
@@ -29,11 +30,13 @@ interface CalendarAction {
     title: string;
     time: string;
     duration: number;
+    date?: string;
   };
   replaceWith?: {
     title: string;
     time: string;
     duration: number;
+    date?: string;
   };
   recurrence?: {
     frequency: "daily" | "weekly" | "monthly";
@@ -81,7 +84,6 @@ interface PlannerSuggestion {
 }
 
 type PlannerPhase =
-  | "NO_KEY"
   | "IDLE"
   | "BRAIN_DUMP_INPUT"
   | "EXTRACTING"
@@ -92,11 +94,9 @@ type PlannerPhase =
   | "ACCEPTED";
 
 interface BrainDumpPlannerProps {
-  openaiKey: string;
   calendarEvents: CalendarEvent[];
   onScheduleChange: (action: CalendarAction) => void;
   onSuggestionsGenerated: (suggestions: PlannerSuggestion[]) => void;
-  onApiKeyRequest: () => void;
   priority?: PriorityMode | null;
 }
 
@@ -125,17 +125,13 @@ const priorityColors: Record<string, string> = {
 };
 
 export function BrainDumpPlanner({
-  openaiKey,
   calendarEvents,
   onScheduleChange,
   onSuggestionsGenerated,
-  onApiKeyRequest,
   priority,
 }: BrainDumpPlannerProps) {
   // --- State ---
-  const [phase, setPhase] = useState<PlannerPhase>(
-    openaiKey && openaiKey.startsWith("sk-") ? "IDLE" : "NO_KEY"
-  );
+  const [phase, setPhase] = useState<PlannerPhase>("IDLE");
   const [brainDumpText, setBrainDumpText] = useState("");
   const [extractedTasks, setExtractedTasks] = useState<ExtractedTask[]>([]);
   const [clarificationQuestions, setClarificationQuestions] = useState<ClarificationQuestion[]>([]);
@@ -147,29 +143,15 @@ export function BrainDumpPlanner({
   const [revisionInput, setRevisionInput] = useState("");
   const [error, setError] = useState<string | null>(null);
 
-  // --- Guardrail: watch API key ---
-  useEffect(() => {
-    if (openaiKey && openaiKey.startsWith("sk-") && phase === "NO_KEY") {
-      setPhase("IDLE");
-    } else if ((!openaiKey || !openaiKey.startsWith("sk-")) && phase !== "NO_KEY") {
-      setPhase("NO_KEY");
-    }
-  }, [openaiKey, phase]);
-
   // --- OpenAI Helpers ---
 
   const callExtractTasks = async (text: string) => {
-    if (!openaiKey || !openaiKey.startsWith("sk-")) {
-      throw new Error("Valid OpenAI API key required");
-    }
-
     const todayISO = localToday();
 
-    const response = await fetch("https://api.openai.com/v1/chat/completions", {
+    const response = await fetch(env.openai.proxyUrl, {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
-        Authorization: `Bearer ${openaiKey}`,
       },
       body: JSON.stringify({
         model: "gpt-4o-mini",
@@ -310,10 +292,6 @@ Call extract_tasks with ALL items.`,
     revisionRequest?: string,
     previousSchedule?: ProposedScheduleBlock[]
   ) => {
-    if (!openaiKey || !openaiKey.startsWith("sk-")) {
-      throw new Error("Valid OpenAI API key required");
-    }
-
     const now = new Date();
     const todayISO = localToday();
     const currentTime = `${String(now.getHours()).padStart(2, "0")}:${String(now.getMinutes()).padStart(2, "0")}`;
@@ -377,11 +355,10 @@ Return ONLY by calling the propose_schedule function.`,
       });
     }
 
-    const response = await fetch("https://api.openai.com/v1/chat/completions", {
+    const response = await fetch(env.openai.proxyUrl, {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
-        Authorization: `Bearer ${openaiKey}`,
       },
       body: JSON.stringify({
         model: "gpt-4o-mini",
@@ -402,7 +379,7 @@ Return ONLY by calling the propose_schedule function.`,
                       properties: {
                         task_title: { type: "string" },
                         time: { type: "string", description: "HH:MM 24h format" },
-                        date: { type: "string", description: "YYYY-MM-DD" },
+                        date: { type: "string", description: "YYYY-MM-DD. Use the task's due date if specified, otherwise today." },
                         duration: { type: "number", description: "minutes" },
                         category: { type: "string" },
                       },
@@ -608,6 +585,7 @@ Return ONLY by calling the propose_schedule function.`,
             title: block.title,
             time: block.time,
             duration: block.duration,
+            date: block.date,
           },
         });
       }, index * 100);
@@ -741,31 +719,10 @@ Return ONLY by calling the propose_schedule function.`,
 
   // --- Render by Phase ---
 
-  // NO_KEY: API key gate
-  if (phase === "NO_KEY") {
-    return (
-      <Card className="p-6 border-2 border-amber-500/20 bg-gradient-to-br from-amber-500/5 to-orange-500/5">
-        <div className="text-center">
-          <div className="w-12 h-12 rounded-full bg-amber-500/10 flex items-center justify-center mx-auto mb-3">
-            <Brain className="w-6 h-6 text-amber-500" />
-          </div>
-          <h3 className="font-semibold text-lg mb-2">Brain Dump Planner</h3>
-          <p className="text-sm text-muted-foreground mb-4">
-            AI-powered day planning requires an OpenAI API key. Add your key to start turning brain dumps into optimized schedules.
-          </p>
-          <Button onClick={onApiKeyRequest} className="gap-2">
-            <Sparkles className="w-4 h-4" />
-            Add API Key in Settings
-          </Button>
-        </div>
-      </Card>
-    );
-  }
-
   // IDLE: Start button
   if (phase === "IDLE") {
     return (
-      <Card className="p-6">
+      <Card className="p-6" data-tour-id="brain-dump">
         <div className="text-center">
           <div className="w-12 h-12 rounded-full bg-purple-500/10 flex items-center justify-center mx-auto mb-3">
             <Brain className="w-6 h-6 text-purple-500" />

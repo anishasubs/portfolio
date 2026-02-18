@@ -66,3 +66,82 @@ export const PRIORITY_MODES: PriorityMode[] = [
   "Social",
   "Wellness",
 ];
+
+// Map event types to their primary priority category
+export const EVENT_TYPE_TO_PRIORITY: Record<string, PriorityMode> = {
+  class: "Academics",
+  study: "Academics",
+  recruiting: "Recruiting",
+  networking: "Social",
+  meeting: "Social",
+  workout: "Wellness",
+};
+
+interface CalendarEventLike {
+  type: string;
+  duration: number;
+  date: string;
+}
+
+/** Compute hours spent per priority category for a given week's events */
+export function computeWeeklyBalance(
+  events: CalendarEventLike[]
+): Record<PriorityMode, number> {
+  const balance: Record<PriorityMode, number> = {
+    Academics: 0,
+    Recruiting: 0,
+    Social: 0,
+    Wellness: 0,
+  };
+
+  for (const event of events) {
+    const category = EVENT_TYPE_TO_PRIORITY[event.type];
+    if (category) {
+      balance[category] += event.duration / 60; // convert minutes to hours
+    }
+  }
+
+  return balance;
+}
+
+/** Generate human-readable callouts about schedule imbalances */
+export function computeImbalanceCallouts(
+  balance: Record<PriorityMode, number>,
+  priority: PriorityMode
+): string[] {
+  const callouts: string[] = [];
+  const totalHours = Object.values(balance).reduce((a, b) => a + b, 0);
+
+  if (totalHours === 0) return [];
+
+  const priorityHours = balance[priority];
+  const priorityPct = (priorityHours / totalHours) * 100;
+
+  // Check if priority category is underrepresented
+  if (priorityHours === 0) {
+    callouts.push(`No ${priority.toLowerCase()} events this week — consider adding some.`);
+  } else if (priorityPct < 15) {
+    callouts.push(
+      `Only ${priorityHours.toFixed(1)}h of ${priority.toLowerCase()} this week (${Math.round(priorityPct)}% of your time).`
+    );
+  }
+
+  // Check for overloaded categories
+  for (const mode of PRIORITY_MODES) {
+    if (mode === priority) continue;
+    const modeHours = balance[mode];
+    const modePct = (modeHours / totalHours) * 100;
+    if (modePct > 50 && modeHours > priorityHours * 2) {
+      callouts.push(
+        `${mode} is taking ${modeHours.toFixed(1)}h (${Math.round(modePct)}%) — more than your ${priority.toLowerCase()} priority.`
+      );
+    }
+  }
+
+  // Wellness check
+  if (priority !== "Wellness" && balance.Wellness === 0) {
+    callouts.push("No wellness time scheduled this week.");
+  }
+
+  return callouts;
+}

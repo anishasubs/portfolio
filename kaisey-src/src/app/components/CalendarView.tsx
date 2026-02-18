@@ -6,6 +6,7 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/app/components/ui/ta
 import { Badge } from "@/app/components/ui/badge";
 import { Input } from "@/app/components/ui/input";
 import { toast } from "sonner";
+import { type PriorityMode, PRIORITY_CONFIG } from "@/app/components/priority";
 
 interface CalendarEvent {
   id: string;
@@ -34,6 +35,7 @@ interface CalendarAction {
 interface CalendarViewProps {
   events: CalendarEvent[];
   onScheduleChange?: (action: CalendarAction) => void;
+  priority?: PriorityMode | null;
 }
 
 const daysOfWeek = ["Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"];
@@ -63,7 +65,12 @@ function formatDateKey(date: Date): string {
   return `${year}-${month}-${day}`;
 }
 
-export function CalendarView({ events, onScheduleChange }: CalendarViewProps) {
+export function CalendarView({ events, onScheduleChange, priority }: CalendarViewProps) {
+  const isPriorityEvent = (event: CalendarEvent) => {
+    if (!priority) return true;
+    return PRIORITY_CONFIG[priority].eventTypes.includes(event.type);
+  };
+
   const [view, setView] = useState<"day" | "week" | "month">("day");
   const [currentDate, setCurrentDate] = useState(new Date());
   const [editingEventId, setEditingEventId] = useState<string | null>(null);
@@ -199,10 +206,12 @@ export function CalendarView({ events, onScheduleChange }: CalendarViewProps) {
       );
     }
 
+    const muted = !isPriorityEvent(event);
+
     return (
-      <div key={event.id} className="flex gap-3 p-3 rounded-lg border hover:bg-muted/50 transition-colors group">
+      <div key={event.id} className={`flex gap-3 p-3 rounded-lg border hover:bg-muted/50 transition-colors group ${muted ? "opacity-50" : ""}`}>
         <div className="text-sm text-muted-foreground font-mono w-16">{event.time}</div>
-        <div className={`w-1 rounded-full ${event.color}`}></div>
+        <div className={`w-1 rounded-full ${muted ? "bg-gray-400" : event.color}`}></div>
         <div className="flex-1">
           <h4 className="font-semibold text-sm">{event.title}</h4>
           <p className="text-xs text-muted-foreground">{event.duration} min &middot; {event.type}</p>
@@ -230,7 +239,7 @@ export function CalendarView({ events, onScheduleChange }: CalendarViewProps) {
   };
 
   return (
-    <Card className="p-4">
+    <Card className="p-4" data-tour-id="calendar-view">
       <div className="flex items-center justify-between mb-4">
         <div className="flex items-center gap-2">
           <Calendar className="w-4 h-4 text-blue-500" />
@@ -289,7 +298,7 @@ export function CalendarView({ events, onScheduleChange }: CalendarViewProps) {
                     </div>
                     <div className="space-y-2">
                       {dayEvts.map((event) => (
-                        <div key={event.id} className={`p-2 rounded text-xs ${event.color} text-white relative`}>
+                        <div key={event.id} className={`p-2 rounded text-xs ${isPriorityEvent(event) ? event.color : "bg-gray-400"} text-white relative ${isPriorityEvent(event) ? "" : "opacity-50"}`}>
                           <div className="font-semibold truncate">{event.title}</div>
                           <div className="opacity-90">{event.time} &middot; {event.duration}m</div>
                           {onScheduleChange && (

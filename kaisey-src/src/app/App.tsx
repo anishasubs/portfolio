@@ -6,17 +6,15 @@ import { Toaster } from "@/app/components/ui/sonner";
 import { CommandCenter } from "@/app/components/CommandCenter";
 import { AgentSuggestion } from "@/app/components/AgentSuggestion";
 import { CalendarView } from "@/app/components/CalendarView";
-import { HealthMetrics } from "@/app/components/HealthMetrics";
-import { AssignmentGrid } from "@/app/components/AssignmentGrid";
 import { BrainDumpPlanner } from "@/app/components/BrainDumpPlanner";
 import { KaiseyChatbot } from "@/app/components/KaiseyChatbot";
 import { WelcomePage } from "@/app/components/WelcomePage";
 import { SettingsPage } from "@/app/components/SettingsPage";
 import { ProfileSection } from "@/app/components/ProfileSection";
 import { toast } from "sonner";
-import { validateEnv } from "@/config/env";
 import { PrioritySelector } from "@/app/components/PrioritySelector";
 import { type PriorityMode, PRIORITY_STORAGE_KEY } from "@/app/components/priority";
+import { OnboardingTour, isTourComplete } from "@/app/components/OnboardingTour";
 
 // Helper function to fetch Google user profile
 async function fetchGoogleUserProfile(accessToken: string): Promise<{ name: string; email: string; picture?: string } | null> {
@@ -243,11 +241,13 @@ interface CalendarAction {
     title: string;
     time: string;
     duration: number;
+    date?: string;
   };
   replaceWith?: {
     title: string;
     time: string;
     duration: number;
+    date?: string;
   };
   recurrence?: {
     frequency: "daily" | "weekly" | "monthly";
@@ -265,7 +265,6 @@ export default function App() {
   const [isLoadingCalendar, setIsLoadingCalendar] = useState(false);
   const [userProfile, setUserProfile] = useState<{ name: string; email: string; picture?: string } | null>(null);
   const [credentials, setCredentials] = useState({
-    openaiKey: "",
     googleCredentials: "",
   });
   const [suggestions, setSuggestions] = useState<Array<{id: string; type: "conflict" | "optimization" | "alert" | "success"; title: string; description: string; actions?: CalendarAction[]}>>([]);
@@ -274,6 +273,7 @@ export default function App() {
     return stored ? (stored as PriorityMode) : null;
   });
   const [needsPrioritySelection, setNeedsPrioritySelection] = useState(false);
+  const [showTour, setShowTour] = useState(false);
 
   const now = new Date();
   const today = `${now.getFullYear()}-${String(now.getMonth() + 1).padStart(2, '0')}-${String(now.getDate()).padStart(2, '0')}`;
@@ -286,14 +286,8 @@ export default function App() {
   ];
   const [calendarEvents, setCalendarEvents] = useState<CalendarEvent[]>([]);
 
-  // Generate schedule-based suggestions when API key is present
+  // Generate schedule-based suggestions
   useEffect(() => {
-    if (!credentials.openaiKey || !credentials.openaiKey.startsWith('sk-')) {
-      // Clear AI-generated suggestions when no API key
-      setSuggestions(prev => prev.filter(s => s.id.startsWith('bd-')));
-      return;
-    }
-
     const todayKey = `${new Date().getFullYear()}-${String(new Date().getMonth() + 1).padStart(2, '0')}-${String(new Date().getDate()).padStart(2, '0')}`;
     const todayEvents = calendarEvents
       .filter(e => e.date === todayKey)
@@ -390,7 +384,7 @@ export default function App() {
       const brainDumpSuggestions = prev.filter(s => s.id.startsWith('bd-'));
       return [...newSuggestions, ...brainDumpSuggestions];
     });
-  }, [credentials.openaiKey, calendarEvents]);
+  }, [calendarEvents]);
 
   function formatTimeHelper(totalMinutes: number): string {
     const h = Math.floor(totalMinutes / 60);
@@ -399,6 +393,7 @@ export default function App() {
   }
 
   const handlePrioritySelect = (priority: PriorityMode) => {
+    const isFirstSelection = userPriority === null;
     const isChange = userPriority !== null && userPriority !== priority;
     setUserPriority(priority);
     localStorage.setItem(PRIORITY_STORAGE_KEY, priority);
@@ -406,10 +401,14 @@ export default function App() {
     if (isChange) {
       toast.success(`Priority updated to ${priority}`);
     }
+    // Show tour after first priority selection if not already seen
+    if (isFirstSelection && !isTourComplete()) {
+      setTimeout(() => setShowTour(true), 500);
+    }
   };
 
-  const handleLogin = async (openaiKey: string, googleCreds: string) => {
-    setCredentials({ openaiKey, googleCredentials: googleCreds });
+  const handleLogin = async (googleCreds: string) => {
+    setCredentials({ googleCredentials: googleCreds });
     setIsLoggedIn(true);
 
     // Trigger priority onboarding if user hasn't set one
@@ -531,7 +530,7 @@ export default function App() {
         id: tempId,
         title: calendarAction.event.title,
         time: calendarAction.event.time,
-        date: today,
+        date: calendarAction.event.date || today,
         duration: calendarAction.event.duration,
         type,
         color,
@@ -609,28 +608,6 @@ export default function App() {
     });
   };
 
-  const handleAssignmentSchedule = (assignment: any, time: string, duration: number) => {
-    // Create a calendar event for the assignment
-    const newEvent: CalendarEvent = {
-      id: (Math.max(0, ...calendarEvents.map(e => parseInt(e.id) || 0)) + 1).toString(),
-      title: `Study: ${assignment.title}`,
-      time: time,
-      date: today,
-      duration: duration,
-      type: "study",
-      color: "bg-indigo-500"
-    };
-
-    setCalendarEvents(prevEvents => {
-      const updated = [...prevEvents, newEvent];
-      return updated.sort((a, b) => a.time.localeCompare(b.time));
-    });
-
-    toast.success("Study time added to calendar", {
-      description: `${duration} min for ${assignment.title} at ${time}`,
-    });
-  };
-
   // Show welcome page if not logged in
   if (!isLoggedIn) {
     return <WelcomePage onLogin={handleLogin} />;
@@ -642,19 +619,15 @@ export default function App() {
       <SettingsPage
         credentials={credentials}
         onSave={(newCreds) => {
-          const justAddedKey = !credentials.openaiKey && newCreds.openaiKey && newCreds.openaiKey.startsWith("sk-");
           setCredentials(newCreds);
           setShowSettings(false);
           toast.success("Settings saved successfully");
-          if (justAddedKey && !userPriority) {
-            setNeedsPrioritySelection(true);
-          }
         }}
         onClose={() => setShowSettings(false)}
         onLogout={() => {
           setIsLoggedIn(false);
           setShowSettings(false);
-          setCredentials({ openaiKey: "", googleCredentials: "" });
+          setCredentials({ googleCredentials: "" });
           setCalendarEvents([]);
           setSuggestions([]);
           setUserProfile(null);
@@ -728,17 +701,15 @@ export default function App() {
         {/* Brain Dump Planner */}
         <div className="mb-6">
           <BrainDumpPlanner
-            openaiKey={credentials.openaiKey}
             calendarEvents={calendarEvents}
             onScheduleChange={handleScheduleChange}
             onSuggestionsGenerated={handleBrainDumpSuggestions}
-            onApiKeyRequest={() => setShowSettings(true)}
             priority={userPriority}
           />
         </div>
 
-        {/* My Recommendations - only shown when API key is present */}
-        {credentials.openaiKey && credentials.openaiKey.startsWith('sk-') && suggestions.length > 0 && (
+        {/* My Recommendations */}
+        {suggestions.length > 0 && (
           <div className="mb-6">
             <div className="flex items-center gap-2 mb-3">
               <Bot className="w-4 h-4 text-blue-500" />
@@ -765,7 +736,7 @@ export default function App() {
         <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
           {/* Left Column - Calendar */}
           <div className="lg:col-span-2 space-y-6">
-            <CalendarView events={calendarEvents} onScheduleChange={handleScheduleChange} />
+            <CalendarView events={calendarEvents} onScheduleChange={handleScheduleChange} priority={userPriority} />
           </div>
 
           {/* Right Column - Profile */}
@@ -780,9 +751,13 @@ export default function App() {
         onScheduleChange={handleScheduleChange}
         onFocusChange={setUserFocus}
         variant="floating"
-        openaiKey={credentials.openaiKey}
         priority={userPriority}
       />
+
+      {/* Onboarding Tour */}
+      {showTour && (
+        <OnboardingTour onComplete={() => setShowTour(false)} />
+      )}
 
       {/* Toast Notifications */}
       <Toaster />

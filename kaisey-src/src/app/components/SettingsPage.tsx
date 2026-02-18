@@ -1,29 +1,24 @@
 import { useState } from "react";
-import { X, Key, LogIn, LogOut, Save, Brain, AlertCircle } from "lucide-react";
+import { X, LogIn, LogOut, Save, Brain } from "lucide-react";
 import { Button } from "@/app/components/ui/button";
 import { Input } from "@/app/components/ui/input";
 import { Label } from "@/app/components/ui/label";
 import { Card } from "@/app/components/ui/card";
-import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/app/components/ui/tabs";
-import { Alert, AlertDescription } from "@/app/components/ui/alert";
-import { env } from "@/config/env";
 
 interface SettingsPageProps {
   credentials: {
-    openaiKey: string;
     googleCredentials: string;
   };
-  onSave: (credentials: { openaiKey: string; googleCredentials: string }) => void;
+  onSave: (credentials: { googleCredentials: string }) => void;
   onClose: () => void;
   onLogout: () => void;
 }
 
 export function SettingsPage({ credentials, onSave, onClose, onLogout }: SettingsPageProps) {
-  const [openaiKey, setOpenaiKey] = useState(credentials.openaiKey);
   const [googleCredentials, setGoogleCredentials] = useState(credentials.googleCredentials);
 
   const handleSave = () => {
-    onSave({ openaiKey, googleCredentials });
+    onSave({ googleCredentials });
   };
 
   return (
@@ -37,7 +32,7 @@ export function SettingsPage({ credentials, onSave, onClose, onLogout }: Setting
             </div>
             <div>
               <h1 className="text-xl font-bold">Kaisey Settings</h1>
-              <p className="text-xs text-muted-foreground">Manage your API keys and integrations</p>
+              <p className="text-xs text-muted-foreground">Manage your integrations</p>
             </div>
           </div>
           <Button variant="ghost" size="sm" onClick={onClose}>
@@ -47,134 +42,61 @@ export function SettingsPage({ credentials, onSave, onClose, onLogout }: Setting
       </header>
 
       {/* Content */}
-      <main className="max-w-4xl mx-auto px-6 py-8">
-        <Tabs defaultValue="api" className="space-y-6">
-          <TabsList className="grid w-full grid-cols-2">
-            <TabsTrigger value="api">API Keys</TabsTrigger>
-            <TabsTrigger value="integrations">Integrations</TabsTrigger>
-          </TabsList>
+      <main className="max-w-4xl mx-auto px-6 py-8 space-y-6">
+        <Card className="p-6">
+          <div className="space-y-6">
+            <div>
+              <h3 className="text-lg font-semibold mb-4">Calendar & Health Integrations</h3>
+              <p className="text-sm text-muted-foreground mb-6">
+                Connect your calendar and health platforms for comprehensive schedule optimization.
+              </p>
+            </div>
 
-          <TabsContent value="api" className="space-y-6">
-            <Card className="p-6">
-              <div className="space-y-6">
-                <div>
-                  <h3 className="text-lg font-semibold mb-4">API Configuration</h3>
-                  <p className="text-sm text-muted-foreground mb-6">
-                    Configure your API keys to enable Kaisey's AI-powered features.
-                  </p>
-                </div>
-
-                <div className="space-y-4">
-                  <div className="space-y-2">
-                    <Label htmlFor="settings-openai-key" className="flex items-center gap-2">
-                      <Key className="w-4 h-4" />
-                      OpenAI API Key
-                    </Label>
-                    <Input
-                      id="settings-openai-key"
-                      type="password"
-                      placeholder="sk-..."
-                      value={openaiKey}
-                      onChange={(e) => setOpenaiKey(e.target.value)}
-                      className="font-mono text-sm"
-                    />
-                    <p className="text-xs text-muted-foreground">
-                      Used for AI-powered schedule optimization and natural language processing
-                    </p>
-                    
-                    {/* Security Warning Banner */}
-                    <div className="mt-3 p-3 bg-amber-50 border border-amber-200 rounded-lg">
-                      <div className="flex items-start gap-2">
-                        <div className="text-amber-600 font-semibold text-sm mt-0.5">⚠️</div>
-                        <div className="flex-1">
-                          <p className="text-xs font-semibold text-amber-900 mb-1">Security Warning</p>
-                          <ul className="text-xs text-amber-800 space-y-1">
-                            <li>• Your API key is stored in browser memory (not encrypted)</li>
-                            <li>• Anyone with browser access can view your key</li>
-                            <li>• API calls are made directly from your browser</li>
-                            <li>• Each message costs money from your OpenAI account</li>
-                          </ul>
-                          <p className="text-xs text-amber-900 mt-2 font-medium">
-                            💡 For production use, implement a backend server to secure your API key.
-                          </p>
-                        </div>
-                      </div>
-                    </div>
-                    
-                    {openaiKey && openaiKey.startsWith('sk-') && (
-                      <div className="mt-2 p-2 bg-green-50 border border-green-200 rounded-lg">
-                        <p className="text-xs text-green-700 font-medium">✓ API key detected - Kaisey will use real OpenAI responses</p>
-                      </div>
-                    )}
-                    
-                    {!openaiKey && (
-                      <div className="mt-2 p-2 bg-blue-50 border border-blue-200 rounded-lg">
-                        <p className="text-xs text-blue-700">ℹ️ Without an API key, Kaisey will use pre-programmed responses</p>
-                      </div>
-                    )}
-                  </div>
-                </div>
+            <div className="space-y-4">
+              <div className="space-y-2">
+                <Label htmlFor="settings-google-creds" className="flex items-center gap-2">
+                  <LogIn className="w-4 h-4" />
+                  Google Calendar Credentials
+                </Label>
+                <Input
+                  id="settings-google-creds"
+                  type="password"
+                  placeholder="Paste your Google OAuth credentials JSON"
+                  value={googleCredentials}
+                  onChange={(e) => setGoogleCredentials(e.target.value)}
+                  className="font-mono text-sm"
+                />
+                <p className="text-xs text-muted-foreground">
+                  Enables read/write access to your Google Calendar for dynamic rescheduling
+                </p>
               </div>
-            </Card>
-          </TabsContent>
 
-          <TabsContent value="integrations" className="space-y-6">
-            <Card className="p-6">
-              <div className="space-y-6">
-                <div>
-                  <h3 className="text-lg font-semibold mb-4">Calendar & Health Integrations</h3>
-                  <p className="text-sm text-muted-foreground mb-6">
-                    Connect your calendar and health platforms for comprehensive schedule optimization.
-                  </p>
-                </div>
-
-                <div className="space-y-4">
-                  <div className="space-y-2">
-                    <Label htmlFor="settings-google-creds" className="flex items-center gap-2">
-                      <LogIn className="w-4 h-4" />
-                      Google Calendar Credentials
-                    </Label>
-                    <Input
-                      id="settings-google-creds"
-                      type="password"
-                      placeholder="Paste your Google OAuth credentials JSON"
-                      value={googleCredentials}
-                      onChange={(e) => setGoogleCredentials(e.target.value)}
-                      className="font-mono text-sm"
-                    />
-                    <p className="text-xs text-muted-foreground">
-                      Enables read/write access to your Google Calendar for dynamic rescheduling
-                    </p>
+              <div className="p-4 rounded-lg border bg-muted/50">
+                <h4 className="font-semibold text-sm mb-3">Health Platform Integrations</h4>
+                <div className="space-y-2 text-sm">
+                  <div className="flex items-center justify-between p-2 rounded bg-background">
+                    <span className="text-muted-foreground">Apple Health</span>
+                    <span className="text-xs text-green-500 font-semibold">Connected</span>
                   </div>
-
-                  <div className="p-4 rounded-lg border bg-muted/50">
-                    <h4 className="font-semibold text-sm mb-3">Health Platform Integrations</h4>
-                    <div className="space-y-2 text-sm">
-                      <div className="flex items-center justify-between p-2 rounded bg-background">
-                        <span className="text-muted-foreground">Apple Health</span>
-                        <span className="text-xs text-green-500 font-semibold">Connected</span>
-                      </div>
-                      <div className="flex items-center justify-between p-2 rounded bg-background">
-                        <span className="text-muted-foreground">Strava</span>
-                        <span className="text-xs text-yellow-500 font-semibold">Available</span>
-                      </div>
-                      <div className="flex items-center justify-between p-2 rounded bg-background">
-                        <span className="text-muted-foreground">Whoop</span>
-                        <span className="text-xs text-yellow-500 font-semibold">Available</span>
-                      </div>
-                    </div>
-                    <p className="text-xs text-muted-foreground mt-3">
-                      Configure health integrations in your device settings
-                    </p>
+                  <div className="flex items-center justify-between p-2 rounded bg-background">
+                    <span className="text-muted-foreground">Strava</span>
+                    <span className="text-xs text-yellow-500 font-semibold">Available</span>
+                  </div>
+                  <div className="flex items-center justify-between p-2 rounded bg-background">
+                    <span className="text-muted-foreground">Whoop</span>
+                    <span className="text-xs text-yellow-500 font-semibold">Available</span>
                   </div>
                 </div>
+                <p className="text-xs text-muted-foreground mt-3">
+                  Configure health integrations in your device settings
+                </p>
               </div>
-            </Card>
-          </TabsContent>
-        </Tabs>
+            </div>
+          </div>
+        </Card>
 
         {/* Action Buttons */}
-        <div className="flex gap-3 justify-between mt-8">
+        <div className="flex gap-3 justify-between">
           <Button variant="destructive" onClick={onLogout} className="gap-2">
             <LogOut className="w-4 h-4" />
             Log Out

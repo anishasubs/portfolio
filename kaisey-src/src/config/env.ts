@@ -17,9 +17,9 @@ export const env = {
     scopes: "https://www.googleapis.com/auth/calendar.readonly https://www.googleapis.com/auth/calendar.events https://www.googleapis.com/auth/userinfo.profile https://www.googleapis.com/auth/userinfo.email",
   },
 
-  // OpenAI
+  // OpenAI Proxy
   openai: {
-    apiKey: import.meta.env.VITE_OPENAI_API_KEY || "",
+    proxyUrl: import.meta.env.VITE_OPENAI_PROXY_URL || "https://kaisey-proxy.vercel.app/api/chat",
   },
 
   // Canvas LMS
@@ -50,7 +50,7 @@ if (typeof window !== 'undefined') {
   console.log('🔧 Kaisey Environment Configuration:');
   console.log('  Google Client ID:', env.google.clientId ? '✅ Set' : '❌ Missing');
   console.log('  Redirect URI:', env.google.redirectUri);
-  console.log('  OpenAI Key:', env.openai.apiKey ? '✅ Set' : '❌ Missing');
+  console.log('  OpenAI Proxy:', env.openai.proxyUrl);
   console.log('  Environment:', env.app.env);
 }
 

@@ -7,7 +7,7 @@ import { toast } from "sonner";
 import { googleConfig } from "@/config/env";
 
 interface WelcomePageProps {
-  onLogin: (openaiKey: string, googleCredentials: string) => void;
+  onLogin: (googleCredentials: string) => void;
 }
 
 export function WelcomePage({ onLogin }: WelcomePageProps) {
@@ -61,7 +61,7 @@ export function WelcomePage({ onLogin }: WelcomePageProps) {
         
         // Auto-login after connection
         setTimeout(() => {
-          onLogin("", credentials);
+          onLogin(credentials);
         }, 1000);
       }
     }
@@ -78,7 +78,7 @@ export function WelcomePage({ onLogin }: WelcomePageProps) {
             description: "Logging you in...",
           });
           setTimeout(() => {
-            onLogin("", storedToken);
+            onLogin(storedToken);
           }, 1000);
         } else {
           // Token expired, clear it
@@ -167,7 +167,7 @@ export function WelcomePage({ onLogin }: WelcomePageProps) {
       description: "You're using Kaisey with sample data. Connect Google Calendar later in Settings.",
     });
     
-    onLogin("", demoCredentials);
+    onLogin(demoCredentials);
   };
 
   const videoRef = useRef<HTMLVideoElement>(null);
