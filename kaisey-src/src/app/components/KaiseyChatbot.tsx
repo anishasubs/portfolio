@@ -47,14 +47,25 @@ interface ConversationMemory {
   context: string[];
 }
 
+interface CalendarEvent {
+  id: string;
+  title: string;
+  time: string;
+  date: string;
+  duration: number;
+  type: string;
+  color: string;
+}
+
 interface KaiseyChatbotProps {
   onScheduleChange: (action: CalendarAction) => void;
   onFocusChange?: (focus: string) => void;
   variant?: "widget" | "panel";
   priority?: PriorityMode | null;
+  calendarEvents?: CalendarEvent[];
 }
 
-export function KaiseyChatbot({ onScheduleChange, onFocusChange, variant = "floating", priority }: KaiseyChatbotProps) {
+export function KaiseyChatbot({ onScheduleChange, onFocusChange, variant = "floating", priority, calendarEvents = [] }: KaiseyChatbotProps) {
   const [isOpen, setIsOpen] = useState(variant === "widget");
   const [messages, setMessages] = useState<Message[]>([
     {
@@ -446,7 +457,11 @@ export function KaiseyChatbot({ onScheduleChange, onFocusChange, variant = "floa
 
 Current Context:
 - Today's date: ${`${new Date().getFullYear()}-${String(new Date().getMonth() + 1).padStart(2, "0")}-${String(new Date().getDate()).padStart(2, "0")}`}
+- Current time: ${`${String(new Date().getHours()).padStart(2, "0")}:${String(new Date().getMinutes()).padStart(2, "0")}`}
 ${priority ? `- User's current priority: ${priority}\n- ${PRIORITY_CONFIG[priority].promptHint}` : ""}
+
+Existing calendar events (DO NOT schedule over these):
+${calendarEvents.length > 0 ? calendarEvents.map(e => `- ${e.date} ${e.time} (${e.duration}min): ${e.title}`).join('\n') : '(no events)'}
 
 IMPORTANT RULES:
 1. REMEMBER the conversation history. If the user has already provided information (event title, time, duration, recurrence), DO NOT ask for it again.

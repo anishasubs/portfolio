@@ -752,6 +752,7 @@ export default function App() {
         onFocusChange={setUserFocus}
         variant="floating"
         priority={userPriority}
+        calendarEvents={calendarEvents}
       />
 
       {/* Onboarding Tour */}
