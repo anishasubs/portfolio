@@ -458,12 +458,10 @@
 
         /* ── Scroll hint ─────────────────────────────────────── */
         .scroll-hint {
-            position: fixed; bottom: 32px; left: 50%;
-            transform: translateX(-50%);
+            position: fixed; bottom: 32px; right: 32px;
             z-index: 199;
             font-family: 'Raleway', sans-serif;
-            font-size: 15px; color: #1c4e89;
-            letter-spacing: 0.15em; text-transform: lowercase;
+            font-size: 20px; color: #1c4e89;
             opacity: 0;
             transition: opacity 0.6s ease;
             pointer-events: none;
@@ -785,7 +783,7 @@
 </div>
 
 
-<div class="scroll-hint" id="scroll-hint">scroll <span>&darr;</span></div>
+<div class="scroll-hint" id="scroll-hint"><span>&darr;</span></div>
 
 <script>
 (function () {
