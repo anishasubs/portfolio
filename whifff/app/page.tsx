@@ -131,6 +131,12 @@ export default function Home() {
                 >
                   start over {"\u2726"}
                 </button>
+                <a
+                  href="/ledger"
+                  className="block mt-3 text-xs font-semibold text-[#4A8EC2]/70 hover:text-[#4A8EC2] transition-colors"
+                >
+                  see what others got recommended &rarr;
+                </a>
                 <p className="text-[10px] text-[#1B3A5C] mt-3.5 opacity-40 font-semibold">
                   scent data via fragrantica &middot; prices approximate
                 </p>

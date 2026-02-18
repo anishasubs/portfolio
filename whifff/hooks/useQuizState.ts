@@ -24,21 +24,46 @@ export function useQuizState() {
   const [cards, setCards] = useState(0);
   const [mix, setMix] = useState(0);
   const sessionIdRef = useRef<string | null>(null);
+  const stepTimestampsRef = useRef<Record<string, string>>({});
 
   // Create session on mount
   useEffect(() => {
-    fetch("/api/sessions", { method: "POST" })
+    const deviceType = window.innerWidth < 768 ? "mobile" : "desktop";
+    fetch("/api/sessions", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ device_type: deviceType }),
+    })
       .then((res) => res.json())
       .then((data) => {
         sessionIdRef.current = data.id;
       })
       .catch(() => {});
+    stepTimestampsRef.current = { "0": new Date().toISOString() };
   }, []);
 
-  // Track step changes
+  // Track step changes — patch current step + answer data + timestamps
   useEffect(() => {
     if (!sessionIdRef.current) return;
-    patchSession(sessionIdRef.current, { currentStep: step });
+
+    // Record timestamp for this step
+    stepTimestampsRef.current[String(step)] = new Date().toISOString();
+
+    // Build patch payload with current answers for this step
+    const patch: Record<string, unknown> = {
+      currentStep: step,
+      stepTimestamps: { ...stepTimestampsRef.current },
+    };
+
+    // Include answers accumulated so far
+    if (past.length > 0) patch.pastPerfumeNames = past.map((p) => p.name);
+    if (scents.length > 0) patch.scentFamilies = scents;
+    if (price) patch.priceRange = price;
+    if (occasion) patch.occasion = occasion;
+    if (strength) patch.strength = strength;
+
+    patchSession(sessionIdRef.current, patch);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [step]);
 
   // Mixing animation phases — fetch recommendations during animation
@@ -116,8 +141,14 @@ export function useQuizState() {
     setRecs([]);
     setCards(0);
     setMix(0);
+    stepTimestampsRef.current = { "0": new Date().toISOString() };
     // Create a new session for the restart
-    fetch("/api/sessions", { method: "POST" })
+    const deviceType = window.innerWidth < 768 ? "mobile" : "desktop";
+    fetch("/api/sessions", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ device_type: deviceType }),
+    })
       .then((res) => res.json())
       .then((data) => {
         sessionIdRef.current = data.id;

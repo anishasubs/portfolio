@@ -14,6 +14,8 @@ export interface SessionRecord {
   completedAt: Date | null;
   userAgent: string;
   referrer: string;
+  deviceType: string;
+  stepTimestamps: Record<string, string>;
 }
 
 // ---------------------------------------------------------------------------
@@ -21,7 +23,7 @@ export interface SessionRecord {
 // ---------------------------------------------------------------------------
 
 interface SessionProvider {
-  create(userAgent: string, referrer: string): Promise<SessionRecord>;
+  create(userAgent: string, referrer: string, deviceType: string): Promise<SessionRecord>;
   get(id: string): Promise<SessionRecord | undefined>;
   update(id: string, updates: Partial<SessionRecord>): Promise<SessionRecord | null>;
   getStats(): Promise<{
@@ -31,7 +33,10 @@ interface SessionProvider {
     dropOff: Record<number, number>;
     topFamilies: [string, number][];
     topRecommended: [string, number][];
+    topOccasions: [string, number][];
+    deviceBreakdown: Record<string, number>;
   }>;
+  listCompleted(limit: number, offset: number): Promise<{ sessions: SessionRecord[]; total: number }>;
 }
 
 // ---------------------------------------------------------------------------
@@ -41,7 +46,7 @@ interface SessionProvider {
 class InMemorySessionProvider implements SessionProvider {
   private sessions = new Map<string, SessionRecord>();
 
-  async create(userAgent: string, referrer: string): Promise<SessionRecord> {
+  async create(userAgent: string, referrer: string, deviceType: string): Promise<SessionRecord> {
     const id = crypto.randomUUID();
     const session: SessionRecord = {
       id,
@@ -57,6 +62,8 @@ class InMemorySessionProvider implements SessionProvider {
       completedAt: null,
       userAgent,
       referrer,
+      deviceType,
+      stepTimestamps: {},
     };
     this.sessions.set(id, session);
     return session;
@@ -109,7 +116,32 @@ class InMemorySessionProvider implements SessionProvider {
       .sort(([, a], [, b]) => b - a)
       .slice(0, 10) as [string, number][];
 
-    return { total, completed, completionRate, dropOff: stepCounts, topFamilies, topRecommended };
+    const occasionCounts: Record<string, number> = {};
+    all.forEach((s) => {
+      if (s.occasion) {
+        occasionCounts[s.occasion] = (occasionCounts[s.occasion] || 0) + 1;
+      }
+    });
+    const topOccasions = Object.entries(occasionCounts)
+      .sort(([, a], [, b]) => b - a) as [string, number][];
+
+    const deviceCounts: Record<string, number> = {};
+    all.forEach((s) => {
+      const dt = s.deviceType || "unknown";
+      deviceCounts[dt] = (deviceCounts[dt] || 0) + 1;
+    });
+
+    return { total, completed, completionRate, dropOff: stepCounts, topFamilies, topRecommended, topOccasions, deviceBreakdown: deviceCounts };
+  }
+
+  async listCompleted(limit: number, offset: number) {
+    const completedSessions = Array.from(this.sessions.values())
+      .filter((s) => s.completed)
+      .sort((a, b) => (b.completedAt?.getTime() ?? 0) - (a.completedAt?.getTime() ?? 0));
+    return {
+      sessions: completedSessions.slice(offset, offset + limit),
+      total: completedSessions.length,
+    };
   }
 }
 
@@ -132,21 +164,22 @@ function mapRowToSession(row: Record<string, unknown>): SessionRecord {
     completedAt: row.completed_at ? new Date(row.completed_at as string) : null,
     userAgent: (row.user_agent as string) ?? "",
     referrer: (row.referrer as string) ?? "",
+    deviceType: (row.device_type as string) ?? "unknown",
+    stepTimestamps: (row.step_timestamps as Record<string, string>) ?? {},
   };
 }
 
 class SupabaseSessionProvider implements SessionProvider {
-  async create(userAgent: string, referrer: string): Promise<SessionRecord> {
+  async create(userAgent: string, referrer: string, deviceType: string): Promise<SessionRecord> {
     const sb = getSupabaseServerClient();
     const { data, error } = await sb
       .from("quiz_sessions")
-      .insert({ user_agent: userAgent, referrer })
+      .insert({ user_agent: userAgent, referrer, device_type: deviceType })
       .select()
       .single();
 
     if (error || !data) {
       console.error("Failed to create session:", error?.message);
-      // Fallback: return a local session so the quiz still works
       return {
         id: crypto.randomUUID(),
         pastPerfumeNames: [],
@@ -161,6 +194,8 @@ class SupabaseSessionProvider implements SessionProvider {
         completedAt: null,
         userAgent,
         referrer,
+        deviceType,
+        stepTimestamps: {},
       };
     }
     return mapRowToSession(data);
@@ -193,6 +228,8 @@ class SupabaseSessionProvider implements SessionProvider {
       if (updates.completed) dbUpdates.completed_at = new Date().toISOString();
     }
     if (updates.currentStep !== undefined) dbUpdates.current_step = updates.currentStep;
+    if (updates.deviceType !== undefined) dbUpdates.device_type = updates.deviceType;
+    if (updates.stepTimestamps !== undefined) dbUpdates.step_timestamps = updates.stepTimestamps;
 
     const { data, error } = await sb
       .from("quiz_sessions")
@@ -220,6 +257,8 @@ class SupabaseSessionProvider implements SessionProvider {
         dropOff: { 0: 0, 1: 0, 2: 0, 3: 0, 4: 0, 5: 0 },
         topFamilies: [],
         topRecommended: [],
+        topOccasions: [],
+        deviceBreakdown: {},
       };
     }
     // The RPC returns JSON — parse dropOff keys to numbers
@@ -237,7 +276,28 @@ class SupabaseSessionProvider implements SessionProvider {
       dropOff,
       topFamilies: (raw.topFamilies ?? []) as [string, number][],
       topRecommended: (raw.topRecommended ?? []) as [string, number][],
+      topOccasions: (raw.topOccasions ?? []) as [string, number][],
+      deviceBreakdown: (raw.deviceBreakdown ?? {}) as Record<string, number>,
     };
+  }
+
+  async listCompleted(limit: number, offset: number) {
+    const sb = getSupabaseClient();
+    const { count } = await sb
+      .from("quiz_sessions")
+      .select("*", { count: "exact", head: true })
+      .eq("completed", true);
+    const { data, error } = await sb
+      .from("quiz_sessions")
+      .select()
+      .eq("completed", true)
+      .order("completed_at", { ascending: false })
+      .range(offset, offset + limit - 1);
+    if (error || !data) {
+      console.error("Failed to list completed sessions:", error?.message);
+      return { sessions: [], total: 0 };
+    }
+    return { sessions: data.map(mapRowToSession), total: count ?? 0 };
   }
 }
 
@@ -256,8 +316,8 @@ function getSessionProvider(): SessionProvider {
   return sessionProvider;
 }
 
-export async function createSession(userAgent: string, referrer: string): Promise<SessionRecord> {
-  return getSessionProvider().create(userAgent, referrer);
+export async function createSession(userAgent: string, referrer: string, deviceType: string = "unknown"): Promise<SessionRecord> {
+  return getSessionProvider().create(userAgent, referrer, deviceType);
 }
 
 export async function getSession(id: string): Promise<SessionRecord | undefined> {
@@ -270,4 +330,8 @@ export async function updateSession(id: string, updates: Partial<SessionRecord>)
 
 export async function getStats() {
   return getSessionProvider().getStats();
+}
+
+export async function listCompletedSessions(limit: number, offset: number) {
+  return getSessionProvider().listCompleted(limit, offset);
 }
