@@ -915,10 +915,10 @@
             <div class="hero-logo">whifff</div>
             <div class="hero-tagline">your next favorite scent is one quiz away</div>
             <p class="hero-subtitle">An AI-powered perfume quiz that decodes your scent personality and finds your perfect fragrance match.</p>
-            <div class="meta">Case Study by Anisha Subberwal | Columbia Business School MBA 2026</div>
+            <div class="meta" style="margin-bottom:6px;">Case Study by Anisha Subberwal | Columbia Business School MBA 2026</div>
+            <div class="meta" style="font-size:11px;opacity:0.7;letter-spacing:0.08em;">Sole builder &mdash; product strategy, design, and full-stack engineering</div>
             <div class="hero-ctas">
                 <a href="https://whifff.vercel.app" target="_blank" class="btn btn-primary">Take the Quiz &rarr;</a>
-                <a href="#demo" class="btn btn-secondary">Watch the Ad &darr;</a>
             </div>
         </div>
     </div>
@@ -950,21 +950,6 @@
         </div>
     </section>
 
-    <!-- 3. The Ad / Demo -->
-    <section class="bg-sky demo-section fade-in" id="demo">
-        <div class="container">
-            <span class="section-tag">The Ad</span>
-            <h2>See Whifff in Action</h2>
-            <p class="section-desc" style="margin: 0 auto;">A 40-second ad showcasing the quiz experience from first question to personalized result.</p>
-            <div class="video-container">
-                <video autoplay muted loop playsinline>
-                    <source src="whifff-ad.mp4" type="video/mp4">
-                </video>
-            </div>
-            <a href="https://whifff.vercel.app" target="_blank" class="btn btn-primary" style="margin-top: 24px;">Try It Yourself &rarr;</a>
-        </div>
-    </section>
-
     <!-- 4. How It Works -->
     <section class="bg-light fade-in">
         <div class="container">
@@ -974,33 +959,33 @@
             <div class="steps-grid">
                 <div class="step-card">
                     <div class="step-num">1</div>
-                    <h4>Pick Your Vibe</h4>
-                    <p>Choose the mood that matches your day &mdash; cozy, bold, fresh, or romantic &mdash; to set the scent direction.</p>
+                    <h4>Perfumes You Love</h4>
+                    <p>Already have a signature scent? Tell us what you wear and love &mdash; we'll extract the notes and accords to understand your taste before the quiz even starts. Or skip ahead if you're starting fresh.</p>
                 </div>
                 <div class="step-card">
                     <div class="step-num">2</div>
-                    <h4>Scent Memories</h4>
-                    <p>Select smells you love from everyday life: fresh laundry, campfire, coffee, rain on pavement.</p>
+                    <h4>Pick Your Scent Families</h4>
+                    <p>Choose the fragrance families that pull you in &mdash; floral, woody, fresh, oriental, fruity, or gourmand. Pick as many as feel right. This sets the direction for everything that follows.</p>
                 </div>
                 <div class="step-card">
                     <div class="step-num">3</div>
-                    <h4>Occasion &amp; Season</h4>
-                    <p>Tell us when and where you'll wear it &mdash; the algorithm weighs intensity and note profiles accordingly.</p>
+                    <h4>Set Your Budget</h4>
+                    <p>Pick your price range so every recommendation is something you'd actually buy. From affordable finds to niche splurges &mdash; no judgment either way.</p>
                 </div>
                 <div class="step-card">
                     <div class="step-num">4</div>
-                    <h4>Ingredient Preferences</h4>
-                    <p>Lean into florals, woods, gourmands, or fresh notes. This shapes the dominant accord in your match.</p>
+                    <h4>Choose Your Occasion</h4>
+                    <p>Date night, everyday wear, office, night out &mdash; where you'll wear it changes what we recommend. The algorithm weighs intensity and note profiles based on context.</p>
                 </div>
                 <div class="step-card">
                     <div class="step-num">5</div>
-                    <h4>Budget &amp; Brand</h4>
-                    <p>Set your price range and whether you prefer niche houses, designer labels, or don't care.</p>
+                    <h4>How Strong Do You Want It?</h4>
+                    <p>Sillage is how far your scent projects. Want something intimate that stays close? Or do you want to leave a trail? This shapes which concentrations and note structures we prioritize.</p>
                 </div>
                 <div class="step-card">
                     <div class="step-num">6</div>
-                    <h4>AI Match &amp; Chat</h4>
-                    <p>Get your top 3 matches with explanations, then chat with the AI to refine or explore further.</p>
+                    <h4>Your Top 3 Matches</h4>
+                    <p>The flask mixes, the algorithm runs, and your personalized results appear &mdash; each with note breakdowns, ratings, sillage badges, and an explanation of why it matched your profile.</p>
                 </div>
             </div>
         </div>
@@ -1015,28 +1000,28 @@
             <div class="engine-grid">
                 <div class="engine-card">
                     <h4>Structured Data Pipeline</h4>
-                    <p>20,000+ perfumes catalogued with scent profiles, note breakdowns, accords, occasion tags, and price tiers. Each entry is normalized for vector comparison.</p>
+                    <p>Curated perfume database with scent profiles, note breakdowns, accords, occasion tags, sillage ratings, and price tiers &mdash; each entry normalized and structured for algorithmic matching.</p>
                 </div>
                 <div class="engine-card">
-                    <h4>Vector Similarity Search</h4>
-                    <p>Quiz answers are embedded into a preference vector. Cosine similarity ranks all perfumes against your profile, surfacing the closest matches.</p>
+                    <h4>Multi-Signal Scoring Engine</h4>
+                    <p>Every perfume is scored against your quiz answers using 8 weighted signals: accord matching from your past perfumes (+4), note overlap (+3), scent family alignment (+3), sub-note matching (+2), occasion-accord fit (+1), sillage match (+3 exact, +1 adjacent), price range (+2), and a quality rating boost (+0.5&times;). The top 3 highest-scoring perfumes become your results.</p>
                 </div>
                 <div class="engine-card">
-                    <h4>Post-Match Filtering</h4>
-                    <p>Hard filters (budget, brand preference) are applied after vector ranking to preserve serendipity while respecting constraints.</p>
+                    <h4>Smart Filtering</h4>
+                    <p>Hard filters (budget, perfumes you already own) are applied after scoring to keep recommendations surprising while respecting your constraints. The engine finds the best matches first, then trims &mdash; not the other way around.</p>
                 </div>
                 <div class="engine-card">
-                    <h4>Conversational AI Chat</h4>
-                    <p>After results, users can ask follow-up questions via a chat UI powered by Claude. The AI explains why each match fits and suggests alternatives.</p>
+                    <h4>Production Roadmap: Vector Search</h4>
+                    <p>The scoring engine is designed to scale. The next upgrade replaces keyword matching with pgvector &mdash; each perfume's notes embedded as a 384-dimensional vector, with nearest-neighbor search returning the top 20 candidates in under 100ms. Price, occasion, and sillage filters then apply as post-filters.</p>
                 </div>
             </div>
             <div class="tech-pills">
-                <span class="tech-pill">Next.js 16</span>
+                <span class="tech-pill">Next.js 16.1</span>
                 <span class="tech-pill">React 19</span>
-                <span class="tech-pill">TypeScript</span>
-                <span class="tech-pill">Tailwind v4</span>
-                <span class="tech-pill">Framer Motion</span>
-                <span class="tech-pill">Claude API</span>
+                <span class="tech-pill">TypeScript 5</span>
+                <span class="tech-pill">Tailwind CSS v4</span>
+                <span class="tech-pill">Framer Motion 12</span>
+                <span class="tech-pill">Supabase</span>
                 <span class="tech-pill">Vercel</span>
                 <span class="tech-pill">App Router</span>
             </div>
