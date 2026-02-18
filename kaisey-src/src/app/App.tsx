@@ -3,11 +3,9 @@ import { Bot, Bell, Settings, ArrowLeft } from "lucide-react";
 import { Button } from "@/app/components/ui/button";
 import { Badge } from "@/app/components/ui/badge";
 import { Toaster } from "@/app/components/ui/sonner";
-import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/app/components/ui/tabs";
 import { CommandCenter } from "@/app/components/CommandCenter";
 import { AgentSuggestion } from "@/app/components/AgentSuggestion";
 import { CalendarView } from "@/app/components/CalendarView";
-import { BrainDumpPlanner } from "@/app/components/BrainDumpPlanner";
 import { KaiseyChatbot } from "@/app/components/KaiseyChatbot";
 import { WelcomePage } from "@/app/components/WelcomePage";
 import { SettingsPage } from "@/app/components/SettingsPage";
@@ -715,30 +713,15 @@ export default function App() {
           <CommandCenter events={calendarEvents} userFocus={userFocus} userName={userProfile?.name} priority={userPriority} onPriorityChange={handlePrioritySelect} />
         </div>
 
-        {/* Brain Dump + Chat Tabs */}
-        <div className="mb-6">
-          <Tabs defaultValue="brain-dump" data-tour-id="brain-dump">
-            <TabsList className="grid w-full grid-cols-2 mb-4">
-              <TabsTrigger value="brain-dump">Brain Dump</TabsTrigger>
-              <TabsTrigger value="chat">Chat with Kaisey</TabsTrigger>
-            </TabsList>
-            <TabsContent value="brain-dump">
-              <BrainDumpPlanner
-                calendarEvents={calendarEvents}
-                onScheduleChange={handleScheduleChange}
-                onSuggestionsGenerated={handleBrainDumpSuggestions}
-                priority={userPriority}
-              />
-            </TabsContent>
-            <TabsContent value="chat">
-              <KaiseyChatbot
-                onScheduleChange={handleScheduleChange}
-                variant="widget"
-                priority={userPriority}
-                calendarEvents={calendarEvents}
-              />
-            </TabsContent>
-          </Tabs>
+        {/* Chat with Kaisey */}
+        <div className="mb-6" data-tour-id="brain-dump">
+          <KaiseyChatbot
+            onScheduleChange={handleScheduleChange}
+            onSuggestionsGenerated={handleBrainDumpSuggestions}
+            variant="widget"
+            priority={userPriority}
+            calendarEvents={calendarEvents}
+          />
         </div>
 
         {/* My Recommendations */}
