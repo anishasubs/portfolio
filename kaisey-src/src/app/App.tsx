@@ -733,7 +733,6 @@ export default function App() {
             <TabsContent value="chat">
               <KaiseyChatbot
                 onScheduleChange={handleScheduleChange}
-                onFocusChange={setUserFocus}
                 variant="widget"
                 priority={userPriority}
                 calendarEvents={calendarEvents}

@@ -59,19 +59,18 @@ interface CalendarEvent {
 
 interface KaiseyChatbotProps {
   onScheduleChange: (action: CalendarAction) => void;
-  onFocusChange?: (focus: string) => void;
   variant?: "widget" | "panel";
   priority?: PriorityMode | null;
   calendarEvents?: CalendarEvent[];
 }
 
-export function KaiseyChatbot({ onScheduleChange, onFocusChange, variant = "floating", priority, calendarEvents = [] }: KaiseyChatbotProps) {
+export function KaiseyChatbot({ onScheduleChange, variant = "floating", priority, calendarEvents = [] }: KaiseyChatbotProps) {
   const [isOpen, setIsOpen] = useState(variant === "widget");
   const [messages, setMessages] = useState<Message[]>([
     {
       id: "1",
       type: "agent",
-      content: "Hi Alex! I'm Kaisey, your personal MBA Co-Pilot. What's your priority today? I can help optimize your schedule.",
+      content: "Hi! I'm Kaisey. I can add, move, or remove events on your calendar. Try something like \"add gym tomorrow at 9am\" or \"move my meeting to 3pm.\"",
       timestamp: new Date(),
     },
   ]);
@@ -229,158 +228,7 @@ export function KaiseyChatbot({ onScheduleChange, onFocusChange, variant = "floa
       return responses;
     }
 
-    // Priority detection and schedule optimization
-    if (lowerInput.includes("priority") || lowerInput.includes("priorities") || 
-        lowerInput.includes("focus on") || lowerInput.includes("important") ||
-        lowerInput.includes("need to")) {
-      
-      let priority = "";
-      let priorityType = "";
-      let scheduleActions: CalendarAction[] = [];
-      
-      // Detect priority type
-      if (lowerInput.includes("recruit") || lowerInput.includes("career") || lowerInput.includes("job")) {
-        priority = "recruiting and career development";
-        priorityType = "recruiting";
-        
-        // Notify parent about focus change
-        if (onFocusChange) {
-          onFocusChange("Recruiting & Career Development");
-        }
-        
-        scheduleActions = [
-          {
-            type: "replace",
-            event: { title: "Gym Session", time: "13:00", duration: 45 },
-            replaceWith: { title: "Gym Session", time: "06:00", duration: 45 }
-          },
-          {
-            type: "add",
-            event: { title: "Goldman Sachs Prep", time: "11:30", duration: 30 }
-          },
-          {
-            type: "replace",
-            event: { title: "Coffee Chat: Sarah (McKinsey)", time: "10:15", duration: 45 },
-            replaceWith: { title: "Coffee Chat: Sarah (McKinsey)", time: "10:15", duration: 60 }
-          }
-        ];
-      } else if (lowerInput.includes("study") || lowerInput.includes("academic") || lowerInput.includes("exam") || lowerInput.includes("class")) {
-        priority = "academics and studying";
-        priorityType = "academics";
-        
-        // Notify parent about focus change
-        if (onFocusChange) {
-          onFocusChange("Academic Excellence");
-        }
-        
-        scheduleActions = [
-          {
-            type: "remove",
-            event: { title: "Gym Session", time: "13:00", duration: 45 }
-          },
-          {
-            type: "remove",
-            event: { title: "Coffee Chat: Sarah (McKinsey)", time: "10:15", duration: 45 }
-          },
-          {
-            type: "add",
-            event: { title: "Focused Study Block", time: "14:00", duration: 120 }
-          }
-        ];
-      } else if (lowerInput.includes("health") || lowerInput.includes("recovery") || lowerInput.includes("rest") || lowerInput.includes("well-being")) {
-        priority = "health and recovery";
-        priorityType = "health";
-        
-        // Notify parent about focus change
-        if (onFocusChange) {
-          onFocusChange("Health & Well-being");
-        }
-        
-        scheduleActions = [
-          {
-            type: "replace",
-            event: { title: "Coffee Chat: Sarah (McKinsey)", time: "10:15", duration: 45 },
-            replaceWith: { title: "Coffee Chat: Sarah (McKinsey) - Video Call", time: "10:15", duration: 45 }
-          },
-          {
-            type: "replace",
-            event: { title: "Gym Session", time: "13:00", duration: 45 },
-            replaceWith: { title: "Light Yoga & Stretching", time: "13:00", duration: 30 }
-          },
-          {
-            type: "add",
-            event: { title: "Meditation Break", time: "15:00", duration: 30 }
-          }
-        ];
-      } else if (lowerInput.includes("network") || lowerInput.includes("connection") || lowerInput.includes("relationship")) {
-        priority = "networking and building connections";
-        priorityType = "networking";
-        
-        // Notify parent about focus change
-        if (onFocusChange) {
-          onFocusChange("Professional Networking");
-        }
-        
-        scheduleActions = [
-          {
-            type: "replace",
-            event: { title: "Coffee Chat: Sarah (McKinsey)", time: "10:15", duration: 45 },
-            replaceWith: { title: "Coffee Chat: Sarah (McKinsey)", time: "10:15", duration: 60 }
-          },
-          {
-            type: "add",
-            event: { title: "Goldman Sachs Follow-up", time: "13:00", duration: 15 }
-          },
-          {
-            type: "add",
-            event: { title: "Lunch with Classmates", time: "13:30", duration: 60 }
-          }
-        ];
-      } else {
-        // Generic priority mentioned
-        priority = "your stated goals";
-        priorityType = "general";
-        scheduleActions = [
-          {
-            type: "add",
-            event: { title: "Protected Focus Time", time: "09:00", duration: 120 }
-          },
-          {
-            type: "add",
-            event: { title: "Travel Buffer", time: "11:45", duration: 15 }
-          },
-          {
-            type: "add",
-            event: { title: "Deep Work Block", time: "14:30", duration: 90 }
-          }
-        ];
-      }
-
-      responses.push({
-        id: (Date.now() + 1).toString(),
-        type: "agent",
-        content: `Got it, Alex! I understand ${priority} is your top priority today. Here are my recommended calendar changes:`,
-        timestamp: new Date(),
-      });
-
-      // Create action items for each suggested change
-      scheduleActions.forEach((calAction, index) => {
-        responses.push({
-          id: (Date.now() + 2 + index).toString(),
-          type: "action",
-          content: "", // Content will be rendered based on action type in UI
-          timestamp: new Date(),
-          action: {
-            ...calAction,
-            status: "pending",
-          },
-        });
-      });
-
-      newMemory.context.push(`Priority set: ${priority}`);
-      newMemory.preferences.push(`Prioritizes ${priority}`);
-      
-    } else if (lowerInput.includes("move") || lowerInput.includes("reschedule")) {
+    if (lowerInput.includes("move") || lowerInput.includes("reschedule")) {
       let eventToMove = "event";
       let newTime = "later";
       
@@ -423,7 +271,7 @@ export function KaiseyChatbot({ onScheduleChange, onFocusChange, variant = "floa
       responses.push({
         id: (Date.now() + 1).toString(),
         type: "agent",
-        content: "I can help you optimize your schedule! Try:\n• \"My priority today is recruiting\"\n• \"My priority is academics\"\n• \"My priority is health\"\n• \"My priority is networking\"\n\nOr ask me to move specific events!",
+        content: "I can help manage your calendar! Try:\n• \"Add gym tomorrow at 9am\"\n• \"Schedule a meeting on Friday at 2pm\"\n• \"Move my study session to 4pm\"\n• \"Remove the coffee chat\"",
         timestamp: new Date(),
       });
     }
@@ -872,7 +720,7 @@ Example: If user says "Growth Hacking Class, 6pm-9pm, every Tuesday for 4 weeks"
                   AI Active
                 </Badge>
               </h3>
-              <p className="text-xs text-muted-foreground">Tell me your priority and I'll optimize your schedule</p>
+              <p className="text-xs text-muted-foreground">Add, move, or remove events from your calendar</p>
             </div>
           </div>
         </div>
@@ -883,7 +731,7 @@ Example: If user says "Growth Hacking Class, 6pm-9pm, every Tuesday for 4 weeks"
             value={inputValue}
             onChange={(e) => setInputValue(e.target.value)}
             onKeyPress={handleKeyPress}
-            placeholder="e.g., 'Schedule time for valuation case study today'"
+            placeholder="e.g., 'Add gym tomorrow at 9am for 1 hour'"
             className="flex-1"
           />
           <Button
