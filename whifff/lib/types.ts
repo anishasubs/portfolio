@@ -1,0 +1,57 @@
+export type ScentFamily = "floral" | "sweet" | "fresh" | "warm" | "fruity" | "musky";
+export type PriceOption = "$" | "$$" | "$$$" | "all";
+export type Occasion = "everyday" | "datenight" | "work" | "special";
+export type Strength = "soft" | "moderate" | "strong";
+
+export interface Perfume {
+  id: string;
+  name: string;
+  brand: string;
+  price: number;
+  pr: PriceOption;
+  notes: string[];
+  accords: string[];
+  rating: number;
+  reviews: number;
+  review: string;
+  img: string;
+  sillage: Strength;
+}
+
+export interface ScoredPerfume extends Perfume {
+  score: number;
+}
+
+export interface QuizAnswers {
+  past: Perfume[];
+  scents: ScentFamily[];
+  price: PriceOption | null;
+  occasion: Occasion | null;
+  strength: Strength | null;
+}
+
+export interface FamilyOption {
+  id: ScentFamily;
+  label: string;
+  emoji: string;
+  desc: string;
+}
+
+export interface PriceOptionItem {
+  id: PriceOption;
+  label: string;
+  sub: string;
+}
+
+export interface OccasionOption {
+  id: Occasion;
+  label: string;
+  emoji: string;
+}
+
+export interface StrengthOption {
+  id: Strength;
+  label: string;
+  emoji: string;
+  desc: string;
+}

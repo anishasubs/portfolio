@@ -1,0 +1,6 @@
+pandas>=2.0
+thefuzz[speedup]>=0.20
+python-Levenshtein>=0.25
+supabase>=2.0
+python-dotenv>=1.0
+requests>=2.31
