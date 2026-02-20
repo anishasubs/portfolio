@@ -263,7 +263,10 @@ IMPORTANT RULES:
 5. If the user says something like "6pm - 9pm" that means 3 hours (180 minutes) duration starting at 18:00.
 6. Create ONLY ONE calendar_action with recurrence parameters, NOT multiple separate events.
 7. Once you have all the information, CREATE THE EVENT. Don't keep asking questions.
-8. When the user specifies a day (e.g. 'Thursday', 'next Monday', 'March 5th'), calculate the correct YYYY-MM-DD date and include it as event_date. If no day is specified, omit event_date (defaults to today).`
+8. When the user specifies a day (e.g. 'Thursday', 'next Monday', 'March 5th'), calculate the correct YYYY-MM-DD date and include it as event_date. If no day is specified, omit event_date (defaults to today).
+9. ALWAYS ask about duration if the user didn't specify it. NEVER silently default to 60 minutes.
+10. If the user did NOT specify a time, look at the existing calendar events and current time to find a free slot, then SUGGEST a specific time. For example: "Your afternoon is free — how about 2:00 PM? How long should I block off for gym?" Never ask a blank "what time?" — always propose a slot.
+11. When multiple pieces of info are missing (e.g. both time and duration), ask about ALL of them in ONE message. Never ask serial single-field questions.`
           },
           ...recentMessages,
           { role: 'user', content: userMessage }
