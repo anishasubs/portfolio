@@ -174,6 +174,14 @@ export function WelcomePage({ onLogin }: WelcomePageProps) {
   const [showVideo, setShowVideo] = useState(true);
   const [videoError, setVideoError] = useState(false);
   const [videoReady, setVideoReady] = useState(false);
+  const [isPortrait, setIsPortrait] = useState(window.innerWidth < 768);
+
+  useEffect(() => {
+    const mq = window.matchMedia("(max-width: 767px)");
+    const handler = (e: MediaQueryListEvent) => setIsPortrait(e.matches);
+    mq.addEventListener("change", handler);
+    return () => mq.removeEventListener("change", handler);
+  }, []);
 
   const handleSkipVideo = () => {
     setShowVideo(false);
@@ -181,9 +189,13 @@ export function WelcomePage({ onLogin }: WelcomePageProps) {
 
   // Video intro view
   if (showVideo && !videoError) {
+    const videoSrc = isPortrait
+      ? `${import.meta.env.BASE_URL}kaisey-demo-portrait.mp4`
+      : `${import.meta.env.BASE_URL}kaisey-demo.mp4`;
+
     return (
-      <div className="min-h-screen bg-gradient-to-br from-gray-950 via-gray-900 to-gray-950 flex flex-col items-center justify-center p-8">
-        <div className="w-full max-w-5xl">
+      <div className="min-h-screen bg-gradient-to-br from-gray-950 via-gray-900 to-gray-950 flex flex-col items-center justify-center p-4 md:p-8">
+        <div className={`w-full ${isPortrait ? 'max-w-sm' : 'max-w-5xl'}`}>
           {!videoReady && (
             <div className="flex flex-col items-center justify-center py-20">
               <div className="w-10 h-10 border-2 border-white/20 border-t-white/80 rounded-full animate-spin mb-4" />
@@ -191,8 +203,9 @@ export function WelcomePage({ onLogin }: WelcomePageProps) {
             </div>
           )}
           <video
+            key={videoSrc}
             ref={videoRef}
-            src={`${import.meta.env.BASE_URL}kaisey-demo.mp4`}
+            src={videoSrc}
             autoPlay
             muted
             playsInline
