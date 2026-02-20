@@ -50,21 +50,12 @@ interface CalendarEvent {
 interface ExtractedTask {
   id: string;
   title: string;
-  estimatedDuration: number | null;
+  estimatedDuration: number;
   dueDate: string | null;
   preferredTime: string | null;
   priority: "high" | "medium" | "low";
   category: "class" | "meeting" | "study" | "workout" | "networking" | "recruiting";
   priorityCategory: "Academics" | "Recruiting" | "Social" | "Wellness";
-}
-
-interface ClarificationQuestion {
-  taskId: string;
-  taskTitle: string;
-  question: string;
-  field: "estimatedDuration" | "dueDate";
-  answered: boolean;
-  answer?: string;
 }
 
 interface ProposedScheduleBlock {
@@ -86,7 +77,7 @@ interface PlannerSuggestion {
 type BrainDumpPhase =
   | "IDLE"
   | "EXTRACTING"
-  | "CLARIFY"
+  | "EDITING"
   | "PROPOSING"
   | "REVIEW_SCHEDULE"
   | "REVISING"
@@ -96,7 +87,7 @@ type BrainDumpPhase =
 
 interface Message {
   id: string;
-  type: "user" | "agent" | "action" | "task-list" | "clarification" | "schedule-proposal" | "schedule-accepted";
+  type: "user" | "agent" | "action" | "task-list" | "schedule-proposal" | "schedule-accepted";
   content: string;
   timestamp: Date;
   action?: CalendarAction & {
@@ -104,7 +95,6 @@ interface Message {
   };
   // Brain dump message data
   tasks?: ExtractedTask[];
-  clarificationQuestion?: ClarificationQuestion;
   schedule?: ProposedScheduleBlock[];
   scheduleSummary?: string;
   acceptedCount?: number;
@@ -221,8 +211,6 @@ export function KaiseyChatbot({ onScheduleChange, onSuggestionsGenerated, varian
   // Brain dump state
   const [brainDumpPhase, setBrainDumpPhase] = useState<BrainDumpPhase>("IDLE");
   const [extractedTasks, setExtractedTasks] = useState<ExtractedTask[]>([]);
-  const [clarificationQuestions, setClarificationQuestions] = useState<ClarificationQuestion[]>([]);
-  const [currentQuestionIndex, setCurrentQuestionIndex] = useState(0);
   const [proposedSchedule, setProposedSchedule] = useState<ProposedScheduleBlock[]>([]);
 
   const scrollToBottom = () => {
@@ -379,8 +367,16 @@ The user will brain dump everything they need to do. Extract ALL of them as task
 
 Rules:
 1. Extract every actionable item. Writing emails, sending messages, applying for positions, making calls are ALL schedulable tasks.
-2. For each task: set category, priorityCategory, priority, duration (null if unknown), dueDate (null if unknown), preferredTime (HH:MM 24h if user specified, else null).
-3. Generate clarification questions ONLY for tasks where duration is null.
+2. For each task: set category, priorityCategory, priority, dueDate (null if unknown), preferredTime (HH:MM 24h if user specified, else null).
+3. ALWAYS estimate a duration in minutes — never return null. Use common-sense defaults:
+   - Coffee/casual meeting: 60m
+   - Study session: 90m
+   - Email/quick task: 15m
+   - Workout/gym: 60m
+   - Class: 75m
+   - Networking event: 60m
+   - Interview prep: 60m
+   - Case study: 120m
 4. Ignore calendar management commands like "delete my events."
 
 Today: ${todayISO}
@@ -409,7 +405,7 @@ Call extract_tasks with ALL items.`,
                       type: "object",
                       properties: {
                         title: { type: "string" },
-                        estimatedDuration: { type: ["number", "null"] },
+                        estimatedDuration: { type: "number", description: "Duration in minutes, always provide a best guess" },
                         dueDate: { type: ["string", "null"] },
                         preferredTime: { type: ["string", "null"] },
                         priority: { type: "string", enum: ["high", "medium", "low"] },
@@ -419,20 +415,8 @@ Call extract_tasks with ALL items.`,
                       required: ["title", "estimatedDuration", "dueDate", "preferredTime", "priority", "priorityCategory", "category"],
                     },
                   },
-                  clarification_questions: {
-                    type: "array",
-                    items: {
-                      type: "object",
-                      properties: {
-                        task_title: { type: "string" },
-                        question: { type: "string" },
-                        field: { type: "string", enum: ["estimatedDuration", "dueDate"] },
-                      },
-                      required: ["task_title", "question", "field"],
-                    },
-                  },
                 },
-                required: ["tasks", "clarification_questions"],
+                required: ["tasks"],
               },
             },
           },
@@ -455,17 +439,12 @@ Call extract_tasks with ALL items.`,
     return JSON.parse(toolCall.function.arguments) as {
       tasks: Array<{
         title: string;
-        estimatedDuration: number | null;
+        estimatedDuration: number;
         dueDate: string | null;
         preferredTime: string | null;
         priority: "high" | "medium" | "low";
         priorityCategory: "Academics" | "Recruiting" | "Social" | "Wellness";
         category: "class" | "meeting" | "study" | "workout" | "networking" | "recruiting";
-      }>;
-      clarification_questions: Array<{
-        task_title: string;
-        question: string;
-        field: "estimatedDuration" | "dueDate";
       }>;
     };
   };
@@ -746,8 +725,6 @@ Return ONLY by calling propose_schedule.`,
   const resetBrainDump = () => {
     setBrainDumpPhase("IDLE");
     setExtractedTasks([]);
-    setClarificationQuestions([]);
-    setCurrentQuestionIndex(0);
     setProposedSchedule([]);
   };
 
@@ -762,24 +739,13 @@ Return ONLY by calling propose_schedule.`,
       const tasks: ExtractedTask[] = (result.tasks || []).map((t, i) => ({
         id: `task-${i}`,
         title: t.title,
-        estimatedDuration: t.estimatedDuration,
+        estimatedDuration: t.estimatedDuration || 30,
         dueDate: t.preferredTime ? (t.dueDate || todayISO) : t.dueDate,
         preferredTime: t.preferredTime || null,
         priority: t.priority || "medium",
         priorityCategory: (t.priorityCategory && PRIORITY_CONFIG[t.priorityCategory]) ? t.priorityCategory : "Academics",
         category: t.category || "study",
       }));
-
-      const questions: ClarificationQuestion[] = (result.clarification_questions || []).map((q, i) => {
-        const matchingTask = tasks.find((t) => t.title === q.task_title);
-        return {
-          taskId: matchingTask?.id || `task-${i}`,
-          taskTitle: q.task_title,
-          question: q.question,
-          field: q.field,
-          answered: false,
-        };
-      });
 
       if (tasks.length === 0) {
         setIsTyping(false);
@@ -794,40 +760,17 @@ Return ONLY by calling propose_schedule.`,
       }
 
       setExtractedTasks(tasks);
-      setClarificationQuestions(questions);
-      setCurrentQuestionIndex(0);
       setIsTyping(false);
+      setBrainDumpPhase("EDITING");
 
-      // Add task list message
+      // Add task list message (editable cards)
       setMessages(prev => [...prev, {
         id: (Date.now() + 1).toString(),
         type: "task-list",
-        content: `I found ${tasks.length} tasks in your brain dump:`,
+        content: `I found ${tasks.length} tasks — adjust durations and times, then hit Schedule All:`,
         timestamp: new Date(),
         tasks,
       }]);
-
-      if (questions.length === 0) {
-        // Skip clarifications, go straight to scheduling
-        setBrainDumpPhase("PROPOSING");
-        setMessages(prev => [...prev, {
-          id: (Date.now() + 2).toString(),
-          type: "agent",
-          content: "All tasks have complete info. Building your optimized schedule...",
-          timestamp: new Date(),
-        }]);
-        await proposeScheduleFromTasks(tasks);
-      } else {
-        setBrainDumpPhase("CLARIFY");
-        // Add first clarification question
-        setMessages(prev => [...prev, {
-          id: (Date.now() + 2).toString(),
-          type: "clarification",
-          content: "",
-          timestamp: new Date(),
-          clarificationQuestion: questions[0],
-        }]);
-      }
     } catch (err) {
       setIsTyping(false);
       setBrainDumpPhase("IDLE");
@@ -840,59 +783,37 @@ Return ONLY by calling propose_schedule.`,
     }
   };
 
-  const handleClarificationInChat = (answer: string) => {
-    const currentQ = clarificationQuestions[currentQuestionIndex];
-    if (!currentQ) return;
+  const handleScheduleAll = async () => {
+    setBrainDumpPhase("PROPOSING");
+    setMessages(prev => [...prev, {
+      id: Date.now().toString(),
+      type: "agent",
+      content: "Building your optimized schedule...",
+      timestamp: new Date(),
+    }]);
+    await proposeScheduleFromTasks(extractedTasks);
+  };
 
-    const updatedQuestions = [...clarificationQuestions];
-    updatedQuestions[currentQuestionIndex] = { ...currentQ, answered: true, answer };
+  const handleTaskDurationChange = (taskId: string, duration: number) => {
+    setExtractedTasks(prev => prev.map(t => t.id === taskId ? { ...t, estimatedDuration: duration } : t));
+  };
 
-    const updatedTasks = extractedTasks.map((task) => {
-      if (task.id === currentQ.taskId) {
-        if (currentQ.field === "estimatedDuration") {
-          const minutes = parseInt(answer);
-          return { ...task, estimatedDuration: isNaN(minutes) ? 60 : minutes };
-        } else if (currentQ.field === "dueDate") {
-          return { ...task, dueDate: answer };
-        }
-      }
-      return task;
-    });
+  const handleTaskTimePreferenceChange = (taskId: string, pref: "Morning" | "Afternoon" | "Evening" | "Flexible") => {
+    const timeMap: Record<string, string | null> = {
+      Morning: "09:00",
+      Afternoon: "13:00",
+      Evening: "18:00",
+      Flexible: null,
+    };
+    setExtractedTasks(prev => prev.map(t => t.id === taskId ? { ...t, preferredTime: timeMap[pref] } : t));
+  };
 
-    setClarificationQuestions(updatedQuestions);
-    setExtractedTasks(updatedTasks);
-
-    // Mark the current question message as answered
-    setMessages(prev => prev.map(msg => {
-      if (msg.type === "clarification" && msg.clarificationQuestion?.taskId === currentQ.taskId && msg.clarificationQuestion?.field === currentQ.field) {
-        return { ...msg, clarificationQuestion: { ...msg.clarificationQuestion, answered: true, answer } };
-      }
-      return msg;
-    }));
-
-    const nextIndex = currentQuestionIndex + 1;
-    if (nextIndex >= clarificationQuestions.length) {
-      // All answered, move to proposing
-      setCurrentQuestionIndex(nextIndex);
-      setBrainDumpPhase("PROPOSING");
-      setMessages(prev => [...prev, {
-        id: Date.now().toString(),
-        type: "agent",
-        content: "Got it! Building your optimized schedule...",
-        timestamp: new Date(),
-      }]);
-      proposeScheduleFromTasks(updatedTasks);
-    } else {
-      setCurrentQuestionIndex(nextIndex);
-      // Add next question
-      setMessages(prev => [...prev, {
-        id: Date.now().toString(),
-        type: "clarification",
-        content: "",
-        timestamp: new Date(),
-        clarificationQuestion: updatedQuestions[nextIndex],
-      }]);
-    }
+  const getTimePreferenceLabel = (preferredTime: string | null): string => {
+    if (!preferredTime) return "Flexible";
+    const hour = parseInt(preferredTime.split(":")[0]);
+    if (hour < 12) return "Morning";
+    if (hour < 17) return "Afternoon";
+    return "Evening";
   };
 
   const proposeScheduleFromTasks = async (tasks: ExtractedTask[]) => {
@@ -936,7 +857,7 @@ Return ONLY by calling propose_schedule.`,
       }
     } catch (err) {
       setIsTyping(false);
-      setBrainDumpPhase("CLARIFY");
+      setBrainDumpPhase("EDITING");
       setMessages(prev => [...prev, {
         id: Date.now().toString(),
         type: "agent",
@@ -1055,11 +976,6 @@ Return ONLY by calling propose_schedule.`,
     setMessages(prev => [...prev, userMsg]);
 
     // Route by brain dump phase
-    if (brainDumpPhase === "CLARIFY") {
-      handleClarificationInChat(userMessage);
-      return;
-    }
-
     if (brainDumpPhase === "REVIEW_SCHEDULE") {
       handleRevisionInChat(userMessage);
       return;
@@ -1071,6 +987,17 @@ Return ONLY by calling propose_schedule.`,
         id: (Date.now() + 1).toString(),
         type: "agent",
         content: "I'm still working on your schedule. Please wait a moment...",
+        timestamp: new Date(),
+      }]);
+      return;
+    }
+
+    // EDITING phase — user should use the cards UI
+    if (brainDumpPhase === "EDITING") {
+      setMessages(prev => [...prev, {
+        id: (Date.now() + 1).toString(),
+        type: "agent",
+        content: "Adjust your tasks using the cards above, then click **Schedule All** when ready.",
         timestamp: new Date(),
       }]);
       return;
@@ -1171,10 +1098,8 @@ Return ONLY by calling propose_schedule.`,
 
   const getPlaceholder = (): string => {
     switch (brainDumpPhase) {
-      case "CLARIFY": {
-        const q = clarificationQuestions[currentQuestionIndex];
-        return q?.field === "estimatedDuration" ? "e.g., 90 (minutes)" : "e.g., 2026-02-20";
-      }
+      case "EDITING":
+        return "Adjust tasks above, then click Schedule All";
       case "REVIEW_SCHEDULE":
         return "Type revision or click Accept...";
       case "EXTRACTING":
@@ -1186,7 +1111,7 @@ Return ONLY by calling propose_schedule.`,
     }
   };
 
-  const isInputDisabled = brainDumpPhase === "EXTRACTING" || brainDumpPhase === "PROPOSING" || brainDumpPhase === "REVISING";
+  const isInputDisabled = brainDumpPhase === "EXTRACTING" || brainDumpPhase === "PROPOSING" || brainDumpPhase === "REVISING" || brainDumpPhase === "EDITING";
 
   // --- Message Renderers ---
 
@@ -1281,56 +1206,115 @@ Return ONLY by calling propose_schedule.`,
     );
   };
 
+  const durationOptions = [
+    { label: "15m", value: 15 },
+    { label: "30m", value: 30 },
+    { label: "1h", value: 60 },
+    { label: "1.5h", value: 90 },
+    { label: "2h", value: 120 },
+    { label: "3h", value: 180 },
+  ];
+
+  const timePreferenceOptions: Array<{ label: string; value: "Morning" | "Afternoon" | "Evening" | "Flexible" }> = [
+    { label: "Morning", value: "Morning" },
+    { label: "Afternoon", value: "Afternoon" },
+    { label: "Evening", value: "Evening" },
+    { label: "Flexible", value: "Flexible" },
+  ];
+
   const renderTaskListMessage = (message: Message) => {
     if (!message.tasks) return null;
+    const isEditable = brainDumpPhase === "EDITING";
+
     return (
       <div className="flex gap-2">
-        <div className="w-6 h-6 rounded-full bg-purple-500 flex items-center justify-center shrink-0">
+        <div className="w-6 h-6 rounded-full bg-purple-500 flex items-center justify-center shrink-0 mt-0.5">
           <ListTodo className="w-3 h-3 text-white" />
         </div>
-        <div className="max-w-[85%] flex-1">
+        <div className="max-w-[90%] flex-1">
           <div className="rounded-lg bg-muted p-3">
-            <p className="text-xs font-semibold mb-2">{message.content}</p>
-            <div className="space-y-1.5">
-              {message.tasks.map((task) => (
-                <div key={task.id} className="flex items-center gap-2 text-xs bg-background rounded p-2">
-                  <div className={`w-2 h-2 rounded-full shrink-0 ${categoryColors[task.category] || "bg-gray-400"}`} />
-                  <span className="flex-1 truncate">{task.title}</span>
-                  <Badge className={`text-[9px] px-1.5 py-0 ${PRIORITY_CONFIG[task.priorityCategory]?.bgColor || ""} ${PRIORITY_CONFIG[task.priorityCategory]?.textColor || ""} border ${PRIORITY_CONFIG[task.priorityCategory]?.borderColor || ""}`}>
-                    {task.priorityCategory}
-                  </Badge>
-                  <Badge className={`text-[9px] px-1.5 py-0 ${priorityColors[task.priority]}`}>
-                    {task.priority}
-                  </Badge>
-                  {task.estimatedDuration && (
-                    <span className="text-muted-foreground text-[10px]">{formatDuration(task.estimatedDuration)}</span>
+            <p className="text-xs font-semibold mb-3">{message.content}</p>
+            <div className="space-y-3">
+              {(isEditable ? extractedTasks : message.tasks).map((task) => (
+                <div key={task.id} className="bg-background rounded-lg p-3 border border-border/50">
+                  {/* Header row: title + badges */}
+                  <div className="flex items-center gap-2 mb-2">
+                    <div className={`w-2 h-2 rounded-full shrink-0 ${categoryColors[task.category] || "bg-gray-400"}`} />
+                    <span className="text-xs font-medium flex-1">{task.title}</span>
+                    <Badge className={`text-[9px] px-1.5 py-0 ${PRIORITY_CONFIG[task.priorityCategory]?.bgColor || ""} ${PRIORITY_CONFIG[task.priorityCategory]?.textColor || ""} border ${PRIORITY_CONFIG[task.priorityCategory]?.borderColor || ""}`}>
+                      {task.priorityCategory}
+                    </Badge>
+                    <Badge className={`text-[9px] px-1.5 py-0 ${priorityColors[task.priority]}`}>
+                      {task.priority}
+                    </Badge>
+                  </div>
+
+                  {isEditable ? (
+                    <>
+                      {/* Duration chips */}
+                      <div className="mb-1.5">
+                        <span className="text-[10px] text-muted-foreground font-medium">Duration</span>
+                        <div className="flex flex-wrap gap-1 mt-1">
+                          {durationOptions.map((opt) => (
+                            <button
+                              key={opt.value}
+                              onClick={() => handleTaskDurationChange(task.id, opt.value)}
+                              className={`px-2 py-0.5 rounded-full text-[10px] font-medium transition-colors ${
+                                task.estimatedDuration === opt.value
+                                  ? "bg-blue-500 text-white"
+                                  : "bg-muted-foreground/10 text-muted-foreground hover:bg-muted-foreground/20"
+                              }`}
+                            >
+                              {opt.label}
+                            </button>
+                          ))}
+                        </div>
+                      </div>
+
+                      {/* Time preference chips */}
+                      <div>
+                        <span className="text-[10px] text-muted-foreground font-medium">Time</span>
+                        <div className="flex flex-wrap gap-1 mt-1">
+                          {timePreferenceOptions.map((opt) => (
+                            <button
+                              key={opt.value}
+                              onClick={() => handleTaskTimePreferenceChange(task.id, opt.value)}
+                              className={`px-2 py-0.5 rounded-full text-[10px] font-medium transition-colors ${
+                                getTimePreferenceLabel(task.preferredTime) === opt.value
+                                  ? "bg-purple-500 text-white"
+                                  : "bg-muted-foreground/10 text-muted-foreground hover:bg-muted-foreground/20"
+                              }`}
+                            >
+                              {opt.label}
+                            </button>
+                          ))}
+                        </div>
+                      </div>
+                    </>
+                  ) : (
+                    <div className="flex items-center gap-2 text-[10px] text-muted-foreground">
+                      <Clock className="w-3 h-3" />
+                      <span>{formatDuration(task.estimatedDuration)}</span>
+                      {task.preferredTime && (
+                        <>
+                          <span>&bull;</span>
+                          <span>{getTimePreferenceLabel(task.preferredTime)}</span>
+                        </>
+                      )}
+                    </div>
                   )}
                 </div>
               ))}
             </div>
-          </div>
-        </div>
-      </div>
-    );
-  };
 
-  const renderClarificationMessage = (message: Message) => {
-    const q = message.clarificationQuestion;
-    if (!q) return null;
-    return (
-      <div className="flex gap-2">
-        <div className="w-6 h-6 rounded-full bg-gradient-to-br from-blue-500 to-purple-500 flex items-center justify-center shrink-0">
-          <Bot className="w-3 h-3 text-white" />
-        </div>
-        <div className="max-w-[80%]">
-          <div className={`rounded-lg p-3 ${q.answered ? "bg-muted/50" : "bg-amber-500/5 border border-amber-500/20"}`}>
-            <p className="text-xs font-semibold mb-1">{q.taskTitle}</p>
-            <p className="text-xs text-muted-foreground">{q.question}</p>
-            {q.answered && q.answer && (
-              <div className="flex items-center gap-1 mt-2 text-xs text-green-600">
-                <Check className="w-3 h-3" />
-                <span>{q.answer}</span>
-              </div>
+            {isEditable && (
+              <Button
+                size="sm"
+                onClick={handleScheduleAll}
+                className="w-full mt-3 bg-gradient-to-r from-green-600 to-emerald-600 hover:from-green-700 hover:to-emerald-700 h-8 text-xs font-semibold"
+              >
+                <CalendarPlus className="w-3.5 h-3.5 mr-1.5" /> Schedule All
+              </Button>
             )}
           </div>
         </div>
@@ -1495,8 +1479,6 @@ Return ONLY by calling propose_schedule.`,
                       renderActionMessage(message)
                     ) : message.type === "task-list" ? (
                       renderTaskListMessage(message)
-                    ) : message.type === "clarification" ? (
-                      renderClarificationMessage(message)
                     ) : message.type === "schedule-proposal" ? (
                       renderScheduleProposalMessage(message)
                     ) : message.type === "schedule-accepted" ? (
