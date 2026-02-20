@@ -1,7 +1,7 @@
 @import "tailwindcss";
 
 @theme inline {
-  --font-caprasimo: var(--font-caprasimo-var);
+  --font-shrikhand: var(--font-shrikhand-var);
   --font-pacifico: var(--font-pacifico-var);
   --font-nunito: var(--font-nunito-var);
   --font-playfair: var(--font-playfair-var);
@@ -46,6 +46,16 @@
 @keyframes twinkle {
   0%, 100% { opacity: 0.3; transform: scale(0.8); }
   50% { opacity: 1; transform: scale(1.1); }
+}
+
+@keyframes clouds {
+  0% { background-position: 0% 50%; }
+  50% { background-position: 100% 50%; }
+  100% { background-position: 0% 50%; }
+}
+
+.animate-clouds {
+  animation: clouds 60s ease-in-out infinite;
 }
 
 /* Utility animation classes */
@@ -125,8 +135,8 @@
 }
 
 /* Font family utilities */
-.font-caprasimo {
-  font-family: var(--font-caprasimo-var), cursive;
+.font-shrikhand {
+  font-family: var(--font-shrikhand-var), cursive;
 }
 
 .font-pacifico {

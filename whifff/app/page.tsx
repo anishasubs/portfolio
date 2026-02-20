@@ -1,9 +1,9 @@
 "use client";
 
+import { useState, useEffect } from "react";
 import { MSGS } from "@/lib/constants";
 import { useTypewriter } from "@/hooks/useTypewriter";
 import { useQuizState } from "@/hooks/useQuizState";
-import CloudBackground from "@/components/CloudBackground";
 import WhifffLogo from "@/components/WhifffLogo";
 import ProgressBar from "@/components/ProgressBar";
 import ChatBubble from "@/components/ChatBubble";
@@ -14,22 +14,57 @@ import OccasionGrid from "@/components/OccasionGrid";
 import StrengthPicker from "@/components/StrengthPicker";
 import MixingAnimation from "@/components/MixingAnimation";
 import ResultCard from "@/components/ResultCard";
+import BottleSpritz from "@/components/BottleSpritz";
 
 export default function Home() {
   const quiz = useQuizState();
   const [typed, done] = useTypewriter(MSGS[quiz.step] || "");
+  const [loading, setLoading] = useState(true);
+
+  // Simple timer: show splash for 3.2s (matches animation length)
+  useEffect(() => {
+    const t = setTimeout(() => setLoading(false), 3200);
+    return () => clearTimeout(t);
+  }, []);
+
+  // Loading splash — bottle spritz plays once, then reveals the quiz
+  if (loading) {
+    return (
+      <div
+        className="min-h-screen font-nunito flex flex-col items-center justify-center"
+        style={{
+          backgroundImage: "url('/clouds-bg.jpg')",
+          backgroundSize: "cover",
+          backgroundPosition: "center 40%",
+          backgroundColor: "#8FC5E8",
+        }}
+      >
+        <div className="animate-fadeUp text-center">
+          <BottleSpritz size="hero" />
+          <h1
+            className="font-shrikhand text-[clamp(56px,14vw,80px)] text-[#D4191A] m-0 leading-none tracking-tight -mt-4"
+            style={{ WebkitTextStroke: "1px black", textShadow: "0 4px 20px rgba(0,0,0,0.15)" }}
+          >
+            whifff
+          </h1>
+          <p className="font-pacifico text-[clamp(14px,3.5vw,18px)] text-white mt-1.5 opacity-85 [text-shadow:0_2px_10px_rgba(0,40,80,0.1)]">
+            your next favorite scent is one quiz away
+          </p>
+        </div>
+      </div>
+    );
+  }
 
   return (
     <div
       className="min-h-screen font-nunito relative overflow-hidden"
       style={{
-        background: "linear-gradient(180deg, #3A7CB8 0%, #4A90C4 20%, #6AADDA 45%, #8FC5E8 65%, #B8DCF2 82%, #DCF0FF 100%)",
+        backgroundImage: "url('/clouds-bg.jpg')",
+        backgroundSize: "cover",
+        backgroundPosition: "center 40%",
+        backgroundColor: "#8FC5E8",
       }}
     >
-      {/* Floating clouds */}
-      <CloudBackground className="fixed top-[6%] -left-[4%] w-60 animate-float pointer-events-none" />
-      <CloudBackground className="fixed top-[32%] -right-[6%] w-[200px] animate-float [animation-duration:8s] [animation-delay:1s] pointer-events-none" />
-      <CloudBackground className="fixed bottom-[12%] left-[3%] w-[170px] animate-float [animation-duration:7s] [animation-delay:2s] pointer-events-none" />
 
       {/* Logo */}
       <WhifffLogo />

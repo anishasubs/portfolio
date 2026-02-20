@@ -1,11 +1,11 @@
 import type { Metadata } from "next";
-import { Caprasimo, Pacifico, Nunito, Playfair_Display } from "next/font/google";
+import { Shrikhand, Pacifico, Nunito, Playfair_Display } from "next/font/google";
 import "./globals.css";
 
-const caprasimo = Caprasimo({
+const shrikhand = Shrikhand({
   weight: "400",
   subsets: ["latin"],
-  variable: "--font-caprasimo-var",
+  variable: "--font-shrikhand-var",
   display: "swap",
 });
 
@@ -40,7 +40,7 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en">
-      <body className={`${caprasimo.variable} ${pacifico.variable} ${nunito.variable} ${playfair.variable} antialiased`}>
+      <body className={`${shrikhand.variable} ${pacifico.variable} ${nunito.variable} ${playfair.variable} antialiased`}>
         {children}
       </body>
     </html>
