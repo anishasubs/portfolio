@@ -367,18 +367,6 @@ export default function App() {
       });
     });
 
-    // Check for empty evening if busy morning
-    const currentTime = `${String(new Date().getHours()).padStart(2, '0')}:${String(new Date().getMinutes()).padStart(2, '0')}`;
-    const upcomingEvents = todayEvents.filter(e => e.time > currentTime);
-    if (upcomingEvents.length === 0 && todayEvents.length > 0) {
-      newSuggestions.push({
-        id: `sched-done`,
-        type: "success",
-        title: "All Events Complete",
-        description: "You've finished all your scheduled events for today. Great work! Consider using the Brain Dump Planner if you have more tasks to tackle.",
-      });
-    }
-
     // Only update if we have new schedule suggestions (preserve brain-dump ones)
     setSuggestions(prev => {
       const brainDumpSuggestions = prev.filter(s => s.id.startsWith('bd-'));
@@ -536,13 +524,28 @@ export default function App() {
     };
 
     if (calendarAction.type === "add") {
+      const eventDate = calendarAction.event.date || today;
+      const eventTitle = calendarAction.event.title.toLowerCase();
+      const eventTime = calendarAction.event.time;
+
+      // Skip if a matching event already exists (same title + date + time)
+      const isDuplicate = calendarEvents.some(e =>
+        e.title.toLowerCase() === eventTitle &&
+        e.date === eventDate &&
+        e.time === eventTime
+      );
+      if (isDuplicate) {
+        console.log("Skipping duplicate event:", calendarAction.event.title);
+        return;
+      }
+
       const tempId = `local-${Date.now()}`;
       const { type, color } = getEventTypeAndColor(calendarAction.event.title);
       const newEvent: CalendarEvent = {
         id: tempId,
         title: calendarAction.event.title,
         time: calendarAction.event.time,
-        date: calendarAction.event.date || today,
+        date: eventDate,
         duration: calendarAction.event.duration,
         type,
         color,
