@@ -163,9 +163,9 @@ function detectIntent(text: string): "braindump" | "quick" {
     return "braindump";
   }
 
-  // 3+ clauses — split on sentence-enders AND commas (people list tasks with commas)
+  // 2+ clauses — split on sentence-enders AND commas (people list tasks with commas)
   const clauses = trimmed.split(/[.!?\n,]+/).filter(s => s.trim().length > 5);
-  if (clauses.length >= 3) return "braindump";
+  if (clauses.length >= 2) return "braindump";
 
   // 2+ distinct "I have to" / "I need to" / "I want to" / "I gotta" phrases = multiple tasks
   const taskPhrases = lower.match(/\b(i have to|i need to|i want to|i gotta|i should|i must|have to|need to|gotta)\b/g);
