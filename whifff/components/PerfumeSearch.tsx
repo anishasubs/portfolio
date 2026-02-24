@@ -12,6 +12,7 @@ export default function PerfumeSearch({ onSelect, selected }: PerfumeSearchProps
   const [q, setQ] = useState("");
   const [focused, setFocused] = useState(false);
   const [results, setResults] = useState<Perfume[]>([]);
+  const [searching, setSearching] = useState(false);
   const inputRef = useRef<HTMLInputElement>(null);
   const debounceRef = useRef<ReturnType<typeof setTimeout>>(null);
   const abortRef = useRef<AbortController | null>(null);
@@ -19,9 +20,11 @@ export default function PerfumeSearch({ onSelect, selected }: PerfumeSearchProps
   useEffect(() => {
     if (q.length < 2) {
       setResults([]);
+      setSearching(false);
       return;
     }
 
+    setSearching(true);
     if (debounceRef.current) clearTimeout(debounceRef.current);
     debounceRef.current = setTimeout(async () => {
       abortRef.current?.abort();
@@ -33,6 +36,7 @@ export default function PerfumeSearch({ onSelect, selected }: PerfumeSearchProps
         });
         const data: Perfume[] = await res.json();
         setResults(data.filter((p) => !selected.some((s) => s.id === p.id)));
+        setSearching(false);
       } catch {
         // aborted — ignore
       }
@@ -94,7 +98,7 @@ export default function PerfumeSearch({ onSelect, selected }: PerfumeSearchProps
         </div>
       )}
 
-      {q.length >= 3 && results.length === 0 && focused && (
+      {q.length >= 3 && results.length === 0 && !searching && focused && (
         <div className="absolute top-full left-0 right-0 bg-white rounded-2xl mt-1.5 py-3.5 px-4 shadow-[0_12px_40px_rgba(0,40,80,0.15)] z-10">
           <p className="text-xs text-[#6B8CAE] m-0 text-center">hmm, don&apos;t have that one yet &mdash; try another!</p>
         </div>

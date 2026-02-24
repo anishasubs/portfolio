@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useEffect } from "react";
+import { useState } from "react";
 import { MSGS } from "@/lib/constants";
 import { useTypewriter } from "@/hooks/useTypewriter";
 import { useQuizState } from "@/hooks/useQuizState";
@@ -21,13 +21,7 @@ export default function Home() {
   const [typed, done] = useTypewriter(MSGS[quiz.step] || "");
   const [loading, setLoading] = useState(true);
 
-  // Simple timer: show splash for 3.2s (matches animation length)
-  useEffect(() => {
-    const t = setTimeout(() => setLoading(false), 3200);
-    return () => clearTimeout(t);
-  }, []);
-
-  // Loading splash — bottle spritz plays once, then reveals the quiz
+  // Splash screen — bottle animation plays once with staggered text reveal
   if (loading) {
     return (
       <div
@@ -39,18 +33,16 @@ export default function Home() {
           backgroundColor: "#8FC5E8",
         }}
       >
-        <div className="animate-fadeUp text-center">
-          <BottleSpritz size="hero" />
-          <h1
-            className="font-shrikhand text-[clamp(56px,14vw,80px)] text-[#D4191A] m-0 leading-none tracking-tight -mt-4"
-            style={{ WebkitTextStroke: "1px black", textShadow: "0 4px 20px rgba(0,0,0,0.15)" }}
-          >
-            whifff
-          </h1>
-          <p className="font-pacifico text-[clamp(14px,3.5vw,18px)] text-white mt-1.5 opacity-85 [text-shadow:0_2px_10px_rgba(0,40,80,0.1)]">
-            your next favorite scent is one quiz away
-          </p>
-        </div>
+        <BottleSpritz size="splash" onAnimationEnd={() => setLoading(false)} />
+        <h1
+          className="font-shrikhand text-[clamp(56px,14vw,80px)] text-[#D4191A] m-0 leading-none tracking-tight -mt-4 opacity-0 animate-[fadeUp_0.6s_ease-out_0.8s_forwards]"
+          style={{ WebkitTextStroke: "1px black", textShadow: "0 4px 20px rgba(0,0,0,0.15)" }}
+        >
+          whifff
+        </h1>
+        <p className="font-playfair text-[clamp(14px,3.5vw,18px)] text-white mt-1.5 opacity-0 animate-[fadeUp_0.6s_ease-out_1.4s_forwards] [text-shadow:0_2px_10px_rgba(0,40,80,0.1)]">
+          your next favorite scent is one quiz away
+        </p>
       </div>
     );
   }

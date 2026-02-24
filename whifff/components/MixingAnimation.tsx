@@ -27,16 +27,16 @@ export default function MixingAnimation({ phase, notes }: MixingAnimationProps) 
 
       {/* Bottle animation */}
       <div className="relative">
-        <BottleSpritz size="hero" loop />
+        <BottleSpritz size="splash" loop />
 
         {/* Sparkles when ready */}
         {phase >= 3 &&
           [
-            { x: 20, y: 60 },
-            { x: 240, y: 70 },
-            { x: 35, y: 140 },
-            { x: 230, y: 145 },
-            { x: 130, y: 30 },
+            { x: 20, y: 70 },
+            { x: 290, y: 80 },
+            { x: 40, y: 170 },
+            { x: 280, y: 175 },
+            { x: 160, y: 35 },
           ].map((s, i) => (
             <div key={i} className="absolute animate-sparkle" style={{ left: s.x, top: s.y, animationDelay: `${i * 0.15}s` }}>
               <Sparkle size={10} />

@@ -105,7 +105,7 @@ function PerfumeCloud({ progress }: { progress: number }) {
 }
 
 interface BottleSpritzProps {
-  size?: "hero" | "loading";
+  size?: "splash" | "hero" | "loading";
   loop?: boolean;
   onAnimationEnd?: () => void;
 }
@@ -150,7 +150,9 @@ export default function BottleSpritz({ size = "hero", loop = false, onAnimationE
 
   const floatY = Math.sin(frame * 0.06) * 2.5;
 
-  const dims = size === "hero"
+  const dims = size === "splash"
+    ? { w: 340, h: 240, className: "mx-auto w-[340px] h-[240px]" }
+    : size === "hero"
     ? { w: 280, h: 200, className: "mx-auto w-[280px] h-[200px]" }
     : { w: 160, h: 120, className: "mx-auto w-[160px] h-[120px]" };
 
