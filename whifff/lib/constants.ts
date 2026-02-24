@@ -37,7 +37,7 @@ export const OCC_MAP: Record<Occasion, string[]> = {
 };
 
 export const MSGS = [
-  "first things first \u2014 do you have any scents you already love? search below or skip if you're starting fresh",
+  "first things first \u2014 pick up to 2 scents you already love so i can learn your vibe, or skip if you're starting fresh",
   "okay now tell me \u2014 what kind of scents make you feel something? pick as many as you want",
   "what are we working with budget-wise?",
   "and where are you wearing this?",

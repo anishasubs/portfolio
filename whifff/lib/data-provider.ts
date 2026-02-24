@@ -50,7 +50,6 @@ let provider: DataProvider | null = null;
 export function getDataProvider(): DataProvider {
   if (!provider) {
     if (isSupabaseConfigured()) {
-      // Dynamic import avoids pulling Supabase client when not configured
       // eslint-disable-next-line @typescript-eslint/no-require-imports
       const { SupabaseDataProvider } = require("./supabase-data-provider");
       provider = new SupabaseDataProvider() as DataProvider;

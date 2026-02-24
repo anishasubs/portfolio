@@ -41,7 +41,6 @@ export default function ResultCard({ p, i }: ResultCardProps) {
             <Stars rating={p.rating} />
             <SillageBadge level={p.sillage} />
           </div>
-          <div className="text-[10px] text-[#6B8CAE] mt-0.5">{p.reviews.toLocaleString()} reviews</div>
           <div className="text-lg font-black text-[#4A8EC2] mt-1">${p.price}</div>
         </div>
       </div>
@@ -54,6 +53,13 @@ export default function ResultCard({ p, i }: ResultCardProps) {
           </span>
         ))}
       </div>
+
+      {/* Match reasons */}
+      {p.reasons.length > 0 && (
+        <p className="mt-2.5 text-[11px] italic text-[#7A9BB5] leading-[1.5]">
+          {p.reasons.slice(0, 2).join(" \u00B7 ")}
+        </p>
+      )}
 
     </div>
   );

@@ -14,6 +14,7 @@ export default function PerfumeSearch({ onSelect, selected }: PerfumeSearchProps
   const [results, setResults] = useState<Perfume[]>([]);
   const inputRef = useRef<HTMLInputElement>(null);
   const debounceRef = useRef<ReturnType<typeof setTimeout>>(null);
+  const abortRef = useRef<AbortController | null>(null);
 
   useEffect(() => {
     if (q.length < 2) {
@@ -23,10 +24,19 @@ export default function PerfumeSearch({ onSelect, selected }: PerfumeSearchProps
 
     if (debounceRef.current) clearTimeout(debounceRef.current);
     debounceRef.current = setTimeout(async () => {
-      const res = await fetch(`/api/perfumes/search?q=${encodeURIComponent(q)}&limit=5`);
-      const data: Perfume[] = await res.json();
-      setResults(data.filter((p) => !selected.some((s) => s.id === p.id)));
-    }, 150);
+      abortRef.current?.abort();
+      const controller = new AbortController();
+      abortRef.current = controller;
+      try {
+        const res = await fetch(`/api/perfumes/search?q=${encodeURIComponent(q)}&limit=5`, {
+          signal: controller.signal,
+        });
+        const data: Perfume[] = await res.json();
+        setResults(data.filter((p) => !selected.some((s) => s.id === p.id)));
+      } catch {
+        // aborted — ignore
+      }
+    }, 350);
 
     return () => {
       if (debounceRef.current) clearTimeout(debounceRef.current);

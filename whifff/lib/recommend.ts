@@ -15,17 +15,32 @@ export function scoreAndRank({ db, past, scents, price, occasion, strength }: Re
     .filter((p) => !past.some((pp) => pp.id === p.id))
     .map((p) => {
       let s = 0;
+      let pastReason = "";
+      let familyReason = "";
 
       // Match against past perfume notes/accords
       if (past.length > 0) {
         const userNotes = past.flatMap((pp) => pp.notes);
         const userAccords = past.flatMap((pp) => pp.accords);
+        const matchedNotes: string[] = [];
+        const matchedAccords: string[] = [];
         p.notes.forEach((n) => {
-          if (userNotes.some((x) => x.toLowerCase().includes(n.toLowerCase()) || n.toLowerCase().includes(x.toLowerCase()))) s += 3;
+          if (userNotes.some((x) => x.toLowerCase().includes(n.toLowerCase()) || n.toLowerCase().includes(x.toLowerCase()))) {
+            s += 3;
+            matchedNotes.push(n.toLowerCase());
+          }
         });
         p.accords.forEach((a) => {
-          if (userAccords.some((x) => x.toLowerCase().includes(a.toLowerCase()))) s += 4;
+          if (userAccords.some((x) => x.toLowerCase().includes(a.toLowerCase()))) {
+            s += 4;
+            matchedAccords.push(a.toLowerCase());
+          }
         });
+        const sharedTerms = [...matchedNotes, ...matchedAccords].slice(0, 3);
+        if (sharedTerms.length > 0) {
+          const source = past.length === 1 ? past[0].name : "your favorites";
+          pastReason = `shares ${sharedTerms.join(", ")} with ${source}`;
+        }
       }
 
       // Match against selected scent families
@@ -38,6 +53,25 @@ export function scoreAndRank({ db, past, scents, price, occasion, strength }: Re
           });
         }
       });
+      if (scents.length > 0) {
+        const matchedFamilies = scents.filter((sc) =>
+          p.accords.some((a) => a.toLowerCase().includes(sc))
+        );
+        if (matchedFamilies.length > 0) {
+          const label = FAMILIES.find((f) => f.id === matchedFamilies[0])?.label ?? matchedFamilies[0];
+          familyReason = `matches your ${label.toLowerCase()} vibe`;
+        }
+      }
+
+      // Combine past perfume + family reasons into one cohesive sentence
+      const reasons: string[] = [];
+      if (pastReason && familyReason) {
+        reasons.push(`${pastReason} and ${familyReason}`);
+      } else if (pastReason) {
+        reasons.push(pastReason);
+      } else if (familyReason) {
+        reasons.push(familyReason);
+      }
 
       // Occasion accord match
       if (occasion && OCC_MAP[occasion]) {
@@ -47,16 +81,28 @@ export function scoreAndRank({ db, past, scents, price, occasion, strength }: Re
       }
 
       // Price range match
-      if (price && price !== "all" && p.pr === price) s += 2;
+      if (price && price !== "all" && p.pr === price) {
+        s += 2;
+        reasons.push("fits your budget");
+      }
 
       // Sillage match
-      if (strength && p.sillage === strength) s += 3;
-      else if (strength && (strength === "moderate" || p.sillage === "moderate")) s += 1;
+      if (strength && p.sillage === strength) {
+        s += 3;
+        const labels: Record<string, string> = { soft: "soft", moderate: "balanced", strong: "bold" };
+        reasons.push(`has the ${labels[strength]} projection you wanted`);
+      } else if (strength && (strength === "moderate" || p.sillage === "moderate")) {
+        s += 1;
+      }
 
       // Rating boost
       s += p.rating * 0.5;
+      if (p.rating >= 4.3 && reasons.length < 2) {
+        reasons.push(`highly rated at ${p.rating}`);
+      }
 
-      return { ...p, score: s } as ScoredPerfume;
+      // Cap at 3 reasons, prioritizing order (past perfume > family > sillage/price > rating)
+      return { ...p, score: s, reasons: reasons.slice(0, 3) } as ScoredPerfume;
     });
 
   scored.sort((a, b) => b.score - a.score);

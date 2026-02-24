@@ -80,7 +80,9 @@ export default function Home() {
         {/* Step 0: Past perfumes */}
         {quiz.step === 0 && done && (
           <div className="animate-fadeUp">
-            <PerfumeSearch onSelect={quiz.addPast} selected={quiz.past} />
+            {quiz.past.length < 2 && (
+              <PerfumeSearch onSelect={quiz.addPast} selected={quiz.past} />
+            )}
 
             {quiz.past.length > 0 && (
               <div className="flex flex-wrap gap-2 mb-4">

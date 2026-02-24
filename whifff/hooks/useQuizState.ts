@@ -156,7 +156,7 @@ export function useQuizState() {
       .catch(() => {});
   }, []);
 
-  const addPast = useCallback((p: Perfume) => setPast((prev) => [...prev, p]), []);
+  const addPast = useCallback((p: Perfume) => setPast((prev) => (prev.length >= 2 ? prev : [...prev, p])), []);
   const removePast = useCallback((id: string) => setPast((prev) => prev.filter((x) => x.id !== id)), []);
 
   const toggleScent = useCallback(

@@ -24,8 +24,6 @@ function mapDbRowToPerfume(row: Record<string, unknown>): Perfume {
     notes: (row.notes_all as string[]) ?? [],
     accords: (row.accords as string[]) ?? [],
     rating: (row.rating as number) ?? 0,
-    reviews: (row.review_count as number) ?? 0,
-    review: (row.top_review as string) ?? "",
     img: (row.image_url as string) ?? "",
     sillage: ((row.sillage as string) ?? "moderate") as Perfume["sillage"],
   };

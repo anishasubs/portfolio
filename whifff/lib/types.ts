@@ -12,14 +12,13 @@ export interface Perfume {
   notes: string[];
   accords: string[];
   rating: number;
-  reviews: number;
-  review: string;
   img: string;
   sillage: Strength;
 }
 
 export interface ScoredPerfume extends Perfume {
   score: number;
+  reasons: string[];
 }
 
 export interface QuizAnswers {
