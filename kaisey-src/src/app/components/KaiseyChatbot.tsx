@@ -54,7 +54,7 @@ interface ExtractedTask {
   dueDate: string | null;
   preferredTime: string | null;
   priority: "high" | "medium" | "low";
-  category: "class" | "meeting" | "study" | "workout" | "networking" | "recruiting";
+  category: "academics" | "recruiting" | "social" | "wellness";
   priorityCategory: "Academics" | "Recruiting" | "Social" | "Wellness";
 }
 
@@ -109,19 +109,17 @@ interface ConversationMemory {
 // --- Constants ---
 
 const categoryColors: Record<string, string> = {
-  class: "bg-blue-500",
-  meeting: "bg-purple-500",
-  study: "bg-indigo-500",
-  workout: "bg-green-500",
-  networking: "bg-orange-500",
+  academics: "bg-blue-500",
   recruiting: "bg-red-500",
+  social: "bg-orange-500",
+  wellness: "bg-green-500",
 };
 
 const priorityCategoryToCalCategory: Record<string, ExtractedTask["category"]> = {
-  Academics: "study",
+  Academics: "academics",
   Recruiting: "recruiting",
-  Social: "networking",
-  Wellness: "workout",
+  Social: "social",
+  Wellness: "wellness",
 };
 
 const priorityColors: Record<string, string> = {
@@ -385,9 +383,8 @@ Rules:
 Today: ${todayISO}
 
 priorityCategory: Academics, Recruiting, Social, Wellness
-category: class, meeting, study, workout, networking, recruiting
+category: academics, recruiting, social, wellness
 priority: high / medium / low
-${priority ? `\n${PRIORITY_CONFIG[priority].promptHint}` : ""}
 
 Call extract_tasks with ALL items.`,
           },
@@ -413,7 +410,7 @@ Call extract_tasks with ALL items.`,
                         preferredTime: { type: ["string", "null"] },
                         priority: { type: "string", enum: ["high", "medium", "low"] },
                         priorityCategory: { type: "string", enum: ["Academics", "Recruiting", "Social", "Wellness"] },
-                        category: { type: "string", enum: ["class", "meeting", "study", "workout", "networking", "recruiting"] },
+                        category: { type: "string", enum: ["academics", "recruiting", "social", "wellness"] },
                       },
                       required: ["title", "estimatedDuration", "dueDate", "preferredTime", "priority", "priorityCategory", "category"],
                     },
@@ -447,7 +444,7 @@ Call extract_tasks with ALL items.`,
         preferredTime: string | null;
         priority: "high" | "medium" | "low";
         priorityCategory: "Academics" | "Recruiting" | "Social" | "Wellness";
-        category: "class" | "meeting" | "study" | "workout" | "networking" | "recruiting";
+        category: "academics" | "recruiting" | "social" | "wellness";
       }>;
     };
   };
@@ -747,7 +744,7 @@ Return ONLY by calling propose_schedule.`,
         preferredTime: t.preferredTime || null,
         priority: t.priority || "medium",
         priorityCategory: (t.priorityCategory && PRIORITY_CONFIG[t.priorityCategory]) ? t.priorityCategory : "Academics",
-        category: t.category || "study",
+        category: t.category || "academics",
       }));
 
       if (tasks.length === 0) {

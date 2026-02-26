@@ -186,22 +186,16 @@ async function fetchGoogleCalendarEvents(accessToken: string): Promise<CalendarE
       // Determine event type based on title
       const title = item.summary || "Untitled Event";
       const lowerTitle = title.toLowerCase();
-      let type: CalendarEvent["type"] = "meeting";
+      let type: CalendarEvent["type"] = "academics";
       let color = "bg-blue-500";
 
-      if (lowerTitle.includes("gym") || lowerTitle.includes("yoga") || lowerTitle.includes("workout") || lowerTitle.includes("exercise")) {
-        type = "workout";
+      if (lowerTitle.includes("gym") || lowerTitle.includes("yoga") || lowerTitle.includes("workout") || lowerTitle.includes("exercise") || lowerTitle.includes("meditation") || lowerTitle.includes("wellness")) {
+        type = "wellness";
         color = "bg-green-500";
-      } else if (lowerTitle.includes("class") || lowerTitle.includes("lecture") || lowerTitle.includes("course")) {
-        type = "class";
-        color = "bg-blue-500";
-      } else if (lowerTitle.includes("study") || lowerTitle.includes("prep") || lowerTitle.includes("homework")) {
-        type = "study";
-        color = "bg-indigo-500";
-      } else if (lowerTitle.includes("coffee") || lowerTitle.includes("lunch") || lowerTitle.includes("network") || lowerTitle.includes("chat")) {
-        type = "networking";
+      } else if (lowerTitle.includes("coffee") || lowerTitle.includes("lunch") || lowerTitle.includes("network") || lowerTitle.includes("chat") || lowerTitle.includes("happy hour") || lowerTitle.includes("party")) {
+        type = "social";
         color = "bg-orange-500";
-      } else if (lowerTitle.includes("recruit") || lowerTitle.includes("interview") || lowerTitle.includes("info session")) {
+      } else if (lowerTitle.includes("recruit") || lowerTitle.includes("interview") || lowerTitle.includes("info session") || lowerTitle.includes("goldman") || lowerTitle.includes("mckinsey") || lowerTitle.includes("career")) {
         type = "recruiting";
         color = "bg-red-500";
       }
@@ -230,7 +224,7 @@ interface CalendarEvent {
   time: string;
   date: string; // YYYY-MM-DD format
   duration: number;
-  type: "class" | "meeting" | "study" | "workout" | "networking" | "recruiting";
+  type: "academics" | "recruiting" | "social" | "wellness";
   color: string;
 }
 
@@ -278,11 +272,11 @@ export default function App() {
   const now = new Date();
   const today = `${now.getFullYear()}-${String(now.getMonth() + 1).padStart(2, '0')}-${String(now.getDate()).padStart(2, '0')}`;
   const demoEvents: CalendarEvent[] = [
-    { id: "1", title: "Corporate Finance", time: "08:00", date: today, duration: 90, type: "class", color: "bg-blue-500" },
-    { id: "2", title: "Coffee Chat: Sarah (McKinsey)", time: "10:15", date: today, duration: 45, type: "networking", color: "bg-orange-500" },
-    { id: "3", title: "Strategy Canvas Quiz", time: "11:00", date: today, duration: 60, type: "class", color: "bg-blue-500" },
+    { id: "1", title: "Corporate Finance", time: "08:00", date: today, duration: 90, type: "academics", color: "bg-blue-500" },
+    { id: "2", title: "Coffee Chat: Sarah (McKinsey)", time: "10:15", date: today, duration: 45, type: "social", color: "bg-orange-500" },
+    { id: "3", title: "Strategy Canvas Quiz", time: "11:00", date: today, duration: 60, type: "academics", color: "bg-blue-500" },
     { id: "4", title: "Goldman Sachs Info Session", time: "12:00", date: today, duration: 60, type: "recruiting", color: "bg-red-500" },
-    { id: "5", title: "Gym Session", time: "13:00", date: today, duration: 45, type: "workout", color: "bg-green-500" },
+    { id: "5", title: "Gym Session", time: "13:00", date: today, duration: 45, type: "wellness", color: "bg-green-500" },
   ];
   const [calendarEvents, setCalendarEvents] = useState<CalendarEvent[]>([]);
 
@@ -497,12 +491,10 @@ export default function App() {
 
     const getColorForType = (type: CalendarEvent["type"]): string => {
       const map: Record<CalendarEvent["type"], string> = {
-        class: "bg-blue-500",
-        study: "bg-indigo-500",
+        academics: "bg-blue-500",
         recruiting: "bg-red-500",
-        networking: "bg-orange-500",
-        meeting: "bg-purple-500",
-        workout: "bg-green-500",
+        social: "bg-orange-500",
+        wellness: "bg-green-500",
       };
       return map[type] || "bg-blue-500";
     };
@@ -510,16 +502,14 @@ export default function App() {
     // Determine event type and color based on title
     const getEventTypeAndColor = (title: string): { type: CalendarEvent["type"], color: string } => {
       const lowerTitle = title.toLowerCase();
-      if (lowerTitle.includes("gym") || lowerTitle.includes("yoga") || lowerTitle.includes("meditation") || lowerTitle.includes("workout")) {
-        return { type: "workout", color: "bg-green-500" };
-      } else if (lowerTitle.includes("coffee") || lowerTitle.includes("lunch") || lowerTitle.includes("follow-up") || lowerTitle.includes("networking")) {
-        return { type: "networking", color: "bg-orange-500" };
-      } else if (lowerTitle.includes("prep") || lowerTitle.includes("study") || lowerTitle.includes("focus") || lowerTitle.includes("deep work") || lowerTitle.includes("buffer")) {
-        return { type: "study", color: "bg-indigo-500" };
-      } else if (lowerTitle.includes("goldman") || lowerTitle.includes("info session") || lowerTitle.includes("recruiting")) {
+      if (lowerTitle.includes("gym") || lowerTitle.includes("yoga") || lowerTitle.includes("meditation") || lowerTitle.includes("workout") || lowerTitle.includes("wellness")) {
+        return { type: "wellness", color: "bg-green-500" };
+      } else if (lowerTitle.includes("coffee") || lowerTitle.includes("lunch") || lowerTitle.includes("follow-up") || lowerTitle.includes("networking") || lowerTitle.includes("happy hour")) {
+        return { type: "social", color: "bg-orange-500" };
+      } else if (lowerTitle.includes("goldman") || lowerTitle.includes("info session") || lowerTitle.includes("recruiting") || lowerTitle.includes("interview") || lowerTitle.includes("career")) {
         return { type: "recruiting", color: "bg-red-500" };
       } else {
-        return { type: "class", color: "bg-blue-500" };
+        return { type: "academics", color: "bg-blue-500" };
       }
     };
 

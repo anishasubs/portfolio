@@ -1,5 +1,7 @@
 export type PriorityMode = "Academics" | "Recruiting" | "Social" | "Wellness";
 
+export type EventCategory = "academics" | "recruiting" | "social" | "wellness";
+
 export const PRIORITY_STORAGE_KEY = "kaisey-priority";
 
 export interface PriorityConfig {
@@ -9,7 +11,7 @@ export interface PriorityConfig {
   textColor: string;
   borderColor: string;
   ringColor: string;
-  eventTypes: Array<"class" | "meeting" | "study" | "workout" | "networking" | "recruiting">;
+  eventTypes: EventCategory[];
   promptHint: string;
 }
 
@@ -21,7 +23,7 @@ export const PRIORITY_CONFIG: Record<PriorityMode, PriorityConfig> = {
     textColor: "text-blue-600",
     borderColor: "border-blue-500",
     ringColor: "ring-blue-500",
-    eventTypes: ["class", "study"],
+    eventTypes: ["academics"],
     promptHint:
       "The user's top priority is ACADEMICS. Bias task priorities toward class prep, studying, assignments, and exam review. Schedule study blocks during peak focus hours and protect them from interruptions.",
   },
@@ -32,7 +34,7 @@ export const PRIORITY_CONFIG: Record<PriorityMode, PriorityConfig> = {
     textColor: "text-red-600",
     borderColor: "border-red-500",
     ringColor: "ring-red-500",
-    eventTypes: ["recruiting", "networking"],
+    eventTypes: ["recruiting"],
     promptHint:
       "The user's top priority is RECRUITING. Bias task priorities toward interview prep, networking coffee chats, info sessions, and career development. Give recruiting-related tasks the best time slots.",
   },
@@ -43,7 +45,7 @@ export const PRIORITY_CONFIG: Record<PriorityMode, PriorityConfig> = {
     textColor: "text-orange-600",
     borderColor: "border-orange-500",
     ringColor: "ring-orange-500",
-    eventTypes: ["networking", "meeting"],
+    eventTypes: ["social"],
     promptHint:
       "The user's top priority is SOCIAL. Bias task priorities toward networking events, group meetings, coffee chats, and social gatherings. Ensure enough free time for spontaneous social opportunities.",
   },
@@ -54,7 +56,7 @@ export const PRIORITY_CONFIG: Record<PriorityMode, PriorityConfig> = {
     textColor: "text-green-600",
     borderColor: "border-green-500",
     ringColor: "ring-green-500",
-    eventTypes: ["workout"],
+    eventTypes: ["wellness"],
     promptHint:
       "The user's top priority is WELLNESS. Bias task priorities toward workouts, meditation, rest, and recovery. Schedule breaks between intense blocks and avoid overloading the day.",
   },
@@ -68,13 +70,11 @@ export const PRIORITY_MODES: PriorityMode[] = [
 ];
 
 // Map event types to their primary priority category
-export const EVENT_TYPE_TO_PRIORITY: Record<string, PriorityMode> = {
-  class: "Academics",
-  study: "Academics",
+export const EVENT_TYPE_TO_PRIORITY: Record<EventCategory, PriorityMode> = {
+  academics: "Academics",
   recruiting: "Recruiting",
-  networking: "Social",
-  meeting: "Social",
-  workout: "Wellness",
+  social: "Social",
+  wellness: "Wellness",
 };
 
 interface CalendarEventLike {

@@ -14,7 +14,7 @@ interface CalendarEvent {
   time: string;
   date: string; // YYYY-MM-DD format
   duration: number;
-  type: "class" | "meeting" | "study" | "workout" | "networking" | "recruiting";
+  type: "academics" | "recruiting" | "social" | "wellness";
   color: string;
 }
 
@@ -78,7 +78,7 @@ export function CalendarView({ events, onScheduleChange, priority }: CalendarVie
   const [editTitle, setEditTitle] = useState("");
   const [editTime, setEditTime] = useState("");
   const [editDuration, setEditDuration] = useState("");
-  const [editType, setEditType] = useState<CalendarEvent["type"]>("meeting");
+  const [editType, setEditType] = useState<CalendarEvent["type"]>("academics");
 
   const todayKey = formatDateKey(new Date());
   const currentDateKey = formatDateKey(currentDate);
@@ -143,7 +143,7 @@ export function CalendarView({ events, onScheduleChange, priority }: CalendarVie
     setEditTitle("");
     setEditTime("");
     setEditDuration("");
-    setEditType("meeting");
+    setEditType("academics");
   };
 
   const handleEditSave = (event: CalendarEvent) => {
@@ -203,12 +203,10 @@ export function CalendarView({ events, onScheduleChange, priority }: CalendarVie
               onChange={(e) => setEditType(e.target.value as CalendarEvent["type"])}
               className="h-8 text-xs rounded-md border border-input bg-background px-2"
             >
-              <option value="class">Academics</option>
-              <option value="study">Study</option>
+              <option value="academics">Academics</option>
               <option value="recruiting">Recruiting</option>
-              <option value="networking">Networking</option>
-              <option value="meeting">Meeting</option>
-              <option value="workout">Wellness</option>
+              <option value="social">Social</option>
+              <option value="wellness">Wellness</option>
             </select>
             <div className="flex-1" />
             <Button size="sm" variant="ghost" onClick={handleEditCancel} className="h-7 w-7 p-0">
@@ -223,12 +221,10 @@ export function CalendarView({ events, onScheduleChange, priority }: CalendarVie
       );
     }
 
-    const muted = !isPriorityEvent(event);
-
     return (
-      <div key={event.id} className={`flex gap-3 p-3 rounded-lg border hover:bg-muted/50 transition-colors group ${muted ? "opacity-50" : ""}`}>
+      <div key={event.id} className={`flex gap-3 p-3 rounded-lg border hover:bg-muted/50 transition-colors group`}>
         <div className="text-sm text-muted-foreground font-mono w-16">{event.time}</div>
-        <div className={`w-1 rounded-full ${muted ? "bg-gray-400" : event.color}`}></div>
+        <div className={`w-1 rounded-full ${event.color}`}></div>
         <div className="flex-1">
           <h4 className="font-semibold text-sm">{event.title}</h4>
           <p className="text-xs text-muted-foreground">{event.duration} min &middot; {event.type}</p>
@@ -315,7 +311,7 @@ export function CalendarView({ events, onScheduleChange, priority }: CalendarVie
                     </div>
                     <div className="space-y-2">
                       {dayEvts.map((event) => (
-                        <div key={event.id} className={`p-2 rounded text-xs ${isPriorityEvent(event) ? event.color : "bg-gray-400"} text-white relative ${isPriorityEvent(event) ? "" : "opacity-50"}`}>
+                        <div key={event.id} className={`p-2 rounded text-xs ${event.color} text-white relative`}>
                           <div className="font-semibold truncate">{event.title}</div>
                           <div className="opacity-90">{event.time} &middot; {event.duration}m</div>
                           {onScheduleChange && (

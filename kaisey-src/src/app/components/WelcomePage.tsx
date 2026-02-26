@@ -190,8 +190,8 @@ export function WelcomePage({ onLogin }: WelcomePageProps) {
   // Video intro view
   if (showVideo && !videoError) {
     const videoSrc = isPortrait
-      ? `${import.meta.env.BASE_URL}kaisey-demo-portrait.mp4`
-      : `${import.meta.env.BASE_URL}kaisey-demo.mp4`;
+      ? `${import.meta.env.BASE_URL}kaisey-instruction-portrait.mp4`
+      : `${import.meta.env.BASE_URL}kaisey-instruction.mp4`;
 
     return (
       <div className="min-h-screen bg-gradient-to-br from-gray-950 via-gray-900 to-gray-950 flex flex-col items-center justify-center p-4 md:p-8">

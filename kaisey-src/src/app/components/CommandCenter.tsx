@@ -17,7 +17,7 @@ interface CalendarEvent {
   time: string;
   date: string;
   duration: number;
-  type: "class" | "meeting" | "study" | "workout" | "networking" | "recruiting";
+  type: "academics" | "recruiting" | "social" | "wellness";
   color: string;
 }
 
@@ -213,7 +213,7 @@ export function CommandCenter({ events, userFocus, userName, priority, onPriorit
                     <div
                       key={mode}
                       className={`${BALANCE_COLORS[mode]} transition-all duration-300 ${
-                        priority === mode ? "opacity-100" : "opacity-60"
+                        "opacity-100"
                       }`}
                       style={{ width: `${pct}%` }}
                       title={`${mode}: ${hours.toFixed(1)}h (${Math.round(pct)}%)`}
