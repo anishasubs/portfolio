@@ -837,7 +837,7 @@
         /* ── Final CTA ───────────────────────────────────────── */
         .final-cta {
             text-align: center;
-            padding: 100px 40px;
+            padding: 100px 40px 140px;
             background-image: url('../whifff/public/clouds-bg.jpg');
             background-size: cover;
             background-position: center 40%;
@@ -851,12 +851,16 @@
             font-size: 52px;
             color: #D4191A;
             margin-bottom: 12px;
-            -webkit-text-stroke: 1px black;
+            -webkit-text-stroke: 0.15px black;
             text-shadow: 0 4px 20px rgba(0,0,0,0.1);
         }
 
+        .final-cta .scent-strip {
+            transform: rotate(3deg);
+            transform-origin: right center;
+        }
         .final-cta .scent-strip:hover {
-            transform: translateY(-3px);
+            transform: rotate(7deg);
             box-shadow:
                 0 6px 16px rgba(0,0,0,0.14),
                 0 18px 40px rgba(0,0,0,0.1),
@@ -1410,7 +1414,7 @@
         <div class="sparkle"></div>
         <h2>Find Your Scent</h2>
         <p>The quiz takes two minutes. Your perfect fragrance is waiting.</p>
-        <a href="https://whifff.vercel.app?from=case-study" target="_blank" class="scent-strip" style="position: relative; transform: none; right: auto; top: auto; margin: 0 auto;">
+        <a href="https://whifff.vercel.app?from=case-study" target="_blank" class="scent-strip" style="position: relative; right: auto; top: auto; margin: 0 auto;">
             <span class="scent-strip__text">Take the Quiz</span>
             <span class="scent-strip__arrow">&rarr;</span>
         </a>
