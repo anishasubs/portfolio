@@ -4,7 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Whifff — AI Perfume Quiz Case Study by Anisha Subberwal</title>
-    <link href="https://fonts.googleapis.com/css2?family=Bodoni+Moda:ital,wght@0,400;0,700;1,400&family=Parisienne&family=Raleway:wght@400;500;600;700&family=Shrikhand&family=Pacifico&family=Nunito:wght@400;500;600;700;800&family=Playfair+Display:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Parisienne&family=Shrikhand&family=Pacifico&family=Nunito:wght@400;500;600;700;800&family=Playfair+Display:wght@400;500;600;700&display=swap" rel="stylesheet">
     <style>
         * {
             margin: 0;
@@ -82,7 +82,7 @@
             align-items: center;
             justify-content: center;
             text-align: center;
-            padding: 120px 40px 80px;
+            padding: 80px 40px 48px;
             position: relative;
             overflow: hidden;
             background-image: url('../whifff/public/clouds-bg.jpg');
@@ -91,71 +91,222 @@
             background-color: #8FC5E8;
         }
 
-        /* Floating clouds */
-        .cloud {
+        /* Perfume bottle — anchored bottom-left */
+        .hero-bottle {
             position: absolute;
-            opacity: 0.15;
-            z-index: 0;
+            bottom: -2%;
+            left: 2%;
+            width: clamp(200px, 28vw, 380px);
+            z-index: 2;
+            pointer-events: none;
         }
-        .cloud-1 { top: 15%; left: 5%; animation: float 6s ease-in-out infinite; }
-        .cloud-2 { top: 30%; right: 8%; animation: float 8s ease-in-out infinite 1s; }
-        .cloud-3 { top: 55%; left: 15%; animation: float 7s ease-in-out infinite 2s; }
 
-        @keyframes float {
-            0%, 100% { transform: translateY(0); }
-            50% { transform: translateY(-10px); }
+        /* ── Perfume mist — CSS cloud with form and depth ── */
+        .hero-mist {
+            position: absolute;
+            z-index: 5;
+            pointer-events: none;
+            width: clamp(180px, 24vw, 320px);
+            aspect-ratio: 1.4 / 1;
+            border-radius: 50%;
+            background:
+                /* bright highlights on top */
+                radial-gradient(ellipse 50% 40% at 40% 30%,
+                    rgba(255,255,255,0.95) 0%, transparent 60%),
+                radial-gradient(ellipse 35% 30% at 65% 25%,
+                    rgba(255,255,255,0.85) 0%, transparent 55%),
+                /* main body */
+                radial-gradient(ellipse 75% 65% at 48% 50%,
+                    rgba(255,255,255,0.8) 0%,
+                    rgba(240,245,250,0.5) 35%,
+                    rgba(220,230,240,0.2) 55%,
+                    transparent 75%),
+                /* subtle shadow on bottom for volume */
+                radial-gradient(ellipse 60% 30% at 50% 80%,
+                    rgba(160,185,210,0.25) 0%, transparent 70%);
+            filter: blur(6px);
+            opacity: 0;
+            transform-origin: center center;
+            transform: scale(0);
+            /* positioned by JS to match nozzle exactly */
+        }
+        .hero-mist.animate {
+            animation: mistSpray 4s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+        }
+        @keyframes mistSpray {
+            0%   { opacity: 0;    transform: scale(0)    translateX(15px);  filter: blur(2px); }
+            5%   { opacity: 0.7;  transform: scale(0.15) translateX(19px);  filter: blur(3px); }
+            10%  { opacity: 1;    transform: scale(0.3)  translateX(25px);  filter: blur(4px); }
+            15%  { opacity: 1;    transform: scale(0.4)  translateX(32px);  filter: blur(4.5px); }
+            20%  { opacity: 0.95; transform: scale(0.5)  translateX(38px);  filter: blur(5px); }
+            25%  { opacity: 0.9;  transform: scale(0.58) translateX(44px);  filter: blur(5.5px); }
+            30%  { opacity: 0.85; transform: scale(0.65) translateX(50px);  filter: blur(6px); }
+            35%  { opacity: 0.8;  transform: scale(0.72) translateX(56px);  filter: blur(6.5px); }
+            40%  { opacity: 0.74; transform: scale(0.78) translateX(62px);  filter: blur(7px); }
+            45%  { opacity: 0.67; transform: scale(0.84) translateX(68px);  filter: blur(7.5px); }
+            50%  { opacity: 0.6;  transform: scale(0.9)  translateX(74px);  filter: blur(8px); }
+            55%  { opacity: 0.52; transform: scale(0.95) translateX(80px);  filter: blur(8.5px); }
+            60%  { opacity: 0.44; transform: scale(1)    translateX(86px);  filter: blur(9px); }
+            65%  { opacity: 0.36; transform: scale(1.05) translateX(92px);  filter: blur(9.5px); }
+            70%  { opacity: 0.28; transform: scale(1.1)  translateX(97px);  filter: blur(10px); }
+            75%  { opacity: 0.2;  transform: scale(1.14) translateX(102px); filter: blur(11px); }
+            80%  { opacity: 0.14; transform: scale(1.18) translateX(107px); filter: blur(11.5px); }
+            85%  { opacity: 0.09; transform: scale(1.22) translateX(111px); filter: blur(12px); }
+            90%  { opacity: 0.05; transform: scale(1.25) translateX(115px); filter: blur(13px); }
+            95%  { opacity: 0.02; transform: scale(1.28) translateX(118px); filter: blur(13.5px); }
+            100% { opacity: 0;    transform: scale(1.3)  translateX(120px); filter: blur(14px); }
         }
 
         .hero-content {
             position: relative;
-            z-index: 1;
+            z-index: 4;
             max-width: 800px;
         }
 
         .hero-logo {
             font-family: 'Shrikhand', cursive;
-            font-size: clamp(56px, 14vw, 96px);
+            font-size: clamp(64px, 16vw, 120px);
             color: #D4191A;
-            margin-bottom: 12px;
+            margin-bottom: 0;
             line-height: 1;
             letter-spacing: 2px;
-            -webkit-text-stroke: 1px black;
+            -webkit-text-stroke: 1.5px black;
             text-shadow: 0 4px 20px rgba(0,0,0,0.15);
+            position: relative;
+        }
+        .hero-sparkle {
+            position: absolute;
+            fill: white;
+        }
+        .hero-sparkle--1 { top: -2px; left: 12%; width: 12px; height: 12px; opacity: 0.6; animation: twinkle 2s ease-in-out infinite; }
+        .hero-sparkle--2 { top: 10px; right: 15%; width: 9px; height: 9px; opacity: 0.5; animation: twinkle 2s ease-in-out infinite 0.5s; }
+        .hero-sparkle--3 { top: 45%; left: 5%; width: 8px; height: 8px; opacity: 0.4; animation: twinkle 2s ease-in-out infinite 1s; }
+        .hero-sparkle--4 { top: 30%; right: 8%; width: 10px; height: 10px; opacity: 0.5; animation: twinkle 2s ease-in-out infinite 1.5s; }
+        @keyframes twinkle {
+            0%, 100% { opacity: 0.3; transform: scale(0.8); }
+            50% { opacity: 1; transform: scale(1.1); }
         }
 
         .hero-tagline {
-            font-family: 'Pacifico', cursive;
+            font-family: 'Playfair Display', serif;
             font-size: clamp(16px, 3.5vw, 22px);
             color: white;
             opacity: 0.85;
-            margin-bottom: 16px;
+            margin-bottom: 2px;
             text-shadow: 0 2px 10px rgba(0,40,80,0.1);
         }
 
         .hero-subtitle {
-            font-size: 17px;
-            color: rgba(255,255,255,0.8);
+            font-size: 16px;
+            color: rgba(255,255,255,0.75);
             max-width: 520px;
-            margin: 0 auto 12px;
-            font-weight: 500;
+            margin: 32px auto 0;
+            font-weight: 400;
+            line-height: 1.7;
         }
-
-        .hero .meta {
-            font-size: 12px;
-            color: rgba(255,255,255,0.55);
+        .hero-credit {
+            position: absolute;
+            bottom: 24px;
+            left: 0;
+            right: 0;
+            font-size: 11px;
+            color: rgba(255,255,255,0.5);
             text-transform: uppercase;
-            letter-spacing: 0.12em;
-            margin-bottom: 36px;
-            font-weight: 600;
+            letter-spacing: 0.1em;
         }
 
         .hero-ctas {
             display: flex;
-            gap: 14px;
             justify-content: center;
-            flex-wrap: wrap;
+            margin-top: 72px;
+            position: relative;
+            height: 160px;
         }
 
+        /* ── Scent strip CTAs (horizontal, foil embossed) ── */
+        .scent-strip {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            width: 340px;
+            height: 50px;
+            padding: 0 24px 0 34px;
+            background:
+                url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='200' height='200'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.75' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='200' height='200' filter='url(%23n)' opacity='0.04'/%3E%3C/svg%3E"),
+                linear-gradient(
+                    180deg,
+                    #f9f7f3 0%,
+                    #f5f1ec 30%,
+                    #f0ebe4 60%,
+                    #ebe5dd 100%
+                );
+            border-radius: 25px 3px 3px 25px;
+            box-shadow:
+                0 1px 4px rgba(0,0,0,0.1),
+                0 6px 20px rgba(0,0,0,0.07),
+                inset 0 1px 0 rgba(255,255,255,0.8),
+                inset 0 -1px 0 rgba(0,0,0,0.04);
+            text-decoration: none;
+            cursor: pointer;
+            transition: transform 0.35s ease, box-shadow 0.35s ease;
+            position: absolute;
+        }
+        .scent-strip:first-child {
+            transform: rotate(3deg);
+            transform-origin: right center;
+            right: calc(50% - 240px);
+            top: 5px;
+            z-index: 2;
+        }
+        .scent-strip:last-child {
+            transform: rotate(-3deg);
+            transform-origin: right center;
+            right: calc(50% - 240px);
+            top: 38px;
+            z-index: 1;
+        }
+        .scent-strip:first-child:hover {
+            z-index: 3;
+            transform: rotate(7deg);
+            box-shadow:
+                0 6px 16px rgba(0,0,0,0.14),
+                0 18px 40px rgba(0,0,0,0.1),
+                inset 0 1px 0 rgba(255,255,255,0.8);
+        }
+        .scent-strip:last-child:hover {
+            z-index: 3;
+            transform: rotate(-7deg);
+            box-shadow:
+                0 6px 16px rgba(0,0,0,0.14),
+                0 18px 40px rgba(0,0,0,0.1),
+                inset 0 1px 0 rgba(255,255,255,0.8);
+        }
+
+        .scent-strip__text {
+            font-family: 'Playfair Display', serif;
+            font-size: 15px;
+            font-weight: 700;
+            letter-spacing: 0.12em;
+            text-transform: uppercase;
+            color: rgba(15,10,5,0.75);
+            text-shadow:
+                0 -1px 0 rgba(0,0,0,0.15),
+                0 1px 0 rgba(255,255,255,0.7),
+                1px 0 0 rgba(255,255,255,0.2),
+                -1px 0 0 rgba(0,0,0,0.03);
+            white-space: nowrap;
+        }
+
+        .scent-strip__arrow {
+            font-family: 'Playfair Display', serif;
+            font-size: 17px;
+            color: rgba(15,10,5,0.45);
+            text-shadow:
+                0 -1px 0 rgba(0,0,0,0.1),
+                0 1px 0 rgba(255,255,255,0.6);
+        }
+
+        /* ── Generic btn (used elsewhere on page) ── */
         .btn {
             display: inline-flex;
             align-items: center;
@@ -858,7 +1009,6 @@
             .vision-grid { grid-template-columns: 1fr; }
             .final-cta h2 { font-size: 36px; }
             .final-cta { padding: 60px 24px; }
-            .cloud { display: none; }
         }
         @media (max-width: 480px) {
             .container { padding: 0 16px; }
@@ -897,39 +1047,33 @@
     </nav>
 
     <!-- 1. Hero -->
-    <div class="hero">
-        <!-- Floating clouds -->
-        <svg class="cloud cloud-1" width="200" height="80" viewBox="0 0 200 80" fill="white">
-            <ellipse cx="60" cy="50" rx="60" ry="28"/>
-            <ellipse cx="110" cy="40" rx="50" ry="25"/>
-            <ellipse cx="150" cy="50" rx="40" ry="20"/>
-            <ellipse cx="85" cy="35" rx="40" ry="22"/>
-            <ellipse cx="130" cy="48" rx="35" ry="18"/>
-        </svg>
-        <svg class="cloud cloud-2" width="160" height="65" viewBox="0 0 160 65" fill="white">
-            <ellipse cx="50" cy="40" rx="45" ry="22"/>
-            <ellipse cx="90" cy="32" rx="40" ry="20"/>
-            <ellipse cx="120" cy="40" rx="35" ry="18"/>
-            <ellipse cx="70" cy="30" rx="30" ry="18"/>
-        </svg>
-        <svg class="cloud cloud-3" width="180" height="70" viewBox="0 0 180 70" fill="white">
-            <ellipse cx="55" cy="45" rx="50" ry="24"/>
-            <ellipse cx="100" cy="36" rx="45" ry="22"/>
-            <ellipse cx="140" cy="44" rx="38" ry="19"/>
-            <ellipse cx="80" cy="32" rx="35" ry="20"/>
-        </svg>
+    <div class="hero" id="hero-trigger">
+        <!-- Perfume bottle photo — bottom left -->
+        <img class="hero-bottle" src="assets/perfume-bottle.png" alt="Vintage perfume bottle" />
+        <!-- Perfume mist — CSS only, grows from nozzle -->
+        <div class="hero-mist"></div>
 
         <div class="hero-content">
-            <div class="hero-logo">whifff</div>
+            <div class="hero-logo">whifff
+                <svg class="hero-sparkle hero-sparkle--1" viewBox="0 0 24 24" aria-hidden="true"><path d="M12 0 L14 9 L24 12 L14 15 L12 24 L10 15 L0 12 L10 9 Z"/></svg>
+                <svg class="hero-sparkle hero-sparkle--2" viewBox="0 0 24 24" aria-hidden="true"><path d="M12 0 L14 9 L24 12 L14 15 L12 24 L10 15 L0 12 L10 9 Z"/></svg>
+                <svg class="hero-sparkle hero-sparkle--3" viewBox="0 0 24 24" aria-hidden="true"><path d="M12 0 L14 9 L24 12 L14 15 L12 24 L10 15 L0 12 L10 9 Z"/></svg>
+                <svg class="hero-sparkle hero-sparkle--4" viewBox="0 0 24 24" aria-hidden="true"><path d="M12 0 L14 9 L24 12 L14 15 L12 24 L10 15 L0 12 L10 9 Z"/></svg>
+            </div>
             <div class="hero-tagline">your next favorite scent is one quiz away</div>
             <p class="hero-subtitle">An AI-powered perfume quiz that decodes your scent personality and finds your perfect fragrance match.</p>
-            <div class="meta" style="margin-bottom:6px;">Case Study by Anisha Subberwal | Columbia Business School MBA 2026</div>
-            <div class="meta" style="font-size:11px;opacity:0.7;letter-spacing:0.08em;">Sole builder &mdash; product strategy, design, and full-stack engineering</div>
             <div class="hero-ctas">
-                <a href="https://whifff.vercel.app" target="_blank" class="btn btn-primary">Take the Quiz &rarr;</a>
-                <a href="https://whifff.vercel.app/ledger" target="_blank" class="btn btn-secondary">View the Ledger &rarr;</a>
+                <a href="https://whifff.vercel.app?from=case-study" target="_blank" class="scent-strip">
+                    <span class="scent-strip__text">Take the Quiz</span>
+                    <span class="scent-strip__arrow">&rarr;</span>
+                </a>
+                <a href="https://whifff.vercel.app/ledger" target="_blank" class="scent-strip">
+                    <span class="scent-strip__text">View the Ledger</span>
+                    <span class="scent-strip__arrow">&rarr;</span>
+                </a>
             </div>
         </div>
+        <div class="hero-credit">Case study by Anisha Subberwal &middot; Columbia Business School MBA 2026</div>
     </div>
 
     <!-- 2. The Problem -->
@@ -1286,6 +1430,40 @@
         document.querySelectorAll('.fade-in').forEach(el => {
             observer.observe(el);
         });
+
+        // Position mist so its bottom-left (transform-origin) is at the bottle nozzle
+        function positionMist() {
+            const bottle = document.querySelector('.hero-bottle');
+            const mist = document.querySelector('.hero-mist');
+            const hero = document.querySelector('.hero');
+            if (!bottle || !mist || !hero) return;
+
+            const heroRect = hero.getBoundingClientRect();
+            const bottleRect = bottle.getBoundingClientRect();
+
+            // Nozzle tip: 47% from left, 31% from top of bottle
+            const nozzleX = bottleRect.left + bottleRect.width * 0.47;
+            const nozzleY = bottleRect.top + bottleRect.height * 0.31;
+
+            // Center mist on nozzle
+            const mistW = mist.offsetWidth;
+            const mistH = mist.offsetHeight;
+            mist.style.left = (nozzleX - heroRect.left - mistW / 2) + 'px';
+            mist.style.top = (nozzleY - heroRect.top - mistH / 2) + 'px';
+        }
+
+        // Wait for bottle image to load, then position and animate
+        const bottleImg = document.querySelector('.hero-bottle');
+        if (bottleImg.complete) {
+            positionMist();
+            document.querySelector('.hero-mist').classList.add('animate');
+        } else {
+            bottleImg.addEventListener('load', () => {
+                positionMist();
+                document.querySelector('.hero-mist').classList.add('animate');
+            });
+        }
+        window.addEventListener('resize', positionMist);
     </script>
 </body>
 </html>

@@ -1,6 +1,7 @@
 "use client";
 
-import { useState } from "react";
+import { Suspense, useState } from "react";
+import { useSearchParams } from "next/navigation";
 import { MSGS } from "@/lib/constants";
 import { useTypewriter } from "@/hooks/useTypewriter";
 import { useQuizState } from "@/hooks/useQuizState";
@@ -17,9 +18,19 @@ import ResultCard from "@/components/ResultCard";
 import BottleSpritz from "@/components/BottleSpritz";
 
 export default function Home() {
+  return (
+    <Suspense>
+      <HomeContent />
+    </Suspense>
+  );
+}
+
+function HomeContent() {
+  const searchParams = useSearchParams();
+  const fromCaseStudy = searchParams.get("from") === "case-study";
   const quiz = useQuizState();
   const [typed, done] = useTypewriter(MSGS[quiz.step] || "");
-  const [loading, setLoading] = useState(true);
+  const [loading, setLoading] = useState(!fromCaseStudy);
 
   // Splash screen — bottle animation plays once with staggered text reveal
   if (loading) {
@@ -34,15 +45,19 @@ export default function Home() {
         }}
       >
         <BottleSpritz size="splash" onAnimationEnd={() => setLoading(false)} />
-        <h1
-          className="font-shrikhand text-[clamp(56px,14vw,80px)] text-[#D4191A] m-0 leading-none tracking-tight -mt-4 opacity-0 animate-[fadeUp_0.6s_ease-out_0.8s_forwards]"
-          style={{ WebkitTextStroke: "1px black", textShadow: "0 4px 20px rgba(0,0,0,0.15)" }}
-        >
-          whifff
-        </h1>
-        <p className="font-playfair text-[clamp(14px,3.5vw,18px)] text-white mt-1.5 opacity-0 animate-[fadeUp_0.6s_ease-out_1.4s_forwards] [text-shadow:0_2px_10px_rgba(0,40,80,0.1)]">
-          your next favorite scent is one quiz away
-        </p>
+        {!fromCaseStudy && (
+          <>
+            <h1
+              className="font-shrikhand text-[clamp(56px,14vw,80px)] text-[#D4191A] m-0 leading-none tracking-tight -mt-4 opacity-0 animate-[fadeUp_0.6s_ease-out_0.8s_forwards]"
+              style={{ WebkitTextStroke: "1px black", textShadow: "0 4px 20px rgba(0,0,0,0.15)" }}
+            >
+              whifff
+            </h1>
+            <p className="font-playfair text-[clamp(14px,3.5vw,18px)] text-white mt-1.5 opacity-0 animate-[fadeUp_0.6s_ease-out_1.4s_forwards] [text-shadow:0_2px_10px_rgba(0,40,80,0.1)]">
+              your next favorite scent is one quiz away
+            </p>
+          </>
+        )}
       </div>
     );
   }
