@@ -855,6 +855,14 @@
             text-shadow: 0 4px 20px rgba(0,0,0,0.1);
         }
 
+        .final-cta .scent-strip:hover {
+            transform: translateY(-3px);
+            box-shadow:
+                0 6px 16px rgba(0,0,0,0.14),
+                0 18px 40px rgba(0,0,0,0.1),
+                inset 0 1px 0 rgba(255,255,255,0.8);
+        }
+
         .final-cta p {
             font-size: 18px;
             color: rgba(255,255,255,0.8);
@@ -1402,7 +1410,10 @@
         <div class="sparkle"></div>
         <h2>Find Your Scent</h2>
         <p>The quiz takes two minutes. Your perfect fragrance is waiting.</p>
-        <a href="https://whifff.vercel.app" target="_blank" class="btn btn-primary" style="font-size: 16px; padding: 16px 40px;">Take the Quiz &rarr;</a>
+        <a href="https://whifff.vercel.app?from=case-study" target="_blank" class="scent-strip" style="position: relative; transform: none; right: auto; top: auto; margin: 0 auto;">
+            <span class="scent-strip__text">Take the Quiz</span>
+            <span class="scent-strip__arrow">&rarr;</span>
+        </a>
     </section>
 
     <!-- Footer -->
