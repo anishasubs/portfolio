@@ -1,0 +1,134 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Whifff Deck — Our User</title>
+  <link href="https://fonts.googleapis.com/css2?family=Shrikhand&family=Playfair+Display:ital,wght@0,400;0,700;0,900;1,400;1,700;1,900&family=Nunito:wght@400;600;700;800&display=swap" rel="stylesheet">
+  <script src="https://mcp.figma.com/mcp/html-to-design/capture.js" async></script>
+  <style>
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+
+    body {
+      font-family: 'Nunito', sans-serif;
+      background: #f9f4eb;
+      color: #4a4a4a;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      min-height: 100vh;
+      padding: 20px;
+    }
+
+    .section {
+      width: 244px;
+    }
+
+    /* Title */
+    .section-title {
+      font-family: 'Playfair Display', serif;
+      font-weight: 900;
+      font-size: 18px;
+      color: #2a2a2a;
+      margin-bottom: 12px;
+      line-height: 1.2;
+    }
+
+    .section-title em {
+      color: #d4191a;
+      font-style: italic;
+    }
+
+    /* Illustration */
+    .illo {
+      display: flex;
+      justify-content: center;
+      margin-bottom: 12px;
+    }
+
+    /* Cards */
+    .card {
+      background: white;
+      border-radius: 12px;
+      padding: 12px 14px;
+      box-shadow: 0 1px 6px rgba(0,0,0,0.05);
+      margin-bottom: 8px;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .card::before {
+      content: '';
+      position: absolute;
+      left: 0; top: 0; bottom: 0;
+      width: 3px;
+    }
+
+    .card.red::before { background: #d4191a; }
+    .card.teal::before { background: #4a7c8a; }
+    .card.gold::before { background: #c19a5b; }
+
+    .card .num {
+      font-family: 'Playfair Display', serif;
+      font-weight: 900;
+      font-size: 22px;
+      line-height: 1;
+    }
+
+    .card.red .num { color: #d4191a; }
+
+    .card .label {
+      font-size: 10px;
+      font-weight: 700;
+      color: #2a2a2a;
+      margin-top: 4px;
+      line-height: 1.35;
+    }
+
+    .card .detail {
+      font-size: 9px;
+      font-weight: 600;
+      color: #8a7a6a;
+      line-height: 1.4;
+      margin-top: 3px;
+    }
+
+    .source {
+      font-size: 7.5px;
+      color: #b0a090;
+      margin-top: 4px;
+      font-weight: 600;
+    }
+  </style>
+</head>
+<body>
+  <div class="section">
+    <div class="section-title">
+      <svg width="24" height="24" viewBox="0 0 24 24" fill="none" style="vertical-align: -4px; margin-right: 4px;">
+        <circle cx="12" cy="8" r="5" fill="#d4191a" opacity="0.15"/>
+        <circle cx="12" cy="8" r="5" stroke="#d4191a" stroke-width="1.5" fill="none"/>
+        <path d="M3.5 21.5C3.5 16.8 7.3 13 12 13C16.7 13 20.5 16.8 20.5 21.5" stroke="#d4191a" stroke-width="1.5" stroke-linecap="round" fill="none"/>
+      </svg>
+      Our User: <em>Gen Z</em>
+    </div>
+
+    <div class="card red">
+      <div class="num">50% &rarr; 65%</div>
+      <div class="label">Gen Z daily fragrance use is the fastest-growing of any generation</div>
+      <div class="detail">The market isn&rsquo;t just broken &mdash; it&rsquo;s expanding. More Gen Z women wear fragrance daily than ever before.</div>
+    </div>
+
+    <div class="card teal">
+      <div class="label">No brand loyalty, no notes vocabulary &mdash; they shop by <strong>mood</strong></div>
+      <div class="detail">Gen Z doesn&rsquo;t walk in asking for oud or bergamot. They want to feel fresh, confident, put-together &mdash; and they&rsquo;ll try any brand that gets them there.</div>
+    </div>
+
+    <div class="card gold">
+      <div class="label">PerfumeTok drives desire &mdash; but you <strong>can&rsquo;t smell through a screen</strong></div>
+      <div class="detail">Gen Z discovers fragrance on social media, but full bottles start at $80&ndash;$150. It&rsquo;s too expensive to blind buy based on a 30-second review.</div>
+    </div>
+
+    <div class="source">L'Or&eacute;al Luxe Sociovision 2022 &middot; n=5,500</div>
+  </div>
+</body>
+</html>

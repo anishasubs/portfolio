@@ -1,4 +1,4 @@
-import type { Perfume, ScoredPerfume, ScentFamily, PriceOption, Occasion, Strength } from "./types";
+import type { Perfume, ScoredPerfume, ScentFamily, Occasion, Strength, Vibe } from "./types";
 import { DB } from "./mock-data";
 import { scoreAndRank } from "./recommend";
 import { isSupabaseConfigured } from "./supabase";
@@ -9,7 +9,7 @@ export interface DataProvider {
   getRecommendations(params: {
     pastIds: string[];
     scents: ScentFamily[];
-    price: PriceOption | null;
+    vibe: Vibe | null;
     occasion: Occasion | null;
     strength: Strength | null;
   }): Promise<ScoredPerfume[]>;
@@ -29,7 +29,7 @@ class MockDataProvider implements DataProvider {
   async getRecommendations(params: {
     pastIds: string[];
     scents: ScentFamily[];
-    price: PriceOption | null;
+    vibe: Vibe | null;
     occasion: Occasion | null;
     strength: Strength | null;
   }): Promise<ScoredPerfume[]> {
@@ -38,7 +38,7 @@ class MockDataProvider implements DataProvider {
       db: DB,
       past,
       scents: params.scents,
-      price: params.price,
+      vibe: params.vibe,
       occasion: params.occasion,
       strength: params.strength,
     });

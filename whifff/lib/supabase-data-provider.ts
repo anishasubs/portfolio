@@ -1,4 +1,4 @@
-import type { Perfume, ScoredPerfume, ScentFamily, PriceOption, Occasion, Strength } from "./types";
+import type { Perfume, ScoredPerfume, ScentFamily, PriceOption, Occasion, Strength, Vibe } from "./types";
 import type { DataProvider } from "./data-provider";
 import { getSupabaseClient } from "./supabase";
 import { scoreAndRank } from "./recommend";
@@ -58,7 +58,7 @@ export class SupabaseDataProvider implements DataProvider {
   async getRecommendations(params: {
     pastIds: string[];
     scents: ScentFamily[];
-    price: PriceOption | null;
+    vibe: Vibe | null;
     occasion: Occasion | null;
     strength: Strength | null;
   }): Promise<ScoredPerfume[]> {
@@ -92,7 +92,7 @@ export class SupabaseDataProvider implements DataProvider {
       db,
       past,
       scents: params.scents,
-      price: params.price,
+      vibe: params.vibe,
       occasion: params.occasion,
       strength: params.strength,
     });

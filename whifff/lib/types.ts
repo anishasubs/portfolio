@@ -2,6 +2,7 @@ export type ScentFamily = "floral" | "sweet" | "fresh" | "warm" | "fruity" | "mu
 export type PriceOption = "$" | "$$" | "$$$" | "all";
 export type Occasion = "everyday" | "datenight" | "work" | "special";
 export type Strength = "soft" | "moderate" | "strong";
+export type Vibe = "sensorial" | "assertion" | "social" | "wellness";
 
 export interface Perfume {
   id: string;
@@ -24,9 +25,19 @@ export interface ScoredPerfume extends Perfume {
 export interface QuizAnswers {
   past: Perfume[];
   scents: ScentFamily[];
-  price: PriceOption | null;
+  vibe: Vibe | null;
   occasion: Occasion | null;
   strength: Strength | null;
+}
+
+export interface VibeOption {
+  id: Vibe;
+  label: string;
+  emoji: string;
+  desc: string;
+  territory: string;
+  profileName: string;
+  profileDesc: string;
 }
 
 export interface FamilyOption {

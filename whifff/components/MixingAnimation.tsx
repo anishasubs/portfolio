@@ -1,7 +1,7 @@
 "use client";
 
 import Sparkle from "./Sparkle";
-import BottleSpritz from "./BottleSpritz";
+import ScentKeyAnim from "./ScentKeyAnim";
 
 interface MixingAnimationProps {
   phase: number;
@@ -25,18 +25,20 @@ export default function MixingAnimation({ phase, notes }: MixingAnimationProps) 
           ))}
       </div>
 
-      {/* Bottle animation */}
+      {/* Scent Key + capsules animation */}
       <div className="relative">
-        <BottleSpritz size="splash" loop />
+        <div className={phase >= 3 ? "animate-keyFloat" : phase >= 2 ? "animate-keyAssemble" : ""}>
+          <ScentKeyAnim size={240} loop={phase >= 3} />
+        </div>
 
         {/* Sparkles when ready */}
         {phase >= 3 &&
           [
-            { x: 20, y: 70 },
-            { x: 290, y: 80 },
-            { x: 40, y: 170 },
-            { x: 280, y: 175 },
-            { x: 160, y: 35 },
+            { x: 10, y: 30 },
+            { x: 220, y: 40 },
+            { x: 30, y: 130 },
+            { x: 210, y: 135 },
+            { x: 120, y: 15 },
           ].map((s, i) => (
             <div key={i} className="absolute animate-sparkle" style={{ left: s.x, top: s.y, animationDelay: `${i * 0.15}s` }}>
               <Sparkle size={10} />
@@ -49,10 +51,10 @@ export default function MixingAnimation({ phase, notes }: MixingAnimationProps) 
         {phase < 1
           ? "gathering your notes..."
           : phase < 2
-            ? "adding ingredients..."
+            ? "selecting your capsules..."
             : phase < 3
-              ? "mixing your blend..."
-              : "your scent is ready \u2726"}
+              ? "assembling your scent key..."
+              : "your discovery kit is ready \u2726"}
       </p>
     </div>
   );

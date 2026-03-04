@@ -10,11 +10,13 @@ import ProgressBar from "@/components/ProgressBar";
 import ChatBubble from "@/components/ChatBubble";
 import PerfumeSearch from "@/components/PerfumeSearch";
 import ScentFamilyGrid from "@/components/ScentFamilyGrid";
-import PriceSelector from "@/components/PriceSelector";
+import VibeGrid from "@/components/VibeGrid";
 import OccasionGrid from "@/components/OccasionGrid";
 import StrengthPicker from "@/components/StrengthPicker";
 import MixingAnimation from "@/components/MixingAnimation";
 import ResultCard from "@/components/ResultCard";
+import DiscoveryKitCTA from "@/components/DiscoveryKitCTA";
+import ScentProfileCard from "@/components/ScentProfileCard";
 import BottleSpritz from "@/components/BottleSpritz";
 
 export default function Home() {
@@ -141,8 +143,8 @@ function HomeContent() {
           <ScentFamilyGrid selected={quiz.scents} onToggle={quiz.toggleScent} onNext={() => quiz.setStep(2)} />
         )}
 
-        {/* Step 2: Price */}
-        {quiz.step === 2 && done && <PriceSelector onSelect={quiz.selectPrice} />}
+        {/* Step 2: Vibe — how do you want to feel? */}
+        {quiz.step === 2 && done && <VibeGrid onSelect={quiz.selectVibe} />}
 
         {/* Step 3: Occasion */}
         {quiz.step === 3 && done && <OccasionGrid onSelect={quiz.selectOccasion} />}
@@ -156,32 +158,30 @@ function HomeContent() {
         {/* Results */}
         {quiz.results && (
           <div className="animate-fadeUp">
-            <ChatBubble
-              text={
-                quiz.past.length > 0
-                  ? `okay based on your love for ${quiz.past.map((p) => p.name).join(" & ")} and your vibe \u2014 here's what i'd pick for you`
-                  : "here's what i put together for you \u2014 i think you're gonna love these"
-              }
-              cursor={false}
-            />
+            {/* Scent Profile Card — on top */}
+            {quiz.vibe && (
+              <ScentProfileCard
+                vibe={quiz.vibe}
+                scents={quiz.scents}
+                occasion={quiz.occasion}
+                strength={quiz.strength}
+              />
+            )}
 
-            {quiz.recs.map((p, i) => quiz.cards > i && <ResultCard key={p.id} p={p} i={i} />)}
+            {/* Discovery Kit card — recs live inside */}
+            <DiscoveryKitCTA>
+              {quiz.recs.map((p, i) => quiz.cards > i && <ResultCard key={p.id} p={p} i={i} />)}
+            </DiscoveryKitCTA>
 
             {quiz.cards >= 3 && (
-              <div className="text-center mt-6 animate-fadeUp">
+              <div className="text-center mt-3 animate-fadeUp">
                 <button
-                  className="bp py-[15px] px-10 rounded-full bg-white text-[#4A8EC2] text-sm font-extrabold tracking-wide shadow-[0_4px_16px_rgba(0,40,80,0.1)]"
+                  className="text-xs font-semibold text-white/70 hover:text-white transition-colors"
                   onClick={quiz.restart}
                 >
-                  start over {"\u2726"}
+                  start over &#x2726;
                 </button>
-                <a
-                  href="/ledger"
-                  className="block mt-3 text-xs font-semibold text-[#4A8EC2]/70 hover:text-[#4A8EC2] transition-colors"
-                >
-                  see what others got recommended &rarr;
-                </a>
-                <p className="text-[10px] text-[#1B3A5C] mt-3.5 opacity-40 font-semibold">
+                <p className="text-[10px] text-[#1B3A5C] mt-3 opacity-40 font-semibold">
                   scent data via fragrantica &middot; prices approximate
                 </p>
               </div>

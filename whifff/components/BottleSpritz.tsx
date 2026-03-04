@@ -134,8 +134,6 @@ export default function BottleSpritz({ size = "hero", loop = false, onAnimationE
     return () => clearInterval(interval);
   }, [loop]);
 
-  const bottleOpacity = Math.min(frame / 10, 1);
-
   const bulbSquish =
     frame < 8 ? 0 :
     frame < 18 ? (frame - 8) / 10 :
@@ -147,8 +145,6 @@ export default function BottleSpritz({ size = "hero", loop = false, onAnimationE
     frame < 16 ? 0 :
     frame < 78 ? (frame - 16) / 62 :
     1;
-
-  const floatY = Math.sin(frame * 0.06) * 2.5;
 
   const dims = size === "splash"
     ? { w: 340, h: 240, className: "mx-auto w-[340px] h-[240px]" }
@@ -162,10 +158,6 @@ export default function BottleSpritz({ size = "hero", loop = false, onAnimationE
         width={dims.w}
         height={dims.h}
         viewBox="-40 0 380 280"
-        style={{
-          transform: `translateY(${floatY}px)`,
-          opacity: bottleOpacity,
-        }}
       >
         <PerfumeCloud progress={cloudProgress} />
         <Bottle bulbSquish={bulbSquish} />

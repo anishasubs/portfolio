@@ -1,18 +1,40 @@
-import type { Perfume, ScoredPerfume, ScentFamily, PriceOption, Occasion, Strength } from "./types";
-import { FAMILIES, OCC_MAP } from "./constants";
+import type { Perfume, ScoredPerfume, ScentFamily, Occasion, Strength, Vibe } from "./types";
+import { FAMILIES, OCC_MAP, VIBE_MAP } from "./constants";
+
+// L'Oréal Luxe portfolio — only recommend fragrances from these brands
+const LOREAL_BRANDS = new Set([
+  "yves saint laurent",
+  "lancôme",
+  "lancome",
+  "giorgio armani",
+  "valentino",
+  "prada",
+  "mugler",
+  "thierry mugler",
+  "ralph lauren",
+  "viktor & rolf",
+  "viktor&rolf",
+  "cacharel",
+  "diesel",
+  "maison margiela",
+  "maison martin margiela",
+  "atelier cologne",
+  "azzaro",
+]);
 
 interface RecommendInput {
   db: Perfume[];
   past: Perfume[];
   scents: ScentFamily[];
-  price: PriceOption | null;
+  vibe: Vibe | null;
   occasion: Occasion | null;
   strength: Strength | null;
 }
 
-export function scoreAndRank({ db, past, scents, price, occasion, strength }: RecommendInput): ScoredPerfume[] {
+export function scoreAndRank({ db, past, scents, vibe, occasion, strength }: RecommendInput): ScoredPerfume[] {
   let scored = db
     .filter((p) => !past.some((pp) => pp.id === p.id))
+    .filter((p) => LOREAL_BRANDS.has(p.brand.toLowerCase()))
     .map((p) => {
       let s = 0;
       let pastReason = "";
@@ -73,17 +95,18 @@ export function scoreAndRank({ db, past, scents, price, occasion, strength }: Re
         reasons.push(familyReason);
       }
 
+      // Vibe/territory accord match
+      if (vibe && VIBE_MAP[vibe]) {
+        VIBE_MAP[vibe].forEach((a) => {
+          if (p.accords.some((pa) => pa.toLowerCase().includes(a))) s += 2;
+        });
+      }
+
       // Occasion accord match
       if (occasion && OCC_MAP[occasion]) {
         OCC_MAP[occasion].forEach((a) => {
           if (p.accords.some((pa) => pa.toLowerCase().includes(a))) s += 1;
         });
-      }
-
-      // Price range match
-      if (price && price !== "all" && p.pr === price) {
-        s += 2;
-        reasons.push("fits your budget");
       }
 
       // Sillage match
@@ -106,12 +129,6 @@ export function scoreAndRank({ db, past, scents, price, occasion, strength }: Re
     });
 
   scored.sort((a, b) => b.score - a.score);
-
-  // If price filter set and enough matches, filter to that range
-  if (price && price !== "all") {
-    const filtered = scored.filter((p) => p.pr === price);
-    if (filtered.length >= 3) scored = filtered;
-  }
 
   return scored.slice(0, 3);
 }

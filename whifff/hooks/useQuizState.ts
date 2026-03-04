@@ -1,7 +1,7 @@
 "use client";
 
 import { useState, useEffect, useCallback, useRef } from "react";
-import type { Perfume, ScoredPerfume, ScentFamily, PriceOption, Occasion, Strength } from "@/lib/types";
+import type { Perfume, ScoredPerfume, ScentFamily, Occasion, Strength, Vibe } from "@/lib/types";
 import { FAMILIES } from "@/lib/constants";
 
 function patchSession(sessionId: string, data: Record<string, unknown>) {
@@ -16,7 +16,7 @@ export function useQuizState() {
   const [step, setStep] = useState(0);
   const [past, setPast] = useState<Perfume[]>([]);
   const [scents, setScents] = useState<ScentFamily[]>([]);
-  const [price, setPrice] = useState<PriceOption | null>(null);
+  const [vibe, setVibe] = useState<Vibe | null>(null);
   const [occasion, setOccasion] = useState<Occasion | null>(null);
   const [strength, setStrength] = useState<Strength | null>(null);
   const [results, setResults] = useState(false);
@@ -58,7 +58,7 @@ export function useQuizState() {
     // Include answers accumulated so far
     if (past.length > 0) patch.pastPerfumeNames = past.map((p) => p.name);
     if (scents.length > 0) patch.scentFamilies = scents;
-    if (price) patch.priceRange = price;
+    if (vibe) patch.vibe = vibe;
     if (occasion) patch.occasion = occasion;
     if (strength) patch.strength = strength;
 
@@ -84,7 +84,7 @@ export function useQuizState() {
         body: JSON.stringify({
           past_perfume_ids: past.map((p) => p.id),
           scent_families: scents,
-          price_range: price,
+          vibe,
           occasion,
           strength,
         }),
@@ -97,7 +97,7 @@ export function useQuizState() {
         patchSession(sessionIdRef.current, {
           pastPerfumeNames: past.map((p) => p.name),
           scentFamilies: scents,
-          priceRange: price,
+          vibe,
           occasion,
           strength,
           recommendedPerfumeNames: data.map((p) => p.name),
@@ -112,7 +112,7 @@ export function useQuizState() {
     t.push(resultTimer);
 
     return () => t.forEach(clearTimeout);
-  }, [step, past, scents, price, occasion, strength]);
+  }, [step, past, scents, vibe, occasion, strength]);
 
   // Stagger card reveals
   useEffect(() => {
@@ -134,7 +134,7 @@ export function useQuizState() {
     setStep(0);
     setPast([]);
     setScents([]);
-    setPrice(null);
+    setVibe(null);
     setOccasion(null);
     setStrength(null);
     setResults(false);
@@ -164,8 +164,8 @@ export function useQuizState() {
     []
   );
 
-  const selectPrice = useCallback((id: PriceOption) => {
-    setPrice(id);
+  const selectVibe = useCallback((id: Vibe) => {
+    setVibe(id);
     setTimeout(() => setStep(3), 350);
   }, []);
 
@@ -187,8 +187,8 @@ export function useQuizState() {
     removePast,
     scents,
     toggleScent,
-    price,
-    selectPrice,
+    vibe,
+    selectVibe,
     occasion,
     selectOccasion,
     strength,
