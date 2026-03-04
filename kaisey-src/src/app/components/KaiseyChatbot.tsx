@@ -246,7 +246,7 @@ export function KaiseyChatbot({ onScheduleChange, onSuggestionsGenerated, varian
             content: `You are Kaisey, an intelligent MBA Co-Pilot assistant that helps MBA students optimize their schedules.
 
 Current Context:
-- Today's date: ${localToday()}
+- Today's date: ${localToday()} (${new Date().toLocaleDateString("en-US", { weekday: "long" })})
 - Current time: ${`${String(new Date().getHours()).padStart(2, "0")}:${String(new Date().getMinutes()).padStart(2, "0")}`}
 ${priority ? `- User's current priority: ${priority}\n- ${PRIORITY_CONFIG[priority].promptHint}` : ""}
 
@@ -611,6 +611,11 @@ Return ONLY by calling propose_schedule.`,
       }
     }
 
+    // "today"
+    if (/\btoday\b/.test(lower)) {
+      return `${now.getFullYear()}-${String(now.getMonth() + 1).padStart(2, "0")}-${String(now.getDate()).padStart(2, "0")}`;
+    }
+
     // "tomorrow"
     if (/\btomorrow\b/.test(lower)) {
       const d = new Date(now);
@@ -796,6 +801,20 @@ Return ONLY by calling propose_schedule.`,
 
   const handleTaskDurationChange = (taskId: string, duration: number) => {
     setExtractedTasks(prev => prev.map(t => t.id === taskId ? { ...t, estimatedDuration: duration } : t));
+  };
+
+  const categoryOrder: ExtractedTask["category"][] = ["academics", "recruiting", "social", "wellness"];
+  const categoryToPriority: Record<ExtractedTask["category"], ExtractedTask["priorityCategory"]> = {
+    academics: "Academics", recruiting: "Recruiting", social: "Social", wellness: "Wellness",
+  };
+
+  const handleTaskCategoryChange = (taskId: string) => {
+    setExtractedTasks(prev => prev.map(t => {
+      if (t.id !== taskId) return t;
+      const idx = categoryOrder.indexOf(t.category);
+      const next = categoryOrder[(idx + 1) % categoryOrder.length];
+      return { ...t, category: next, priorityCategory: categoryToPriority[next] };
+    }));
   };
 
   const handleTaskTimePreferenceChange = (taskId: string, pref: "Morning" | "Afternoon" | "Evening" | "Flexible") => {
@@ -1239,7 +1258,15 @@ Return ONLY by calling propose_schedule.`,
                 <div key={task.id} className="bg-background rounded-lg p-3 border border-border/50">
                   {/* Header row: title + badges */}
                   <div className="flex items-center gap-2 mb-2">
-                    <div className={`w-2 h-2 rounded-full shrink-0 ${categoryColors[task.category] || "bg-gray-400"}`} />
+                    {isEditable ? (
+                      <button
+                        onClick={() => handleTaskCategoryChange(task.id)}
+                        className={`w-4 h-4 rounded-full shrink-0 ${categoryColors[task.category] || "bg-gray-400"} ring-2 ring-offset-1 ring-offset-background ring-transparent hover:ring-foreground/30 transition-all`}
+                        title={`${task.category} (tap to change)`}
+                      />
+                    ) : (
+                      <div className={`w-2 h-2 rounded-full shrink-0 ${categoryColors[task.category] || "bg-gray-400"}`} />
+                    )}
                     <span className="text-xs font-medium flex-1">{task.title}</span>
                     <Badge className={`text-[9px] px-1.5 py-0 ${PRIORITY_CONFIG[task.priorityCategory]?.bgColor || ""} ${PRIORITY_CONFIG[task.priorityCategory]?.textColor || ""} border ${PRIORITY_CONFIG[task.priorityCategory]?.borderColor || ""}`}>
                       {task.priorityCategory}
