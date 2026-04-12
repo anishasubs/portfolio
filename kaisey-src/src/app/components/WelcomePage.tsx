@@ -245,7 +245,7 @@ export function WelcomePage({ onLogin }: WelcomePageProps) {
           </div>
           <h1 className="text-3xl font-bold mb-2">Welcome to Kaisey</h1>
           <p className="text-muted-foreground">
-            Your AI-powered MBA Co-Pilot for Academic Excellence, Professional Networking, and Personal Well-being
+            Your AI-powered Co-Pilot for Academic Excellence, Professional Networking, and Personal Well-being
           </p>
         </div>
 
@@ -336,7 +336,7 @@ export function WelcomePage({ onLogin }: WelcomePageProps) {
         {/* Footer */}
         <div className="mt-8 pt-6 border-t text-center space-y-3">
           <p className="text-xs text-muted-foreground">
-            Kaisey integrates with Canvas/LMS, Google Calendar, Apple Health, Strava, and Whoop to optimize your MBA experience.
+            Kaisey integrates with Canvas/LMS, Google Calendar, Apple Health, Strava, and Whoop to optimize your student experience.
           </p>
           <a
             href="/portfolio/"

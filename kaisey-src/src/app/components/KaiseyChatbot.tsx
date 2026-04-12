@@ -135,6 +135,8 @@ const localToday = () => {
   return `${d.getFullYear()}-${String(d.getMonth() + 1).padStart(2, "0")}-${String(d.getDate()).padStart(2, "0")}`;
 };
 
+const userTimezone = () => Intl.DateTimeFormat().resolvedOptions().timeZone;
+
 const formatTime = (time24: string) => {
   const [h, m] = time24.split(":").map(Number);
   const period = h >= 12 ? "PM" : "AM";
@@ -243,11 +245,12 @@ export function KaiseyChatbot({ onScheduleChange, onSuggestionsGenerated, varian
         messages: [
           {
             role: 'system',
-            content: `You are Kaisey, an intelligent MBA Co-Pilot assistant that helps MBA students optimize their schedules.
+            content: `You are Kaisey, an intelligent Co-Pilot assistant that helps students optimize their schedules.
 
 Current Context:
 - Today's date: ${localToday()} (${new Date().toLocaleDateString("en-US", { weekday: "long" })})
 - Current time: ${`${String(new Date().getHours()).padStart(2, "0")}:${String(new Date().getMinutes()).padStart(2, "0")}`}
+- Timezone: ${userTimezone()}
 ${priority ? `- User's current priority: ${priority}\n- ${PRIORITY_CONFIG[priority].promptHint}` : ""}
 
 Existing calendar events (DO NOT schedule over these):
@@ -363,12 +366,12 @@ IMPORTANT RULES:
         messages: [
           {
             role: "system",
-            content: `You are a task extraction assistant for Kaisey, an MBA student planning tool.
+            content: `You are a task extraction assistant for Kaisey, a student planning tool.
 The user will brain dump everything they need to do. Extract ALL of them as tasks.
 
 Rules:
 1. Extract every actionable item. Writing emails, sending messages, applying for positions, making calls are ALL schedulable tasks.
-2. For each task: set category, priorityCategory, priority, dueDate (null if unknown), preferredTime (HH:MM 24h if user specified, else null).
+2. For each task: set category, priorityCategory, priority, dueDate (YYYY-MM-DD if known, null if unknown), preferredTime (HH:MM 24h if user specified, else null).
 3. ALWAYS estimate a duration in minutes — never return null. Use common-sense defaults:
    - Coffee/casual meeting: 60m
    - Study session: 90m
@@ -379,8 +382,12 @@ Rules:
    - Interview prep: 60m
    - Case study: 120m
 4. Ignore calendar management commands like "delete my events."
+5. PARSE dates and times from the input. Resolve relative dates: "today" = ${todayISO}, "tomorrow" = the next day, "Monday"/"Tuesday"/etc. = the next occurrence of that day. Set dueDate to the resolved YYYY-MM-DD.
+6. PARSE specific times: "at 9" or "at 9am" = "09:00", "at 5pm" = "17:00", "at noon" = "12:00". Set preferredTime to the parsed HH:MM value.
+7. CLEAN the title: strip scheduling words like "schedule", "add", "at 9am", "tomorrow", day names, and date references. The title should be just the activity name (e.g., "schedule gym tomorrow at 9" → title: "Gym").
 
-Today: ${todayISO}
+Today: ${todayISO} (${new Date().toLocaleDateString("en-US", { weekday: "long" })})
+Timezone: ${userTimezone()}
 
 priorityCategory: Academics, Recruiting, Social, Wellness
 category: academics, recruiting, social, wellness
@@ -473,7 +480,7 @@ Call extract_tasks with ALL items.`,
     const msgs: Array<{ role: "system" | "user" | "assistant"; content: string }> = [
       {
         role: "system",
-        content: `You are a schedule optimization assistant for an MBA student.
+        content: `You are a schedule optimization assistant for a student.
 Given a list of tasks to schedule and existing calendar events, propose an optimized daily schedule.
 
 CRITICAL RULES:
@@ -488,6 +495,7 @@ CRITICAL RULES:
 
 Today: ${todayISO}
 Current time: ${currentTime}
+Timezone: ${userTimezone()}
 ${priority ? `\n${PRIORITY_CONFIG[priority].promptHint}` : ""}
 
 Existing events today:
@@ -1561,7 +1569,7 @@ Return ONLY by calling propose_schedule.`,
                 <Bot className="w-4 h-4 text-white" />
                 <div>
                   <h3 className="font-semibold text-white text-sm">Kaisey</h3>
-                  <p className="text-xs text-white/80">Your MBA Co-Pilot</p>
+                  <p className="text-xs text-white/80">Your Student Co-Pilot</p>
                 </div>
               </div>
               <Button variant="ghost" size="sm" onClick={() => setIsOpen(false)} className="h-8 w-8 p-0 text-white hover:bg-white/20">

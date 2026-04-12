@@ -443,7 +443,7 @@ export default function App() {
       // No Google credentials — load demo events
       setCalendarEvents(demoEvents);
       toast.success("Welcome to Kaisey!", {
-        description: "Your AI MBA Co-Pilot is ready.",
+        description: "Your AI Co-Pilot is ready.",
       });
     }
   };
@@ -678,7 +678,7 @@ export default function App() {
             </div>
             <div>
               <h1 className="text-xl font-bold">Kaisey</h1>
-              <p className="text-xs text-muted-foreground">MBA Co-Pilot</p>
+              <p className="text-xs text-muted-foreground">Student Co-Pilot</p>
             </div>
           </div>
 

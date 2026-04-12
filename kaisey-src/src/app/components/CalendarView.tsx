@@ -40,7 +40,7 @@ interface CalendarViewProps {
 }
 
 const daysOfWeek = ["Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"];
-const dayNames = ["Mon", "Tue", "Wed", "Thu", "Fri", "Sat"];
+const dayNames = ["Mon", "Tue", "Wed", "Thu", "Fri", "Sat", "Sun"];
 
 // Helper to get the start of the week (Monday)
 function getWeekDates(date: Date): Date[] {
@@ -50,7 +50,7 @@ function getWeekDates(date: Date): Date[] {
   monday.setDate(diff);
 
   const dates: Date[] = [];
-  for (let i = 0; i < 6; i++) {
+  for (let i = 0; i < 7; i++) {
     const d = new Date(monday);
     d.setDate(monday.getDate() + i);
     dates.push(d);
@@ -266,7 +266,7 @@ export function CalendarView({ events, onScheduleChange, priority }: CalendarVie
             {view === "day"
               ? currentDate.toLocaleDateString("en-US", { weekday: "long", month: "short", day: "numeric", year: "numeric" })
               : view === "week"
-                ? `${weekDates[0].toLocaleDateString("en-US", { month: "short", day: "numeric" })} - ${weekDates[5].toLocaleDateString("en-US", { month: "short", day: "numeric", year: "numeric" })}`
+                ? `${weekDates[0].toLocaleDateString("en-US", { month: "short", day: "numeric" })} - ${weekDates[6].toLocaleDateString("en-US", { month: "short", day: "numeric", year: "numeric" })}`
                 : formatMonth(currentDate)}
           </span>
           <Button variant="outline" size="sm" onClick={() => setCurrentDate(new Date(currentDate.getTime() + 86400000 * (view === "month" ? 30 : view === "week" ? 7 : 1)))}>
@@ -296,7 +296,7 @@ export function CalendarView({ events, onScheduleChange, priority }: CalendarVie
         {/* Week View */}
         <TabsContent value="week">
           <div className="overflow-x-auto">
-            <div className="grid grid-cols-6 gap-2 min-w-[800px]">
+            <div className="grid grid-cols-7 gap-2 min-w-[900px]">
               {weekDates.map((date, index) => {
                 const dayName = dayNames[index];
                 const dateKey = formatDateKey(date);

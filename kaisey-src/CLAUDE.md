@@ -1,7 +1,7 @@
-# Kaisey — AI MBA Co-Pilot
+# Kaisey — AI Student Co-Pilot
 
 ## What This Is
-Kaisey is a React+Vite+Tailwind+shadcn single-page app that acts as an AI calendar assistant for MBA students. It integrates with Google Calendar and uses OpenAI (gpt-4o-mini) for intelligent scheduling.
+Kaisey is a React+Vite+Tailwind+shadcn single-page app that acts as an AI calendar assistant for students. It integrates with Google Calendar and uses OpenAI (gpt-4o-mini) for intelligent scheduling.
 
 ## Tech Stack
 - **Framework**: React 18 + TypeScript + Vite
