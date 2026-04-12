@@ -2,7 +2,7 @@
 
 > **Claude Hackathon Project** | The first calendar system that unifies Google Calendar, Canvas, and CampusGroups — then uses Claude and your Oura Ring data to tell you what actually matters most right now.
 
-**[Live Demo](https://anishasubs.github.io/portfolio/kaisey/index.html)** | **[Case Study](https://anishasubs.github.io/portfolio/kaisey-case-study/)**
+**[Case Study](https://anishasubs.github.io/portfolio/kaisey-case-study/)**
 
 <p align="center">
   <img src="kaisey-qr.jpeg" alt="Scan to try Kaisey" width="250" />
