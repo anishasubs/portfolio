@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html>
+<head><title>Connecting Oura Ring...</title></head>
+<body>
+<p>Connecting your Oura Ring...</p>
+<script>
+// This page receives the Oura OAuth implicit flow callback.
+// It saves the access token to localStorage and redirects to the main app.
+var hash = window.location.hash.substring(1);
+var params = new URLSearchParams(hash);
+var token = params.get('access_token');
+var expiresIn = params.get('expires_in');
+var state = params.get('state');
+
+if (token && state === 'kaisey_oura_auth') {
+  var auth = {
+    accessToken: token,
+    refreshToken: '',
+    expiresAt: Date.now() + (Number(expiresIn) || 86400) * 1000
+  };
+  localStorage.setItem('kaisey_oura_auth', JSON.stringify(auth));
+  localStorage.setItem('kaisey_oura_just_connected', 'true');
+  window.location.replace('/portfolio/kaisey/');
+} else {
+  document.body.innerHTML = '<p>Oura connection failed. <a href="/portfolio/kaisey/">Return to Kaisey</a></p>';
+}
+</script>
+</body>
+</html>

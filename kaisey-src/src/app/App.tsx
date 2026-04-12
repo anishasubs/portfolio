@@ -476,35 +476,33 @@ export default function App() {
   };
 
   // Handle Oura OAuth callback (code in URL after redirect)
-  // Handle Oura OAuth callback (code flow: code in query params) + load cached data on mount
+  // Handle Oura OAuth callback (token saved by oura-callback.html) + load cached data on mount
   useEffect(() => {
-    const urlParams = new URLSearchParams(window.location.search);
-    const ouraCode = urlParams.get("code");
-    const ouraState = urlParams.get("state");
+    const justConnected = localStorage.getItem("kaisey_oura_just_connected");
 
-    if (ouraCode && ouraState === "kaisey_oura_auth") {
-      console.log("🔵 Oura OAuth callback detected, exchanging code...");
-      window.history.replaceState(null, "", window.location.pathname + window.location.hash);
-      setOuraLoading(true);
-      exchangeOuraCodeClientSide(ouraCode)
-        .then(async (auth) => {
-          console.log("🔵 Oura token exchange success, fetching data...");
-          saveOuraAuth(auth);
-          const freshMetrics = await fetchOuraData(auth.accessToken);
-          console.log("🔵 Oura data fetched:", {
-            sleep: freshMetrics.sleep.length,
-            activity: freshMetrics.activity.length,
-            readiness: freshMetrics.readiness.length,
-          });
-          setOuraMetrics(freshMetrics);
-          saveOuraMetrics(freshMetrics);
-          toast.success("Oura Ring connected!", { description: `Synced ${freshMetrics.sleep.length} days of health data.` });
-        })
-        .catch((err) => {
-          console.error("🔴 Oura exchange/fetch error:", err);
-          toast.error("Oura Ring connection failed", { description: err.message });
-        })
-        .finally(() => setOuraLoading(false));
+    if (justConnected) {
+      console.log("🔵 Oura just connected via callback page, fetching data...");
+      localStorage.removeItem("kaisey_oura_just_connected");
+      const auth = loadOuraAuth();
+      if (auth) {
+        setOuraLoading(true);
+        fetchOuraData(auth.accessToken)
+          .then((freshMetrics) => {
+            console.log("🔵 Oura data fetched:", {
+              sleep: freshMetrics.sleep.length,
+              activity: freshMetrics.activity.length,
+              readiness: freshMetrics.readiness.length,
+            });
+            setOuraMetrics(freshMetrics);
+            saveOuraMetrics(freshMetrics);
+            toast.success("Oura Ring connected!", { description: `Synced ${freshMetrics.sleep.length} days of health data.` });
+          })
+          .catch((err) => {
+            console.error("🔴 Oura data fetch error:", err);
+            toast.error("Oura connected but data fetch failed", { description: String(err) });
+          })
+          .finally(() => setOuraLoading(false));
+      }
     } else {
       // No OAuth callback — try loading cached Oura data
       const cached = loadOuraMetrics();

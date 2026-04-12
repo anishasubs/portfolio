@@ -48,25 +48,29 @@ export interface OuraMetrics {
   auth: OuraAuth;
 }
 
-/** Build the Oura OAuth authorization URL and redirect (code flow, exchanged client-side) */
+/** Build the Oura OAuth authorization URL and redirect (implicit flow via callback page) */
 export function initOuraOAuth(): void {
   const clientId = env.health.ouraClientId;
   if (!clientId) {
     throw new Error("Oura Client ID not configured");
   }
 
-  const redirectUri = env.health.ouraRedirectUri;
-  const scopes = "personal daily heartrate session workout tag spo2";
+  // Use the callback page as redirect URI — it's a direct file, no 301 redirect,
+  // so the hash fragment survives. The callback page saves the token and redirects to the main app.
+  const redirectUri = import.meta.env.PROD
+    ? window.location.origin + "/portfolio/kaisey/oura-callback.html"
+    : window.location.origin + "/portfolio/kaisey/oura-callback.html";
+
+  const scopes = "email personal daily heartrate tag workout session spo2 ring_configuration stress heart_health";
 
   const authUrl = `https://cloud.ouraring.com/oauth/authorize?${new URLSearchParams({
     client_id: clientId,
     redirect_uri: redirectUri,
-    response_type: "code",
+    response_type: "token",
     scope: scopes,
     state: "kaisey_oura_auth",
   })}`;
 
-  sessionStorage.setItem("kaisey_oura_auth_in_progress", "true");
   window.location.href = authUrl;
 }
 
