@@ -122,35 +122,59 @@ export async function fetchOuraData(accessToken: string, days = 7): Promise<Omit
 
   const headers = { Authorization: `Bearer ${accessToken}` };
 
-  const [sleepRes, activityRes, readinessRes] = await Promise.all([
+  // Fetch sleep periods (has raw durations), daily_sleep (has scores), activity, and readiness
+  const [sleepPeriodsRes, dailySleepRes, activityRes, readinessRes] = await Promise.all([
+    fetch(`https://api.ouraring.com/v2/usercollection/sleep?start_date=${start}&end_date=${end}`, { headers }),
     fetch(`https://api.ouraring.com/v2/usercollection/daily_sleep?start_date=${start}&end_date=${end}`, { headers }),
     fetch(`https://api.ouraring.com/v2/usercollection/daily_activity?start_date=${start}&end_date=${end}`, { headers }),
     fetch(`https://api.ouraring.com/v2/usercollection/daily_readiness?start_date=${start}&end_date=${end}`, { headers }),
   ]);
 
-  if (!sleepRes.ok || !activityRes.ok || !readinessRes.ok) {
-    const failedEndpoint = !sleepRes.ok ? "sleep" : !activityRes.ok ? "activity" : "readiness";
-    throw new Error(`Oura API error fetching ${failedEndpoint}`);
+  // Log errors but don't throw — partial data is better than none
+  const sleepPeriodsData = sleepPeriodsRes.ok ? await sleepPeriodsRes.json() : { data: [] };
+  const dailySleepData = dailySleepRes.ok ? await dailySleepRes.json() : { data: [] };
+  const activityData = activityRes.ok ? await activityRes.json() : { data: [] };
+  const readinessData = readinessRes.ok ? await readinessRes.json() : { data: [] };
+
+  console.log("🔵 Oura API responses:", {
+    sleepPeriods: sleepPeriodsData.data?.length ?? 0,
+    dailySleep: dailySleepData.data?.length ?? 0,
+    activity: activityData.data?.length ?? 0,
+    readiness: readinessData.data?.length ?? 0,
+  });
+
+  // Build a map of sleep periods by day (use the longest period per day)
+  const sleepByDay: Record<string, any> = {};
+  for (const s of (sleepPeriodsData.data || [])) {
+    const day = s.day;
+    if (!sleepByDay[day] || (s.total_sleep_duration ?? 0) > (sleepByDay[day].total_sleep_duration ?? 0)) {
+      sleepByDay[day] = s;
+    }
   }
 
-  const [sleepData, activityData, readinessData] = await Promise.all([
-    sleepRes.json(),
-    activityRes.json(),
-    readinessRes.json(),
-  ]);
+  // Build a map of daily sleep scores by day
+  const sleepScoreByDay: Record<string, number> = {};
+  for (const ds of (dailySleepData.data || [])) {
+    sleepScoreByDay[ds.day] = ds.score ?? 0;
+  }
+
+  const sleepDays = Object.keys(sleepByDay).sort();
 
   return {
     lastFetch: Date.now(),
-    sleep: (sleepData.data || []).map((s: any) => ({
-      date: s.day,
-      duration: s.contributors?.total_sleep ?? 0,
-      efficiency: s.contributors?.efficiency ?? 0,
-      restfulness: s.contributors?.restfulness ?? 0,
-      latency: s.contributors?.latency ?? 0,
-      deep: s.contributors?.deep_sleep ?? 0,
-      rem: s.contributors?.rem_sleep ?? 0,
-      awakeTime: s.contributors?.timing ?? 0,
-    })),
+    sleep: sleepDays.map((day) => {
+      const s = sleepByDay[day];
+      return {
+        date: day,
+        duration: s.total_sleep_duration ?? 0,        // seconds
+        efficiency: s.efficiency ?? sleepScoreByDay[day] ?? 0,  // 0-100
+        restfulness: s.restless_periods ?? 0,
+        latency: s.latency ?? 0,                       // seconds
+        deep: s.deep_sleep_duration ?? 0,              // seconds
+        rem: s.rem_sleep_duration ?? 0,                // seconds
+        awakeTime: s.awake_time ?? 0,                  // seconds
+      };
+    }),
     activity: (activityData.data || []).map((a: any) => ({
       date: a.day,
       activeEnergy: a.active_calories ?? 0,

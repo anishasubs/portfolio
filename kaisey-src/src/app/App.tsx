@@ -476,31 +476,59 @@ export default function App() {
   };
 
   // Handle Oura OAuth callback (code in URL after redirect)
+  // Handle Oura OAuth callback + load cached data on mount
   useEffect(() => {
     const urlParams = new URLSearchParams(window.location.search);
     const ouraCode = urlParams.get("code");
     const ouraState = urlParams.get("state");
+
     if (ouraCode && ouraState === "kaisey_oura_auth") {
+      console.log("🔵 Oura OAuth callback detected, exchanging code...");
       window.history.replaceState(null, "", window.location.pathname + window.location.hash);
       setOuraLoading(true);
       exchangeOuraCode(ouraCode)
         .then(async (auth) => {
+          console.log("🔵 Oura token exchange success, fetching data...");
           saveOuraAuth(auth);
           try {
             const freshMetrics = await fetchOuraData(auth.accessToken);
+            console.log("🔵 Oura data fetched:", {
+              sleep: freshMetrics.sleep.length,
+              activity: freshMetrics.activity.length,
+              readiness: freshMetrics.readiness.length,
+            });
             setOuraMetrics(freshMetrics);
             saveOuraMetrics(freshMetrics);
-            toast.success("Oura Ring connected!", { description: "Health data synced." });
+            toast.success("Oura Ring connected!", { description: `Synced ${freshMetrics.sleep.length} days of health data.` });
           } catch (err) {
-            console.error("Oura data fetch error:", err);
-            toast.success("Oura Ring connected!", { description: "Data will sync shortly." });
+            console.error("🔴 Oura data fetch error:", err);
+            toast.error("Oura connected but data fetch failed", { description: String(err) });
           }
         })
         .catch((err) => {
-          console.error("Oura auth error:", err);
+          console.error("🔴 Oura token exchange error:", err);
           toast.error("Oura Ring connection failed", { description: err.message });
         })
         .finally(() => setOuraLoading(false));
+    } else {
+      // No OAuth callback — try loading cached Oura data
+      const cached = loadOuraMetrics();
+      if (cached && isCacheValid(cached)) {
+        console.log("🔵 Loaded cached Oura data");
+        setOuraMetrics(cached);
+      } else if (loadOuraAuth()) {
+        // Have auth but stale cache — refresh
+        console.log("🔵 Oura auth found, refreshing data...");
+        const auth = loadOuraAuth()!;
+        setOuraLoading(true);
+        fetchOuraData(auth.accessToken)
+          .then((freshMetrics) => {
+            setOuraMetrics(freshMetrics);
+            saveOuraMetrics(freshMetrics);
+          })
+          .catch((err) => console.error("🔴 Oura refresh error:", err))
+          .finally(() => setOuraLoading(false));
+      }
     }
   }, []);
 

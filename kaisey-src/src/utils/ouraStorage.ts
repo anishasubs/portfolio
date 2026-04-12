@@ -24,11 +24,11 @@ export function isCacheValid(metrics: Omit<OuraMetrics, "auth"> | null): boolean
 }
 
 export function saveOuraAuth(auth: OuraAuth): void {
-  sessionStorage.setItem(OURA_AUTH_KEY, JSON.stringify(auth));
+  localStorage.setItem(OURA_AUTH_KEY, JSON.stringify(auth));
 }
 
 export function loadOuraAuth(): OuraAuth | null {
-  const stored = sessionStorage.getItem(OURA_AUTH_KEY);
+  const stored = localStorage.getItem(OURA_AUTH_KEY);
   if (!stored) return null;
   try {
     return JSON.parse(stored);
@@ -39,7 +39,7 @@ export function loadOuraAuth(): OuraAuth | null {
 
 export function clearOuraData(): void {
   localStorage.removeItem(OURA_METRICS_KEY);
-  sessionStorage.removeItem(OURA_AUTH_KEY);
+  localStorage.removeItem(OURA_AUTH_KEY);
 }
 
 export function getOuraDataState(): { connected: boolean; hasData: boolean; cacheValid: boolean } {
