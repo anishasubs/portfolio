@@ -10,12 +10,12 @@ interface OuraSleepCardProps {
 export function OuraSleepCard({ metrics, isLoading }: OuraSleepCardProps) {
   if (isLoading) {
     return (
-      <Card className="p-4">
-        <div className="animate-pulse space-y-3">
-          <div className="h-4 bg-muted rounded w-1/3" />
-          <div className="h-8 bg-muted rounded w-1/4" />
-          <div className="h-3 bg-muted rounded w-full" />
-          <div className="h-3 bg-muted rounded w-2/3" />
+      <Card className="p-6">
+        <div className="animate-pulse space-y-4">
+          <div className="h-5 bg-muted rounded w-1/3" />
+          <div className="h-10 bg-muted rounded w-1/4" />
+          <div className="h-4 bg-muted rounded w-full" />
+          <div className="h-4 bg-muted rounded w-2/3" />
         </div>
       </Card>
     );
@@ -45,42 +45,53 @@ export function OuraSleepCard({ metrics, isLoading }: OuraSleepCardProps) {
   // Quality assessment
   let quality: "poor" | "fair" | "good";
   let qualityColor: string;
+  let qualityBg: string;
   let qualityAdvice: string;
   if (lastNight.efficiency < 70 || durationHours < 5) {
     quality = "poor";
-    qualityColor = "text-red-500";
+    qualityColor = "text-red-600";
+    qualityBg = "bg-red-50 border-red-200";
     qualityAdvice = "Consider a rest day. Avoid scheduling intensive tasks.";
   } else if (lastNight.efficiency < 85 || durationHours < 6.5) {
     quality = "fair";
-    qualityColor = "text-yellow-500";
+    qualityColor = "text-yellow-600";
+    qualityBg = "bg-yellow-50 border-yellow-200";
     qualityAdvice = "Try to get more sleep tonight. Avoid late scheduling.";
   } else {
     quality = "good";
-    qualityColor = "text-green-500";
+    qualityColor = "text-green-600";
+    qualityBg = "bg-green-50 border-green-200";
     qualityAdvice = "Great recovery! Ready for productivity.";
   }
 
   return (
-    <Card className="p-4">
-      <div className="flex items-center justify-between mb-3">
-        <div className="flex items-center gap-2">
-          <Moon className="w-4 h-4 text-indigo-500" />
-          <h3 className="font-semibold text-sm">Sleep Quality</h3>
+    <Card className="p-6">
+      {/* Header */}
+      <div className="flex items-center justify-between mb-4">
+        <div className="flex items-center gap-2.5">
+          <div className="p-2 rounded-lg bg-indigo-100">
+            <Moon className="w-5 h-5 text-indigo-600" />
+          </div>
+          <h3 className="font-semibold text-base">Sleep Quality</h3>
         </div>
-        <span className="text-2xl font-bold">{lastNight.efficiency}</span>
+        <div className="text-right">
+          <span className="text-3xl font-bold">{lastNight.efficiency}</span>
+          <span className="text-sm text-muted-foreground ml-1">/100</span>
+        </div>
       </div>
 
-      <p className="text-xs text-muted-foreground mb-3">
-        Last night: {durationHours}h ({lastNight.efficiency}% efficiency)
+      {/* Last night summary */}
+      <p className="text-sm text-muted-foreground mb-4">
+        Last night: <span className="font-medium text-foreground">{durationHours}h</span> ({lastNight.efficiency}% efficiency)
       </p>
 
       {/* Duration progress */}
-      <div className="mb-3">
-        <div className="flex justify-between text-[10px] text-muted-foreground mb-1">
-          <span>Sleep Duration</span>
-          <span>{durationHours}h / {targetHours}h target</span>
+      <div className="mb-4">
+        <div className="flex justify-between text-sm mb-1.5">
+          <span className="text-muted-foreground">Sleep Duration</span>
+          <span className="font-medium">{durationHours}h / {targetHours}h</span>
         </div>
-        <div className="h-2 rounded-full bg-muted overflow-hidden">
+        <div className="h-3 rounded-full bg-muted overflow-hidden">
           <div
             className="h-full rounded-full bg-indigo-500 transition-all duration-500"
             style={{ width: `${progressPct}%` }}
@@ -89,30 +100,32 @@ export function OuraSleepCard({ metrics, isLoading }: OuraSleepCardProps) {
       </div>
 
       {/* Sleep composition */}
-      <div className="mb-3">
-        <p className="text-[10px] text-muted-foreground mb-1">Sleep Composition</p>
-        <div className="h-2 rounded-full overflow-hidden flex">
+      <div className="mb-4">
+        <p className="text-sm text-muted-foreground mb-1.5">Sleep Composition</p>
+        <div className="h-3 rounded-full overflow-hidden flex">
           <div className="bg-indigo-700" style={{ width: `${deepPct}%` }} />
           <div className="bg-purple-500" style={{ width: `${remPct}%` }} />
           <div className="bg-blue-300" style={{ width: `${lightPct}%` }} />
         </div>
-        <div className="flex gap-3 mt-1 text-[10px] text-muted-foreground">
-          <span className="flex items-center gap-1"><span className="w-2 h-2 rounded-full bg-indigo-700" />Deep {deepHours}h</span>
-          <span className="flex items-center gap-1"><span className="w-2 h-2 rounded-full bg-purple-500" />REM {remHours}h</span>
-          <span className="flex items-center gap-1"><span className="w-2 h-2 rounded-full bg-blue-300" />Light {lightHours}h</span>
+        <div className="flex gap-4 mt-2 text-sm text-muted-foreground">
+          <span className="flex items-center gap-1.5"><span className="w-2.5 h-2.5 rounded-full bg-indigo-700" />Deep {deepHours}h</span>
+          <span className="flex items-center gap-1.5"><span className="w-2.5 h-2.5 rounded-full bg-purple-500" />REM {remHours}h</span>
+          <span className="flex items-center gap-1.5"><span className="w-2.5 h-2.5 rounded-full bg-blue-300" />Light {lightHours}h</span>
         </div>
       </div>
 
       {/* Quality assessment */}
-      <div className={`text-xs ${qualityColor} font-medium mb-2`}>
-        {quality === "poor" ? "⚠ Poor Sleep" : quality === "fair" ? "⚠ Fair Sleep" : "✓ Good Sleep"}
+      <div className={`rounded-lg border p-3 mb-4 ${qualityBg}`}>
+        <p className={`text-sm font-semibold ${qualityColor} mb-1`}>
+          {quality === "poor" ? "Poor Sleep" : quality === "fair" ? "Fair Sleep" : "Good Sleep"}
+        </p>
+        <p className="text-sm text-muted-foreground">{qualityAdvice}</p>
       </div>
-      <p className="text-[10px] text-muted-foreground mb-3">{qualityAdvice}</p>
 
       {/* 3-day average */}
-      <div className="flex items-center gap-1 text-[10px] text-muted-foreground border-t pt-2">
-        <TrendingUp className="w-3 h-3" />
-        <span>3-day avg: {avg3Duration}h ({avg3Efficiency}% efficiency)</span>
+      <div className="flex items-center gap-2 text-sm text-muted-foreground border-t pt-3">
+        <TrendingUp className="w-4 h-4" />
+        <span>3-day avg: <span className="font-medium text-foreground">{avg3Duration}h</span> ({avg3Efficiency}% efficiency)</span>
       </div>
     </Card>
   );

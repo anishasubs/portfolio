@@ -10,12 +10,12 @@ interface OuraActivityCardProps {
 export function OuraActivityCard({ metrics, isLoading }: OuraActivityCardProps) {
   if (isLoading) {
     return (
-      <Card className="p-4">
-        <div className="animate-pulse space-y-3">
-          <div className="h-4 bg-muted rounded w-1/3" />
-          <div className="h-8 bg-muted rounded w-1/4" />
-          <div className="h-3 bg-muted rounded w-full" />
-          <div className="h-3 bg-muted rounded w-2/3" />
+      <Card className="p-6">
+        <div className="animate-pulse space-y-4">
+          <div className="h-5 bg-muted rounded w-1/3" />
+          <div className="h-10 bg-muted rounded w-1/4" />
+          <div className="h-4 bg-muted rounded w-full" />
+          <div className="h-4 bg-muted rounded w-2/3" />
         </div>
       </Card>
     );
@@ -36,18 +36,22 @@ export function OuraActivityCard({ metrics, isLoading }: OuraActivityCardProps) 
   // Activity assessment
   let level: "low" | "moderate" | "high";
   let levelColor: string;
+  let levelBg: string;
   let levelAdvice: string;
   if (avgEnergy < 350) {
     level = "low";
-    levelColor = "text-yellow-500";
+    levelColor = "text-yellow-600";
+    levelBg = "bg-yellow-50 border-yellow-200";
     levelAdvice = "Schedule workouts or movement breaks between tasks.";
   } else if (avgEnergy >= 500) {
     level = "high";
-    levelColor = "text-green-500";
+    levelColor = "text-green-600";
+    levelBg = "bg-green-50 border-green-200";
     levelAdvice = "Great activity! Include adequate recovery time.";
   } else {
     level = "moderate";
-    levelColor = "text-blue-500";
+    levelColor = "text-blue-600";
+    levelBg = "bg-blue-50 border-blue-200";
     levelAdvice = "Maintain this consistent routine.";
   }
 
@@ -57,27 +61,31 @@ export function OuraActivityCard({ metrics, isLoading }: OuraActivityCardProps) 
     : null;
 
   return (
-    <Card className="p-4">
-      <div className="flex items-center justify-between mb-3">
-        <div className="flex items-center gap-2">
-          <Activity className="w-4 h-4 text-orange-500" />
-          <h3 className="font-semibold text-sm">Activity & Energy</h3>
+    <Card className="p-6">
+      {/* Header */}
+      <div className="flex items-center justify-between mb-4">
+        <div className="flex items-center gap-2.5">
+          <div className="p-2 rounded-lg bg-orange-100">
+            <Activity className="w-5 h-5 text-orange-600" />
+          </div>
+          <h3 className="font-semibold text-base">Activity & Energy</h3>
         </div>
         {latestReadiness !== null && (
           <div className="text-right">
-            <span className="text-[10px] text-muted-foreground">Readiness</span>
-            <div className="text-lg font-bold">{latestReadiness}</div>
+            <p className="text-xs text-muted-foreground mb-0.5">Readiness</p>
+            <span className="text-3xl font-bold">{latestReadiness}</span>
+            <span className="text-sm text-muted-foreground ml-1">/100</span>
           </div>
         )}
       </div>
 
       {/* Active Energy */}
-      <div className="mb-3">
-        <div className="flex justify-between text-[10px] text-muted-foreground mb-1">
-          <span>Active Energy</span>
-          <span>{today.activeEnergy} kcal / {energyTarget}</span>
+      <div className="mb-4">
+        <div className="flex justify-between text-sm mb-1.5">
+          <span className="text-muted-foreground">Active Energy</span>
+          <span className="font-medium">{today.activeEnergy} kcal / {energyTarget}</span>
         </div>
-        <div className="h-2 rounded-full bg-muted overflow-hidden">
+        <div className="h-3 rounded-full bg-muted overflow-hidden">
           <div
             className="h-full rounded-full bg-orange-500 transition-all duration-500"
             style={{ width: `${energyPct}%` }}
@@ -86,12 +94,12 @@ export function OuraActivityCard({ metrics, isLoading }: OuraActivityCardProps) 
       </div>
 
       {/* Steps */}
-      <div className="mb-3">
-        <div className="flex justify-between text-[10px] text-muted-foreground mb-1">
-          <span>Steps</span>
-          <span>{today.steps.toLocaleString()} / {stepsTarget.toLocaleString()}</span>
+      <div className="mb-4">
+        <div className="flex justify-between text-sm mb-1.5">
+          <span className="text-muted-foreground">Steps</span>
+          <span className="font-medium">{today.steps.toLocaleString()} / {stepsTarget.toLocaleString()}</span>
         </div>
-        <div className="h-2 rounded-full bg-muted overflow-hidden">
+        <div className="h-3 rounded-full bg-muted overflow-hidden">
           <div
             className="h-full rounded-full bg-blue-500 transition-all duration-500"
             style={{ width: `${stepsPct}%` }}
@@ -100,15 +108,17 @@ export function OuraActivityCard({ metrics, isLoading }: OuraActivityCardProps) 
       </div>
 
       {/* Activity level */}
-      <div className={`text-xs ${levelColor} font-medium mb-1`}>
-        {level === "low" ? "↓ Low Activity" : level === "high" ? "↑ High Activity" : "→ Moderate Activity"}
+      <div className={`rounded-lg border p-3 mb-4 ${levelBg}`}>
+        <p className={`text-sm font-semibold ${levelColor} mb-1`}>
+          {level === "low" ? "Low Activity" : level === "high" ? "High Activity" : "Moderate Activity"}
+        </p>
+        <p className="text-sm text-muted-foreground">{levelAdvice}</p>
       </div>
-      <p className="text-[10px] text-muted-foreground mb-3">{levelAdvice}</p>
 
       {/* 7-day average */}
-      <div className="flex items-center gap-1 text-[10px] text-muted-foreground border-t pt-2">
-        <TrendingUp className="w-3 h-3" />
-        <span>7-day avg: {avgEnergy} kcal/day | {avgSteps.toLocaleString()} steps/day</span>
+      <div className="flex items-center gap-2 text-sm text-muted-foreground border-t pt-3">
+        <TrendingUp className="w-4 h-4" />
+        <span>7-day avg: <span className="font-medium text-foreground">{avgEnergy} kcal/day</span> | {avgSteps.toLocaleString()} steps/day</span>
       </div>
     </Card>
   );
