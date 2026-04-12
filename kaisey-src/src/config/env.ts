@@ -36,8 +36,8 @@ export const env = {
     whoopApiKey: import.meta.env.VITE_WHOOP_API_KEY || "",
     ouraClientId: import.meta.env.VITE_OURA_CLIENT_ID || "",
     ouraRedirectUri: import.meta.env.PROD
-      ? window.location.origin + '/portfolio/kaisey/'
-      : (import.meta.env.VITE_OURA_REDIRECT_URI || window.location.origin + '/portfolio/kaisey/'),
+      ? window.location.origin + '/portfolio/kaisey'
+      : (import.meta.env.VITE_OURA_REDIRECT_URI || window.location.origin),
   },
 
   // App Config

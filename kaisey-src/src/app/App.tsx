@@ -16,7 +16,7 @@ import { type PriorityMode, PRIORITY_STORAGE_KEY } from "@/app/components/priori
 import { OnboardingTour, isTourComplete } from "@/app/components/OnboardingTour";
 import { OuraSleepCard } from "@/app/components/OuraSleepCard";
 import { OuraActivityCard } from "@/app/components/OuraActivityCard";
-import { fetchOuraData, exchangeOuraCode, initOuraOAuth, type OuraMetrics } from "@/utils/ouraClient";
+import { fetchOuraData, exchangeOuraCodeClientSide, initOuraOAuth, type OuraMetrics } from "@/utils/ouraClient";
 import { saveOuraMetrics, loadOuraMetrics, loadOuraAuth, saveOuraAuth, clearOuraData, isCacheValid } from "@/utils/ouraStorage";
 
 // Helper function to fetch Google user profile
@@ -476,26 +476,21 @@ export default function App() {
   };
 
   // Handle Oura OAuth callback (code in URL after redirect)
-  // Handle Oura OAuth callback (implicit flow: token in hash) + load cached data on mount
+  // Handle Oura OAuth callback (code flow: code in query params) + load cached data on mount
   useEffect(() => {
-    const hashParams = new URLSearchParams(window.location.hash.substring(1));
-    const ouraAccessToken = hashParams.get("access_token");
-    const ouraState = hashParams.get("state");
+    const urlParams = new URLSearchParams(window.location.search);
+    const ouraCode = urlParams.get("code");
+    const ouraState = urlParams.get("state");
 
-    if (ouraAccessToken && ouraState === "kaisey_oura_auth") {
-      console.log("🔵 Oura OAuth callback detected (implicit flow), fetching data...");
-      // Clean up the URL hash (preserve Google hash if present)
-      window.history.replaceState(null, "", window.location.pathname);
-      const expiresIn = hashParams.get("expires_in");
-      const auth = {
-        accessToken: ouraAccessToken,
-        refreshToken: "",
-        expiresAt: Date.now() + (Number(expiresIn) || 86400) * 1000,
-      };
-      saveOuraAuth(auth);
+    if (ouraCode && ouraState === "kaisey_oura_auth") {
+      console.log("🔵 Oura OAuth callback detected, exchanging code...");
+      window.history.replaceState(null, "", window.location.pathname + window.location.hash);
       setOuraLoading(true);
-      fetchOuraData(ouraAccessToken)
-        .then((freshMetrics) => {
+      exchangeOuraCodeClientSide(ouraCode)
+        .then(async (auth) => {
+          console.log("🔵 Oura token exchange success, fetching data...");
+          saveOuraAuth(auth);
+          const freshMetrics = await fetchOuraData(auth.accessToken);
           console.log("🔵 Oura data fetched:", {
             sleep: freshMetrics.sleep.length,
             activity: freshMetrics.activity.length,
@@ -506,8 +501,8 @@ export default function App() {
           toast.success("Oura Ring connected!", { description: `Synced ${freshMetrics.sleep.length} days of health data.` });
         })
         .catch((err) => {
-          console.error("🔴 Oura data fetch error:", err);
-          toast.error("Oura connected but data fetch failed", { description: String(err) });
+          console.error("🔴 Oura exchange/fetch error:", err);
+          toast.error("Oura Ring connection failed", { description: err.message });
         })
         .finally(() => setOuraLoading(false));
     } else {
