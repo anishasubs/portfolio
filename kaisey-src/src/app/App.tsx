@@ -14,6 +14,10 @@ import { toast } from "sonner";
 import { PrioritySelector } from "@/app/components/PrioritySelector";
 import { type PriorityMode, PRIORITY_STORAGE_KEY } from "@/app/components/priority";
 import { OnboardingTour, isTourComplete } from "@/app/components/OnboardingTour";
+import { OuraSleepCard } from "@/app/components/OuraSleepCard";
+import { OuraActivityCard } from "@/app/components/OuraActivityCard";
+import { fetchOuraData, type OuraMetrics } from "@/utils/ouraClient";
+import { saveOuraMetrics, loadOuraMetrics, loadOuraAuth, clearOuraData, isCacheValid } from "@/utils/ouraStorage";
 
 // Helper function to fetch Google user profile
 async function fetchGoogleUserProfile(accessToken: string): Promise<{ name: string; email: string; picture?: string } | null> {
@@ -268,6 +272,8 @@ export default function App() {
   });
   const [needsPrioritySelection, setNeedsPrioritySelection] = useState(false);
   const [showTour, setShowTour] = useState(false);
+  const [ouraMetrics, setOuraMetrics] = useState<Omit<OuraMetrics, "auth"> | null>(null);
+  const [ouraLoading, setOuraLoading] = useState(false);
 
   const now = new Date();
   const today = `${now.getFullYear()}-${String(now.getMonth() + 1).padStart(2, '0')}-${String(now.getDate()).padStart(2, '0')}`;
@@ -446,6 +452,50 @@ export default function App() {
         description: "Your AI Co-Pilot is ready.",
       });
     }
+
+    // Load Oura data (cached or fresh)
+    const cachedOura = loadOuraMetrics();
+    if (isCacheValid(cachedOura)) {
+      setOuraMetrics(cachedOura);
+    } else {
+      const ouraAuth = loadOuraAuth();
+      if (ouraAuth) {
+        setOuraLoading(true);
+        try {
+          const freshMetrics = await fetchOuraData(ouraAuth.accessToken);
+          setOuraMetrics(freshMetrics);
+          saveOuraMetrics(freshMetrics);
+        } catch (err) {
+          console.error("Oura fetch error:", err);
+          if (cachedOura) setOuraMetrics(cachedOura);
+        } finally {
+          setOuraLoading(false);
+        }
+      }
+    }
+  };
+
+  const handleOuraRefresh = async () => {
+    const ouraAuth = loadOuraAuth();
+    if (!ouraAuth) throw new Error("Oura not connected");
+    setOuraLoading(true);
+    try {
+      const freshMetrics = await fetchOuraData(ouraAuth.accessToken);
+      setOuraMetrics(freshMetrics);
+      saveOuraMetrics(freshMetrics);
+      toast.success("Oura data refreshed");
+    } catch (err) {
+      toast.error("Failed to refresh Oura data");
+      throw err;
+    } finally {
+      setOuraLoading(false);
+    }
+  };
+
+  const handleOuraDisconnect = () => {
+    clearOuraData();
+    setOuraMetrics(null);
+    toast.success("Oura Ring disconnected");
   };
 
   const handleAcceptSuggestion = (id: string) => {
@@ -642,10 +692,15 @@ export default function App() {
           setUserFocus(null);
           setUserPriority(null);
           setNeedsPrioritySelection(false);
+          setOuraMetrics(null);
+          clearOuraData();
           localStorage.removeItem(PRIORITY_STORAGE_KEY);
           localStorage.removeItem("google_calendar_token");
           toast.success("Logged out successfully");
         }}
+        ouraMetrics={ouraMetrics}
+        onOuraRefresh={handleOuraRefresh}
+        onOuraDisconnect={handleOuraDisconnect}
       />
     );
   }
@@ -714,6 +769,7 @@ export default function App() {
             variant="widget"
             priority={userPriority}
             calendarEvents={calendarEvents}
+            ouraMetrics={ouraMetrics}
           />
         </div>
 
@@ -738,6 +794,14 @@ export default function App() {
                 dismiss={() => handleDismissSuggestion(suggestion.id)}
               />
             ))}
+          </div>
+        )}
+
+        {/* Oura Health Cards */}
+        {(ouraMetrics || ouraLoading) && (
+          <div className="mb-6 grid grid-cols-1 lg:grid-cols-2 gap-4">
+            <OuraSleepCard metrics={ouraMetrics} isLoading={ouraLoading} />
+            <OuraActivityCard metrics={ouraMetrics} isLoading={ouraLoading} />
           </div>
         )}
 

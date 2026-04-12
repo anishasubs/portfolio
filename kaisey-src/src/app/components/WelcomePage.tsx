@@ -1,10 +1,12 @@
 import { useState, useEffect, useRef } from "react";
-import { Brain, LogIn, Sparkles, Calendar, Play, ArrowLeft } from "lucide-react";
+import { Brain, LogIn, Sparkles, Calendar, Play, ArrowLeft, Heart } from "lucide-react";
 import { Button } from "@/app/components/ui/button";
 import { Label } from "@/app/components/ui/label";
 import { Card } from "@/app/components/ui/card";
 import { toast } from "sonner";
 import { googleConfig } from "@/config/env";
+import { initOuraOAuth, exchangeOuraCode } from "@/utils/ouraClient";
+import { saveOuraAuth } from "@/utils/ouraStorage";
 
 interface WelcomePageProps {
   onLogin: (googleCredentials: string) => void;
@@ -13,6 +15,8 @@ interface WelcomePageProps {
 export function WelcomePage({ onLogin }: WelcomePageProps) {
   const [googleCredentials, setGoogleCredentials] = useState("");
   const [isConnectingGoogle, setIsConnectingGoogle] = useState(false);
+  const [ouraConnected, setOuraConnected] = useState(false);
+  const [isConnectingOura, setIsConnectingOura] = useState(false);
 
   // Check if we just came back from OAuth redirect
   useEffect(() => {
@@ -66,6 +70,28 @@ export function WelcomePage({ onLogin }: WelcomePageProps) {
       }
     }
     
+    // Check for Oura OAuth callback (code in URL params)
+    const urlParams = new URLSearchParams(window.location.search);
+    const ouraCode = urlParams.get("code");
+    const ouraState = urlParams.get("state");
+    if (ouraCode && ouraState === "kaisey_oura_auth") {
+      window.history.replaceState(null, "", window.location.pathname);
+      exchangeOuraCode(ouraCode)
+        .then((auth) => {
+          saveOuraAuth(auth);
+          setOuraConnected(true);
+          toast.success("Oura Ring connected!", {
+            description: "Health data will sync after login.",
+          });
+        })
+        .catch((err) => {
+          console.error("Oura auth error:", err);
+          toast.error("Oura Ring connection failed", {
+            description: err.message,
+          });
+        });
+    }
+
     // Check if we already have credentials in localStorage
     const storedToken = localStorage.getItem("google_calendar_token");
     if (storedToken) {
@@ -147,6 +173,18 @@ export function WelcomePage({ onLogin }: WelcomePageProps) {
       onLogin("", googleCredentials);
     } else {
       toast.error("Please connect your Google Calendar first.");
+    }
+  };
+
+  const handleOuraRingConnect = () => {
+    setIsConnectingOura(true);
+    try {
+      initOuraOAuth();
+    } catch (err) {
+      toast.error("Oura Ring not configured", {
+        description: err instanceof Error ? err.message : "Check your environment variables.",
+      });
+      setIsConnectingOura(false);
     }
   };
 
@@ -304,6 +342,34 @@ export function WelcomePage({ onLogin }: WelcomePageProps) {
             )}
           </div>
           
+          {/* Oura Ring (Optional) */}
+          <div className="space-y-2">
+            <div className="text-center">
+              <p className="text-sm text-muted-foreground">
+                Connect your Oura Ring for health-aware scheduling
+              </p>
+            </div>
+            {ouraConnected ? (
+              <div className="p-3 rounded-lg border-2 border-green-500/20 bg-green-50 dark:bg-green-900/10 text-center">
+                <div className="flex items-center justify-center gap-2 text-green-700 dark:text-green-400">
+                  <div className="w-2 h-2 rounded-full bg-green-500 animate-pulse" />
+                  <span className="text-sm font-semibold">Oura Ring Connected</span>
+                </div>
+              </div>
+            ) : (
+              <Button
+                onClick={handleOuraRingConnect}
+                disabled={isConnectingOura}
+                variant="outline"
+                className="w-full h-12"
+                size="lg"
+              >
+                <Heart className="w-4 h-4 mr-2 text-red-500" />
+                {isConnectingOura ? "Connecting..." : "Connect Oura Ring (Optional)"}
+              </Button>
+            )}
+          </div>
+
           {/* Divider */}
           <div className="relative">
             <div className="absolute inset-0 flex items-center">
@@ -336,7 +402,7 @@ export function WelcomePage({ onLogin }: WelcomePageProps) {
         {/* Footer */}
         <div className="mt-8 pt-6 border-t text-center space-y-3">
           <p className="text-xs text-muted-foreground">
-            Kaisey integrates with Canvas/LMS, Google Calendar, Apple Health, Strava, and Whoop to optimize your student experience.
+            Kaisey integrates with Canvas/LMS, Google Calendar, Oura Ring, Apple Health, Strava, and Whoop to optimize your student experience.
           </p>
           <a
             href="/portfolio/"

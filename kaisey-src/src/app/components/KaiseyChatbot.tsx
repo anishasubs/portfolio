@@ -137,6 +137,9 @@ const localToday = () => {
 
 const userTimezone = () => Intl.DateTimeFormat().resolvedOptions().timeZone;
 
+// Lazy import to avoid circular deps
+import { buildOuraContext } from "@/utils/ouraContext";
+
 const formatTime = (time24: string) => {
   const [h, m] = time24.split(":").map(Number);
   const period = h >= 12 ? "PM" : "AM";
@@ -186,9 +189,10 @@ interface KaiseyChatbotProps {
   variant?: "widget" | "panel";
   priority?: PriorityMode | null;
   calendarEvents?: CalendarEvent[];
+  ouraMetrics?: Omit<import("@/utils/ouraClient").OuraMetrics, "auth"> | null;
 }
 
-export function KaiseyChatbot({ onScheduleChange, onSuggestionsGenerated, variant = "floating", priority, calendarEvents = [] }: KaiseyChatbotProps) {
+export function KaiseyChatbot({ onScheduleChange, onSuggestionsGenerated, variant = "floating", priority, calendarEvents = [], ouraMetrics }: KaiseyChatbotProps) {
   const [isOpen, setIsOpen] = useState(variant === "widget");
   const [messages, setMessages] = useState<Message[]>([
     {
@@ -255,6 +259,7 @@ ${priority ? `- User's current priority: ${priority}\n- ${PRIORITY_CONFIG[priori
 
 Existing calendar events (DO NOT schedule over these):
 ${calendarEvents.length > 0 ? calendarEvents.map(e => `- ${e.date} ${e.time} (${e.duration}min): ${e.title}`).join('\n') : '(no events)'}
+${(() => { const ctx = ouraMetrics ? buildOuraContext(ouraMetrics) : null; return ctx ? '\n' + ctx.promptAddition : ''; })()}
 
 IMPORTANT RULES:
 1. REMEMBER the conversation history. If the user has already provided information (event title, time, duration, recurrence), DO NOT ask for it again.
