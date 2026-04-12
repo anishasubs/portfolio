@@ -20,15 +20,16 @@ export function WelcomePage({ onLogin }: WelcomePageProps) {
     const accessToken = hashParams.get("access_token");
     const error = hashParams.get("error");
     
-    // Handle OAuth errors
-    if (error) {
+    // Handle OAuth errors (only for Google, not Oura)
+    const state = hashParams.get("state");
+    if (error && state === "kaisey_calendar_auth") {
       const errorDescription = hashParams.get("error_description") || "Unknown error";
       console.error("OAuth Error:", error, errorDescription);
-      
+
       toast.error("Google Calendar connection failed", {
         description: errorDescription.replace(/\+/g, ' '),
       });
-      
+
       // Clean up the URL
       window.history.replaceState(null, "", window.location.pathname);
       setIsConnectingGoogle(false);

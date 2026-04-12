@@ -48,7 +48,7 @@ export interface OuraMetrics {
   auth: OuraAuth;
 }
 
-/** Build the Oura OAuth authorization URL and redirect */
+/** Build the Oura OAuth authorization URL and redirect (implicit/client-side flow) */
 export function initOuraOAuth(): void {
   const clientId = env.health.ouraClientId;
   if (!clientId) {
@@ -56,12 +56,12 @@ export function initOuraOAuth(): void {
   }
 
   const redirectUri = env.health.ouraRedirectUri;
-  const scopes = "personal sleep daily_activity daily_readiness";
+  const scopes = "personal daily heartrate session workout tag spo2";
 
   const authUrl = `https://cloud.ouraring.com/oauth/authorize?${new URLSearchParams({
     client_id: clientId,
     redirect_uri: redirectUri,
-    response_type: "code",
+    response_type: "token",
     scope: scopes,
     state: "kaisey_oura_auth",
   })}`;
