@@ -141,7 +141,7 @@
             align-items: center;
             justify-content: center;
             text-align: center;
-            padding: 120px 40px 80px;
+            padding: 80px 40px 80px;
             position: relative;
             overflow: hidden;
         }
@@ -286,8 +286,8 @@
         /* ── Cards shared ────────────────────────────────────── */
         .cards-grid {
             display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
-            gap: 2rem;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 1.5rem;
             margin-top: 2.5rem;
         }
         .card {
@@ -541,28 +541,6 @@
 <body>
 
     <!-- Sticky Nav -->
-    <nav class="site-nav">
-        <a class="site-nav-name" href="../index.html"><span class="nav-pocket-icon"><img class="menu-v1" src="../assets/pocket-v1.svg" alt=""><img class="menu-v2" src="../assets/pocket-v2.svg" alt=""><img class="menu-v3" src="../assets/pocket-v3.svg" alt=""></span>Anisha Subberwal</a>
-        <button class="nav-hamburger" onclick="document.getElementById('nav-links').classList.toggle('open')" aria-label="Menu">
-            <span></span><span></span><span></span>
-        </button>
-        <ul class="site-nav-links" id="nav-links">
-            <li class="nav-work-wrap">
-                <a href="../index.html">Work</a>
-                <ul class="nav-work-dropdown">
-                    <li><a href="../inde-wild-case-study/index.html">beauty brand growth</a></li>
-                    <li><a href="../coffeechain/index.html">crypto coffee case</a></li>
-                    <li><a href="../kaisey-case-study/index.html">smart calendar</a></li>
-                    <li><a href="../whifff-case-study/index.html">perfume scent quiz</a></li>
-                </ul>
-            </li>
-            <li><a href="../index.html#about">About</a></li>
-            <li><a href="../assets/Anisha_Subberwal_Resume.pdf" download>Resume</a></li>
-            <li><a href="https://www.linkedin.com/in/anisha-subberwal-434346126/" target="_blank">LinkedIn</a></li>
-            <li><a href="mailto:as7689@columbia.edu">Email</a></li>
-        </ul>
-    </nav>
-
     <!-- ═══ 1. HERO ═══ -->
     <section class="hero">
         <div class="hero-content">
@@ -706,27 +684,48 @@
     <section class="problem">
         <div class="container fade-in">
             <span class="section-tag">In Action</span>
-            <h2 class="section-title">Same Day, Different Mode</h2>
-            <p class="problem-intro">Here's how Kaisey re-ranks a real Tuesday in October &mdash; peak recruiting season, Oura readiness score: 54 &mdash; when you toggle from Academics to Recruiting mode.</p>
+            <h2 class="section-title">Your Day at a Glance</h2>
+            <p class="problem-intro">Kaisey gives you an instant snapshot of your day and week &mdash; showing your next event, weekly time balance across all four categories, and where your focus is going. No manual tracking required.</p>
 
             <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 1.5rem; margin-top: 2rem;">
                 <div style="background: white; border-radius: 12px; padding: 1.5rem; border: 1px solid rgba(0,0,0,0.06);">
-                    <h4 style="font-size: 0.9rem; font-weight: 700; margin-bottom: 1rem; color: var(--navy);">&#128218; Academics Mode</h4>
-                    <div style="padding: 10px 14px; border-radius: 8px; margin-bottom: 8px; background: rgba(124, 58, 237, 0.06); border-left: 3px solid var(--violet);"><strong>Strategy case prep &mdash; HubSpot/Motion AI</strong><br><span style="font-size: 0.8rem; color: var(--text-secondary);">Due tomorrow &middot; Cold call risk</span></div>
-                    <div style="padding: 10px 14px; border-radius: 8px; margin-bottom: 8px; background: rgba(124, 58, 237, 0.06); border-left: 3px solid var(--violet);"><strong>Operations problem set</strong><br><span style="font-size: 0.8rem; color: var(--text-secondary);">Due Thursday &middot; 2hr estimated</span></div>
-                    <div style="padding: 10px 14px; border-radius: 8px; margin-bottom: 8px; background: rgba(251, 191, 36, 0.06); border-left: 3px solid #fbbf24;"><strong>Coffee chat &mdash; PM at Google</strong><br><span style="font-size: 0.8rem; color: var(--text-secondary);">3:00 PM &middot; Confirmed</span></div>
-                    <div style="padding: 10px 14px; border-radius: 8px; background: rgba(0,0,0,0.02); border-left: 3px solid #ccc;"><strong>CBS Tech Club social</strong><br><span style="font-size: 0.8rem; color: var(--text-secondary);">6:00 PM &middot; Optional</span></div>
+                    <h4 style="font-size: 0.9rem; font-weight: 700; margin-bottom: 1rem; color: var(--navy);">&#128197; Weekly Balance View</h4>
+                    <p style="font-size: 0.85rem; color: var(--text-secondary); margin-bottom: 1rem;">See exactly how many hours you're dedicating to each category this week.</p>
+                    <div style="margin-bottom: 10px;">
+                        <div style="display: flex; justify-content: space-between; font-size: 0.8rem; margin-bottom: 4px;"><span style="color: #3b82f6; font-weight: 600;">Academics</span><span>8.5h</span></div>
+                        <div style="height: 8px; border-radius: 4px; background: #e5e7eb; overflow: hidden;"><div style="width: 65%; height: 100%; background: #3b82f6; border-radius: 4px;"></div></div>
+                    </div>
+                    <div style="margin-bottom: 10px;">
+                        <div style="display: flex; justify-content: space-between; font-size: 0.8rem; margin-bottom: 4px;"><span style="color: #ef4444; font-weight: 600;">Recruiting</span><span>4.0h</span></div>
+                        <div style="height: 8px; border-radius: 4px; background: #e5e7eb; overflow: hidden;"><div style="width: 35%; height: 100%; background: #ef4444; border-radius: 4px;"></div></div>
+                    </div>
+                    <div style="margin-bottom: 10px;">
+                        <div style="display: flex; justify-content: space-between; font-size: 0.8rem; margin-bottom: 4px;"><span style="color: #f97316; font-weight: 600;">Social</span><span>3.0h</span></div>
+                        <div style="height: 8px; border-radius: 4px; background: #e5e7eb; overflow: hidden;"><div style="width: 25%; height: 100%; background: #f97316; border-radius: 4px;"></div></div>
+                    </div>
+                    <div>
+                        <div style="display: flex; justify-content: space-between; font-size: 0.8rem; margin-bottom: 4px;"><span style="color: #22c55e; font-weight: 600;">Wellness</span><span>2.5h</span></div>
+                        <div style="height: 8px; border-radius: 4px; background: #e5e7eb; overflow: hidden;"><div style="width: 20%; height: 100%; background: #22c55e; border-radius: 4px;"></div></div>
+                    </div>
+                    <div style="margin-top: 12px; padding: 8px 12px; border-radius: 8px; background: rgba(251, 191, 36, 0.08); border: 1px solid rgba(251, 191, 36, 0.2); font-size: 0.8rem; color: #92400e;">&#9888; No wellness time scheduled this week.</div>
                 </div>
                 <div style="background: white; border-radius: 12px; padding: 1.5rem; border: 1px solid rgba(0,0,0,0.06);">
-                    <h4 style="font-size: 0.9rem; font-weight: 700; margin-bottom: 1rem; color: var(--navy);">&#128188; Recruiting Mode</h4>
-                    <div style="padding: 10px 14px; border-radius: 8px; margin-bottom: 8px; background: rgba(124, 58, 237, 0.06); border-left: 3px solid var(--violet);"><strong>Coffee chat &mdash; PM at Google</strong><br><span style="font-size: 0.8rem; color: var(--text-secondary);">3:00 PM &middot; Hiring manager &middot; Top-choice firm</span></div>
-                    <div style="padding: 10px 14px; border-radius: 8px; margin-bottom: 8px; background: rgba(124, 58, 237, 0.06); border-left: 3px solid var(--violet);"><strong>CBS Tech Club social</strong><br><span style="font-size: 0.8rem; color: var(--text-secondary);">6:00 PM &middot; 3 target-firm alumni attending</span></div>
-                    <div style="padding: 10px 14px; border-radius: 8px; margin-bottom: 8px; background: rgba(251, 191, 36, 0.06); border-left: 3px solid #fbbf24;"><strong>Strategy case prep &mdash; HubSpot/Motion AI</strong><br><span style="font-size: 0.8rem; color: var(--text-secondary);">Due tomorrow &middot; Prep after 7 PM</span></div>
-                    <div style="padding: 10px 14px; border-radius: 8px; background: rgba(0,0,0,0.02); border-left: 3px solid #ccc;"><strong>Operations problem set</strong><br><span style="font-size: 0.8rem; color: var(--text-secondary);">Due Thursday &middot; Deferred to Wednesday</span></div>
+                    <h4 style="font-size: 0.9rem; font-weight: 700; margin-bottom: 1rem; color: var(--navy);">&#9889; Today's Focus</h4>
+                    <p style="font-size: 0.85rem; color: var(--text-secondary); margin-bottom: 1rem;">Toggle between modes to set your priority for the day. Kaisey highlights what matters most.</p>
+                    <div style="display: flex; gap: 8px; flex-wrap: wrap; margin-bottom: 1.25rem;">
+                        <span style="padding: 6px 14px; border-radius: 20px; font-size: 0.8rem; font-weight: 600; background: #3b82f6; color: white;">&#128218; Academics</span>
+                        <span style="padding: 6px 14px; border-radius: 20px; font-size: 0.8rem; font-weight: 500; background: #f3f4f6; color: #6b7280;">&#128188; Recruiting</span>
+                        <span style="padding: 6px 14px; border-radius: 20px; font-size: 0.8rem; font-weight: 500; background: #f3f4f6; color: #6b7280;">&#128101; Social</span>
+                        <span style="padding: 6px 14px; border-radius: 20px; font-size: 0.8rem; font-weight: 500; background: #f3f4f6; color: #6b7280;">&#128154; Wellness</span>
+                    </div>
+                    <div style="padding: 12px 14px; border-radius: 8px; margin-bottom: 8px; background: rgba(59, 130, 246, 0.06); border-left: 3px solid #3b82f6;"><strong>Up Next: Corporate Finance</strong><br><span style="font-size: 0.8rem; color: var(--text-secondary);">8:00 AM &middot; 90 min</span></div>
+                    <div style="padding: 12px 14px; border-radius: 8px; margin-bottom: 8px; background: rgba(59, 130, 246, 0.06); border-left: 3px solid #3b82f6;"><strong>Strategy Canvas Quiz</strong><br><span style="font-size: 0.8rem; color: var(--text-secondary);">11:00 AM &middot; 60 min</span></div>
+                    <div style="padding: 12px 14px; border-radius: 8px; margin-bottom: 8px; background: rgba(239, 68, 68, 0.06); border-left: 3px solid #ef4444;"><strong>Goldman Sachs Info Session</strong><br><span style="font-size: 0.8rem; color: var(--text-secondary);">12:00 PM &middot; 60 min</span></div>
+                    <div style="padding: 12px 14px; border-radius: 8px; background: rgba(34, 197, 94, 0.06); border-left: 3px solid #22c55e;"><strong>Gym Session</strong><br><span style="font-size: 0.8rem; color: var(--text-secondary);">1:00 PM &middot; 45 min</span></div>
                 </div>
             </div>
 
-            <p style="margin-top: 1.25rem; font-size: 0.9rem; color: var(--text-secondary); line-height: 1.7;">Notice: it's not just reordering. In Recruiting mode, Claude surfaces metadata &mdash; &ldquo;hiring manager,&rdquo; &ldquo;3 target-firm alumni&rdquo; &mdash; that changes the <em>meaning</em> of each event. And with a readiness score of 54, Claude inserts a recovery block before the high-stakes coffee chat. The AI reasons across <em>both</em> your calendar and your body.</p>
+            <p style="margin-top: 1.25rem; font-size: 0.9rem; color: var(--text-secondary); line-height: 1.7;">The weekly balance bar shows at a glance where your time is going. Events are color-coded by category so you can instantly spot imbalances &mdash; like zero wellness hours during finals week. The day view surfaces your next event and full schedule, grouped by the priority mode you've selected.</p>
         </div>
     </section>
 
@@ -810,7 +809,7 @@
                 <div>
                     <h3 style="font-size: 1.1rem; margin-bottom: 4px;">Phase 3 &mdash; Multi-University</h3>
                     <div style="font-size: 0.8rem; color: var(--text-secondary); letter-spacing: 0.5px; margin-bottom: 6px;">Fall 2026 &middot; 5 partner schools</div>
-                    <p style="color: var(--text-secondary); line-height: 1.7;">Career services partnerships at 4&ndash;5 MBA programs. Oura integration as differentiator. Each school adds scheduling pattern data that sharpens Claude's reasoning.</p>
+                    <p style="color: var(--text-secondary); line-height: 1.7;">Career services partnerships at 4&ndash;5 university programs. Oura integration as differentiator. Each school adds scheduling pattern data that sharpens Claude's reasoning.</p>
                 </div>
                 <div>
                     <h3 style="font-size: 1.1rem; margin-bottom: 4px;">Phase 4 &mdash; Beyond Students</h3>
@@ -825,12 +824,6 @@
         </div>
     </section>
 
-    <!-- ═══ 8. FOOTER ═══ -->
-    <footer>
-        <h3>Anisha Subberwal</h3>
-        <p style="margin: 16px 0;">MBA Candidate, Columbia Business School 2026</p>
-        <p><a href="mailto:as7689@columbia.edu">as7689@columbia.edu</a> | +1 (646) 512-1483</p>
-    </footer>
 
     <!-- ═══ SCRIPTS ═══ -->
     <script>
