@@ -566,12 +566,11 @@
     <!-- ═══ 1. HERO ═══ -->
     <section class="hero">
         <div class="hero-content">
-            <span class="hero-tag">Hackathon Project</span>
+            <span class="hero-tag">AI-Powered Productivity</span>
             <h1>Kaisey: Your AI Chief of Staff for Student Life</h1>
-            <p class="hero-subtitle">The first calendar system that unifies Google Calendar, Canvas, and CampusGroups &mdash; then uses Claude and your Oura Ring data to tell you what actually matters most right now.</p>
+            <p class="hero-subtitle">An intelligent calendar assistant that dynamically re-prioritizes your academics, recruiting, and social life &mdash; so you never have to choose which ball to drop.</p>
             <div class="hero-ctas">
                 <a href="#demo" class="cta-btn cta-primary">Watch Demo</a>
-                <a href="#architecture" class="cta-btn cta-secondary">See AI Architecture &rarr;</a>
                 <a href="../kaisey/index.html" class="cta-btn cta-secondary" target="_blank">Try Kaisey</a>
             </div>
         </div>
@@ -582,50 +581,33 @@
     <section class="problem">
         <div class="container fade-in">
             <span class="section-tag">The Problem</span>
-            <h2 class="section-title">The Recruiting &harr; Academics Collision</h2>
-            <p class="problem-intro">Students don't have busy calendars &mdash; they have <strong>competing calendars</strong> that actively work against each other. Your Canvas deadline doesn't know about your Super Day. Your CampusGroups invite doesn't know you slept four hours. The result is a daily triage problem that costs real opportunities.</p>
-
-            <div class="cards-grid" style="grid-template-columns: repeat(3, 1fr); margin-bottom: 2rem;">
-                <div class="card" style="text-align: center;">
-                    <div style="font-size: 2.5rem; font-weight: 700; color: var(--violet);">6+</div>
-                    <p>Tools the average student juggles daily just to stay on schedule</p>
-                </div>
-                <div class="card" style="text-align: center;">
-                    <div style="font-size: 2.5rem; font-weight: 700; color: var(--violet);">73%</div>
-                    <p>Have missed a deadline because the reminder lived in a different app</p>
-                </div>
-                <div class="card" style="text-align: center;">
-                    <div style="font-size: 2.5rem; font-weight: 700; color: var(--violet);">2.4hrs</div>
-                    <p>Lost every week mentally stitching calendars, inboxes, and to-do lists together</p>
-                </div>
-            </div>
+            <h2 class="section-title">The Quadruple Bind</h2>
+            <p class="problem-intro">Students juggle four competing priorities every single day &mdash; academics, recruiting, social life, and wellness. The tools they use are just as fragmented as the demands on their time.</p>
 
             <div class="cards-grid">
                 <div class="card">
                     <div class="card-icon">&#128218;</div>
                     <h3>Academics</h3>
-                    <p>Canvas deadlines, group projects, and reading lists exist in a silo with zero connection to your recruiting calendar or energy levels.</p>
+                    <p>Canvas deadlines, group projects, reading lists &mdash; all in one silo with no connection to the rest of your schedule.</p>
                 </div>
                 <div class="card">
                     <div class="card-icon">&#128188;</div>
                     <h3>Recruiting</h3>
-                    <p>Coffee chats, application deadlines, and interview prep scattered across email, spreadsheets, and calendar invites &mdash; often with hard deadlines that override everything.</p>
+                    <p>Coffee chats, application deadlines, interview prep &mdash; scattered across email, spreadsheets, and calendar invites.</p>
                 </div>
                 <div class="card">
                     <div class="card-icon">&#127881;</div>
                     <h3>Social Life</h3>
-                    <p>Club events on CampusGroups, networking dinners, weekend trips &mdash; the first thing sacrificed when workload spikes, but the hardest to rebuild once dropped.</p>
+                    <p>Club events, networking dinners, weekend trips &mdash; the first thing to go when the workload spikes, but the hardest to get back.</p>
                 </div>
                 <div class="card">
                     <div class="card-icon">&#128154;</div>
                     <h3>Wellness</h3>
-                    <p>Gym, sleep, mental health &mdash; always deprioritized until burnout hits, then suddenly the most urgent thing on the list.</p>
+                    <p>Gym sessions, sleep, mental health breaks &mdash; always deprioritized until burnout hits, then suddenly the most important thing.</p>
                 </div>
             </div>
 
-            <div style="margin-top: 2rem; padding: 1.5rem; border-radius: 12px; background: rgba(248, 113, 113, 0.06); border: 1px solid rgba(248, 113, 113, 0.15); font-size: 1.05rem; color: var(--text-secondary); line-height: 1.7;">
-                <strong style="color: #dc2626;">This isn't about productivity &mdash; it's about outcomes.</strong> One missed recruiting deadline is a lost job offer. One forgotten group meeting is a trust deficit with your team. Every student knows the feeling of discovering they dropped something important &mdash; not because they were lazy, but because no tool connected the dots.
-            </div>
+            <p style="margin-top: 2rem; font-size: 1.05rem; color: var(--text-secondary); line-height: 1.7;">The result? Disconnected tools, context-switching burnout, and a constant feeling that something important is slipping through the cracks.</p>
         </div>
     </section>
 
@@ -633,100 +615,38 @@
     <section class="solution">
         <div class="container fade-in">
             <span class="section-tag">The Solution</span>
-            <h2 class="section-title">One Intelligent Layer Across Everything</h2>
-            <p class="section-desc" style="margin-bottom: 2.5rem;">Kaisey syncs your Google Calendar, Canvas Calendar, and CampusGroups into one intelligent feed &mdash; then uses Claude to reason about what actually matters most right now. Not a new calendar. A smarter layer over the three you already use.</p>
+            <h2 class="section-title">What I Built</h2>
+            <p class="section-desc" style="margin-bottom: 2.5rem;">Kaisey is an AI chief of staff that connects your calendar, coursework, and career goals into a single intelligent layer &mdash; then helps you decide what matters most, right now.</p>
 
             <div class="cards-grid">
                 <div class="card">
                     <div class="card-icon">&#9889;</div>
                     <h3>Dynamic Priority Toggle</h3>
-                    <p>One tap shifts your entire day. Slide between Academics, Recruiting, Social, and Wellness modes &mdash; Kaisey re-ranks every event using Claude's reasoning, not a simple sort. When your Oura readiness score is below 60, Wellness mode auto-activates.</p>
+                    <p>Slide between Academics, Recruiting, Social, and Wellness mode. Kaisey instantly re-ranks your day based on what matters most this week.</p>
                 </div>
                 <div class="card">
                     <div class="card-icon">&#128279;</div>
-                    <h3>Three Calendars, One Brain</h3>
-                    <p>Google Calendar, Canvas Calendar, and CampusGroups &mdash; synced into a single unified feed. For the first time, your class deadlines, recruiting coffee chats, and club events live in the same view, and Claude can reason across all of them at once.</p>
+                    <h3>Connected Stack (MCP)</h3>
+                    <p>Google Calendar, Canvas, and email wired together through a Model Context Protocol &mdash; so Kaisey sees your full picture, not just fragments.</p>
                 </div>
                 <div class="card">
-                    <div class="card-icon">&#128154;</div>
-                    <h3>Oura Ring Biometric Sync</h3>
-                    <p>Kaisey pulls your sleep score, readiness score, and recovery data from the Oura Ring API &mdash; then factors it into every prioritization decision. Slept 4 hours? Claude promotes wellness blocks and defers low-stakes meetings.</p>
-                </div>
-                <div class="card">
-                    <div class="card-icon">&#128274;</div>
-                    <h3>Privacy-First, Session-Only</h3>
-                    <p>Calendar data is processed in-session and never persisted on any server. Claude sees what it needs to reason about priorities, then the context is discarded. No data warehouse, no profile building.</p>
-                </div>
-            </div>
-        </div>
-    </section>
-
-    <!-- ═══ AI ARCHITECTURE ═══ -->
-    <section class="solution" id="architecture">
-        <div class="container fade-in">
-            <span class="section-tag">AI Integration</span>
-            <h2 class="section-title">How Claude Powers Kaisey</h2>
-            <p class="section-desc" style="margin-bottom: 2.5rem;">Claude isn't a chatbot bolted onto a calendar. It's the reasoning core &mdash; every prioritization decision flows through Claude's tool use, structured output, and multi-source context window. Remove Claude and there is no product.</p>
-
-            <!-- Architecture flow diagram -->
-            <div style="display: flex; align-items: center; justify-content: center; gap: 12px; flex-wrap: wrap; padding: 2rem; background: white; border-radius: 12px; border: 1px solid rgba(0,0,0,0.06); margin-bottom: 2rem; overflow-x: auto;">
-                <div style="text-align: center; padding: 14px 18px; background: var(--pill-bg); border-radius: 10px; min-width: 120px;"><div style="font-size: 0.7rem; text-transform: uppercase; letter-spacing: 1.5px; color: var(--text-secondary); margin-bottom: 4px;">Input</div><div style="font-weight: 600; font-size: 0.9rem;">Priority Toggle</div></div>
-                <span style="color: var(--text-secondary); font-size: 1.2rem;">&rarr;</span>
-                <div style="text-align: center; padding: 14px 18px; background: var(--pill-bg); border-radius: 10px; min-width: 120px;"><div style="font-size: 0.7rem; text-transform: uppercase; letter-spacing: 1.5px; color: var(--text-secondary); margin-bottom: 4px;">Data Layer</div><div style="font-weight: 600; font-size: 0.9rem;">3-Calendar Sync</div></div>
-                <span style="color: var(--text-secondary); font-size: 1.2rem;">&rarr;</span>
-                <div style="text-align: center; padding: 14px 18px; background: var(--pill-bg); border-radius: 10px; min-width: 120px;"><div style="font-size: 0.7rem; text-transform: uppercase; letter-spacing: 1.5px; color: var(--text-secondary); margin-bottom: 4px;">Biometrics</div><div style="font-weight: 600; font-size: 0.9rem;">Oura Ring API</div></div>
-                <span style="color: var(--text-secondary); font-size: 1.2rem;">&rarr;</span>
-                <div style="text-align: center; padding: 14px 18px; background: var(--violet); color: white; border-radius: 10px; min-width: 120px; box-shadow: 0 4px 16px rgba(124, 58, 237, 0.3);"><div style="font-size: 0.7rem; text-transform: uppercase; letter-spacing: 1.5px; opacity: 0.8; margin-bottom: 4px;">Reasoning</div><div style="font-weight: 600; font-size: 0.9rem;">Claude Sonnet</div></div>
-                <span style="color: var(--text-secondary); font-size: 1.2rem;">&rarr;</span>
-                <div style="text-align: center; padding: 14px 18px; background: var(--pill-bg); border-radius: 10px; min-width: 120px;"><div style="font-size: 0.7rem; text-transform: uppercase; letter-spacing: 1.5px; color: var(--text-secondary); margin-bottom: 4px;">Output</div><div style="font-weight: 600; font-size: 0.9rem;">Ranked Day</div></div>
-            </div>
-
-            <div class="cards-grid">
-                <div class="card">
-                    <h3>Why Claude, Not a Sorting Algorithm?</h3>
-                    <p>A sort/filter can reorder by category. But only Claude can reason across three calendar sources and your biometric state simultaneously &mdash; multi-source reasoning, not sorting.</p>
-                </div>
-                <div class="card">
-                    <h3>What Oura Data Powers</h3>
-                    <p>Sleep score, readiness score, and activity deficit. A readiness score below 60 triggers automatic wellness promotion. High readiness + recruiting mode means Claude stacks demanding events together.</p>
-                </div>
-                <div class="card">
-                    <h3>Tool Use Pattern</h3>
-                    <p>Claude calls <code>get_gcal_events()</code>, <code>get_canvas_deadlines()</code>, <code>get_campusgroups_events()</code>, and <code>get_oura_readiness()</code> via MCP to build the full picture before reasoning.</p>
-                </div>
-                <div class="card">
-                    <h3>Structured Output</h3>
-                    <p>Claude returns ranked JSON: each event gets a priority score (0&ndash;100), a rank position, and a one-line rationale. The frontend renders this directly &mdash; Claude's reasoning <em>is</em> the engine.</p>
-                </div>
-            </div>
-        </div>
-    </section>
-
-    <!-- ═══ IN ACTION ═══ -->
-    <section class="problem">
-        <div class="container fade-in">
-            <span class="section-tag">In Action</span>
-            <h2 class="section-title">Same Day, Different Mode</h2>
-            <p class="problem-intro">Here's how Kaisey re-ranks a real Tuesday in October &mdash; peak recruiting season, Oura readiness score: 54 &mdash; when you toggle from Academics to Recruiting mode.</p>
-
-            <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 1.5rem; margin-top: 2rem;">
-                <div style="background: white; border-radius: 12px; padding: 1.5rem; border: 1px solid rgba(0,0,0,0.06);">
-                    <h4 style="font-size: 0.9rem; font-weight: 700; margin-bottom: 1rem; color: var(--navy);">&#128218; Academics Mode</h4>
-                    <div style="padding: 10px 14px; border-radius: 8px; margin-bottom: 8px; background: rgba(124, 58, 237, 0.06); border-left: 3px solid var(--violet);"><strong>Strategy case prep &mdash; HubSpot/Motion AI</strong><br><span style="font-size: 0.8rem; color: var(--text-secondary);">Due tomorrow &middot; Cold call risk</span></div>
-                    <div style="padding: 10px 14px; border-radius: 8px; margin-bottom: 8px; background: rgba(124, 58, 237, 0.06); border-left: 3px solid var(--violet);"><strong>Operations problem set</strong><br><span style="font-size: 0.8rem; color: var(--text-secondary);">Due Thursday &middot; 2hr estimated</span></div>
-                    <div style="padding: 10px 14px; border-radius: 8px; margin-bottom: 8px; background: rgba(251, 191, 36, 0.06); border-left: 3px solid #fbbf24;"><strong>Coffee chat &mdash; PM at Google</strong><br><span style="font-size: 0.8rem; color: var(--text-secondary);">3:00 PM &middot; Confirmed</span></div>
-                    <div style="padding: 10px 14px; border-radius: 8px; background: rgba(0,0,0,0.02); border-left: 3px solid #ccc;"><strong>CBS Tech Club social</strong><br><span style="font-size: 0.8rem; color: var(--text-secondary);">6:00 PM &middot; Optional</span></div>
-                </div>
-                <div style="background: white; border-radius: 12px; padding: 1.5rem; border: 1px solid rgba(0,0,0,0.06);">
-                    <h4 style="font-size: 0.9rem; font-weight: 700; margin-bottom: 1rem; color: var(--navy);">&#128188; Recruiting Mode</h4>
-                    <div style="padding: 10px 14px; border-radius: 8px; margin-bottom: 8px; background: rgba(124, 58, 237, 0.06); border-left: 3px solid var(--violet);"><strong>Coffee chat &mdash; PM at Google</strong><br><span style="font-size: 0.8rem; color: var(--text-secondary);">3:00 PM &middot; Hiring manager &middot; Top-choice firm</span></div>
-                    <div style="padding: 10px 14px; border-radius: 8px; margin-bottom: 8px; background: rgba(124, 58, 237, 0.06); border-left: 3px solid var(--violet);"><strong>CBS Tech Club social</strong><br><span style="font-size: 0.8rem; color: var(--text-secondary);">6:00 PM &middot; 3 target-firm alumni attending</span></div>
-                    <div style="padding: 10px 14px; border-radius: 8px; margin-bottom: 8px; background: rgba(251, 191, 36, 0.06); border-left: 3px solid #fbbf24;"><strong>Strategy case prep &mdash; HubSpot/Motion AI</strong><br><span style="font-size: 0.8rem; color: var(--text-secondary);">Due tomorrow &middot; Prep after 7 PM</span></div>
-                    <div style="padding: 10px 14px; border-radius: 8px; background: rgba(0,0,0,0.02); border-left: 3px solid #ccc;"><strong>Operations problem set</strong><br><span style="font-size: 0.8rem; color: var(--text-secondary);">Due Thursday &middot; Deferred to Wednesday</span></div>
+                    <div class="card-icon">&#128214;</div>
+                    <h3>Student Playbook (RAG)</h3>
+                    <p>Retrieval-augmented generation trained on academic scheduling heuristics &mdash; Kaisey knows that finals week and recruiting week are different beasts.</p>
                 </div>
             </div>
 
-            <p style="margin-top: 1.25rem; font-size: 0.9rem; color: var(--text-secondary); line-height: 1.7;">Notice: it's not just reordering. In Recruiting mode, Claude surfaces metadata &mdash; &ldquo;hiring manager,&rdquo; &ldquo;3 target-firm alumni&rdquo; &mdash; that changes the <em>meaning</em> of each event. And with a readiness score of 54, Claude inserts a recovery block before the high-stakes coffee chat. The AI reasons across <em>both</em> your calendar and your body.</p>
+            <div class="tech-pills">
+                <span class="tech-pill">React</span>
+                <span class="tech-pill">TypeScript</span>
+                <span class="tech-pill">Tailwind CSS</span>
+                <span class="tech-pill">Node.js</span>
+                <span class="tech-pill">Express</span>
+                <span class="tech-pill">OpenAI</span>
+                <span class="tech-pill">OAuth 2.0</span>
+                <span class="tech-pill">Google Calendar API</span>
+                <span class="tech-pill">Canvas LMS</span>
+            </div>
         </div>
     </section>
 
@@ -734,35 +654,23 @@
     <section class="decisions">
         <div class="container fade-in">
             <span class="section-tag">Product Decisions</span>
-            <h2 class="section-title">What We Chose and Why</h2>
+            <h2 class="section-title">Key Product Decisions</h2>
 
             <div class="cards-grid">
                 <div class="decision-card">
                     <div class="label">Authentication</div>
-                    <h3>Google OAuth &rarr; Instant Calendar Access</h3>
-                    <p>One sign-in gives Kaisey read access to Google Calendar with zero onboarding friction. No separate account creation, no permission pop-ups later. Students are in under 10 seconds.</p>
-                    <div style="margin-top: 12px; display: flex; gap: 8px; font-size: 0.85rem;">
-                        <span style="background: rgba(124, 58, 237, 0.1); color: var(--violet); padding: 4px 12px; border-radius: 6px; border: 1px solid rgba(124, 58, 237, 0.2);">&check; Google OAuth</span>
-                        <span style="color: var(--text-secondary); text-decoration: line-through; padding: 4px 12px;">Email / Password</span>
-                    </div>
+                    <h3>OAuth over Email/Password</h3>
+                    <p>Google OAuth gives instant calendar access with zero onboarding friction. Students sign in once and Kaisey is already reading their schedule. No extra setup, no permissions pop-ups later.</p>
                 </div>
                 <div class="decision-card">
-                    <div class="label">Interaction</div>
-                    <h3>Toggle Over Manual Ranking</h3>
-                    <p>A four-mode selector beats a complex drag-and-drop ranking UI. One tap shifts the entire priority stack &mdash; fast enough to switch contexts mid-day between a lecture and a recruiting event.</p>
-                    <div style="margin-top: 12px; display: flex; gap: 8px; font-size: 0.85rem;">
-                        <span style="background: rgba(124, 58, 237, 0.1); color: var(--violet); padding: 4px 12px; border-radius: 6px; border: 1px solid rgba(124, 58, 237, 0.2);">&check; Priority Toggle</span>
-                        <span style="color: var(--text-secondary); text-decoration: line-through; padding: 4px 12px;">Manual Ranking UI</span>
-                    </div>
+                    <div class="label">Prioritization</div>
+                    <h3>Toggle over Manual Ranking</h3>
+                    <p>A simple four-mode selector (Academics / Recruiting / Social / Wellness) beats a complex manual ranking system. One tap shifts the entire priority stack &mdash; fast enough to switch mid-day.</p>
                 </div>
                 <div class="decision-card">
-                    <div class="label">AI Model</div>
-                    <h3>Claude Over GPT for Structured Reasoning</h3>
-                    <p>Claude's tool use and structured output capabilities make it ideal for agentic calendar workflows. We need the model to call functions, receive structured data, and return ranked JSON &mdash; not generate freeform text. Claude's reliability on structured tasks made it the clear choice.</p>
-                    <div style="margin-top: 12px; display: flex; gap: 8px; font-size: 0.85rem;">
-                        <span style="background: rgba(124, 58, 237, 0.1); color: var(--violet); padding: 4px 12px; border-radius: 6px; border: 1px solid rgba(124, 58, 237, 0.2);">&check; Claude Sonnet</span>
-                        <span style="color: var(--text-secondary); text-decoration: line-through; padding: 4px 12px;">GPT-4o</span>
-                    </div>
+                    <div class="label">Architecture</div>
+                    <h3>Privacy-First Design</h3>
+                    <p>Calendar data is processed in-session and never stored on our servers. The AI sees what it needs to prioritize, then forgets. Students control their data completely.</p>
                 </div>
             </div>
         </div>
@@ -773,7 +681,6 @@
         <div class="container fade-in">
             <span class="section-tag">Demo</span>
             <h2 class="section-title">See Kaisey in Action</h2>
-            <p class="section-desc" style="margin-bottom: 1.5rem;">A walkthrough of the priority toggle with a real student calendar &mdash; watch Claude re-rank events in real time.</p>
 
             <div class="video-wrapper">
                 <video controls preload="metadata" poster="">
@@ -785,42 +692,51 @@
             <div style="margin-top: 2rem;">
                 <a href="../kaisey/index.html" class="cta-btn cta-primary" target="_blank" style="background: var(--violet); color: white;">Try the Live App &rarr;</a>
             </div>
-            <p class="demo-note">Sign in with Google to try the live app &mdash; your data is processed in-session and never stored.</p>
+            <p class="demo-note">Sign in with Google to try the live app &mdash; your data is never stored.</p>
         </div>
     </section>
 
-    <!-- ═══ 7. SCALE / ROADMAP ═══ -->
-    <section class="roadmap">
+    <!-- ═══ 6. WHO NEEDS KAISEY ═══ -->
+    <section class="personas">
         <div class="container fade-in">
-            <span class="section-tag">Long-term Potential</span>
-            <h2 class="section-title">From Hackathon to Platform</h2>
-            <p style="margin-bottom: 2rem; font-size: 1.05rem; color: var(--text-secondary); line-height: 1.7;">This isn't a hackathon project that dies on Monday. Kaisey has a clear distribution path from campus pilot to platform &mdash; and every phase makes the product harder to replicate.</p>
+            <span class="section-tag">Who Needs This</span>
+            <h2 class="section-title">Who Needs Kaisey</h2>
 
-            <div style="display: flex; flex-direction: column; gap: 2rem; padding-left: 2rem; border-left: 2px solid var(--violet);">
-                <div>
-                    <h3 style="font-size: 1.1rem; margin-bottom: 4px;">Phase 1 &mdash; Validate (Now)</h3>
-                    <div style="font-size: 0.8rem; color: var(--text-secondary); letter-spacing: 0.5px; margin-bottom: 6px;">Spring 2026 &middot; 20 CBS students</div>
-                    <p style="color: var(--text-secondary); line-height: 1.7;">Closed beta measuring daily active usage, toggle frequency, and whether students report fewer missed deadlines after 2 weeks.</p>
+            <div class="cards-grid">
+                <div class="persona-card">
+                    <div class="persona-icon">&#128640;</div>
+                    <h3>The Career Pivoter</h3>
+                    <p>Switching from consulting to tech? Your calendar is a war zone of coffee chats, case prep, and club events. Kaisey keeps recruiting top-of-stack when it matters most.</p>
                 </div>
-                <div>
-                    <h3 style="font-size: 1.1rem; margin-bottom: 4px;">Phase 2 &mdash; Deepen Integrations</h3>
-                    <div style="font-size: 0.8rem; color: var(--text-secondary); letter-spacing: 0.5px; margin-bottom: 6px;">Summer 2026 &middot; API Partnerships</div>
-                    <p style="color: var(--text-secondary); line-height: 1.7;">Two-way write-back into Google Calendar, CUIT partnership for Canvas API. Kaisey doesn't just read your schedule &mdash; it proposes blocks and writes them directly.</p>
+                <div class="persona-card">
+                    <div class="persona-icon">&#128218;</div>
+                    <h3>The Academic Rescuer</h3>
+                    <p>Finals approaching and you have three group projects due the same week? Toggle to Academics mode and let Kaisey resurface the deadlines you buried under networking events.</p>
                 </div>
-                <div>
-                    <h3 style="font-size: 1.1rem; margin-bottom: 4px;">Phase 3 &mdash; Multi-University</h3>
-                    <div style="font-size: 0.8rem; color: var(--text-secondary); letter-spacing: 0.5px; margin-bottom: 6px;">Fall 2026 &middot; 5 partner schools</div>
-                    <p style="color: var(--text-secondary); line-height: 1.7;">Career services partnerships at 4&ndash;5 MBA programs. Oura integration as differentiator. Each school adds scheduling pattern data that sharpens Claude's reasoning.</p>
-                </div>
-                <div>
-                    <h3 style="font-size: 1.1rem; margin-bottom: 4px;">Phase 4 &mdash; Beyond Students</h3>
-                    <div style="font-size: 0.8rem; color: var(--text-secondary); letter-spacing: 0.5px; margin-bottom: 6px;">2027 &middot; Working professionals</div>
-                    <p style="color: var(--text-secondary); line-height: 1.7;">The priority toggle + biometrics pattern generalizes to professionals. Oura's 2M+ user base becomes a natural distribution channel via the Oura app marketplace.</p>
+                <div class="persona-card">
+                    <div class="persona-icon">&#127758;</div>
+                    <h3>The International Student</h3>
+                    <p>Navigating visa timelines, OPT deadlines, and cultural adjustment on top of coursework. Kaisey adds structure to chaos and ensures nothing critical falls off the radar.</p>
                 </div>
             </div>
+        </div>
+    </section>
+
+    <!-- ═══ 7. WHAT'S NEXT ═══ -->
+    <section class="roadmap">
+        <div class="container fade-in">
+            <span class="section-tag">Roadmap</span>
+            <h2 class="section-title">What's Next</h2>
+
+            <ul class="roadmap-list">
+                <li>Beta pilot with 20 Columbia students for real-world priority testing</li>
+                <li>Canvas &harr; Calendar sync for automatic deadline ingestion</li>
+                <li>Stress-testing the priority toggle with diverse student schedules and edge cases</li>
+                <li>Exploring Slack integration for team-based project coordination</li>
+            </ul>
 
             <div class="roadmap-closing">
-                <p>&ldquo;The goal isn't another productivity app. It's a system that understands the rhythm of your life and adapts with you.&rdquo;</p>
+                <p>&ldquo;The goal isn't another productivity app. It's a system that understands the rhythm of student life and adapts with you.&rdquo;</p>
             </div>
         </div>
     </section>
