@@ -5,7 +5,9 @@
 **[Live Demo](https://anishasubs.github.io/portfolio/kaisey/index.html)** | **[Case Study](https://anishasubs.github.io/portfolio/kaisey-case-study/)**
 
 <p align="center">
-  <img src="../kaisey/kaisey-demo.mp4" alt="Kaisey Demo" width="700" />
+  <img src="kaisey-qr.jpeg" alt="Scan to try Kaisey" width="250" />
+  <br/>
+  <em>Scan to try the live demo</em>
 </p>
 
 ---
