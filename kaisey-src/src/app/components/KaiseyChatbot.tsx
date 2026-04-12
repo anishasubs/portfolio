@@ -465,41 +465,47 @@ Call extract_tasks with ALL items.`,
     const now = new Date();
     const todayISO = localToday();
     const currentTime = `${String(now.getHours()).padStart(2, "0")}:${String(now.getMinutes()).padStart(2, "0")}`;
-    const todayEvents = existingEvents
-      .filter((e) => e.date === todayISO)
-      .map((e) => ({ title: e.title, time: e.time, duration: e.duration, type: e.type }));
+    // Collect all dates mentioned in tasks (plus today)
+    const relevantDates = new Set([todayISO]);
+    tasks.forEach(t => { if (t.dueDate) relevantDates.add(t.dueDate); });
+    const relevantEvents = existingEvents
+      .filter((e) => relevantDates.has(e.date))
+      .map((e) => ({ title: e.title, time: e.time, date: e.date, duration: e.duration, type: e.type }));
 
     const tasksForScheduling = tasks.map((t) => ({
       title: t.title,
       duration: t.estimatedDuration,
       priority: t.priority,
       category: t.category,
-      ...(t.preferredTime ? { preferredTime: t.preferredTime } : {}),
+      ...(t.preferredTime ? { exactTime: t.preferredTime } : {}),
+      ...(t.dueDate ? { date: t.dueDate } : {}),
     }));
 
     const msgs: Array<{ role: "system" | "user" | "assistant"; content: string }> = [
       {
         role: "system",
         content: `You are a schedule optimization assistant for a student.
-Given a list of tasks to schedule and existing calendar events, propose an optimized daily schedule.
+Given a list of tasks to schedule and existing calendar events, propose an optimized schedule across one or more days.
 
 CRITICAL RULES:
-1. Current time is ${currentTime}. NEVER schedule before ${currentTime}.
-2. If a task has "preferredTime", schedule it at EXACTLY that time.
-3. NEVER overlap with existing calendar events.
-4. Respect task durations exactly. Every task MUST have a positive integer duration (minimum 15 minutes).
-5. Add 15-minute buffer between back-to-back events.
-6. Schedule high priority tasks during peak productivity hours when possible.
-7. Do not schedule after 10:00 PM.
-8. Group similar category tasks when possible.
+1. Current time is ${currentTime}. For TODAY (${todayISO}), NEVER schedule before ${currentTime}. Future days can use any time.
+2. If a task has a "date" field, schedule it on THAT specific date. If a task has no date, schedule it today.
+3. If a task has "exactTime", you MUST schedule it at that EXACT time — no exceptions, no optimization. "exactTime" means the user explicitly requested that time.
+4. NEVER overlap with existing calendar events on the same day.
+5. Respect task durations exactly. Every task MUST have a positive integer duration (minimum 15 minutes).
+6. Add 15-minute buffer between back-to-back events on the same day.
+7. Schedule high priority tasks during peak productivity hours when possible.
+8. Do not schedule after 10:00 PM on any day.
+9. Group similar category tasks when possible within each day.
+10. ALWAYS set the correct "date" field (YYYY-MM-DD) for each scheduled block — do NOT put all tasks on today.
 
 Today: ${todayISO}
 Current time: ${currentTime}
 Timezone: ${userTimezone()}
 ${priority ? `\n${PRIORITY_CONFIG[priority].promptHint}` : ""}
 
-Existing events today:
-${JSON.stringify(todayEvents, null, 2)}
+Existing events on relevant days:
+${JSON.stringify(relevantEvents, null, 2)}
 
 Tasks to schedule:
 ${JSON.stringify(tasksForScheduling, null, 2)}
@@ -849,8 +855,12 @@ Return ONLY by calling propose_schedule.`,
       const result = await callProposeSchedule(tasks, calendarEvents);
       const todayISO = localToday();
 
-      const todayExisting: ProposedScheduleBlock[] = calendarEvents
-        .filter((e) => e.date === todayISO)
+      // Collect all dates from proposed blocks
+      const proposedDates = new Set(result.scheduled_blocks.map((b) => b.date));
+      proposedDates.add(todayISO);
+
+      const existingBlocks: ProposedScheduleBlock[] = calendarEvents
+        .filter((e) => proposedDates.has(e.date))
         .map((e) => ({ taskId: e.id, title: e.title, time: e.time, date: e.date, duration: e.duration, category: e.type, isExisting: true }));
 
       const newBlocks: ProposedScheduleBlock[] = result.scheduled_blocks.map((b, i) => ({
@@ -863,7 +873,7 @@ Return ONLY by calling propose_schedule.`,
         isExisting: false,
       }));
 
-      const allBlocks = [...todayExisting, ...newBlocks].sort((a, b) => a.time.localeCompare(b.time));
+      const allBlocks = [...existingBlocks, ...newBlocks].sort((a, b) => a.date.localeCompare(b.date) || a.time.localeCompare(b.time));
       setProposedSchedule(allBlocks);
       setIsTyping(false);
       setBrainDumpPhase("REVIEW_SCHEDULE");
@@ -902,8 +912,11 @@ Return ONLY by calling propose_schedule.`,
       const result = await callProposeSchedule(extractedTasks, calendarEvents, revisionText, proposedSchedule);
       const todayISO = localToday();
 
-      const todayExisting: ProposedScheduleBlock[] = calendarEvents
-        .filter((e) => e.date === todayISO)
+      const proposedDates = new Set(result.scheduled_blocks.map((b) => b.date));
+      proposedDates.add(todayISO);
+
+      const existingBlocks: ProposedScheduleBlock[] = calendarEvents
+        .filter((e) => proposedDates.has(e.date))
         .map((e) => ({ taskId: e.id, title: e.title, time: e.time, date: e.date, duration: e.duration, category: e.type, isExisting: true }));
 
       const newBlocks: ProposedScheduleBlock[] = result.scheduled_blocks.map((b, i) => ({
@@ -916,7 +929,7 @@ Return ONLY by calling propose_schedule.`,
         isExisting: false,
       }));
 
-      const allBlocks = [...todayExisting, ...newBlocks].sort((a, b) => a.time.localeCompare(b.time));
+      const allBlocks = [...existingBlocks, ...newBlocks].sort((a, b) => a.date.localeCompare(b.date) || a.time.localeCompare(b.time));
       setProposedSchedule(allBlocks);
       setIsTyping(false);
       setBrainDumpPhase("REVIEW_SCHEDULE");
@@ -1387,23 +1400,37 @@ Return ONLY by calling propose_schedule.`,
             )}
 
             <div className="space-y-1 mb-2">
-              {message.schedule.map((block, i) => (
-                <div
-                  key={`${block.taskId}-${i}`}
-                  className={`flex items-center gap-2 p-2 rounded text-xs ${
-                    block.isExisting ? "bg-background/50 text-muted-foreground" : "bg-green-500/5 border border-green-500/20 border-dashed"
-                  }`}
-                >
-                  <span className="font-mono w-14 shrink-0 text-[11px]">{formatTime(block.time)}</span>
-                  <div className={`w-1.5 h-1.5 rounded-full shrink-0 ${categoryColors[block.category] || "bg-gray-400"}`} />
-                  <span className="flex-1 truncate">
-                    {block.title}
-                    {block.isExisting && <span className="text-muted-foreground/60 ml-1">(existing)</span>}
-                  </span>
-                  <span className="text-muted-foreground text-[10px] shrink-0">{formatDuration(block.duration)}</span>
-                  {!block.isExisting && <Badge className="bg-green-500 text-white text-[9px] px-1 py-0 shrink-0">New</Badge>}
-                </div>
-              ))}
+              {(() => {
+                let lastDate = "";
+                const hasMultipleDays = new Set(message.schedule.map(b => b.date)).size > 1;
+                return message.schedule.map((block, i) => {
+                  const showDateHeader = hasMultipleDays && block.date !== lastDate;
+                  lastDate = block.date;
+                  return (
+                    <div key={`${block.taskId}-${i}`}>
+                      {showDateHeader && (
+                        <div className="text-[10px] font-semibold text-muted-foreground uppercase tracking-wider pt-2 pb-1 border-b border-muted mb-1">
+                          {new Date(block.date + "T00:00:00").toLocaleDateString("en-US", { weekday: "long", month: "short", day: "numeric" })}
+                        </div>
+                      )}
+                      <div
+                        className={`flex items-center gap-2 p-2 rounded text-xs ${
+                          block.isExisting ? "bg-background/50 text-muted-foreground" : "bg-green-500/5 border border-green-500/20 border-dashed"
+                        }`}
+                      >
+                        <span className="font-mono w-14 shrink-0 text-[11px]">{formatTime(block.time)}</span>
+                        <div className={`w-1.5 h-1.5 rounded-full shrink-0 ${categoryColors[block.category] || "bg-gray-400"}`} />
+                        <span className="flex-1 truncate">
+                          {block.title}
+                          {block.isExisting && <span className="text-muted-foreground/60 ml-1">(existing)</span>}
+                        </span>
+                        <span className="text-muted-foreground text-[10px] shrink-0">{formatDuration(block.duration)}</span>
+                        {!block.isExisting && <Badge className="bg-green-500 text-white text-[9px] px-1 py-0 shrink-0">New</Badge>}
+                      </div>
+                    </div>
+                  );
+                });
+              })()}
             </div>
 
             {isActive && (
