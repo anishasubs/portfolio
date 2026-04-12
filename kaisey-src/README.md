@@ -19,6 +19,7 @@
 - **Biometric-aware scheduling** — Oura Ring sleep/readiness data makes Kaisey the only calendar tool that knows how your body feels, not just what's on your schedule
 - **Multi-source calendar unification** — Google Calendar + Canvas + CampusGroups in a single intelligent feed
 - **Privacy-first** — calendar data processed in-session, never persisted. Zero data warehouse, zero profile building
+- **Event discovery via LinkUp** — future integration with Luma (lu.ma) and Meetup (meetup.com) to automatically surface relevant social and recruiting events — hackathons, networking mixers, info sessions — happening in your city and add them to your calendar
 
 ---
 
@@ -281,7 +282,8 @@ vercel deploy --prod
 | **Phase 1 — Validate** | Spring 2026 · 20 CBS students | Closed beta measuring daily active usage, toggle frequency, missed deadlines |
 | **Phase 2 — Deepen** | Summer 2026 · API Partnerships | Two-way write-back into Google Calendar, CUIT partnership for Canvas API |
 | **Phase 3 — Scale** | Fall 2026 · 5 partner schools | Career services partnerships, Oura as differentiator, school-specific patterns |
-| **Phase 4 — Generalize** | 2027 · Professionals | Priority toggle + biometrics for working professionals. Oura's 2M+ user base as distribution. |
+| **Phase 4 — Event Discovery** | Fall 2026 · LinkUp Integration | Connect to Luma and Meetup via LinkUp to surface recruiting events, hackathons, and networking mixers in your city. Claude auto-recommends events that match your priority mode. |
+| **Phase 5 — Generalize** | 2027 · Professionals | Priority toggle + biometrics for working professionals. Oura's 2M+ user base as distribution. |
 
 ---
 
