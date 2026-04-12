@@ -884,16 +884,8 @@ export default function App() {
           </div>
         )}
 
-        {/* Oura Health Cards */}
-        {(ouraMetrics || ouraLoading) && (
-          <div className="mb-6 grid grid-cols-1 lg:grid-cols-2 gap-4">
-            <OuraSleepCard metrics={ouraMetrics} isLoading={ouraLoading} />
-            <OuraActivityCard metrics={ouraMetrics} isLoading={ouraLoading} />
-          </div>
-        )}
-
-        {/* Main View */}
-        <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
+        {/* Main View — Calendar + Connected Services */}
+        <div className="grid grid-cols-1 lg:grid-cols-3 gap-6 mb-6">
           {/* Left Column - Calendar */}
           <div className="lg:col-span-2 space-y-6">
             <CalendarView events={calendarEvents} onScheduleChange={handleScheduleChange} priority={userPriority} />
@@ -904,6 +896,14 @@ export default function App() {
             <ProfileSection userProfile={userProfile} ouraMetrics={ouraMetrics} ouraLoading={ouraLoading} onOuraConnect={handleOuraConnect} />
           </div>
         </div>
+
+        {/* Oura Health Cards */}
+        {(ouraMetrics || ouraLoading) && (
+          <div className="mb-6 grid grid-cols-1 lg:grid-cols-2 gap-4">
+            <OuraSleepCard metrics={ouraMetrics} isLoading={ouraLoading} />
+            <OuraActivityCard metrics={ouraMetrics} isLoading={ouraLoading} />
+          </div>
+        )}
       </main>
 
       {/* Onboarding Tour */}
