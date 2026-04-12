@@ -296,7 +296,7 @@ export function CalendarView({ events, onScheduleChange, priority }: CalendarVie
         {/* Week View */}
         <TabsContent value="week">
           <div className="overflow-x-auto">
-            <div className="grid grid-cols-7 gap-2 min-w-[900px]">
+            <div className="grid grid-cols-7 gap-1">
               {weekDates.map((date, index) => {
                 const dayName = dayNames[index];
                 const dateKey = formatDateKey(date);
