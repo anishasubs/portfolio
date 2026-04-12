@@ -159,21 +159,35 @@ export async function fetchOuraData(accessToken: string, days = 7): Promise<Omit
 
   const headers = { Authorization: `Bearer ${accessToken}` };
 
-  // Fetch sleep periods (has raw durations), daily_sleep (has scores), activity, and readiness
-  const [sleepPeriodsRes, dailySleepRes, activityRes, readinessRes] = await Promise.all([
-    fetch(`https://api.ouraring.com/v2/usercollection/sleep?start_date=${start}&end_date=${end}`, { headers }),
-    fetch(`https://api.ouraring.com/v2/usercollection/daily_sleep?start_date=${start}&end_date=${end}`, { headers }),
-    fetch(`https://api.ouraring.com/v2/usercollection/daily_activity?start_date=${start}&end_date=${end}`, { headers }),
-    fetch(`https://api.ouraring.com/v2/usercollection/daily_readiness?start_date=${start}&end_date=${end}`, { headers }),
-  ]);
+  const proxyUrl = env.openai.proxyUrl.replace("/api/chat", "/api/oura");
+  const params = `?start_date=${start}&end_date=${end}`;
 
-  // Log errors but don't throw — partial data is better than none
-  const sleepPeriodsData = sleepPeriodsRes.ok ? await sleepPeriodsRes.json() : { data: [] };
-  const dailySleepData = dailySleepRes.ok ? await dailySleepRes.json() : { data: [] };
-  const activityData = activityRes.ok ? await activityRes.json() : { data: [] };
-  const readinessData = readinessRes.ok ? await readinessRes.json() : { data: [] };
+  const proxyRes = await fetch(proxyUrl, {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify({
+      action: "fetch",
+      accessToken,
+      endpoints: [
+        `sleep${params}`,
+        `daily_sleep${params}`,
+        `daily_activity${params}`,
+        `daily_readiness${params}`,
+      ],
+    }),
+  });
 
-  console.log("🔵 Oura API responses:", {
+  if (!proxyRes.ok) {
+    throw new Error(`Oura proxy error: ${proxyRes.status}`);
+  }
+
+  const results = await proxyRes.json();
+  const sleepPeriodsData = results[`sleep${params}`] || { data: [] };
+  const dailySleepData = results[`daily_sleep${params}`] || { data: [] };
+  const activityData = results[`daily_activity${params}`] || { data: [] };
+  const readinessData = results[`daily_readiness${params}`] || { data: [] };
+
+  console.log("🔵 Oura API responses (via proxy):", {
     sleepPeriods: sleepPeriodsData.data?.length ?? 0,
     dailySleep: dailySleepData.data?.length ?? 0,
     activity: activityData.data?.length ?? 0,
