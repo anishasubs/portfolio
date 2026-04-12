@@ -16,8 +16,8 @@ import { type PriorityMode, PRIORITY_STORAGE_KEY } from "@/app/components/priori
 import { OnboardingTour, isTourComplete } from "@/app/components/OnboardingTour";
 import { OuraSleepCard } from "@/app/components/OuraSleepCard";
 import { OuraActivityCard } from "@/app/components/OuraActivityCard";
-import { fetchOuraData, type OuraMetrics } from "@/utils/ouraClient";
-import { saveOuraMetrics, loadOuraMetrics, loadOuraAuth, clearOuraData, isCacheValid } from "@/utils/ouraStorage";
+import { fetchOuraData, exchangeOuraCode, initOuraOAuth, type OuraMetrics } from "@/utils/ouraClient";
+import { saveOuraMetrics, loadOuraMetrics, loadOuraAuth, saveOuraAuth, clearOuraData, isCacheValid } from "@/utils/ouraStorage";
 
 // Helper function to fetch Google user profile
 async function fetchGoogleUserProfile(accessToken: string): Promise<{ name: string; email: string; picture?: string } | null> {
@@ -475,6 +475,45 @@ export default function App() {
     }
   };
 
+  // Handle Oura OAuth callback (code in URL after redirect)
+  useEffect(() => {
+    const urlParams = new URLSearchParams(window.location.search);
+    const ouraCode = urlParams.get("code");
+    const ouraState = urlParams.get("state");
+    if (ouraCode && ouraState === "kaisey_oura_auth") {
+      window.history.replaceState(null, "", window.location.pathname + window.location.hash);
+      setOuraLoading(true);
+      exchangeOuraCode(ouraCode)
+        .then(async (auth) => {
+          saveOuraAuth(auth);
+          try {
+            const freshMetrics = await fetchOuraData(auth.accessToken);
+            setOuraMetrics(freshMetrics);
+            saveOuraMetrics(freshMetrics);
+            toast.success("Oura Ring connected!", { description: "Health data synced." });
+          } catch (err) {
+            console.error("Oura data fetch error:", err);
+            toast.success("Oura Ring connected!", { description: "Data will sync shortly." });
+          }
+        })
+        .catch((err) => {
+          console.error("Oura auth error:", err);
+          toast.error("Oura Ring connection failed", { description: err.message });
+        })
+        .finally(() => setOuraLoading(false));
+    }
+  }, []);
+
+  const handleOuraConnect = () => {
+    try {
+      initOuraOAuth();
+    } catch (err) {
+      toast.error("Oura Ring not configured", {
+        description: err instanceof Error ? err.message : "Check environment variables.",
+      });
+    }
+  };
+
   const handleOuraRefresh = async () => {
     const ouraAuth = loadOuraAuth();
     if (!ouraAuth) throw new Error("Oura not connected");
@@ -814,7 +853,7 @@ export default function App() {
 
           {/* Right Column - Profile */}
           <div className="space-y-6">
-            <ProfileSection userProfile={userProfile} />
+            <ProfileSection userProfile={userProfile} ouraMetrics={ouraMetrics} ouraLoading={ouraLoading} onOuraConnect={handleOuraConnect} />
           </div>
         </div>
       </main>
