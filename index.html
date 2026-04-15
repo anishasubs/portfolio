@@ -473,6 +473,81 @@
         }
         @keyframes bob { 0%, 100% { transform: translateY(0); } 50% { transform: translateY(5px); } }
 
+        /* ── Voiceover button ─────────────────────────────── */
+        .voiceover-btn {
+            position: fixed; bottom: 32px; left: 32px;
+            z-index: 200;
+            width: 44px; height: 44px;
+            border-radius: 50%;
+            background: rgba(255, 250, 237, 0.85);
+            backdrop-filter: blur(12px); -webkit-backdrop-filter: blur(12px);
+            border: 1.5px solid rgba(28, 78, 137, 0.15);
+            box-shadow: 0 2px 12px rgba(28, 78, 137, 0.1);
+            cursor: pointer;
+            display: flex; align-items: center; justify-content: center;
+            transition: transform 0.3s ease, box-shadow 0.3s ease, border-color 0.3s ease;
+            color: #1c4e89;
+        }
+        .voiceover-btn:hover {
+            transform: scale(1.1);
+            box-shadow: 0 4px 20px rgba(28, 78, 137, 0.18);
+            border-color: rgba(28, 78, 137, 0.3);
+        }
+        .voiceover-btn svg { width: 20px; height: 20px; }
+        .voiceover-btn.playing {
+            border-color: #1c4e89;
+            animation: pulse-ring 2s ease-in-out infinite;
+        }
+        @keyframes pulse-ring {
+            0%, 100% { box-shadow: 0 2px 12px rgba(28, 78, 137, 0.1); }
+            50% { box-shadow: 0 2px 20px rgba(28, 78, 137, 0.3); }
+        }
+        .voiceover-bubble {
+            position: fixed; bottom: 52px; left: 82px;
+            z-index: 200;
+            background: rgba(255, 250, 237, 0.92);
+            backdrop-filter: blur(12px); -webkit-backdrop-filter: blur(12px);
+            border: 1.5px solid rgba(28, 78, 137, 0.12);
+            border-radius: 14px;
+            padding: 10px 16px;
+            box-shadow: 0 4px 20px rgba(28, 78, 137, 0.1);
+            max-width: 220px;
+            opacity: 1;
+            transition: opacity 0.4s ease, transform 0.4s ease;
+            transform: translateY(0);
+            pointer-events: none;
+        }
+        .voiceover-bubble.hidden {
+            opacity: 0;
+            transform: translateY(8px);
+            pointer-events: none;
+        }
+        .voiceover-bubble::before {
+            content: '';
+            position: absolute;
+            bottom: -7px; left: 20px;
+            width: 14px; height: 14px;
+            background: rgba(255, 250, 237, 0.92);
+            border-right: 1.5px solid rgba(28, 78, 137, 0.12);
+            border-bottom: 1.5px solid rgba(28, 78, 137, 0.12);
+            transform: rotate(45deg);
+        }
+        .voiceover-bubble p {
+            font-family: 'Raleway', sans-serif;
+            font-size: 13px;
+            font-weight: 500;
+            color: #1c4e89;
+            line-height: 1.4;
+            margin: 0;
+        }
+        .voiceover-bubble .vo-credit {
+            font-size: 10px;
+            font-weight: 400;
+            color: #5a7a94;
+            margin-top: 6px;
+            letter-spacing: 0.02em;
+        }
+
         /* ── Mobile-only elements (hidden by default) ─────── */
         .mobile-grid { display: none; }
         .mobile-pocket { display: none; }
@@ -774,6 +849,24 @@
     </div>
 </div>
 
+
+<!-- ═══ VOICEOVER ═══ -->
+<audio id="voiceover-audio" src="./assets/welcome-voiceover.mp3" preload="auto"></audio>
+<button class="voiceover-btn" id="voiceover-btn" aria-label="Play voiceover" title="Hear Anisha's welcome">
+    <svg id="vo-icon-play" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+        <polygon points="11 5 6 9 2 9 2 15 6 15 11 19 11 5"></polygon>
+        <path d="M15.54 8.46a5 5 0 0 1 0 7.07"></path>
+        <path d="M19.07 4.93a10 10 0 0 1 0 14.14"></path>
+    </svg>
+    <svg id="vo-icon-pause" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="display:none">
+        <rect x="6" y="4" width="4" height="16"></rect>
+        <rect x="14" y="4" width="4" height="16"></rect>
+    </svg>
+</button>
+<div class="voiceover-bubble" id="voiceover-bubble">
+    <p>Let me introduce myself!</p>
+    <p class="vo-credit">Powered by ElevenLabs</p>
+</div>
 
 <div class="scroll-hint" id="scroll-hint"><span>&darr;</span></div>
 
@@ -1329,6 +1422,34 @@
     if (isMobile) {
         hintEl.classList.add('visible');
     }
+
+    /* ================================================================
+       VOICEOVER
+       ================================================================ */
+    var voAudio = document.getElementById('voiceover-audio');
+    var voBtn   = document.getElementById('voiceover-btn');
+    var voPlay  = document.getElementById('vo-icon-play');
+    var voPause = document.getElementById('vo-icon-pause');
+
+    voBtn.addEventListener('click', function () {
+        if (voAudio.paused) {
+            voAudio.play();
+            voBtn.classList.add('playing');
+            voPlay.style.display = 'none';
+            voPause.style.display = 'block';
+        } else {
+            voAudio.pause();
+            voBtn.classList.remove('playing');
+            voPlay.style.display = 'block';
+            voPause.style.display = 'none';
+        }
+    });
+
+    voAudio.addEventListener('ended', function () {
+        voBtn.classList.remove('playing');
+        voPlay.style.display = 'block';
+        voPause.style.display = 'none';
+    });
 
 })();
 </script>
