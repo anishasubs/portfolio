@@ -502,6 +502,9 @@
             color: #c4b3e0;
             text-decoration: none;
         }
+        footer a:hover {
+            text-decoration: underline;
+        }
 
         /* ── Fade-in animation ───────────────────────────────── */
         .fade-in {
@@ -540,11 +543,33 @@
 </head>
 <body>
 
-    <!-- Sticky Nav -->
+    <!-- ═══ STICKY NAV ═══ -->
+    <nav class="site-nav">
+        <a class="site-nav-name" href="../index.html" style="display:flex;align-items:center;gap:10px;"><span class="nav-pocket-icon"><img class="menu-v1" src="../assets/pocket-v1.svg" alt=""><img class="menu-v2" src="../assets/pocket-v2.svg" alt=""><img class="menu-v3" src="../assets/pocket-v3.svg" alt=""></span>Anisha Subberwal</a>
+        <button class="nav-hamburger" onclick="document.getElementById('nav-links').classList.toggle('open')" aria-label="Menu">
+            <span></span><span></span><span></span>
+        </button>
+        <ul class="site-nav-links" id="nav-links">
+            <li class="nav-work-wrap">
+                <a href="../index.html">Work</a>
+                <ul class="nav-work-dropdown">
+                    <li><a href="../inde-wild-case-study/index.html">beauty brand growth</a></li>
+                    <li><a href="../coffeechain/index.html">crypto coffee case</a></li>
+                    <li><a href="../kaisey-case-study/index.html">smart calendar</a></li>
+                    <li><a href="../whifff-case-study/index.html">perfume scent quiz</a></li>
+                </ul>
+            </li>
+            <li><a href="../index.html#about">About</a></li>
+            <li><a href="../assets/Anisha_Subberwal_Resume.pdf" download>Resume</a></li>
+            <li><a href="https://www.linkedin.com/in/anisha-subberwal-434346126/" target="_blank">LinkedIn</a></li>
+            <li><a href="mailto:as7689@columbia.edu">Email</a></li>
+        </ul>
+    </nav>
+
     <!-- ═══ 1. HERO ═══ -->
     <section class="hero">
         <div class="hero-content">
-            <span class="hero-tag">Hackathon Project</span>
+            <span class="hero-tag">Smart Calendar</span>
             <h1>Kaisey: Your AI Chief of Staff for Student Life</h1>
             <p class="hero-subtitle">The first calendar system that unifies Google Calendar, Canvas, and CampusGroups &mdash; then uses Claude and your Oura Ring data to tell you what actually matters most right now.</p>
             <div class="hero-ctas">
@@ -829,6 +854,13 @@
         </div>
     </section>
 
+
+    <!-- Footer -->
+    <footer>
+        <h3>Anisha Subberwal</h3>
+        <p style="margin: 20px 0;">MBA Candidate, Columbia Business School 2026</p>
+        <p><a href="mailto:as7689@columbia.edu">as7689@columbia.edu</a> | +1 (646) 512-1483</p>
+    </footer>
 
     <!-- ═══ SCRIPTS ═══ -->
     <script>
