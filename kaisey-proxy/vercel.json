@@ -2,6 +2,9 @@
   "functions": {
     "api/chat.ts": {
       "maxDuration": 30
+    },
+    "api/oura.ts": {
+      "maxDuration": 30
     }
   }
 }
