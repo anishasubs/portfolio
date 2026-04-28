@@ -1127,6 +1127,20 @@
     </nav>
 
     <!-- Hero Section -->
+    <style>
+        .hero { flex-direction: column; justify-content: center; }
+        .hero-vision-wrap {
+            width: 100%;
+            max-width: 1200px;
+            margin: 2.5rem auto 0;
+            position: relative;
+            z-index: 2;
+        }
+        .hero-vision-wrap .vision-statement-box {
+            margin: 0;
+            box-shadow: 0 30px 80px rgba(0, 0, 0, 0.40);
+        }
+    </style>
     <section class="hero">
         <div class="hero-content">
             <span class="hero-tag">POWERED BY SOLANA</span>
@@ -1134,6 +1148,21 @@
             <p class="hero-subtitle">Universal loyalty and micro-payments for cafes and coffee drinkers, powered by blockchain technology</p>
 
             <div class="hero-meta">
+            </div>
+        </div>
+
+        <div class="hero-vision-wrap">
+            <div class="vision-statement-box">
+                <div class="vision-video-container">
+                    <video autoplay muted loop playsinline class="vision-video">
+                        <source src="ordering-demo.mp4" type="video/mp4">
+                    </video>
+                </div>
+                <div class="vision-text-container">
+                    <p class="vision-text">
+                        Three taps. One coffee. Loyalty earned on-chain.
+                    </p>
+                </div>
             </div>
         </div>
 
@@ -1146,23 +1175,6 @@
     <!-- Overview -->
     <section class="overview">
         <div class="container">
-        <!-- Ordering Demo — Landing Panel -->
-        <div class="vision-statement-box">
-            <!-- Text Section (left) -->
-            <div class="vision-text-container" style="order: 1;">
-                <p class="vision-text">
-                    Three taps. One coffee. Loyalty earned on-chain.
-                </p>
-            </div>
-
-            <!-- Video Section (right) -->
-            <div class="vision-video-container" style="order: 2; border-radius: 0 20px 20px 0;">
-                <video autoplay muted loop playsinline class="vision-video">
-                    <source src="ordering-demo.mp4" type="video/mp4">
-                </video>
-            </div>
-        </div>
-
         <!-- Animated Vision Statement -->
         <div class="vision-statement-box">
             <!-- Video Section -->
