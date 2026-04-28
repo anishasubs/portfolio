@@ -1128,41 +1128,61 @@
 
     <!-- Hero Section -->
     <style>
-        .hero { flex-direction: column; justify-content: center; }
-        .hero-vision-wrap {
+        .hero-content {
+            display: grid;
+            grid-template-columns: 1fr 1.05fr;
+            gap: 3.5rem;
+            align-items: center;
             width: 100%;
-            max-width: 1200px;
-            margin: 2.5rem auto 0;
-            position: relative;
-            z-index: 2;
         }
-        .hero-vision-wrap .vision-statement-box {
-            margin: 0;
-            box-shadow: 0 30px 80px rgba(0, 0, 0, 0.40);
+        .hero-text { min-width: 0; }
+        .hero-demo {
+            justify-self: end;
+            position: relative;
+            width: 100%;
+            max-width: 580px;
+            background: var(--cream);
+            padding: 12px;
+            border-radius: 22px;
+            box-shadow: 0 30px 80px rgba(0, 0, 0, 0.30);
+            animation: fadeInUp 0.9s ease-out 0.6s both, heroFloat 8s ease-in-out 1.5s infinite;
+        }
+        .hero-demo video {
+            width: 100%;
+            height: auto;
+            display: block;
+            border-radius: 12px;
+            background: var(--cream);
+        }
+        @keyframes heroFloat {
+            0%, 100% { transform: translateY(0); }
+            50% { transform: translateY(-10px); }
+        }
+        @media (max-width: 900px) {
+            .hero-content {
+                grid-template-columns: 1fr;
+                gap: 2.5rem;
+            }
+            .hero-demo {
+                justify-self: center;
+                max-width: 100%;
+            }
         }
     </style>
     <section class="hero">
         <div class="hero-content">
-            <span class="hero-tag">POWERED BY SOLANA</span>
-            <h1><span style="font-family: 'Parisienne', cursive;">CoffeeChain</span></h1>
-            <p class="hero-subtitle">Universal loyalty and micro-payments for cafes and coffee drinkers, powered by blockchain technology</p>
+            <div class="hero-text">
+                <span class="hero-tag">POWERED BY SOLANA</span>
+                <h1><span style="font-family: 'Parisienne', cursive;">CoffeeChain</span></h1>
+                <p class="hero-subtitle">Universal loyalty and micro-payments for cafes and coffee drinkers, powered by blockchain technology</p>
 
-            <div class="hero-meta">
+                <div class="hero-meta">
+                </div>
             </div>
-        </div>
-
-        <div class="hero-vision-wrap">
-            <div class="vision-statement-box">
-                <div class="vision-video-container">
-                    <video autoplay muted loop playsinline class="vision-video">
-                        <source src="ordering-demo.mp4" type="video/mp4">
-                    </video>
-                </div>
-                <div class="vision-text-container">
-                    <p class="vision-text">
-                        Three taps. One coffee. Loyalty earned on-chain.
-                    </p>
-                </div>
+            <div class="hero-demo">
+                <video autoplay muted loop playsinline preload="auto" aria-label="CoffeeChain demo">
+                    <source src="ordering-demo.mp4" type="video/mp4">
+                </video>
             </div>
         </div>
 
