@@ -1132,11 +1132,11 @@
             <span class="hero-tag">POWERED BY SOLANA</span>
             <h1><span style="font-family: 'Parisienne', cursive;">CoffeeChain</span></h1>
             <p class="hero-subtitle">Universal loyalty and micro-payments for cafes and coffee drinkers, powered by blockchain technology</p>
-            
+
             <div class="hero-meta">
             </div>
         </div>
-        
+
         <div class="scroll-indicator">
             <div>Scroll to explore</div>
             <div style="margin-top: 0.5rem;">↓</div>
@@ -1579,6 +1579,374 @@
         </div>
     </section>
 
+    <!-- Architecture at Scale — Embedded Finance Lens -->
+    <style>
+        .scale-section {
+            background: linear-gradient(135deg, #0f2c4f 0%, #1c4e89 60%, #2d6ab4 100%);
+            color: var(--cream);
+            border-radius: 32px;
+            max-width: 1200px;
+            margin: 0 auto;
+            position: relative;
+            overflow: hidden;
+        }
+        .scale-section::before {
+            content: '';
+            position: absolute;
+            inset: 0;
+            background:
+                radial-gradient(circle at 15% 20%, rgba(204, 153, 255, 0.15) 0%, transparent 45%),
+                radial-gradient(circle at 85% 90%, rgba(212, 167, 106, 0.12) 0%, transparent 50%);
+            pointer-events: none;
+        }
+        .scale-section .section-tag { color: var(--accent-gold); position: relative; z-index: 2; }
+        .scale-section .section-title { color: var(--cream); position: relative; z-index: 2; }
+        .scale-intro {
+            position: relative; z-index: 2;
+            font-size: 1.2rem;
+            line-height: 1.8;
+            color: rgba(255, 250, 237, 0.92);
+            max-width: 850px;
+            margin: 1.5rem 0 4rem;
+        }
+        .scale-intro strong { color: var(--accent-gold); font-weight: 600; }
+
+        /* Two-layer flow diagram */
+        .flow-diagram {
+            position: relative; z-index: 2;
+            background: rgba(0, 0, 0, 0.22);
+            border-radius: 20px;
+            padding: 2.5rem 2rem;
+            margin: 2rem 0 4rem;
+            border: 1px solid rgba(255, 255, 255, 0.08);
+        }
+        .flow-layer {
+            display: grid;
+            grid-template-columns: 170px 1fr;
+            gap: 2rem;
+            align-items: center;
+            padding: 1.25rem 0;
+        }
+        .flow-layer + .flow-layer {
+            border-top: 1px dashed rgba(255, 255, 255, 0.18);
+            margin-top: 1rem;
+            padding-top: 2rem;
+        }
+        .flow-label {
+            font-family: 'Bodoni Moda', serif;
+            font-size: 0.85rem;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+            text-align: right;
+            line-height: 1.3;
+        }
+        .flow-label .layer-num {
+            display: block;
+            font-size: 3rem;
+            font-family: 'Bodoni Moda', serif;
+            line-height: 1;
+            letter-spacing: 0;
+            margin-bottom: 0.5rem;
+        }
+        .flow-label.onchain { color: var(--accent-purple); }
+        .flow-label.banking { color: var(--accent-gold); }
+        .flow-label.onchain .layer-num { color: var(--accent-green); }
+        .flow-label.banking .layer-num { color: var(--accent-gold); }
+        .flow-row {
+            display: flex;
+            flex-wrap: wrap;
+            align-items: center;
+            gap: 0.65rem;
+        }
+        .flow-node {
+            padding: 0.75rem 1.1rem;
+            background: rgba(255, 255, 255, 0.10);
+            border: 1px solid rgba(255, 255, 255, 0.15);
+            border-radius: 12px;
+            font-size: 0.92rem;
+            font-weight: 500;
+            color: var(--cream);
+            backdrop-filter: blur(6px);
+        }
+        .flow-node.accent { background: rgba(204, 153, 255, 0.20); border-color: rgba(204, 153, 255, 0.40); }
+        .flow-node.gold { background: rgba(212, 167, 106, 0.22); border-color: rgba(212, 167, 106, 0.45); }
+        .flow-arrow { color: rgba(255, 250, 237, 0.55); font-size: 1.2rem; font-weight: 300; }
+        .flow-caption {
+            margin-top: 0.85rem;
+            font-size: 0.88rem;
+            color: rgba(255, 250, 237, 0.70);
+            font-style: italic;
+            line-height: 1.55;
+        }
+
+        /* Off-ramp pattern cards */
+        .offramp-heading {
+            position: relative; z-index: 2;
+            font-family: 'Bodoni Moda', serif;
+            font-size: 2rem;
+            color: var(--cream);
+            margin-bottom: 0.5rem;
+        }
+        .offramp-sub {
+            position: relative; z-index: 2;
+            color: rgba(255, 250, 237, 0.78);
+            margin-bottom: 2rem;
+            font-size: 1.05rem;
+        }
+        .offramp-grid {
+            position: relative; z-index: 2;
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 1.5rem;
+            margin-bottom: 4rem;
+        }
+        .offramp-card {
+            padding: 2rem;
+            background: rgba(255, 255, 255, 0.06);
+            border: 1px solid rgba(255, 255, 255, 0.12);
+            border-radius: 18px;
+            backdrop-filter: blur(8px);
+            transition: transform 0.3s ease, background 0.3s ease, box-shadow 0.3s ease;
+        }
+        .offramp-card:hover {
+            transform: translateY(-5px);
+            background: rgba(255, 255, 255, 0.10);
+        }
+        .offramp-card.scales {
+            background: linear-gradient(135deg, rgba(204, 153, 255, 0.20), rgba(212, 167, 106, 0.12));
+            border-color: rgba(204, 153, 255, 0.35);
+            box-shadow: 0 10px 40px rgba(204, 153, 255, 0.18);
+        }
+        .offramp-card.scales:hover {
+            box-shadow: 0 14px 50px rgba(204, 153, 255, 0.25);
+        }
+        .offramp-num {
+            font-family: 'Bodoni Moda', serif;
+            font-size: 0.78rem;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+            color: var(--accent-gold);
+            margin-bottom: 0.5rem;
+        }
+        .offramp-card.scales .offramp-num { color: var(--accent-purple); }
+        .offramp-title {
+            font-family: 'Bodoni Moda', serif;
+            font-size: 1.4rem;
+            color: var(--cream);
+            margin-bottom: 1rem;
+            line-height: 1.25;
+        }
+        .offramp-flow {
+            font-family: 'Courier New', monospace;
+            font-size: 0.78rem;
+            color: rgba(255, 250, 237, 0.72);
+            background: rgba(0, 0, 0, 0.28);
+            border-radius: 8px;
+            padding: 0.85rem;
+            margin-bottom: 1.25rem;
+            line-height: 1.5;
+        }
+        .offramp-meta {
+            display: flex;
+            flex-direction: column;
+            gap: 0.65rem;
+            margin-bottom: 1rem;
+            font-size: 0.9rem;
+        }
+        .offramp-meta-row {
+            display: flex;
+            gap: 0.6rem;
+        }
+        .offramp-meta-label {
+            color: var(--accent-gold);
+            font-weight: 600;
+            min-width: 80px;
+            font-size: 0.72rem;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            padding-top: 3px;
+        }
+        .offramp-card.scales .offramp-meta-label { color: var(--accent-purple); }
+        .offramp-meta-value {
+            color: rgba(255, 250, 237, 0.88);
+            flex: 1;
+            line-height: 1.5;
+        }
+        .offramp-verdict {
+            margin-top: 1.25rem;
+            padding-top: 1rem;
+            border-top: 1px solid rgba(255, 255, 255, 0.12);
+            font-style: italic;
+            color: rgba(255, 250, 237, 0.85);
+            font-size: 0.92rem;
+            line-height: 1.55;
+        }
+        .offramp-verdict em { color: var(--accent-gold); font-style: italic; }
+        .offramp-card.scales .offramp-verdict em { color: var(--accent-purple); }
+
+        /* Closing punchline */
+        .scale-punchline {
+            position: relative; z-index: 2;
+            margin-top: 1rem;
+            padding: 2.5rem 3rem;
+            background: rgba(0, 0, 0, 0.32);
+            border-left: 4px solid var(--accent-gold);
+            border-radius: 12px;
+        }
+        .scale-punchline-lead {
+            font-family: 'Bodoni Moda', serif;
+            font-size: 1.6rem;
+            color: var(--cream);
+            line-height: 1.4;
+            margin-bottom: 1rem;
+        }
+        .scale-punchline-lead em { color: var(--accent-gold); font-style: italic; }
+        .scale-punchline-body {
+            color: rgba(255, 250, 237, 0.88);
+            font-size: 1rem;
+            line-height: 1.75;
+        }
+        .scale-punchline-body strong { color: var(--accent-purple); font-weight: 600; }
+
+        @media (max-width: 768px) {
+            .scale-section { margin: 0 20px; max-width: none; }
+            .flow-layer { grid-template-columns: 1fr; gap: 1rem; }
+            .flow-label { text-align: left; display: flex; align-items: baseline; gap: 1rem; }
+            .flow-label .layer-num { font-size: 2rem; margin-bottom: 0; }
+            .offramp-grid { grid-template-columns: 1fr; }
+            .scale-punchline { padding: 1.75rem; }
+            .scale-punchline-lead { font-size: 1.25rem; }
+        }
+    </style>
+    <section class="scale-section">
+        <div class="container">
+            <span class="section-tag">Architecture at Scale</span>
+            <h2 class="section-title">Where the architecture has to leave Solana</h2>
+
+            <p class="scale-intro">
+                Solana is the right rail for the on-chain ledger — sub-second finality, sub-cent fees, a transparent reserve. <strong>It is not a fix for fiat on/off-ramps, KYB at merchant onboarding, money-transmitter compliance, or settlement to a cafe owner's operating account.</strong> Those are bank problems. The honest version of the architecture is two layers, not one.
+            </p>
+
+            <!-- Two-Layer Flow Diagram -->
+            <div class="flow-diagram">
+                <div class="flow-layer">
+                    <div class="flow-label onchain">
+                        <span class="layer-num">01</span>
+                        On-chain<br/>ledger
+                    </div>
+                    <div>
+                        <div class="flow-row">
+                            <span class="flow-node">User wallet (USDC)</span>
+                            <span class="flow-arrow">→</span>
+                            <span class="flow-node accent">CoffeeChain PDA · USDC reserve</span>
+                            <span class="flow-arrow">→</span>
+                            <span class="flow-node">Mint BeanPoints (SPL)</span>
+                            <span class="flow-arrow">→</span>
+                            <span class="flow-node">Merchant program account</span>
+                        </div>
+                        <div class="flow-caption">
+                            Trustless, transparent, auditable. Reserve held in a Program-Derived Address. Total BeanPoint supply equals USDC in the PDA, always.
+                        </div>
+                    </div>
+                </div>
+                <div class="flow-layer">
+                    <div class="flow-label banking">
+                        <span class="layer-num">02</span>
+                        Banking<br/>layer
+                    </div>
+                    <div>
+                        <div class="flow-row">
+                            <span class="flow-node">Merchant burns BeanPoints</span>
+                            <span class="flow-arrow">→</span>
+                            <span class="flow-node gold">Custody · KYB · regulated reserve</span>
+                            <span class="flow-arrow">→</span>
+                            <span class="flow-node gold">Fiat settlement (FedNow / RTP / ACH)</span>
+                            <span class="flow-arrow">→</span>
+                            <span class="flow-node">Merchant operating account</span>
+                        </div>
+                        <div class="flow-caption">
+                            Required at scale. Where compliance, settlement, and the merchant's actual relationship with money lives. This is the layer JPM Wallet and Kinexys are built for.
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Off-ramp Patterns -->
+            <h3 class="offramp-heading">Four ways the second layer gets built</h3>
+            <p class="offramp-sub">
+                Real-world patterns for getting USDC into a merchant's bank account, ordered the way a platform actually walks into the question — from first instinct to where the architecture lands at scale.
+            </p>
+
+            <div class="offramp-grid">
+                <div class="offramp-card">
+                    <div class="offramp-num">Pattern 01</div>
+                    <div class="offramp-title">DIY via crypto exchange</div>
+                    <div class="offramp-flow">USDC → Coinbase / Kraken → sell for USD → ACH → merchant bank</div>
+                    <div class="offramp-meta">
+                        <div class="offramp-meta-row"><span class="offramp-meta-label">Cost</span><span class="offramp-meta-value">~0.5% exchange fee</span></div>
+                        <div class="offramp-meta-row"><span class="offramp-meta-label">Friction</span><span class="offramp-meta-value">Extreme — every merchant manages a Coinbase Pro account, KYB, manual exports, tax events on every withdrawal</span></div>
+                        <div class="offramp-meta-row"><span class="offramp-meta-label">Settlement</span><span class="offramp-meta-value">T+1 to T+3</span></div>
+                    </div>
+                    <div class="offramp-verdict">
+                        Doesn't scale past <em>~100 cafes</em>. No indie owner is doing this weekly.
+                    </div>
+                </div>
+
+                <div class="offramp-card">
+                    <div class="offramp-num">Pattern 02</div>
+                    <div class="offramp-title">Stablecoin-to-fiat infrastructure</div>
+                    <div class="offramp-flow">USDC → Bridge.xyz / Conduit / Beam API → ACH or wire → merchant bank</div>
+                    <div class="offramp-meta">
+                        <div class="offramp-meta-row"><span class="offramp-meta-label">Cost</span><span class="offramp-meta-value">~0.5% – 2% per conversion</span></div>
+                        <div class="offramp-meta-row"><span class="offramp-meta-label">Friction</span><span class="offramp-meta-value">Medium — one-time KYB through the provider, then API-driven; merchant doesn't touch crypto rails directly</span></div>
+                        <div class="offramp-meta-row"><span class="offramp-meta-label">Settlement</span><span class="offramp-meta-value">Same-day to T+1</span></div>
+                    </div>
+                    <div class="offramp-verdict">
+                        Workable for thousands of merchants — but you've added a counterparty who can fail, get acquired (Bridge → Stripe, 2024), or change pricing. <em>Concentration risk is real.</em>
+                    </div>
+                </div>
+
+                <div class="offramp-card">
+                    <div class="offramp-num">Pattern 03  ·  First instinct</div>
+                    <div class="offramp-title">Embedded fintech rails  ·  Stripe Connect &amp; Treasury</div>
+                    <div class="offramp-flow">BeanPoints → Stripe Connect / Treasury (rides Goldman, Evolve historically) → KYB at onboarding → ACH or RTP → merchant operating account</div>
+                    <div class="offramp-meta">
+                        <div class="offramp-meta-row"><span class="offramp-meta-label">Cost</span><span class="offramp-meta-value">Stripe fee stack on payments + Treasury fees; predictable, fintech-standard</span></div>
+                        <div class="offramp-meta-row"><span class="offramp-meta-label">Friction</span><span class="offramp-meta-value">Low — well-trodden onboarding, polished docs, ships in ~2 weeks</span></div>
+                        <div class="offramp-meta-row"><span class="offramp-meta-label">Settlement</span><span class="offramp-meta-value">Same-day to T+1; RTP where supported</span></div>
+                    </div>
+                    <div class="offramp-verdict">
+                        The default move for any platform launching today. <em>The wall comes later</em> — when an audit committee asks about sponsor-bank concentration (Synapse, Evolve), when multi-currency gets serious, when enterprise procurement enters. Right answer for CoffeeChain v1 through ~v50. Not where you want to be at v100.
+                    </div>
+                </div>
+
+                <div class="offramp-card scales">
+                    <div class="offramp-num">Pattern 04  ·  Scales</div>
+                    <div class="offramp-title">Embedded bank rails  ·  the JPM Wallet pattern</div>
+                    <div class="offramp-flow">BeanPoints → bank custody → KYB at onboarding → real-time settlement → merchant operating account</div>
+                    <div class="offramp-meta">
+                        <div class="offramp-meta-row"><span class="offramp-meta-label">Cost</span><span class="offramp-meta-value">Higher headline rate, lower TCO once compliance, KYB, dispute handling, and reconciliation are included</span></div>
+                        <div class="offramp-meta-row"><span class="offramp-meta-label">Friction</span><span class="offramp-meta-value">Lowest — merchant onboards once, never touches crypto rails, gets a familiar bank statement</span></div>
+                        <div class="offramp-meta-row"><span class="offramp-meta-label">Settlement</span><span class="offramp-meta-value">Real-time (FedNow / RTP) or T+0</span></div>
+                    </div>
+                    <div class="offramp-verdict">
+                        The answer at scale. <em>Bank charter — not partner bank</em> — so the audit-committee question stops being a question. JPM is productizing exactly this with Kinexys: bank-grade rails on public chains, with the deposit-status legal posture that Stripe-on-Goldman structurally can't match.
+                    </div>
+                </div>
+            </div>
+
+            <!-- Punchline -->
+            <div class="scale-punchline">
+                <div class="scale-punchline-lead">
+                    <em>Solana solves the ledger.</em>  A bank solves the rails. Both are needed at scale.
+                </div>
+                <div class="scale-punchline-body">
+                    The on-chain layer is what makes BeanPoints trustlessly auditable — every reserve dollar visible, every merchant balance verifiable, no hidden ledger. <strong>The banking layer is what makes BeanPoints actually useful for an indie cafe owner who just wants to pay rent.</strong> CoffeeChain v1 ships on the on-chain layer alone. CoffeeChain v100 — thousands of merchants, millions in stored value, regulated reserves — needs both. That's the architecture J.P. Morgan Payments is building for embedded finance customers, and it's where this work points next.
+                </div>
+            </div>
+        </div>
+    </section>
+
     <!-- App Showcase -->
     <section class="app-showcase">
         <div class="container">
@@ -1723,26 +2091,6 @@
             </div>
         </div>
 
-        <h3 class="section-title" style="font-size: 2rem; margin-top: 4rem; color: white;">Funding Breakdown</h3>
-        <div class="funding-breakdown">
-            <div class="funding-item">
-                <div class="funding-amount">$60K</div>
-                <div class="funding-label">Engineering<br/>6 months @ $10k/month</div>
-            </div>
-            <div class="funding-item">
-                <div class="funding-amount">$20K</div>
-                <div class="funding-label">Go-to-Market<br/>4 months @ $5k/month</div>
-            </div>
-            <div class="funding-item">
-                <div class="funding-amount">$20K</div>
-                <div class="funding-label">Other Expenses<br/>Legal, audits, operations</div>
-            </div>
-        </div>
-
-        <div style="margin-top: 3rem; padding: 2rem; background: rgba(0,0,0,0.2); border-radius: 16px; text-align: center;">
-            <div style="font-size: 1.1rem; opacity: 0.9; margin-bottom: 0.5rem;">Total Cost to Launch</div>
-            <div style="font-family: 'Bodoni Moda', serif; font-size: 3.5rem; color: white;">$100K</div>
-        </div>
     </section>
 
     <!-- Competition -->
