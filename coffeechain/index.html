@@ -1141,9 +1141,8 @@
             position: relative;
             width: 100%;
             max-width: 580px;
-            background: var(--cream);
-            padding: 12px;
-            border-radius: 22px;
+            border-radius: 18px;
+            overflow: hidden;
             box-shadow: 0 30px 80px rgba(0, 0, 0, 0.30);
             animation: fadeInUp 0.9s ease-out 0.6s both, heroFloat 8s ease-in-out 1.5s infinite;
         }
@@ -1151,8 +1150,7 @@
             width: 100%;
             height: auto;
             display: block;
-            border-radius: 12px;
-            background: var(--cream);
+            border-radius: 18px;
         }
         @keyframes heroFloat {
             0%, 100% { transform: translateY(0); }
@@ -1195,23 +1193,6 @@
     <!-- Overview -->
     <section class="overview">
         <div class="container">
-        <!-- Animated Vision Statement -->
-        <div class="vision-statement-box">
-            <!-- Video Section -->
-            <div class="vision-video-container">
-                <video autoplay muted loop playsinline class="vision-video">
-                    <source src="hero-video.mp4" type="video/mp4">
-                </video>
-            </div>
-
-            <!-- Text Section -->
-            <div class="vision-text-container">
-                <p class="vision-text">
-                    Integrating crypto payments into everyday life—one coffee at a time
-                </p>
-            </div>
-        </div>
-
         <span class="section-tag">Overview</span>
         <h2 class="section-title">Democratizing Coffee Loyalty Programs</h2>
 
@@ -2203,6 +2184,24 @@
             <p style="font-size: 1.3rem; font-weight: 500; color: var(--coffee-dark);">
                 <em>CoffeeChain doesn't need to beat Starbucks — it needs to give independent cafes tools they've never had access to.</em>
             </p>
+        </div>
+    </section>
+
+    <!-- Closing Vision Statement -->
+    <section style="background: var(--cream); padding: 80px 40px;">
+        <div class="container">
+            <div class="vision-statement-box">
+                <div class="vision-video-container">
+                    <video autoplay muted loop playsinline class="vision-video">
+                        <source src="hero-video.mp4" type="video/mp4">
+                    </video>
+                </div>
+                <div class="vision-text-container">
+                    <p class="vision-text">
+                        Integrating crypto payments into everyday life—one coffee at a time
+                    </p>
+                </div>
+            </div>
         </div>
     </section>
 
