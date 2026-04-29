@@ -560,6 +560,64 @@
             transform: translateY(0);
         }
         
+        .tiktok-caption {
+            display: flex;
+            flex-wrap: wrap;
+            align-items: center;
+            justify-content: center;
+            gap: 6px 10px;
+            font-size: 13px;
+            color: #8a9bb5;
+            margin-top: 14px;
+            text-align: center;
+        }
+        .tiktok-caption .tiktok-meta {
+            font-family: 'Raleway', sans-serif;
+        }
+        .tiktok-link {
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            padding: 8px 14px;
+            min-height: 32px;
+            border-radius: 999px;
+            background: rgba(204, 153, 255, 0.12);
+            color: #1c4e89 !important;
+            font-family: 'Raleway', sans-serif;
+            font-size: 12px;
+            font-weight: 600;
+            letter-spacing: 0.04em;
+            text-decoration: none !important;
+            border: 1px solid rgba(204, 153, 255, 0.35);
+            transition: background 0.2s ease, border-color 0.2s ease, transform 0.2s ease;
+            white-space: nowrap;
+        }
+        .tiktok-link:hover {
+            background: rgba(204, 153, 255, 0.22);
+            border-color: rgba(204, 153, 255, 0.6);
+            transform: translateY(-1px);
+        }
+        .tiktok-link svg {
+            width: 12px;
+            height: 12px;
+            flex-shrink: 0;
+        }
+        @media (max-width: 600px) {
+            .tiktok-caption {
+                flex-direction: column;
+                gap: 8px;
+            }
+            .tiktok-link {
+                padding: 10px 18px;
+                font-size: 13px;
+                min-height: 40px;
+            }
+            .tiktok-link svg {
+                width: 13px;
+                height: 13px;
+            }
+        }
+
         /* Responsive */
         @media (max-width: 1024px) {
             .stats-grid {
@@ -766,15 +824,23 @@
                 padding: 0 20px;
             }
             
+            .results {
+                padding: 80px 16px;
+            }
+
+            .graph-embed {
+                padding: 20px 8px;
+            }
+
             .graph-wrapper {
-                padding: 20px 10px 70px 100px;
-                overflow-x: auto;
+                padding: 20px 4px 70px 36px;
+                overflow-x: visible;
                 min-width: 0;
             }
 
             .graph-container {
-                height: 350px;
-                min-width: 300px;
+                height: 320px;
+                min-width: 0;
             }
 
             .brand-label {
@@ -806,8 +872,16 @@
             }
 
             .y-axis-label {
-                font-size: 11px;
-                left: -80px;
+                font-size: 10px;
+                left: -32px;
+            }
+
+            .axis-detail {
+                display: none;
+            }
+
+            .brand-point.flip-left {
+                flex-direction: row-reverse;
             }
             
             .stat-number {
@@ -1056,23 +1130,44 @@
             <!-- Hero Products -->
             <div class="hero-products fade-in">
                 <div class="hero-product">
-                    <img src="assets/product-1.jpg" alt="AM/PM Serum">
-                    <h3>AM/PM Serum</h3>
-                    <p>Vitamin C brightening serum with bakuchiol and adaptogens for day-to-night radiance</p>
+                    <img src="assets/product-1.jpg" alt="Skincare">
+                    <h3>Skincare</h3>
+                    <p>Ayurvedic-rooted serums and treatments — bakuchiol, vitamin C, and adaptogens for day-to-night radiance</p>
                 </div>
                 <div class="hero-product">
-                    <img src="assets/product-2.jpg" alt="Champi Hair Oil">
-                    <h3>Champi Hair Oil</h3>
-                    <p>Ayurvedic scalp ritual oil with wild-harvested botanicals for strength and shine</p>
-                </div>
-                <div class="hero-product">
-                    <img src="assets/product-3.jpg" alt="Dewy Lip Treatments">
-                    <h3>Dewy Lip Treatments</h3>
-                    <p>Peptide-powered lip treatments in four shades with squalane and vitamin E</p>
+                    <img src="assets/product-2.jpg" alt="Haircare">
+                    <h3>Haircare</h3>
+                    <p>Champi scalp rituals and wild-harvested botanical oils for strength, shine, and root-to-tip nourishment</p>
                 </div>
             </div>
         </div>
     </div>
+
+    <!-- Business Results (moved up — the headline payoff) -->
+    <section class="results fade-in" id="business-results">
+        <div class="container">
+            <h2>Business Results</h2>
+            <p style="font-size: 20px; color: #5a7a94; margin-bottom: 60px;">72 hours. 160+ creators. Real revenue.</p>
+            <div class="stats-grid">
+                <div class="stat-card purple">
+                    <div class="stat-number">$344K</div>
+                    <div class="stat-label">QTD Revenue (+30% YoY)</div>
+                </div>
+                <div class="stat-card orange">
+                    <div class="stat-number">+20%</div>
+                    <div class="stat-label">Conversion Rate Lift</div>
+                </div>
+                <div class="stat-card blue">
+                    <div class="stat-number">867→1,015</div>
+                    <div class="stat-label">TikTok Follower Growth</div>
+                </div>
+                <div class="stat-card pink">
+                    <div class="stat-number">4+</div>
+                    <div class="stat-label">Organic Tags/Day Sustained</div>
+                </div>
+            </div>
+        </div>
+    </section>
 
     <!-- The User Section -->
     <section class="the-user fade-in" id="the-user">
@@ -1262,8 +1357,8 @@
                             <div class="brand-label">Tatcha</div>
                         </div>
                         
-                        <div class="axis-label x-axis-label">Cultural Heritage / Depth →</div>
-                        <div class="axis-label y-axis-label">Modernity / Trend Alignment →</div>
+                        <div class="axis-label x-axis-label">Cultural Heritage<span class="axis-detail"> / Depth</span> →</div>
+                        <div class="axis-label y-axis-label">Modernity<span class="axis-detail"> / Trend Alignment</span> →</div>
                     </div>
                 </div>
                 
@@ -1348,7 +1443,7 @@
                         Your browser doesn't support video playback. <a href="https://www.tiktok.com/@indewildofficial/video/7543368825828429069" target="_blank">Watch on TikTok</a>
                     </video>
                 </div>
-                <p style="font-size: 13px; color: #8a9bb5; margin-top: 10px; text-align: center;">Click to play • <a href="https://www.tiktok.com/@indewildofficial/video/7543368825828429069" target="_blank" style="color: #cc99ff;">View on TikTok ↗</a></p>
+                <div class="tiktok-caption"><span class="tiktok-meta">Click to play</span><a class="tiktok-link" href="https://www.tiktok.com/@indewildofficial/video/7543368825828429069" target="_blank" rel="noopener">View on TikTok <svg viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M5 11l6-6M11 5H6m5 0v5" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></svg></a></div>
             </div>
             
             <div style="background: white; padding: 40px; border-radius: 12px; margin-top: 40px;">
@@ -1363,7 +1458,7 @@
                             <source src="Winner-1.mp4" type="video/mp4">
                             Your browser doesn't support video playback. <a href="https://www.tiktok.com/@indewildofficial/video/7548183293317975326" target="_blank">Watch on TikTok</a>
                         </video>
-                        <p style="font-size: 12px; color: #8a9bb5; margin-top: 8px; text-align: center;">Winner #1 • <a href="https://www.tiktok.com/@indewildofficial/video/7548183293317975326" target="_blank" style="color: #cc99ff;">View on TikTok ↗</a></p>
+                        <div class="tiktok-caption"><span class="tiktok-meta">Winner #1</span><a class="tiktok-link" href="https://www.tiktok.com/@indewildofficial/video/7548183293317975326" target="_blank" rel="noopener">View on TikTok <svg viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M5 11l6-6M11 5H6m5 0v5" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></svg></a></div>
                     </div>
                     <div class="winner-video">
                         <video 
@@ -1373,7 +1468,7 @@
                             <source src="Winner-2.mp4" type="video/mp4">
                             Your browser doesn't support video playback. <a href="https://www.tiktok.com/@indewildofficial/video/7548264253535309086" target="_blank">Watch on TikTok</a>
                         </video>
-                        <p style="font-size: 12px; color: #8a9bb5; margin-top: 8px; text-align: center;">Winner #2 • <a href="https://www.tiktok.com/@indewildofficial/video/7548264253535309086" target="_blank" style="color: #cc99ff;">View on TikTok ↗</a></p>
+                        <div class="tiktok-caption"><span class="tiktok-meta">Winner #2</span><a class="tiktok-link" href="https://www.tiktok.com/@indewildofficial/video/7548264253535309086" target="_blank" rel="noopener">View on TikTok <svg viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M5 11l6-6M11 5H6m5 0v5" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></svg></a></div>
                     </div>
                     <div class="winner-video">
                         <video 
@@ -1383,7 +1478,7 @@
                             <source src="Winner 3.mp4" type="video/mp4">
                             Your browser doesn't support video playback. <a href="https://www.tiktok.com/@indewildofficial/video/7548477368399039775" target="_blank">Watch on TikTok</a>
                         </video>
-                        <p style="font-size: 12px; color: #8a9bb5; margin-top: 8px; text-align: center;">Winner #3 • <a href="https://www.tiktok.com/@indewildofficial/video/7548477368399039775" target="_blank" style="color: #cc99ff;">View on TikTok ↗</a></p>
+                        <div class="tiktok-caption"><span class="tiktok-meta">Winner #3</span><a class="tiktok-link" href="https://www.tiktok.com/@indewildofficial/video/7548477368399039775" target="_blank" rel="noopener">View on TikTok <svg viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M5 11l6-6M11 5H6m5 0v5" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></svg></a></div>
                     </div>
                 </div>
             </div>
@@ -1419,26 +1514,6 @@
                 <div class="stat-card pink">
                     <div class="stat-number">481K+</div>
                     <div class="stat-label">Total Views</div>
-                </div>
-            </div>
-            
-            <h3 style="font-size: 18px; color: #5a7a94; margin: 50px 0 30px; font-weight: 600;">Business Results</h3>
-            <div class="stats-grid">
-                <div class="stat-card purple">
-                    <div class="stat-number">$344K</div>
-                    <div class="stat-label">QTD Revenue (+30% YoY)</div>
-                </div>
-                <div class="stat-card orange">
-                    <div class="stat-number">+20%</div>
-                    <div class="stat-label">Conversion Rate Lift</div>
-                </div>
-                <div class="stat-card blue">
-                    <div class="stat-number">867→1,015</div>
-                    <div class="stat-label">TikTok Follower Growth</div>
-                </div>
-                <div class="stat-card pink">
-                    <div class="stat-number">4+</div>
-                    <div class="stat-label">Organic Tags/Day Sustained</div>
                 </div>
             </div>
             
@@ -1607,16 +1682,25 @@
             const width = container.clientWidth;
             const height = container.clientHeight;
             
+            const isNarrow = window.matchMedia('(max-width: 480px)').matches;
             points.forEach(point => {
                 const heritage = parseFloat(point.dataset.heritage);
                 const modernity = parseFloat(point.dataset.modernity);
-                
+
                 // Convert 4-11 scale to percentage
                 const x = ((heritage - 4) / 7) * width;
                 const y = height - (((modernity - 4) / 7) * height);
-                
-                point.style.left = x + 'px';
+
+                const flip = isNarrow && x / width > 0.55;
+                point.classList.toggle('flip-left', flip);
                 point.style.top = (y - 10) + 'px';
+                if (flip) {
+                    point.style.left = '';
+                    point.style.right = (width - x) + 'px';
+                } else {
+                    point.style.right = '';
+                    point.style.left = x + 'px';
+                }
             });
         }
         
@@ -1653,6 +1737,12 @@
         if (graphContainer) {
             graphObserver.observe(graphContainer);
         }
+
+        let graphResizeTimer;
+        window.addEventListener('resize', () => {
+            clearTimeout(graphResizeTimer);
+            graphResizeTimer = setTimeout(positionBrands, 150);
+        });
         
         // TikTok embed fallback code removed - now using native HTML5 video players
 
