@@ -833,7 +833,7 @@
             }
 
             .graph-wrapper {
-                padding: 20px 4px 70px 36px;
+                padding: 20px 4px 70px 56px;
                 overflow-x: visible;
                 min-width: 0;
             }
@@ -873,11 +873,26 @@
 
             .y-axis-label {
                 font-size: 10px;
-                left: -32px;
+                left: -50px;
             }
 
             .axis-detail {
                 display: none;
+            }
+
+            /* Hide brand labels by default on mobile; reveal on tap.
+               Indē Wild (highlight) stays visible — it's the protagonist. */
+            .brand-point:not(.highlight):not(.label-open) .brand-label {
+                opacity: 0;
+                pointer-events: none;
+                transition: opacity 0.2s ease;
+            }
+            .brand-point.label-open .brand-label {
+                opacity: 1;
+                transition: opacity 0.2s ease;
+            }
+            .brand-point .dot {
+                cursor: pointer;
             }
 
             .brand-point.flip-left {
@@ -1742,6 +1757,23 @@
         window.addEventListener('resize', () => {
             clearTimeout(graphResizeTimer);
             graphResizeTimer = setTimeout(positionBrands, 150);
+        });
+
+        // Tap-to-reveal brand labels on mobile (highlight stays open)
+        document.querySelectorAll('.brand-point').forEach(point => {
+            point.addEventListener('click', (e) => {
+                if (!window.matchMedia('(max-width: 480px)').matches) return;
+                if (point.classList.contains('highlight')) return;
+                e.stopPropagation();
+                document.querySelectorAll('.brand-point.label-open').forEach(p => {
+                    if (p !== point) p.classList.remove('label-open');
+                });
+                point.classList.toggle('label-open');
+            });
+        });
+        document.addEventListener('click', () => {
+            if (!window.matchMedia('(max-width: 480px)').matches) return;
+            document.querySelectorAll('.brand-point.label-open').forEach(p => p.classList.remove('label-open'));
         });
         
         // TikTok embed fallback code removed - now using native HTML5 video players
