@@ -833,7 +833,7 @@
             }
 
             .graph-wrapper {
-                padding: 20px 4px 70px 56px;
+                padding: 20px 4px 90px 50px;
                 overflow-x: visible;
                 min-width: 0;
             }
@@ -868,12 +868,16 @@
 
             .x-axis-label {
                 font-size: 11px;
-                bottom: -40px;
+                bottom: -55px;
             }
 
             .y-axis-label {
+                writing-mode: vertical-rl;
                 font-size: 10px;
-                left: -50px;
+                left: -42px;
+                top: 50%;
+                transform: translateY(-50%) rotate(180deg);
+                white-space: nowrap;
             }
 
             .axis-detail {
