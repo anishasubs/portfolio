@@ -1984,7 +1984,7 @@
         <h2 class="section-title">What the dApp looks like in practice</h2>
         
         <!-- Split Layout: Prototype Left, Info Right -->
-        <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 4rem; max-width: 1200px; margin: 0 auto; align-items: start;">
+        <div class="app-showcase-split" style="display: grid; grid-template-columns: 1fr 1fr; gap: 4rem; max-width: 1200px; margin: 0 auto; align-items: start;">
             
             <!-- Left: Prototype -->
             <div>
@@ -1993,15 +1993,14 @@
                 </p>
                 
                 <!-- Interactive Figma Make Embed -->
-                <div style="max-width: 375px; margin: 0 auto; background: #1c4e89; padding: 16px; border-radius: 40px; box-shadow: 0 30px 80px rgba(0,0,0,0.25); animation: float 6s ease-in-out infinite;">
+                <div class="app-prototype-frame" style="max-width: 375px; margin: 0 auto; background: #1c4e89; padding: 16px; border-radius: 40px; box-shadow: 0 30px 80px rgba(0,0,0,0.25); animation: float 6s ease-in-out infinite;">
                     <div style="background: white; border-radius: 28px; overflow: hidden;">
                         <iframe
                             src="https://fake-brave-74884730.figma.site/"
-                            width="343"
                             height="740"
                             frameborder="0"
                             scrolling="auto"
-                            style="border: none; display: block;"
+                            style="border: none; display: block; width: 100%;"
                         ></iframe>
                     </div>
                 </div>
@@ -2014,14 +2013,14 @@
             </div>
 
             <!-- Right: Customer Experience Box -->
-            <div style="background: #f0e8d8; border-radius: 12px; overflow: hidden; box-shadow: 0 8px 30px rgba(0,0,0,0.1);">
+            <div class="cx-box" style="background: #f0e8d8; border-radius: 12px; overflow: hidden; box-shadow: 0 8px 30px rgba(0,0,0,0.1);">
                 <!-- Header -->
                 <div style="background: #1c4e89; color: white; padding: 1.5rem 2rem;">
                     <h3 style="margin: 0; font-size: 1.8rem; font-weight: 600;">Customer Experience:</h3>
                 </div>
                 
                 <!-- Bullet Points -->
-                <div style="padding: 2rem 2.5rem;">
+                <div class="cx-body" style="padding: 2rem 2.5rem;">
                     <ul style="list-style: none; padding: 0; margin: 0;">
                         <li style="display: flex; gap: 1rem; margin-bottom: 1.5rem; font-size: 1.05rem; line-height: 1.6; color: #1c4e89;">
                             <span style="flex-shrink: 0; width: 8px; height: 8px; background: #1c4e89; border-radius: 50%; margin-top: 0.6rem;"></span>
@@ -2040,7 +2039,7 @@
                     <!-- Flow Diagram -->
                     <div style="padding: 2rem 0; margin-top: 1.5rem;">
                         <!-- 4-Step Transaction Flow -->
-                        <div style="display: flex; justify-content: center; align-items: center; gap: 1.5rem;">
+                        <div class="cx-flow" style="display: flex; justify-content: center; align-items: center; gap: 1.5rem; flex-wrap: wrap;">
                             <!-- Step 1: User -->
                             <div style="text-align: center;">
                                 <div style="font-size: 2.5rem; margin-bottom: 0.5rem;">👤</div>
@@ -2079,11 +2078,28 @@
         <!-- Mobile: Stack vertically -->
         <style>
             @media (max-width: 768px) {
-                .app-showcase > div[style*="grid-template-columns"] {
+                .app-showcase-split {
                     display: block !important;
                 }
-                .app-showcase > div[style*="grid-template-columns"] > div {
+                .app-showcase-split > div {
                     margin-bottom: 3rem;
+                }
+                .app-prototype-frame {
+                    max-width: 100% !important;
+                    padding: 12px !important;
+                    border-radius: 32px !important;
+                }
+                .cx-body {
+                    padding: 1.5rem 1.25rem !important;
+                }
+                .cx-flow {
+                    gap: 0.75rem !important;
+                }
+                .cx-flow > div {
+                    flex: 0 0 calc(50% - 1rem);
+                }
+                .cx-flow > div[style*="font-size: 1.5rem"] {
+                    display: none;
                 }
             }
         </style>
