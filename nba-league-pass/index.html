@@ -1,0 +1,956 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>NBA League Pass — Retention & Daily-Habit Redesign · Case Study by Anisha Subberwal</title>
+    <meta name="description" content="A product case study: turning NBA League Pass from a game-night-only utility into a daily habit for its highest-churn subscriber tier. Columbia PM Lab, in partnership with the NBA.">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Inter:wght@400;500;600;700;800;900&family=Parisienne&family=Roboto+Condensed:wght@400;500;700&display=swap" rel="stylesheet">
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        html { scroll-behavior: smooth; }
+
+        :root {
+            --bg:      #090C16;
+            --bg-2:    #0C1120;
+            --panel:   #141B30;
+            --panel-2: #1A2340;
+            --line:    rgba(255,255,255,0.09);
+            --text:    #EDF1FB;
+            --muted:   #8E9BBC;
+            --muted-2: #6C7794;
+            --red:     #C8102E;
+            --red-br:  #FF4D63;
+            --blue:    #1D428A;
+            --blue-br: #5B8DEF;
+            --gold:    #F9A01B;
+            --green:   #1FD058;
+        }
+
+        body {
+            font-family: 'Inter', sans-serif;
+            background: var(--bg);
+            color: var(--text);
+            line-height: 1.65;
+            -webkit-font-smoothing: antialiased;
+            overflow-x: hidden;
+        }
+
+        .container { max-width: 1060px; margin: 0 auto; padding: 0 40px; }
+        section { padding: 96px 0; position: relative; }
+
+        /* ── Type ──────────────────────────────────────────── */
+        .section-tag {
+            display: inline-flex; align-items: center; gap: 9px;
+            font-size: 12px; font-weight: 800; letter-spacing: 0.22em;
+            text-transform: uppercase; color: var(--red-br); margin-bottom: 20px;
+        }
+        .section-tag::before {
+            content: ""; width: 22px; height: 2px; background: var(--red); border-radius: 2px;
+        }
+        h2 {
+            font-family: 'Bebas Neue', sans-serif;
+            font-size: clamp(40px, 6vw, 74px); font-weight: 400;
+            line-height: 0.94; letter-spacing: 0.5px; color: var(--text);
+            margin-bottom: 22px;
+        }
+        h2 .accent { color: var(--red-br); }
+        p.section-desc { font-size: 18px; color: var(--muted); max-width: 680px; line-height: 1.7; }
+
+        /* ── Backgrounds ───────────────────────────────────── */
+        .bg-2 { background: var(--bg-2); }
+        .bg-hair { border-top: 1px solid var(--line); }
+        .court-lines {
+            position: absolute; inset: 0; pointer-events: none; opacity: 0.5;
+            background-image:
+                repeating-linear-gradient(90deg, transparent 0 119px, rgba(255,255,255,0.02) 119px 120px);
+        }
+
+        /* ── Sticky nav (dark) ─────────────────────────────── */
+        .site-nav {
+            position: fixed; top: 0; left: 0; right: 0; height: 52px; z-index: 400;
+            background: rgba(9,12,22,0.72);
+            backdrop-filter: blur(14px); -webkit-backdrop-filter: blur(14px);
+            border-bottom: 1px solid var(--line);
+            display: flex; align-items: center; justify-content: space-between; padding: 0 32px;
+        }
+        .site-nav-name {
+            font-family: 'Parisienne', cursive; font-size: 23px;
+            color: var(--text); text-decoration: none;
+        }
+        .site-nav-name:hover { color: var(--red-br); }
+        .site-nav-links { display: flex; align-items: center; gap: 28px; list-style: none; }
+        .site-nav-links > li > a {
+            font-size: 12px; font-weight: 700; letter-spacing: 0.1em; text-transform: uppercase;
+            color: var(--text); text-decoration: none; transition: color 0.2s ease;
+        }
+        .site-nav-links > li > a:hover { color: var(--red-br); }
+        .nav-work-wrap { position: relative; }
+        .nav-work-dropdown {
+            position: absolute; top: 100%; left: 50%; transform: translateX(-50%);
+            min-width: 232px; padding: 8px 0; margin-top: 0; padding-top: 14px;
+            background: rgba(20,27,48,0.98);
+            backdrop-filter: blur(14px); -webkit-backdrop-filter: blur(14px);
+            border: 1px solid var(--line); border-radius: 12px;
+            box-shadow: 0 20px 50px rgba(0,0,0,0.5);
+            opacity: 0; pointer-events: none; transition: opacity 0.22s ease; list-style: none;
+        }
+        .nav-work-wrap:hover .nav-work-dropdown { opacity: 1; pointer-events: auto; }
+        .nav-work-dropdown a {
+            display: block; padding: 10px 22px;
+            font-size: 12px; font-weight: 500; letter-spacing: 0.05em; text-transform: lowercase;
+            color: var(--muted); text-decoration: none; white-space: nowrap;
+            transition: background 0.15s, color 0.15s;
+        }
+        .nav-work-dropdown a:hover { background: rgba(255,255,255,0.05); color: var(--text); }
+        .nav-work-dropdown a.current { color: var(--red-br); }
+        .nav-hamburger {
+            display: none; background: none; border: none; cursor: pointer;
+            width: 28px; height: 28px; flex-direction: column; justify-content: center; align-items: center; gap: 5px;
+        }
+        .nav-hamburger span { display: block; width: 20px; height: 2px; background: var(--text); border-radius: 1px; }
+
+        /* ── Buttons ───────────────────────────────────────── */
+        .btn {
+            display: inline-flex; align-items: center; gap: 9px;
+            padding: 15px 28px; border-radius: 8px;
+            font-family: 'Inter', sans-serif; font-size: 13px; font-weight: 800;
+            letter-spacing: 0.06em; text-transform: uppercase; text-decoration: none;
+            cursor: pointer; border: none; transition: all 0.22s ease;
+        }
+        .btn-primary { background: var(--red); color: #fff; box-shadow: 0 8px 24px rgba(200,16,46,0.32); }
+        .btn-primary:hover { transform: translateY(-2px); box-shadow: 0 12px 34px rgba(200,16,46,0.45); }
+        .btn-ghost { background: rgba(255,255,255,0.06); color: var(--text); border: 1px solid var(--line); }
+        .btn-ghost:hover { background: rgba(255,255,255,0.12); transform: translateY(-2px); }
+
+        /* ── Hero ──────────────────────────────────────────── */
+        .hero {
+            min-height: 100vh; display: flex; flex-direction: column; align-items: center; justify-content: center;
+            text-align: center; padding: 120px 40px 70px; position: relative; overflow: hidden;
+            background:
+                radial-gradient(60% 50% at 18% 12%, rgba(29,66,138,0.36) 0%, transparent 60%),
+                radial-gradient(55% 55% at 85% 20%, rgba(200,16,46,0.30) 0%, transparent 60%),
+                radial-gradient(80% 60% at 50% 115%, rgba(249,160,27,0.18) 0%, transparent 55%),
+                var(--bg);
+        }
+        .hero-glow-ring {
+            position: absolute; width: 620px; height: 620px; border-radius: 50%;
+            border: 1px solid rgba(255,255,255,0.05); top: 50%; left: 50%;
+            transform: translate(-50%,-50%); pointer-events: none;
+        }
+        .hero-glow-ring::after {
+            content: ""; position: absolute; inset: 90px; border-radius: 50%;
+            border: 1px solid rgba(255,255,255,0.04);
+        }
+        .hero-content { position: relative; z-index: 3; max-width: 860px; }
+        .hero-badge {
+            display: inline-flex; align-items: center; gap: 10px;
+            padding: 7px 16px; border-radius: 999px; margin-bottom: 30px;
+            background: rgba(255,255,255,0.06); border: 1px solid var(--line);
+            font-size: 11px; font-weight: 700; letter-spacing: 0.18em; text-transform: uppercase; color: var(--muted);
+        }
+        .live-dot {
+            width: 7px; height: 7px; border-radius: 50%; background: var(--green);
+            box-shadow: 0 0 0 0 rgba(31,208,88,0.6); animation: livePulse 2s infinite;
+        }
+        @keyframes livePulse {
+            0% { box-shadow: 0 0 0 0 rgba(31,208,88,0.55); }
+            70% { box-shadow: 0 0 0 9px rgba(31,208,88,0); }
+            100% { box-shadow: 0 0 0 0 rgba(31,208,88,0); }
+        }
+        .hero-title {
+            font-family: 'Bebas Neue', sans-serif; font-weight: 400;
+            font-size: clamp(66px, 13vw, 168px); line-height: 0.86; letter-spacing: 1px;
+            margin-bottom: 8px;
+            background: linear-gradient(180deg, #fff 0%, #B9C6E6 100%);
+            -webkit-background-clip: text; background-clip: text; -webkit-text-fill-color: transparent;
+        }
+        .hero-sub {
+            font-family: 'Bebas Neue', sans-serif; font-size: clamp(22px, 4vw, 40px);
+            letter-spacing: 0.5px; color: var(--red-br); margin-bottom: 26px; line-height: 1;
+        }
+        .hero-desc { font-size: 18px; color: var(--muted); max-width: 620px; margin: 0 auto 38px; line-height: 1.7; }
+        .hero-ctas { display: flex; gap: 14px; justify-content: center; flex-wrap: wrap; }
+
+        .hero-stats {
+            display: flex; gap: 0; margin-top: 58px; flex-wrap: wrap; justify-content: center;
+            border: 1px solid var(--line); border-radius: 16px; overflow: hidden;
+            background: rgba(255,255,255,0.02); backdrop-filter: blur(4px);
+        }
+        .hero-stat { padding: 22px 34px; border-right: 1px solid var(--line); }
+        .hero-stat:last-child { border-right: none; }
+        .hero-stat .n { font-family: 'Bebas Neue', sans-serif; font-size: 42px; line-height: 1; color: var(--text); letter-spacing: 0.5px; }
+        .hero-stat .n b { color: var(--gold); font-weight: 400; }
+        .hero-stat .l { font-size: 11px; color: var(--muted-2); text-transform: uppercase; letter-spacing: 0.14em; margin-top: 8px; font-weight: 600; }
+        .hero-credit {
+            position: absolute; bottom: 22px; left: 0; right: 0; z-index: 3;
+            font-size: 11px; color: var(--muted-2); letter-spacing: 0.08em; padding: 0 24px;
+        }
+
+        /* ── Trailer hero (page opener) ────────────────────── */
+        .trailer-hero {
+            position: relative; height: 100vh; min-height: 560px; width: 100%;
+            display: flex; align-items: center; justify-content: center; overflow: hidden;
+            background: radial-gradient(60% 60% at 50% 40%, rgba(200,16,46,0.16), transparent 70%), #05070E;
+        }
+        .trailer-vid {
+            position: absolute; inset: 0; width: 100%; height: 100%;
+            object-fit: contain; background: #05070E; z-index: 1;
+        }
+        .trailer-scrim {
+            position: absolute; inset: 0; z-index: 2; pointer-events: none;
+            background: radial-gradient(58% 58% at 50% 46%, transparent, rgba(5,7,14,0.5));
+            transition: opacity .4s ease;
+        }
+        .trailer-hero.playing .trailer-scrim { opacity: 0; }
+        .trailer-play {
+            position: relative; z-index: 3; width: 104px; height: 104px; border-radius: 50%;
+            border: none; cursor: pointer; background: rgba(200,16,46,0.94);
+            display: flex; align-items: center; justify-content: center;
+            box-shadow: 0 20px 50px rgba(0,0,0,0.5);
+            transition: transform .2s ease, background .2s ease; animation: tppulse 2.6s infinite;
+        }
+        .trailer-play::after {
+            content: ""; margin-left: 8px; width: 0; height: 0;
+            border-left: 30px solid #fff; border-top: 18px solid transparent; border-bottom: 18px solid transparent;
+        }
+        .trailer-play:hover { transform: scale(1.06); background: #E11533; }
+        @keyframes tppulse {
+            0%   { box-shadow: 0 0 0 0 rgba(200,16,46,0.5), 0 20px 50px rgba(0,0,0,0.5); }
+            70%  { box-shadow: 0 0 0 26px rgba(200,16,46,0), 0 20px 50px rgba(0,0,0,0.5); }
+            100% { box-shadow: 0 0 0 0 rgba(200,16,46,0), 0 20px 50px rgba(0,0,0,0.5); }
+        }
+        .trailer-hero.playing .trailer-play,
+        .trailer-hero.playing .trailer-cap,
+        .trailer-hero.playing .trailer-scroll { opacity: 0; pointer-events: none; }
+        .trailer-cap {
+            position: absolute; z-index: 3; bottom: 88px; left: 0; right: 0; text-align: center;
+            font-size: 13px; font-weight: 700; letter-spacing: 0.14em; text-transform: uppercase;
+            color: #EAF0FB; transition: opacity .3s ease;
+        }
+        .trailer-cap b { color: var(--gold); }
+        .trailer-scroll {
+            position: absolute; z-index: 3; bottom: 24px; left: 0; right: 0; text-align: center;
+            font-size: 12px; letter-spacing: 0.12em; text-transform: uppercase; color: var(--muted); text-decoration: none;
+        }
+        .trailer-scroll:hover { color: var(--text); }
+        .trailer-scroll span { display: block; font-size: 18px; margin-top: 4px; color: var(--red-br); animation: bob 1.8s infinite; }
+        @keyframes bob { 0%,100% { transform: translateY(0); } 50% { transform: translateY(6px); } }
+        @media (max-width: 680px) {
+            .trailer-play { width: 78px; height: 78px; }
+            .trailer-play::after { border-left-width: 22px; border-top-width: 13px; border-bottom-width: 13px; }
+            .trailer-cap { bottom: 70px; font-size: 11px; }
+        }
+
+        /* ── Meta bar (role / team / scope) ────────────────── */
+        .meta-bar {
+            display: grid; grid-template-columns: repeat(4, 1fr); gap: 1px;
+            background: var(--line); border: 1px solid var(--line); border-radius: 16px; overflow: hidden;
+        }
+        .meta-cell { background: var(--bg-2); padding: 26px 28px; }
+        .meta-cell h5 { font-size: 11px; letter-spacing: 0.18em; text-transform: uppercase; color: var(--red-br); font-weight: 800; margin-bottom: 10px; }
+        .meta-cell p { font-size: 14px; color: var(--text); line-height: 1.55; }
+        .meta-cell p span { color: var(--muted); }
+
+        /* ── Prototype embeds ──────────────────────────────── */
+        .embed-block { margin-top: 44px; }
+        .browser-frame {
+            border-radius: 14px; overflow: hidden; border: 1px solid var(--line);
+            background: #05070E; box-shadow: 0 40px 90px rgba(0,0,0,0.55);
+        }
+        .browser-bar {
+            display: flex; align-items: center; gap: 8px; padding: 12px 16px;
+            background: #10162A; border-bottom: 1px solid var(--line);
+        }
+        .browser-dots { display: flex; gap: 7px; }
+        .browser-dots i { width: 11px; height: 11px; border-radius: 50%; display: block; }
+        .browser-dots i:nth-child(1){ background:#FF5F57;} .browser-dots i:nth-child(2){ background:#FEBC2E;} .browser-dots i:nth-child(3){ background:#28C840;}
+        .browser-url {
+            flex: 1; text-align: center; font-size: 12px; color: var(--muted-2);
+            font-family: 'Roboto Condensed', sans-serif; letter-spacing: 0.03em;
+            background: #0A0F1E; border-radius: 6px; padding: 5px 12px; margin: 0 8px;
+            white-space: nowrap; overflow: hidden; text-overflow: ellipsis;
+        }
+        .scaled-embed { position: relative; width: 100%; overflow: hidden; line-height: 0; background: #05070E; }
+        .scaled-embed iframe { border: 0; transform-origin: top left; display: block; }
+        .embed-hint {
+            display: inline-flex; align-items: center; gap: 8px; margin-top: 16px;
+            font-size: 13px; color: var(--muted); font-weight: 500;
+        }
+        .embed-hint b { color: var(--gold); font-weight: 700; }
+
+        /* Phone frame for mobile prototypes */
+        .phone-frame {
+            width: 300px; margin: 0 auto; border-radius: 42px; padding: 12px;
+            background: linear-gradient(160deg, #232C46, #10152A);
+            box-shadow: 0 40px 90px rgba(0,0,0,0.6), inset 0 0 0 1px rgba(255,255,255,0.06);
+            position: relative;
+        }
+        .phone-frame::before {
+            content: ""; position: absolute; top: 22px; left: 50%; transform: translateX(-50%);
+            width: 96px; height: 24px; background: #05070E; border-radius: 0 0 16px 16px; z-index: 4;
+        }
+        .phone-screen { border-radius: 32px; overflow: hidden; background: #05070E; position: relative; line-height: 0; }
+        .phone-screen iframe { border: 0; transform-origin: top left; display: block; }
+
+        /* ── Stat cards (problem) ──────────────────────────── */
+        .stat-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 16px; margin-top: 44px; }
+        .stat-card {
+            background: var(--panel); border: 1px solid var(--line); border-radius: 16px; padding: 30px 24px;
+            border-top: 3px solid var(--red); transition: transform 0.25s ease, box-shadow 0.25s ease;
+        }
+        .stat-card:hover { transform: translateY(-4px); box-shadow: 0 20px 44px rgba(0,0,0,0.4); }
+        .stat-card .big { font-family: 'Bebas Neue', sans-serif; font-size: 60px; line-height: 0.9; color: var(--text); letter-spacing: 0.5px; }
+        .stat-card .big b { color: var(--red-br); font-weight: 400; }
+        .stat-card .lab { font-size: 14px; color: var(--muted); line-height: 1.5; margin-top: 12px; }
+        .src-note { margin-top: 22px; font-size: 12px; color: var(--muted-2); font-style: italic; }
+
+        .pull {
+            margin-top: 44px; padding: 40px 44px; border-radius: 18px; position: relative; overflow: hidden;
+            background: linear-gradient(120deg, #12193000, #1A234066), var(--panel);
+            border: 1px solid var(--line); border-left: 4px solid var(--red);
+        }
+        .pull q { font-family: 'Bebas Neue', sans-serif; font-size: clamp(26px, 4vw, 42px); line-height: 1.02; letter-spacing: 0.5px; color: var(--text); quotes: none; display: block; }
+        .pull .who { margin-top: 14px; font-size: 13px; color: var(--muted-2); text-transform: uppercase; letter-spacing: 0.14em; font-weight: 700; }
+
+        /* ── Generic cards grid ────────────────────────────── */
+        .cards { display: grid; gap: 16px; margin-top: 44px; }
+        .cards.c2 { grid-template-columns: 1fr 1fr; }
+        .cards.c3 { grid-template-columns: repeat(3, 1fr); }
+        .card {
+            background: var(--panel); border: 1px solid var(--line); border-radius: 16px; padding: 30px 28px;
+            transition: transform 0.25s ease, box-shadow 0.25s ease, border-color 0.25s ease;
+        }
+        .card:hover { transform: translateY(-4px); box-shadow: 0 20px 44px rgba(0,0,0,0.4); border-color: rgba(255,255,255,0.16); }
+        .card .kicker { font-size: 11px; letter-spacing: 0.16em; text-transform: uppercase; color: var(--blue-br); font-weight: 800; margin-bottom: 12px; }
+        .card h4 { font-size: 18px; font-weight: 800; color: var(--text); margin-bottom: 10px; letter-spacing: -0.2px; }
+        .card p { font-size: 14.5px; color: var(--muted); line-height: 1.6; }
+        .card p + p { margin-top: 10px; }
+        .card .proof { margin-top: 14px; padding-top: 14px; border-top: 1px solid var(--line); font-size: 13px; color: var(--gold); font-weight: 600; }
+
+        /* Need cards numbered */
+        .need { display: flex; gap: 22px; align-items: flex-start; }
+        .need .num {
+            flex-shrink: 0; width: 54px; height: 54px; border-radius: 14px;
+            display: flex; align-items: center; justify-content: center;
+            font-family: 'Bebas Neue', sans-serif; font-size: 30px; color: #fff; letter-spacing: 1px;
+            background: linear-gradient(135deg, var(--red), #8F0A20);
+        }
+        .need.blue .num { background: linear-gradient(135deg, var(--blue-br), var(--blue)); }
+        .tier {
+            display: inline-block; font-size: 10px; font-weight: 800; letter-spacing: 0.12em;
+            padding: 3px 10px; border-radius: 5px; margin-left: 10px; vertical-align: middle;
+        }
+        .tier.high { background: rgba(200,16,46,0.18); color: var(--red-br); }
+        .tier.med { background: rgba(249,160,27,0.16); color: var(--gold); }
+
+        /* ── Persona strip ─────────────────────────────────── */
+        .persona-grid { display: grid; grid-template-columns: repeat(3,1fr); gap: 16px; margin-top: 44px; }
+        .persona { background: var(--panel); border: 1px solid var(--line); border-radius: 16px; padding: 28px; }
+        .persona.primary { border-color: rgba(200,16,46,0.45); box-shadow: 0 0 0 1px rgba(200,16,46,0.15); }
+        .persona .avatar {
+            width: 46px; height: 46px; border-radius: 12px; display: flex; align-items: center; justify-content: center;
+            font-family: 'Bebas Neue', sans-serif; font-size: 22px; color: #fff; margin-bottom: 16px;
+            background: linear-gradient(135deg, #2A3660, #171E38);
+        }
+        .persona h4 { font-size: 17px; font-weight: 800; color: var(--text); }
+        .persona .role { font-size: 12.5px; color: var(--muted-2); margin: 4px 0 14px; }
+        .persona p { font-size: 14px; color: var(--muted); line-height: 1.6; }
+        .persona .flag { display: inline-block; margin-bottom: 14px; font-size: 10px; font-weight: 800; letter-spacing: 0.14em; text-transform: uppercase; color: var(--red-br); }
+
+        /* ── Scoring table ─────────────────────────────────── */
+        .score-table { width: 100%; margin-top: 40px; border-collapse: separate; border-spacing: 0 8px; }
+        .score-table thead th {
+            font-size: 11px; font-weight: 800; letter-spacing: 0.12em; text-transform: uppercase;
+            color: var(--muted-2); padding: 0 20px 6px; text-align: left;
+        }
+        .score-table thead th:nth-child(2) { text-align: center; width: 130px; }
+        .score-table thead th:last-child { width: 130px; }
+        .score-table tbody tr { background: var(--panel); }
+        .score-table tbody td { padding: 16px 20px; font-size: 14px; color: var(--muted); vertical-align: middle; }
+        .score-table tbody td:first-child { border-radius: 12px 0 0 12px; font-weight: 700; color: var(--text); }
+        .score-table tbody td:last-child { border-radius: 0 12px 12px 0; }
+        .score-table tbody tr.win { background: linear-gradient(90deg, rgba(200,16,46,0.16), rgba(20,27,48,0.9)); box-shadow: inset 3px 0 0 var(--red); }
+        .score-table tbody tr.win td:first-child { color: #fff; }
+        .score-badge { font-family: 'Bebas Neue', sans-serif; font-size: 28px; letter-spacing: 0.5px; text-align: center; display: block; }
+        .score-badge.hi { color: var(--gold); }
+        .score-badge.lo { color: var(--muted-2); }
+        .verdict { font-size: 11px; font-weight: 800; letter-spacing: 0.08em; text-transform: uppercase; }
+        .verdict.now { color: var(--green); }
+        .verdict.later { color: var(--blue-br); }
+        .verdict.cut { color: var(--muted-2); }
+        .criteria-row { display: flex; flex-wrap: wrap; gap: 10px; margin-top: 30px; }
+        .crit-pill {
+            font-size: 12px; font-weight: 600; padding: 8px 14px; border-radius: 8px;
+            background: var(--panel); border: 1px solid var(--line); color: var(--muted);
+        }
+        .crit-pill b { color: var(--gold); font-weight: 800; }
+
+        /* ── Feature blocks ────────────────────────────────── */
+        .feature { padding-top: 56px; }
+        .feature:first-of-type { padding-top: 0; }
+        .feature-head { display: flex; align-items: baseline; gap: 16px; flex-wrap: wrap; margin-bottom: 8px; }
+        .feature-idx { font-family: 'Bebas Neue', sans-serif; font-size: 40px; color: var(--red-br); letter-spacing: 1px; line-height: 1; }
+        .feature-head h3 { font-size: 26px; font-weight: 800; color: var(--text); letter-spacing: -0.4px; }
+        .feature-body { font-size: 16px; color: var(--muted); line-height: 1.7; max-width: 720px; }
+        .feature-body strong { color: var(--text); font-weight: 700; }
+        .feature-tags { display: flex; flex-wrap: wrap; gap: 8px; margin-top: 18px; }
+        .ftag { font-size: 11px; font-weight: 700; letter-spacing: 0.06em; text-transform: uppercase; padding: 6px 12px; border-radius: 6px; background: rgba(91,141,239,0.12); color: var(--blue-br); }
+
+        /* ── Flywheel ──────────────────────────────────────── */
+        .flywheel { display: grid; grid-template-columns: 1fr 28px 1fr 28px 1fr 28px 1fr; align-items: stretch; margin-top: 44px; }
+        .fw-step { background: var(--panel); border: 1px solid var(--line); border-radius: 14px; padding: 24px 22px; }
+        .fw-step .fw-tag { font-size: 10px; font-weight: 800; letter-spacing: 0.16em; text-transform: uppercase; color: var(--red-br); }
+        .fw-step .fw-title { font-family: 'Bebas Neue', sans-serif; font-size: 24px; color: var(--text); line-height: 1.05; margin: 6px 0 6px; letter-spacing: 0.5px; }
+        .fw-step .fw-d { font-size: 13px; color: var(--muted); line-height: 1.5; }
+        .fw-arrow { display: flex; align-items: center; justify-content: center; color: var(--gold); font-size: 22px; }
+        .fw-loop { margin-top: 16px; text-align: center; font-size: 13px; color: var(--muted-2); font-style: italic; }
+
+        /* KPI horizons */
+        .kpi-grid { display: grid; grid-template-columns: repeat(3,1fr); gap: 16px; margin-top: 40px; }
+        .kpi { background: var(--panel); border: 1px solid var(--line); border-radius: 16px; padding: 28px; }
+        .kpi .h { font-size: 11px; letter-spacing: 0.16em; text-transform: uppercase; color: var(--blue-br); font-weight: 800; margin-bottom: 14px; }
+        .kpi .big { font-family: 'Bebas Neue', sans-serif; font-size: 46px; line-height: 0.95; color: var(--gold); letter-spacing: 0.5px; }
+        .kpi .d { font-size: 14px; color: var(--muted); line-height: 1.55; margin-top: 10px; }
+
+        /* ── Roadmap ───────────────────────────────────────── */
+        .roadmap { display: grid; grid-template-columns: repeat(3,1fr); gap: 16px; margin-top: 44px; }
+        .rm-col { background: var(--panel); border: 1px solid var(--line); border-radius: 16px; padding: 26px; }
+        .rm-col .rh { display: flex; align-items: center; gap: 10px; margin-bottom: 18px; }
+        .rm-col .rh span { font-family: 'Bebas Neue', sans-serif; font-size: 26px; letter-spacing: 1px; }
+        .rm-col.now .rh span { color: var(--green); }
+        .rm-col.next .rh span { color: var(--gold); }
+        .rm-col.later .rh span { color: var(--blue-br); }
+        .rm-col .rh .dot { width: 8px; height: 8px; border-radius: 50%; }
+        .rm-col.now .dot { background: var(--green); } .rm-col.next .dot { background: var(--gold); } .rm-col.later .dot { background: var(--blue-br); }
+        .rm-col ul { list-style: none; }
+        .rm-col li { font-size: 14px; color: var(--muted); line-height: 1.5; padding: 10px 0 10px 18px; position: relative; border-top: 1px solid var(--line); }
+        .rm-col li:first-child { border-top: none; }
+        .rm-col li::before { content: ""; position: absolute; left: 0; top: 17px; width: 6px; height: 6px; border-radius: 50%; background: var(--muted-2); }
+        .rm-col li b { color: var(--text); font-weight: 700; }
+
+        /* ── Final CTA ─────────────────────────────────────── */
+        .final {
+            text-align: center; padding: 120px 40px;
+            background:
+                radial-gradient(60% 60% at 50% 0%, rgba(200,16,46,0.28) 0%, transparent 60%),
+                radial-gradient(50% 50% at 50% 100%, rgba(29,66,138,0.3) 0%, transparent 60%),
+                var(--bg-2);
+        }
+        .final h2 { margin-bottom: 16px; }
+        .final p { font-size: 18px; color: var(--muted); margin-bottom: 34px; max-width: 560px; margin-left: auto; margin-right: auto; }
+        .final .hero-ctas { margin-top: 0; }
+
+        /* ── Footer ────────────────────────────────────────── */
+        footer { background: var(--bg); border-top: 1px solid var(--line); padding: 60px 40px; text-align: center; }
+        footer h3 { font-family: 'Bebas Neue', sans-serif; font-size: 30px; letter-spacing: 1px; color: var(--text); }
+        footer p { color: var(--muted); margin: 14px 0; font-size: 14px; }
+        footer a { color: var(--blue-br); text-decoration: none; }
+        footer a:hover { text-decoration: underline; }
+        .footer-disc { margin-top: 20px; font-size: 12px; color: var(--muted-2); max-width: 640px; margin-left: auto; margin-right: auto; line-height: 1.6; }
+
+        /* ── Fade-in ───────────────────────────────────────── */
+        .fade-in { opacity: 0; transform: translateY(24px); transition: opacity 0.6s ease-out, transform 0.6s ease-out; }
+        .fade-in.visible { opacity: 1; transform: translateY(0); }
+
+        /* ── Responsive ────────────────────────────────────── */
+        @media (max-width: 900px) {
+            .stat-grid { grid-template-columns: 1fr 1fr; }
+            .cards.c3 { grid-template-columns: 1fr; }
+            .persona-grid { grid-template-columns: 1fr; }
+            .meta-bar { grid-template-columns: 1fr 1fr; }
+            .kpi-grid { grid-template-columns: 1fr; }
+            .roadmap { grid-template-columns: 1fr; }
+            .flywheel { grid-template-columns: 1fr; }
+            .fw-arrow { transform: rotate(90deg); padding: 4px 0; }
+        }
+        @media (max-width: 680px) {
+            .container { padding: 0 22px; }
+            section { padding: 68px 0; }
+            .site-nav-links {
+                position: fixed; top: 54px; left: 0; right: 0; flex-direction: column; gap: 0;
+                background: rgba(12,17,32,0.98); border-bottom: 1px solid var(--line);
+                max-height: 0; overflow: hidden; transition: max-height 0.3s ease;
+            }
+            .site-nav-links.open { max-height: 420px; }
+            .site-nav-links > li { width: 100%; }
+            .site-nav-links > li > a { display: block; padding: 15px 28px; }
+            .nav-work-dropdown { position: static; opacity: 1; pointer-events: auto; transform: none; background: none; border: none; box-shadow: none; padding: 0; min-width: 0; }
+            .nav-work-dropdown a { padding: 11px 28px 11px 44px; }
+            .nav-hamburger { display: flex; }
+            .cards.c2 { grid-template-columns: 1fr; }
+            .stat-grid { grid-template-columns: 1fr; }
+            .hero-stat { border-right: none; border-bottom: 1px solid var(--line); }
+            .hero-stat:last-child { border-bottom: none; }
+            .score-table thead { display: none; }
+            .score-table, .score-table tbody, .score-table tr, .score-table td { display: block; width: 100%; }
+            .score-table tbody tr { margin-bottom: 12px; border-radius: 12px; padding: 6px 4px; }
+            .score-table tbody td, .score-table tbody td:first-child, .score-table tbody td:last-child { border-radius: 0; padding: 6px 18px; }
+            .score-badge { text-align: left; }
+            .need { gap: 16px; }
+        }
+    </style>
+</head>
+<body>
+    <!-- Nav -->
+    <nav class="site-nav">
+        <a class="site-nav-name" href="../index.html">Anisha Subberwal</a>
+        <button class="nav-hamburger" onclick="document.getElementById('nav-links').classList.toggle('open')" aria-label="Menu">
+            <span></span><span></span><span></span>
+        </button>
+        <ul class="site-nav-links" id="nav-links">
+            <li class="nav-work-wrap">
+                <a href="../index.html">Work</a>
+                <ul class="nav-work-dropdown">
+                    <li><a href="../nba-league-pass/index.html" class="current">nba league pass · retention</a></li>
+                    <li><a href="../inde-wild-case-study/index.html">beauty brand growth</a></li>
+                    <li><a href="../coffeechain/index.html">crypto coffee case</a></li>
+                    <li><a href="../kaisey-case-study/index.html">smart calendar</a></li>
+                    <li><a href="../whifff-case-study/index.html">perfume scent quiz</a></li>
+                </ul>
+            </li>
+            <li><a href="../index.html#about">About</a></li>
+            <li><a href="../assets/Anisha_Subberwal_Resume.pdf" download>Resume</a></li>
+            <li><a href="https://www.linkedin.com/in/anisha-subberwal-434346126/" target="_blank" rel="noopener">LinkedIn</a></li>
+            <li><a href="mailto:as7689@columbia.edu">Email</a></li>
+        </ul>
+    </nav>
+
+    <!-- Trailer (page opener) -->
+    <section class="trailer-hero" id="trailer">
+        <video class="trailer-vid" id="trailerVid" poster="assets/trailer-poster.jpg" preload="none" playsinline>
+            <source src="assets/trailer.mp4" type="video/mp4">
+        </video>
+        <div class="trailer-scrim"></div>
+        <button class="trailer-play" id="trailerPlay" aria-label="Play the trailer"></button>
+        <div class="trailer-cap">&#9654;&nbsp; Watch the 55-second trailer &middot; <b>sound on</b></div>
+        <a class="trailer-scroll" href="#top-hero">Skip to the case study<span>&darr;</span></a>
+    </section>
+
+    <!-- Hero -->
+    <header class="hero" id="top-hero">
+        <div class="hero-glow-ring"></div>
+        <div class="hero-content">
+            <div class="hero-badge"><span class="live-dot"></span>Columbia PM Lab · In partnership with the NBA</div>
+            <h1 class="hero-title">NBA LEAGUE PASS</h1>
+            <div class="hero-sub">From game-night utility to daily habit</div>
+            <p class="hero-desc">League Pass is the world's NBA streaming service — but most subscribers only open it when their team is live. This is a retention redesign for its highest-churn tier: an integrated, video-first product that turns occasional viewers into daily fans.</p>
+            <div class="hero-ctas">
+                <a href="#demo" class="btn btn-primary">Watch the live demo &rarr;</a>
+                <a href="https://nba-league-pass.vercel.app/prototype-desktop-live.html" target="_blank" rel="noopener" class="btn btn-ghost">Open the prototype</a>
+            </div>
+            <div class="hero-stats">
+                <div class="hero-stat"><div class="n"><b>42%</b></div><div class="l">of Standard subs<br>"still thinking"</div></div>
+                <div class="hero-stat"><div class="n"><b>$95M</b></div><div class="l">seasonal revenue<br>at risk</div></div>
+                <div class="hero-stat"><div class="n"><b>3&times;</b></div><div class="l">re-sub lift from<br>the frequency habit</div></div>
+                <div class="hero-stat"><div class="n"><b>18&rarr;4</b></div><div class="l">ideas scored down<br>to a shipped MVP</div></div>
+            </div>
+        </div>
+        <div class="hero-credit">Columbia PM Lab · Group 03 · Anisha Subberwal, Chris Ebhogiaye, Mary Zeng, Ndeye Diarra · 2026</div>
+    </header>
+
+    <!-- Meta bar -->
+    <section class="bg-2" style="padding: 56px 0;">
+        <div class="container">
+            <div class="meta-bar fade-in">
+                <div class="meta-cell"><h5>Role</h5><p>Product Management<br><span>research, strategy &amp; prototyping</span></p></div>
+                <div class="meta-cell"><h5>Context</h5><p>Columbia PM Lab<br><span>live brief with the NBA</span></p></div>
+                <div class="meta-cell"><h5>Timeline</h5><p>Feb&ndash;May 2026<br><span>MRD &rarr; PRD &rarr; prototype</span></p></div>
+                <div class="meta-cell"><h5>Deliverable</h5><p>Retention MVP<br><span>4-feature habit loop</span></p></div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Demo -->
+    <section id="demo" class="fade-in">
+        <div class="container">
+            <span class="section-tag">The Prototype</span>
+            <h2>See the <span class="accent">live game</span> experience</h2>
+            <p class="section-desc">A working prototype of the redesigned live broadcast — win-probability, player lines, and a real-time reaction pulse rendered as overlays on top of the game. Interactive: click around inside the frame.</p>
+            <div class="embed-block">
+                <div class="browser-frame">
+                    <div class="browser-bar">
+                        <div class="browser-dots"><i></i><i></i><i></i></div>
+                        <div class="browser-url">nba-league-pass.vercel.app/prototype-desktop-live</div>
+                    </div>
+                    <div class="scaled-embed" data-w="1280" data-h="800">
+                        <iframe loading="lazy" data-src="https://nba-league-pass.vercel.app/prototype-desktop-live.html" title="NBA League Pass — live game prototype"></iframe>
+                    </div>
+                </div>
+                <div class="embed-hint">&#9432;&nbsp; Heat vs. Bulls, live overlays on the broadcast &mdash; <b>click and explore the real prototype above</b></div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Problem -->
+    <section class="bg-2 bg-hair fade-in">
+        <div class="container">
+            <span class="section-tag">The Problem</span>
+            <h2>A frequency problem<br>wearing a <span class="accent">churn problem's</span> clothes</h2>
+            <p class="section-desc">League Pass has ~3M subscribers, but the Standard tier &mdash; roughly 70% of the base &mdash; behaves like a game-night-only utility. People think about the NBA all day and open the app twice a week. The retention problem is, at its root, a frequency problem.</p>
+            <div class="stat-grid">
+                <div class="stat-card"><div class="big"><b>96%</b></div><div class="lab">use League Pass <em>only</em> for live games &mdash; under 40% ever touch Replays or Stats</div></div>
+                <div class="stat-card"><div class="big"><b>~3</b></div><div class="lab">other apps the average subscriber juggles for NBA content (ESPN, Reddit, X)</div></div>
+                <div class="stat-card"><div class="big"><b>32%</b></div><div class="lab">of Standard subs plan to re-subscribe &mdash; vs. 62% of Premium, a near-2&times; gap</div></div>
+                <div class="stat-card"><div class="big"><b>80<span style="font-size:34px">%+</span></b></div><div class="lab">of new subscribers drop off within their first few weeks of signup</div></div>
+            </div>
+            <p class="src-note">Sources: subscriber survey (n=134, Prolific, Feb 2026) &amp; NBA product-team cohort data. Figures rounded for the public case study.</p>
+            <div class="pull">
+                <q>"The retention problem is fundamentally a frequency problem."</q>
+                <div class="who">Guiding thesis · PRD §1</div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Research -->
+    <section class="fade-in">
+        <div class="container">
+            <span class="section-tag">Research &amp; Method</span>
+            <h2>We let the <span class="accent">data pick the fight</span></h2>
+            <p class="section-desc">Before touching a wireframe, we sized the segments against revenue and churn, then pressure-tested three unmet-need hypotheses with real subscribers.</p>
+            <div class="cards c3">
+                <div class="card">
+                    <div class="kicker">Quantitative</div>
+                    <h4>134-subscriber survey</h4>
+                    <p>Recruited on Prolific (Feb 2026). Segmented by tier &mdash; 69% Standard, 18% Premium &mdash; and cross-cut for re-subscription intent, feature discovery, and weekly usage.</p>
+                </div>
+                <div class="card">
+                    <div class="kicker">Qualitative</div>
+                    <h4>In-depth interviews</h4>
+                    <p>One-on-one sessions with out-of-market diehards, casual bettors, and lapsed season-ticket holders &mdash; surfacing the "second-screen" behavior the survey only hinted at.</p>
+                </div>
+                <div class="card">
+                    <div class="kicker">Partner data</div>
+                    <h4>NBA cohort analysis</h4>
+                    <p>The NBA product team shared weekly signup trends and new-user retention cohorts &mdash; which is how the first-few-weeks drop-off cliff surfaced.</p>
+                </div>
+            </div>
+            <div class="pull" style="border-left-color: var(--blue);">
+                <q>"A Heat fan in Houston and a Cavs fan in Cleveland should open the same app and see two genuinely different experiences."</q>
+                <div class="who">Value proposition · PRD §2</div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Segment + personas -->
+    <section class="bg-2 bg-hair fade-in">
+        <div class="container">
+            <span class="section-tag">The Target User</span>
+            <h2>One tier, <span class="accent">three fans</span></h2>
+            <p class="section-desc">We focused on <strong style="color:var(--text)">Standard tier</strong> &mdash; the largest revenue bucket, the highest churn risk, and the lowest feature discovery. Three personas anchored the work; the out-of-market diehard led.</p>
+            <div class="persona-grid">
+                <div class="persona primary">
+                    <span class="flag">&#9733; Primary persona</span>
+                    <div class="avatar">HH</div>
+                    <h4>Hardcore Harry</h4>
+                    <div class="role">36 · Software engineer · Houston · Heat superfan</div>
+                    <p>Out-of-market diehard. Runs League Pass, r/NBA, X and the family group chat at once. Sky-high NBA intent, near-zero League Pass opens between his team's games.</p>
+                </div>
+                <div class="persona">
+                    <div class="avatar">CD</div>
+                    <h4>Casual Bettor Danny</h4>
+                    <div class="role">21 · Student · Boston · shares 1 login &times; 4</div>
+                    <p>Places small bets and wants signal-grade alerts and live stats &mdash; not another feed to scroll.</p>
+                </div>
+                <div class="persona">
+                    <div class="avatar">FA</div>
+                    <h4>Family-First Anthony</h4>
+                    <div class="role">55 · Cleveland · lifelong Cavs fan</div>
+                    <p>Former season-ticket holder. His churn risk isn't interest &mdash; it's navigation friction and forgetting to come back.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Unmet needs -->
+    <section class="fade-in">
+        <div class="container">
+            <span class="section-tag">What We Validated</span>
+            <h2>Three unmet needs, <span class="accent">all confirmed</span></h2>
+            <p class="section-desc">Each hypothesis was pre-registered, then tested. All three held.</p>
+            <div class="cards" style="margin-top:44px;">
+                <div class="card need">
+                    <div class="num">01</div>
+                    <div>
+                        <h4>The game-night-only gap <span class="tier high">High</span></h4>
+                        <p>Subscribers think about the NBA all day but use League Pass only for live games &mdash; then jump to other apps for everything in between.</p>
+                        <div class="proof">Proof: 96% use it mainly for live games; the average fan uses ~3 other NBA apps.</div>
+                    </div>
+                </div>
+                <div class="card need">
+                    <div class="num">02</div>
+                    <div>
+                        <h4>Passive viewing &amp; undiscovered value <span class="tier high">High</span></h4>
+                        <p>Subscribers want more than a passive stream, but never discover the features League Pass already has &mdash; so the subscription feels like "just live games."</p>
+                        <div class="proof">Proof: 60%+ never use Replays or Stats; 36% open the app 0&ndash;2&times; a week.</div>
+                    </div>
+                </div>
+                <div class="card need blue">
+                    <div class="num">03</div>
+                    <div>
+                        <h4>The superfan identity gap <span class="tier med">Medium</span></h4>
+                        <p>Premium's differentiators (4K, no ads, concurrent streams) don't match Standard subscribers' actual pains &mdash; so loyal fans feel unrecognized rather than upgraded.</p>
+                        <div class="proof">Signal: existing NBA ID exists but "doesn't deliver much value to fans."</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Product decision -->
+    <section class="bg-2 bg-hair fade-in">
+        <div class="container">
+            <span class="section-tag">The Decision</span>
+            <h2>18 ideas in.<br>A <span class="accent">habit loop</span> out.</h2>
+            <p class="section-desc">We scored 18 feature ideas against a weighted matrix &mdash; weighting habit-formation impact highest, because frequency is the strongest predictor of renewal. The redesign didn't win on novelty; it won on being the foundation everything else stands on.</p>
+            <div class="criteria-row">
+                <span class="crit-pill">Habit Formation <b>30%</b></span>
+                <span class="crit-pill">Desirability <b>25%</b></span>
+                <span class="crit-pill">Feasibility <b>20%</b></span>
+                <span class="crit-pill">Business Priority <b>15%</b></span>
+                <span class="crit-pill">Differentiation <b>10%</b></span>
+            </div>
+            <table class="score-table">
+                <thead>
+                    <tr><th>Feature idea</th><th>Weighted</th><th>Verdict</th></tr>
+                </thead>
+                <tbody>
+                    <tr class="win"><td>Video-First Home Screen Redesign</td><td><span class="score-badge hi">4.80</span></td><td><span class="verdict now">Ship &mdash; MVP core</span></td></tr>
+                    <tr><td>Personalized Team-First Experience</td><td><span class="score-badge">4.35</span></td><td><span class="verdict now">Folded into home</span></td></tr>
+                    <tr><td>Morning Check-In / Daily Briefing</td><td><span class="score-badge">4.30</span></td><td><span class="verdict now">Ship</span></td></tr>
+                    <tr><td>Close-Game Smart Notifications</td><td><span class="score-badge">4.25</span></td><td><span class="verdict now">Ship</span></td></tr>
+                    <tr><td>First 7-Day Onboarding Sequence</td><td><span class="score-badge">4.05</span></td><td><span class="verdict now">Ship</span></td></tr>
+                    <tr><td>NBA ID Superfan Layer</td><td><span class="score-badge">3.50</span></td><td><span class="verdict later">Next</span></td></tr>
+                    <tr><td>In-Game Predictions / MVP Voting</td><td><span class="score-badge lo">2.70</span></td><td><span class="verdict cut">Cut &mdash; no return reason</span></td></tr>
+                    <tr><td>Live Game Chat</td><td><span class="score-badge lo">2.60</span></td><td><span class="verdict cut">Cut &mdash; reinforces game-night</span></td></tr>
+                    <tr><td>Reddit / Social Integration</td><td><span class="score-badge lo">2.55</span></td><td><span class="verdict cut">Cut &mdash; brand-safety risk</span></td></tr>
+                </tbody>
+            </table>
+            <div class="cards c2" style="margin-top:24px;">
+                <div class="card">
+                    <div class="kicker">Explicit non-goal</div>
+                    <h4>Blackouts</h4>
+                    <p>The single most-cited complaint &mdash; and deliberately out of scope. Blackouts are set by broadcast-rights deals outside the product team's control; chasing them would burn the sprint on something we couldn't ship.</p>
+                </div>
+                <div class="card">
+                    <div class="kicker">Explicit non-goal</div>
+                    <h4>Becoming a multi-sport hub</h4>
+                    <p>We positioned League Pass as NBA-specific <em>depth</em>, not breadth. Competing with ESPN or YouTube TV on coverage dilutes the one thing League Pass can own: the daily NBA fan.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- The solution / features with embeds -->
+    <section class="fade-in">
+        <div class="container">
+            <span class="section-tag">The Solution</span>
+            <h2>Four features.<br>One <span class="accent">habit loop.</span></h2>
+            <p class="section-desc">No single feature solves retention. Together they construct the loop League Pass is missing &mdash; a reason to open the app in the morning, during the day, and at game time. Each screen below is a live, interactive prototype.</p>
+
+            <!-- Feature 1 -->
+            <div class="feature">
+                <div class="feature-head"><span class="feature-idx">01</span><h3>Video-First Home Screen</h3></div>
+                <p class="feature-body">The generic, article-heavy home is gone. When your team is live, the app <strong>auto-plays the muted broadcast the instant you open it</strong> &mdash; no more three-to-five taps to the game. When nothing's on, the same surface becomes a <strong>personalized daily feed</strong>: your team's highlights, news, and a next-game countdown. Think TikTok &mdash; content is already playing.</p>
+                <div class="feature-tags"><span class="ftag">Auto-play broadcast</span><span class="ftag">Live stats &amp; social overlays</span><span class="ftag">Post-game keep-watching</span></div>
+                <div class="embed-block">
+                    <div class="browser-frame">
+                        <div class="browser-bar"><div class="browser-dots"><i></i><i></i><i></i></div><div class="browser-url">nba-league-pass.vercel.app/prototype-desktop-home</div></div>
+                        <div class="scaled-embed" data-w="1280" data-h="800"><iframe loading="lazy" data-src="https://nba-league-pass.vercel.app/prototype-desktop-home.html" title="Video-first home screen prototype"></iframe></div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Feature 2 -->
+            <div class="feature">
+                <div class="feature-head"><span class="feature-idx">02</span><h3>Personalized Onboarding</h3></div>
+                <p class="feature-body">A short guided setup captures <strong>favorite team, up to three players, notification preferences, and content-format preference</strong> (full, condensed, or highlights) &mdash; then offers a <strong>calendar invite to the next game</strong> as a built-in, 48-hour reason to return. It seeds the personalization every other surface depends on.</p>
+                <div class="feature-tags"><span class="ftag">Team &amp; players</span><span class="ftag">Notif preferences</span><span class="ftag">Calendar invite hook</span><span class="ftag">KPI: 70%+ completion</span></div>
+                <div class="embed-block">
+                    <div class="phone-frame">
+                        <div class="phone-screen scaled-embed" data-w="390" data-h="844"><iframe loading="lazy" data-src="https://nba-league-pass.vercel.app/prototype-mobile-onboarding.html" title="Personalized onboarding prototype"></iframe></div>
+                    </div>
+                    <div class="embed-hint" style="justify-content:center;display:flex;">&#9432;&nbsp; <b>Tap through the onboarding flow</b></div>
+                </div>
+            </div>
+
+            <!-- Feature 3 -->
+            <div class="feature">
+                <div class="feature-head"><span class="feature-idx">03</span><h3>Personalized Morning Briefing</h3></div>
+                <p class="feature-body">A <strong>~60-second, push-triggered morning digest</strong> &mdash; last night's scores, the top plays, tonight's schedule &mdash; delivered around 7:30 AM local and deep-linking straight into the app. This is the primary habit lever: it converts the morning sports-check that ESPN and Google own today into a League Pass session, moving weekly opens from 1&ndash;2 to 3&ndash;4.</p>
+                <div class="feature-tags"><span class="ftag">7:30 AM local push</span><span class="ftag">60-second digest</span><span class="ftag">Deep-links into app</span></div>
+                <div class="embed-block">
+                    <div class="phone-frame">
+                        <div class="phone-screen scaled-embed" data-w="390" data-h="844"><iframe loading="lazy" data-src="https://nba-league-pass.vercel.app/morning-briefing.html" title="Morning briefing prototype"></iframe></div>
+                    </div>
+                    <div class="embed-hint" style="justify-content:center;display:flex;">&#9432;&nbsp; <b>Play the morning briefing</b></div>
+                </div>
+            </div>
+
+            <!-- Feature 4 -->
+            <div class="feature">
+                <div class="feature-head"><span class="feature-idx">04</span><h3>Close-Game Smart Alerts</h3></div>
+                <p class="feature-body">A notification fired by live game state &mdash; your team or player <strong>within 5 points and under 3 minutes to play</strong> &mdash; that <strong>deep-links straight into the broadcast</strong>, bypassing the home screen entirely. It turns "no game tonight" into dwell time and captures the intent that otherwise leaks to Twitter and Reddit. You can see it live inside the game prototype at the top of this page.</p>
+                <div class="feature-tags"><span class="ftag">&lt; 5 points, &lt; 3 min</span><span class="ftag">Deep-link to broadcast</span><span class="ftag">Favorite team / player</span></div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Business case -->
+    <section class="bg-2 bg-hair fade-in">
+        <div class="container">
+            <span class="section-tag">The Business Case</span>
+            <h2>Frequency is the <span class="accent">flywheel</span></h2>
+            <p class="section-desc">The whole model rests on one empirical relationship: the more days a week a subscriber opens League Pass, the more likely they are to renew. Every feature exists to add a touchpoint.</p>
+            <div class="flywheel">
+                <div class="fw-step"><div class="fw-tag">Morning</div><div class="fw-title">Briefing pulls you in</div><div class="fw-d">7:30 AM digest becomes the day's first NBA touch.</div></div>
+                <div class="fw-arrow">&rarr;</div>
+                <div class="fw-step"><div class="fw-tag">Daytime</div><div class="fw-title">Home feed keeps you</div><div class="fw-d">Personalized highlights when no game is live.</div></div>
+                <div class="fw-arrow">&rarr;</div>
+                <div class="fw-step"><div class="fw-tag">Game time</div><div class="fw-title">Alerts snap you back</div><div class="fw-d">Close-game push deep-links into the broadcast.</div></div>
+                <div class="fw-arrow">&rarr;</div>
+                <div class="fw-step"><div class="fw-tag">Renewal</div><div class="fw-title">Habit earns the re-sub</div><div class="fw-d">3&ndash;4 weekly opens &rarr; 3&times; renewal likelihood.</div></div>
+            </div>
+            <div class="fw-loop">1&ndash;2 opens/week &rarr; 14% re-sub &nbsp;·&nbsp; 3&ndash;4 &rarr; 43% &nbsp;·&nbsp; 5+ &rarr; 59%. The loop moves subscribers up the curve.</div>
+
+            <div class="kpi-grid">
+                <div class="kpi"><div class="h">Beta</div><div class="big">70%+</div><div class="d">Onboarding completion &mdash; the functional gate before we trust any habit metric.</div></div>
+                <div class="kpi"><div class="h">GA · North Star</div><div class="big">1&ndash;2 &rarr; 3&ndash;4</div><div class="d">Subscribers crossing into 3&ndash;4 weekly opens within their first 14 days &mdash; the threshold tied to the 3&times; lift.</div></div>
+                <div class="kpi"><div class="h">Long term</div><div class="big">Re-sub &amp; upgrade</div><div class="d">Standard re-subscription rate vs. baseline, plus Standard&rarr;Premium upgrades as perceived value closes.</div></div>
+            </div>
+            <p class="src-note">Retaining just 10&ndash;20% of the ~$95M at-risk swing group preserves <strong style="color:var(--text)">$9.5M&ndash;$19M per season</strong> &mdash; before any upsell to Premium.</p>
+        </div>
+    </section>
+
+    <!-- Decisions -->
+    <section class="fade-in">
+        <div class="container">
+            <span class="section-tag">Product Decisions</span>
+            <h2>Why we built it <span class="accent">this way</span></h2>
+            <div class="cards c3">
+                <div class="card">
+                    <h4>An integrated loop, not a feature list</h4>
+                    <p>We resisted shipping four standalone features. Onboarding seeds the personalization the home screen renders; the briefing and alerts drive traffic back to it. Decoupled, none of them move retention.</p>
+                </div>
+                <div class="card">
+                    <h4>Habit over novelty</h4>
+                    <p>Predictions, chat, and voting all tested as fun &mdash; and all failed the one test that mattered: do they give a reason to come back <em>tomorrow?</em> We weighted habit formation at 30% on purpose.</p>
+                </div>
+                <div class="card">
+                    <h4>Ship inside the constraints</h4>
+                    <p>The only new third-party dependency is a calendar invite (EventKit / Google Calendar). No new payment or auth surface &mdash; keeping the MVP feasible for a preseason Beta.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Roadmap -->
+    <section class="bg-2 bg-hair fade-in">
+        <div class="container">
+            <span class="section-tag">What's Next</span>
+            <h2>The <span class="accent">roadmap</span></h2>
+            <p class="section-desc">The MVP is the loop. Everything after it deepens identity and habit without re-litigating the core bet.</p>
+            <div class="roadmap">
+                <div class="rm-col now">
+                    <div class="rh"><span class="dot"></span><span>Now</span></div>
+                    <ul>
+                        <li><b>Video-first home</b> — auto-play + daily feed</li>
+                        <li><b>Personalized onboarding</b> — team, players, calendar hook</li>
+                        <li><b>Morning briefing</b> — 60-sec push digest</li>
+                        <li><b>Close-game alerts</b> — deep-link to broadcast</li>
+                        <li><b>Persistent session</b> — no re-auth for 90 days</li>
+                    </ul>
+                </div>
+                <div class="rm-col next">
+                    <div class="rh"><span class="dot"></span><span>Next</span></div>
+                    <ul>
+                        <li><b>NBA ID streak nudge</b> — reward the daily habit</li>
+                        <li><b>TikTok-style highlight swipe</b> — vertical discovery</li>
+                        <li><b>Fantasy roster integration</b> — a second daily reason</li>
+                    </ul>
+                </div>
+                <div class="rm-col later">
+                    <div class="rh"><span class="dot"></span><span>Later</span></div>
+                    <ul>
+                        <li><b>Jumbotron / behind-the-scenes feed</b> — Premium preview &amp; upsell lever</li>
+                        <li><b>Localized habit loop</b> — the playbook for international launch markets</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Final CTA -->
+    <section class="final fade-in">
+        <h2>Open the app &mdash; the NBA<br>you care about is <span class="accent">already playing</span></h2>
+        <p>Explore the working prototypes behind this case study, or get in touch about the full MRD and PRD.</p>
+        <div class="hero-ctas">
+            <a href="https://nba-league-pass.vercel.app/prototype-desktop-live.html" target="_blank" rel="noopener" class="btn btn-primary">Open the live prototype &rarr;</a>
+            <a href="mailto:as7689@columbia.edu" class="btn btn-ghost">Get in touch</a>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer>
+        <h3>Anisha Subberwal</h3>
+        <p>MBA Candidate, Columbia Business School 2026</p>
+        <p><a href="mailto:as7689@columbia.edu">as7689@columbia.edu</a></p>
+        <p class="footer-disc">NBA League Pass retention project completed as part of the Columbia PM Lab. Figures shown are rounded and presented for portfolio purposes; internal NBA materials are not reproduced here.</p>
+    </footer>
+
+    <script>
+        // Trailer: play inline (with sound) on click; only loads the file when played
+        (function () {
+            var hero = document.getElementById('trailer');
+            var vid  = document.getElementById('trailerVid');
+            var play = document.getElementById('trailerPlay');
+            if (!hero || !vid || !play) return;
+            function start() {
+                hero.classList.add('playing');
+                vid.setAttribute('controls', 'controls');
+                var p = vid.play();
+                if (p && p.catch) p.catch(function () { vid.muted = true; vid.play(); });
+            }
+            play.addEventListener('click', start);
+            vid.addEventListener('play', function () { hero.classList.add('playing'); });
+        })();
+
+        // Fade-in on scroll
+        var io = new IntersectionObserver(function (entries) {
+            entries.forEach(function (e) { if (e.isIntersecting) { e.target.classList.add('visible'); io.unobserve(e.target); } });
+        }, { threshold: 0.08, rootMargin: '0px 0px -80px 0px' });
+        document.querySelectorAll('.fade-in').forEach(function (el) { io.observe(el); });
+
+        // Scale prototype iframes to fit their container while preserving their real layout
+        function scaleEmbeds() {
+            document.querySelectorAll('.scaled-embed').forEach(function (box) {
+                var w = +box.dataset.w, h = +box.dataset.h;
+                var iframe = box.querySelector('iframe');
+                var scale = box.clientWidth / w;
+                iframe.style.width = w + 'px';
+                iframe.style.height = h + 'px';
+                iframe.style.transform = 'scale(' + scale + ')';
+                box.style.height = (h * scale) + 'px';
+            });
+        }
+
+        // Lazy-load iframe src only when near viewport (keeps 5 embeds cheap)
+        var frameIO = new IntersectionObserver(function (entries) {
+            entries.forEach(function (e) {
+                if (e.isIntersecting) {
+                    var f = e.target.querySelector('iframe[data-src]');
+                    if (f) { f.src = f.dataset.src; f.removeAttribute('data-src'); }
+                    frameIO.unobserve(e.target);
+                }
+            });
+        }, { rootMargin: '400px 0px' });
+        document.querySelectorAll('.scaled-embed').forEach(function (b) { frameIO.observe(b); });
+
+        window.addEventListener('resize', scaleEmbeds);
+        window.addEventListener('load', scaleEmbeds);
+        scaleEmbeds();
+    </script>
+</body>
+</html>

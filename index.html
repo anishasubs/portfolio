@@ -74,6 +74,8 @@
         #todo       { border-radius: 8px;  z-index: 8; }
         #rollon     { border-radius: 0; z-index: 9; overflow: visible; }
         #rollon img { object-fit: cover; }
+        #basketball img { object-fit: contain; }
+        #basketball { filter: drop-shadow(0 10px 18px rgba(0,0,0,0.28)); }
 
         /* ── Hover labels ────────────────────────────────────── */
         .hover-label {
@@ -725,6 +727,7 @@
         <li class="nav-work-wrap">
             <a href="index.html">Work</a>
             <ul class="nav-work-dropdown">
+                <li><a href="nba-league-pass/index.html">nba league pass · retention</a></li>
                 <li><a href="inde-wild-case-study/index.html">beauty brand growth</a></li>
                 <li><a href="coffeechain/index.html">crypto coffee case</a></li>
                 <li><a href="kaisey-case-study/index.html">smart calendar</a></li>
@@ -761,6 +764,7 @@
                 <div class="object" id="phone-case"><img src="./assets/phone-case.webp" alt="Phone case" draggable="false"></div>
                 <div class="object" id="todo"><img src="./assets/todo.webp" alt="To-Do List" draggable="false"></div>
                 <div class="object" id="rollon"><img src="./assets/perfume-bottle.webp" alt="Perfume bottle" draggable="false"></div>
+                <div class="object" id="basketball"><img src="./nba-league-pass/assets/basketball-keychain.png" alt="Basketball keychain" draggable="false"></div>
 
                 <!-- Hover labels -->
                 <div class="hover-label" id="label-tube">BEAUTY<br><strong>BRAND GROWTH</strong><span class="metric-subtitle">160+ creators · 481K views · $344K revenue</span></div>
@@ -768,6 +772,7 @@
                 <div class="hover-label" id="label-todo">A SMART<br><strong>CALENDAR</strong><span class="metric-subtitle">AI scheduling · Google Calendar integration</span></div>
                 <div class="hover-label" id="label-rollon">PERFUME<br><strong>RECOMMENDER</strong><span class="metric-subtitle">20,000+ fragrances · Personalized scent quiz</span></div>
                 <div class="hover-label" id="label-phone-case">ABOUT<br><strong>ME</strong></div>
+                <div class="hover-label" id="label-basketball">NBA<br><strong>LEAGUE PASS</strong><span class="metric-subtitle">Retention redesign · game-night → daily habit</span></div>
 
                 <!-- Denim pocket -->
                 <div class="pocket" id="pocket"><img src="./assets/denim-pocket.webp" alt="Denim pocket" draggable="false"></div>
@@ -896,28 +901,33 @@
     var OBJECTS = {
         tube: {
             start: { x: 497, y: 450, w: 85, h: 350 },
-            end:   { x: 182, y: 237, w: 85, h: 350 },
+            end:   { x: 107, y: 237, w: 85, h: 350 },
             startRot: -18.77, endRot: 0
         },
         receipt: {
             start: { x: 584, y: 495, w: 151, h: 300 },
-            end:   { x: 340, y: 273, w: 151, h: 300 },
+            end:   { x: 244, y: 273, w: 151, h: 300 },
             startRot: 0, endRot: 0
         },
         'phone-case': {
             start: { x: 679, y: 427, w: 150, h: 307 },
-            end:   { x: 1039, y: 240, w: 150, h: 307 },
+            end:   { x: 911, y: 240, w: 150, h: 307 },
             startRot: 0, endRot: 0
         },
         todo: {
             start: { x: 614, y: 543, w: 218, h: 257 },
-            end:   { x: 553, y: 308, w: 201, h: 239 },
+            end:   { x: 447, y: 308, w: 201, h: 239 },
             startRot: 0, endRot: 0
         },
         rollon: {
             start: { x: 740, y: 580, w: 159, h: 270 },
-            end:   { x: 821, y: 277, w: 159, h: 270 },
+            end:   { x: 700, y: 277, w: 159, h: 270 },
             startRot: 0, endRot: 0
+        },
+        basketball: {
+            start: { x: 620, y: 560, w: 220, h: 156 },
+            end:   { x: 1113, y: 330, w: 220, h: 156 },
+            startRot: -16, endRot: 0
         }
     };
 
@@ -964,12 +974,17 @@
         },
         todo: {
             start: { x: M_PKT_X + 70,  y: M_PKT_START_Y - 20,  w: M_COL_W, h: 140 },
-            end:   { x: M_R2_X0,        y: M_ROW2_Y,             w: M_COL_W, h: 140 },
+            end:   { x: M_PAD,          y: M_ROW2_Y,             w: M_COL_W, h: 140 },
             startRot: 0, endRot: 0
         },
         'phone-case': {
             start: { x: M_PKT_X + 110, y: M_PKT_START_Y - 50,  w: M_COL_W, h: 140 },
-            end:   { x: M_R2_X0 + M_COL_W + M_GAP, y: M_ROW2_Y, w: M_COL_W, h: 140 },
+            end:   { x: M_PAD + M_COL_W + M_GAP, y: M_ROW2_Y, w: M_COL_W, h: 140 },
+            startRot: 0, endRot: 0
+        },
+        basketball: {
+            start: { x: M_PKT_X + 90,  y: M_PKT_START_Y - 30,  w: M_COL_W, h: 140 },
+            end:   { x: M_PAD + 2 * (M_COL_W + M_GAP), y: M_ROW2_Y, w: M_COL_W, h: 140 },
             startRot: 0, endRot: 0
         }
     };
@@ -1009,7 +1024,8 @@
         receipt:      document.getElementById('receipt'),
         'phone-case': document.getElementById('phone-case'),
         todo:         document.getElementById('todo'),
-        rollon:       document.getElementById('rollon')
+        rollon:       document.getElementById('rollon'),
+        basketball:   document.getElementById('basketball')
     };
 
     var labelEls = {
@@ -1017,7 +1033,8 @@
         receipt:      document.getElementById('label-receipt'),
         'phone-case': document.getElementById('label-phone-case'),
         todo:         document.getElementById('label-todo'),
-        rollon:       document.getElementById('label-rollon')
+        rollon:       document.getElementById('label-rollon'),
+        basketball:   document.getElementById('label-basketball')
     };
 
     /* ================================================================
@@ -1361,6 +1378,9 @@
     });
     objectEls.rollon.addEventListener('click', function () {
         if (objectsClickable) window.location.href = 'whifff-case-study/index.html';
+    });
+    objectEls.basketball.addEventListener('click', function () {
+        if (objectsClickable) window.location.href = 'nba-league-pass/index.html';
     });
 
     // Mobile grid clicks
