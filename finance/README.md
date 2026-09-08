@@ -23,8 +23,9 @@ so that **the code can be public while the data never is**:
   [tesseract.js](https://tesseract.projectnaptha.com/) vendored under
   `finance/vendor/` (both Apache-2.0). They are loaded lazily, only when you
   import a file, so opening the app stays instant.
-- Nothing is sent to any AI model or vision API. Every insight is computed by
-  rules in this file, so your financial history never leaves the machine.
+- Every insight on the Overview tab is computed by rules in this file, and OCR
+  runs locally rather than through a vision API.
+- **One exception, off by default: the AI advisor.** See below.
 - `.gitignore` blocks exported backups and any CSV/OFX/QFX statements dropped
   into `finance/`, so real data can't be committed by accident.
 
@@ -103,6 +104,57 @@ account value is what feeds net worth.
   Check the amounts in the review screen — that is what it is there for.
 - Statement layouts vary enormously. If a file parses badly, expand *"Show the
   raw text that was read from the file"* to see exactly what the parser saw.
+
+## The AI advisor (opt-in)
+
+The only part of Ledger that sends anything off the device. It is **off until you
+turn it on**, and even then sends nothing until you press Ask.
+
+### What it does
+
+Answers questions about your own numbers — how much to keep in checking, whether
+your savings account is costing you, how to allocate your 401(k) — using the
+balances already in the app.
+
+### What is sent
+
+An aggregated summary: account names and balances, APYs, average monthly spend
+**by category**, income, savings rate, budgets, goals, 401(k) contributions, and
+the optional profile fields (age, retirement age, risk comfort, employer match,
+card APR, fund menu).
+
+**Individual transactions and merchant names are never sent** — only category
+totals. Account numbers are never sent because the app never stores them. Expand
+*"Show exactly what will be sent"* to inspect the payload before every send.
+
+While the advisor is on, the header badge changes from *Local only · no network*
+to *Advisor on · summary sent when you ask*, so the page never overstates the
+guarantee.
+
+### Setup
+
+The advisor calls your own proxy so the API key stays server-side rather than in
+a public page. The endpoint lives in `kaisey-proxy/api/advice.ts` and reuses the
+`OPENAI_API_KEY` already configured there. Deploy it once:
+
+```
+cd kaisey-proxy && npx vercel --prod
+```
+
+Then set the endpoint under **Settings & Data → Advisor endpoint** (it defaults to
+`https://kaisey-proxy.vercel.app/api/advice`).
+
+The system prompt lives on the server, not in the client, so it can't be edited
+from the browser. The endpoint rate-limits to 10 requests/minute, caps payload
+size, and never logs request bodies.
+
+### What it will not do
+
+The model has **no live data**. It cannot look up current savings rates, fund
+prices, or this year's contribution limit, and is instructed to say so rather
+than inventing a number. It recommends fund *types* and allocations rather than
+individual stocks, and points you to a CPA or fiduciary for anything with tax
+consequences. It is general education, not licensed financial advice.
 
 ## What the agent checks
 

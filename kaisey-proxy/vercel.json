@@ -5,6 +5,9 @@
     },
     "api/oura.ts": {
       "maxDuration": 30
+    },
+    "api/advice.ts": {
+      "maxDuration": 60
     }
   }
 }

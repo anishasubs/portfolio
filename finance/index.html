@@ -274,7 +274,7 @@ svg .lbl{fill:var(--text-3);font-size:10px}
     <h1>Ledger</h1>
     <span class="sub">personal finance agent</span>
   </div>
-  <span class="privacy-pill" title="This page makes no network requests. Your data never leaves this browser.">&#9679; Local only &middot; no network</span>
+  <span class="privacy-pill" id="privacyPill" title="This page makes no network requests. Your data never leaves this browser.">&#9679; Local only &middot; no network</span>
   <button class="btn sm" id="btnBackup">Export backup</button>
 </header>
 
@@ -285,6 +285,7 @@ svg .lbl{fill:var(--text-3);font-size:10px}
   <button role="tab" data-view="import" aria-selected="false">Import</button>
   <button role="tab" data-view="budgets" aria-selected="false">Budgets</button>
   <button role="tab" data-view="goals" aria-selected="false">Goals</button>
+  <button role="tab" data-view="advisor" aria-selected="false">Advisor</button>
   <button role="tab" data-view="settings" aria-selected="false">Settings &amp; Data</button>
 </nav>
 
@@ -531,6 +532,100 @@ svg .lbl{fill:var(--text-3);font-size:10px}
   <div id="goalList"></div>
 </section>
 
+<!-- ============================ ADVISOR ============================= -->
+<section class="view" id="view-advisor">
+
+  <!-- consent gate -->
+  <div class="card" id="advisorGate">
+    <h2>AI advisor</h2>
+    <p class="hint">Ask an AI where to put your money, using the balances already in this app.</p>
+
+    <div class="warnbox" style="margin-bottom:16px">
+      <b>This one feature sends your financial summary off this device.</b>
+      Everything else in Ledger stays local. Turning this on means that when you press Ask &mdash;
+      and only then &mdash; a summary of your finances is sent to your own proxy at
+      <span class="mono" id="gateEndpoint"></span>, which forwards it to OpenAI.
+    </div>
+
+    <div class="section-title">What gets sent</div>
+    <ul style="margin:0 0 14px;padding-left:18px;color:var(--text-2);font-size:13px;line-height:1.7">
+      <li>Account names as you typed them, their types, balances and APYs</li>
+      <li>Monthly spending totals by category, income, and your savings rate</li>
+      <li>Budgets, goals, and your 401(k) settings</li>
+      <li>Anything you type into the profile fields below</li>
+    </ul>
+
+    <div class="section-title">What never gets sent</div>
+    <ul style="margin:0 0 16px;padding-left:18px;color:var(--text-2);font-size:13px;line-height:1.7">
+      <li>Individual transactions or merchant names &mdash; only category totals</li>
+      <li>Account numbers &mdash; Ledger never stores them in the first place</li>
+      <li>Anything at all until you press Ask. Enabling this sends nothing by itself.</li>
+    </ul>
+
+    <p class="hint" style="margin-bottom:14px">You can see the exact payload before every send, and turn this back off at any time.</p>
+    <div class="row">
+      <button class="btn primary" id="btnEnableAdvisor">Turn on the advisor</button>
+      <button class="btn ghost" data-goto="overview">Not now</button>
+    </div>
+  </div>
+
+  <!-- advisor proper -->
+  <div id="advisorMain" hidden>
+    <div class="card" style="margin-bottom:14px">
+      <div class="spread">
+        <div><h2>About you</h2>
+          <p class="hint" style="margin:0">Optional, but the advice gets a lot more specific with these. Stored locally like everything else.</p></div>
+        <button class="btn sm ghost" id="btnDisableAdvisor">Turn advisor off</button>
+      </div>
+      <div class="grid g3" style="margin-top:14px">
+        <label class="field"><span>Age</span><input type="number" id="advAge" placeholder="e.g. 29"></label>
+        <label class="field"><span>Target retirement age</span><input type="number" id="advRetire" placeholder="65"></label>
+        <label class="field"><span>Risk comfort</span>
+          <select id="advRisk">
+            <option value="">&mdash; not set &mdash;</option>
+            <option value="conservative">Conservative — a drop would worry me</option>
+            <option value="moderate">Moderate — some swings are fine</option>
+            <option value="aggressive">Aggressive — long horizon, ride it out</option>
+          </select>
+        </label>
+      </div>
+      <div class="grid g2">
+        <label class="field"><span>Employer 401(k) match</span><input type="text" id="advMatch" placeholder="e.g. 100% of first 4%"></label>
+        <label class="field"><span>Credit card APR(s)</span><input type="text" id="advApr" placeholder="e.g. 24.99%"></label>
+      </div>
+      <label class="field"><span>401(k) fund menu &mdash; paste the options your plan offers</span>
+        <textarea id="advFunds" rows="4" placeholder="e.g.&#10;FXAIX  Fidelity 500 Index  0.015%&#10;FTIHX  Fidelity Total International Index  0.06%&#10;FXNAX  Fidelity US Bond Index  0.025%&#10;Vanguard Target Retirement 2060  0.08%"></textarea>
+      </label>
+      <button class="btn sm" id="btnSaveProfile">Save profile</button>
+    </div>
+
+    <div class="card">
+      <h2>Ask</h2>
+      <p class="hint">Start with one of these, or write your own.</p>
+      <div class="row" style="margin-bottom:12px">
+        <button class="btn sm preset" data-q="How much should I keep in my checking account as a buffer, and how much should I move out? Show me the target number and where the excess should go.">Checking buffer</button>
+        <button class="btn sm preset" data-q="My savings account is earning a poor rate. What should I look for in a better savings account, what is this costing me a year, and how much of my cash should sit there versus be invested?">Better savings account</button>
+        <button class="btn sm preset" data-q="How should I allocate my 401(k) across the funds available to me, and am I contributing enough? Consider my age and retirement horizon.">401(k) allocation</button>
+        <button class="btn sm preset" data-q="Look at my whole picture and tell me the three highest-value money moves I should make in the next month, in priority order, with the dollar amounts.">Top 3 moves</button>
+      </div>
+      <label class="field"><span>Your question</span>
+        <textarea id="advQuestion" rows="3" placeholder="Ask anything about your own numbers&hellip;"></textarea>
+      </label>
+      <div class="row">
+        <button class="btn primary" id="btnAsk">Ask</button>
+        <span class="muted" style="font-size:12px" id="advStatus"></span>
+      </div>
+      <details style="margin-top:14px">
+        <summary class="muted" style="font-size:12px;cursor:pointer">Show exactly what will be sent</summary>
+        <pre id="advPayload" class="mono" style="font-size:11px;white-space:pre-wrap;background:var(--surface-2);border:1px solid var(--line);border-radius:8px;padding:12px;max-height:320px;overflow:auto;margin-top:9px"></pre>
+      </details>
+    </div>
+
+    <div id="advAnswer" hidden style="margin-top:14px"></div>
+    <div id="advHistory"></div>
+  </div>
+</section>
+
 <!-- ========================= SETTINGS & DATA ========================= -->
 <section class="view" id="view-settings">
   <div class="grid g2">
@@ -542,6 +637,7 @@ svg .lbl{fill:var(--text-3);font-size:10px}
       <label class="field"><span>401(k) employee contribution limit this year</span><input type="number" id="setLimit401k" step="100"></label>
       <label class="field"><span>401(k) contributed year-to-date</span><input type="number" id="setYtd401k" step="1"></label>
       <label class="field"><span>Large-transaction alert threshold</span><input type="number" id="setLargeTx" step="10"></label>
+      <label class="field"><span>Advisor endpoint <span class="muted">(your own proxy)</span></span><input type="text" id="setEndpoint" placeholder="https://kaisey-proxy.vercel.app/api/advice"></label>
       <button class="btn primary" id="btnSaveSettings">Save assumptions</button>
       <div class="warnbox" style="margin-top:14px">
         <b>Check the numbers.</b> The benchmark APY and the 401(k) contribution limit are editable defaults, not live data &mdash; this page never calls out to the internet. Verify current rates and the current IRS limit and update them here.
@@ -582,7 +678,8 @@ svg .lbl{fill:var(--text-3);font-size:10px}
       <li>This page loads <b>nothing</b> from the internet &mdash; no external scripts, fonts, or stylesheets, and no network requests of any kind. You can verify that in your browser's Network tab, or run it fully offline.</li>
       <li>PDF reading and screenshot OCR use libraries stored in <span class="mono">finance/vendor/</span> on your own disk. They are loaded only when you actually import a file, and they run entirely inside this page.</li>
       <li>Files you drop &mdash; CSV, PDF, or image &mdash; are read in-page with the browser's FileReader. Nothing is ever uploaded, and no statement is sent to any service for processing.</li>
-      <li>Your transactions are <b>not</b> sent to any AI model. Every insight is computed locally by rules in this file, and OCR runs on your machine rather than through a vision API.</li>
+      <li>Every insight on the Overview tab is computed locally by rules in this file, and OCR runs on your machine rather than through a vision API.</li>
+      <li><b>The one exception is the AI advisor</b>, which is off unless you turn it on. When enabled and you press Ask, a <i>summary</i> — balances, category totals, budgets, goals, 401(k) settings — is sent to the endpoint you configure. Individual transactions and merchant names are never included, and you can inspect the exact payload before every send. Turn it off and the page goes back to making no network requests at all.</li>
       <li>Data is stored per-origin. Opening this file from disk and from a web address gives you two separate stores &mdash; use the JSON backup to move between them.</li>
       <li>Anyone with access to this browser profile can read the data. Don't use a shared machine.</li>
     </ul>
@@ -612,8 +709,14 @@ function defaultState(){
       benchmarkApy: 4.0,
       limit401k: 24500,
       ytd401k: 0,
-      largeTx: 400
+      largeTx: 400,
+      // Advisor is off until explicitly enabled; nothing leaves the device
+      // while this is false.
+      advisorEnabled: false,
+      advisorEndpoint: "https://kaisey-proxy.vercel.app/api/advice"
     },
+    profile: {},
+    advisorLog: [],
     dismissed: []
   };
 }
@@ -626,7 +729,11 @@ function load(){
     if(!raw) return defaultState();
     const parsed = JSON.parse(raw);
     const base = defaultState();
-    return Object.assign(base, parsed, { settings: Object.assign(base.settings, parsed.settings || {}) });
+    return Object.assign(base, parsed, {
+      settings: Object.assign(base.settings, parsed.settings || {}),
+      profile: Object.assign(base.profile, parsed.profile || {}),
+      advisorLog: Array.isArray(parsed.advisorLog) ? parsed.advisorLog : []
+    });
   }catch(e){
     console.warn("Could not read saved data:", e);
     return defaultState();
@@ -1946,6 +2053,7 @@ function rankedBars(host, entries, total){
    ================================================================== */
 function renderAll(){
   renderOverview();
+  renderAdvisor();
   renderAccounts();
   renderTransactions();
   renderBudgets();
@@ -2258,6 +2366,7 @@ function renderSettings(){
   $("#setLimit401k").value = st.limit401k;
   $("#setYtd401k").value   = st.ytd401k;
   $("#setLargeTx").value   = st.largeTx;
+  $("#setEndpoint").value  = st.advisorEndpoint || "";
 
   let bytes = 0;
   try{ bytes = new Blob([localStorage.getItem(KEY) || ""]).size; }catch(e){}
@@ -2676,7 +2785,11 @@ function restoreBackup(file){
       if(!confirm("Restoring replaces everything currently stored (" +
                   S.transactions.length + " transactions, " + S.accounts.length + " accounts). Continue?")) return;
       const base = defaultState();
-      S = Object.assign(base, data, { settings: Object.assign(base.settings, data.settings || {}) });
+      S = Object.assign(base, data, {
+        settings: Object.assign(base.settings, data.settings || {}),
+        profile: Object.assign(base.profile, data.profile || {}),
+        advisorLog: Array.isArray(data.advisorLog) ? data.advisorLog : []
+      });
       save(); renderAll(); switchView("overview");
       alert("Restored " + S.transactions.length + " transactions across " + S.accounts.length + " accounts.");
     }catch(e){
@@ -2684,6 +2797,252 @@ function restoreBackup(file){
     }
   };
   reader.readAsText(file);
+}
+
+/* ==================================================================
+   10b. Advisor — the one feature that leaves the device
+   Nothing here runs unless settings.advisorEnabled is true and the user
+   presses Ask. The context is deliberately aggregated: category totals
+   rather than transactions, so merchant-level history never goes out.
+   ================================================================== */
+
+/** Average monthly spend per category over the last N complete months. */
+function avgCategorySpend(months){
+  const list = activeMonths().filter(m => m < thisMonth()).slice(-months);
+  if(!list.length) return {};
+  const totals = {};
+  for(const m of list){
+    for(const [cat, v] of Object.entries(spendByCategory(m))){
+      totals[cat] = (totals[cat] || 0) + v;
+    }
+  }
+  const out = {};
+  for(const [cat, v] of Object.entries(totals)) out[cat] = round2(v / list.length);
+  return out;
+}
+const round2 = n => Math.round((Number(n) || 0) * 100) / 100;
+
+/**
+ * Build the redacted summary sent to the advisor.
+ * Individual transactions and merchant names are intentionally excluded —
+ * only aggregates leave the device.
+ */
+function buildAdvisorContext(){
+  const ym = thisMonth();
+  const prev = addMonths(ym, -1);
+  const nw = netWorth();
+  const st = S.settings;
+  const p = S.profile || {};
+  const rec = detectRecurring();
+  const FIXED = new Set(["Rent & Housing","Utilities","Insurance","Taxes","Phone & Internet"]);
+
+  const monthlySpend = round2(avgMonthlySpend());
+  const liquid = S.accounts
+    .filter(a => ["checking","savings","cash"].includes(a.type))
+    .reduce((s2, a) => s2 + (Number(a.balance) || 0), 0);
+
+  const ctx = {
+    currency: "USD",
+    asOf: todayISO(),
+    accounts: S.accounts.map(a => ({
+      name: a.name,
+      institution: a.institution || undefined,
+      type: a.type,
+      balance: round2(a.balance),
+      apyPercent: a.type === "savings" ? (Number(a.apy) || 0) : undefined
+    })),
+    netWorth: {
+      assets: round2(nw.assets),
+      liabilities: round2(nw.debts),
+      net: round2(nw.net),
+      liquidCash: round2(liquid)
+    },
+    cashFlow: {
+      avgMonthlySpend: monthlySpend,
+      monthsOfExpensesInCash: monthlySpend > 0 ? round2(liquid / monthlySpend) : null,
+      lastCompleteMonth: {
+        month: prev,
+        income: round2(incomeForMonth(prev)),
+        spend: round2(spendForMonth(prev))
+      },
+      avgMonthlySpendByCategory: avgCategorySpend(3)
+    },
+    recurring: {
+      totalMonthly: round2(rec.reduce((s2, r) => s2 + r.monthly, 0)),
+      discretionaryMonthly: round2(rec.filter(r => !FIXED.has(r.category))
+                                      .reduce((s2, r) => s2 + r.monthly, 0))
+    },
+    budgets: Object.keys(S.budgets).length ? S.budgets : undefined,
+    goals: S.goals.length ? S.goals.map(g => ({
+      name: g.name, target: round2(g.target), saved: round2(g.saved), targetDate: g.targetDate || undefined
+    })) : undefined,
+    retirement: {
+      contributedYTD: round2(st.ytd401k),
+      annualLimitUserEntered: round2(st.limit401k),
+      employerMatch: p.match || undefined,
+      fundMenu: p.funds || undefined
+    },
+    assumptions: {
+      emergencyFundTargetMonths: st.emergencyMonths,
+      benchmarkSavingsApyUserEntered: st.benchmarkApy,
+      note: "The APY and contribution limit are values the user typed in, not live data. Treat them as claims to verify, not facts."
+    },
+    about: {
+      age: p.age || undefined,
+      targetRetirementAge: p.retire || undefined,
+      riskComfort: p.risk || undefined,
+      creditCardApr: p.apr || undefined
+    },
+    dataNotes: "Individual transactions and merchant names are deliberately excluded. Only aggregates are shared."
+  };
+
+  // Strip undefined so the payload the user sees is exactly what is sent.
+  return JSON.parse(JSON.stringify(ctx));
+}
+
+/** Minimal, escape-first markdown renderer. The model's output is untrusted
+    text, so it is HTML-escaped before any formatting is applied. */
+function renderMarkdown(md){
+  let h = esc(String(md || ""));
+  const blocks = h.split(/\n{2,}/).map(block => {
+    const b = block.trim();
+    if(!b) return "";
+    const head = b.match(/^(#{1,4})\s+(.*)$/);
+    if(head){
+      const lvl = Math.min(4, head[1].length + 1);
+      return "<h" + lvl + ' style="font-size:' + (lvl <= 2 ? 15 : 13) +
+             'px;font-weight:640;margin:16px 0 6px">' + inline(head[2]) + "</h" + lvl + ">";
+    }
+    if(/^([-*]|\d+\.)\s+/m.test(b) && b.split("\n").every(l => /^\s*([-*]|\d+\.)\s+/.test(l) || !l.trim())){
+      const ordered = /^\s*\d+\.\s+/.test(b);
+      const items = b.split("\n").filter(l => l.trim())
+        .map(l => "<li>" + inline(l.replace(/^\s*([-*]|\d+\.)\s+/, "")) + "</li>").join("");
+      return "<" + (ordered ? "ol" : "ul") + ' style="margin:8px 0;padding-left:20px;line-height:1.7">' +
+             items + "</" + (ordered ? "ol" : "ul") + ">";
+    }
+    return '<p style="margin:9px 0;line-height:1.65">' + inline(b.replace(/\n/g, "<br>")) + "</p>";
+  });
+  return blocks.join("");
+
+  function inline(t){
+    return t
+      .replace(/\*\*([^*]+)\*\*/g, "<b>$1</b>")
+      .replace(/(^|[\s(])\*([^*\n]+)\*/g, "$1<i>$2</i>")
+      .replace(/`([^`]+)`/g, '<code class="mono" style="background:var(--surface-2);padding:1px 4px;border-radius:4px">$1</code>');
+  }
+}
+
+function renderAdvisor(){
+  const on = !!S.settings.advisorEnabled;
+  $("#advisorGate").hidden = on;
+  $("#advisorMain").hidden = !on;
+  $("#gateEndpoint").textContent = S.settings.advisorEndpoint || "(not set)";
+
+  const p = S.profile || {};
+  $("#advAge").value    = p.age || "";
+  $("#advRetire").value = p.retire || "";
+  $("#advRisk").value   = p.risk || "";
+  $("#advMatch").value  = p.match || "";
+  $("#advApr").value    = p.apr || "";
+  $("#advFunds").value  = p.funds || "";
+
+  if(on) refreshPayloadPreview();
+  renderAdvisorLog();
+  renderPrivacyBadge();
+}
+
+function refreshPayloadPreview(){
+  const el = $("#advPayload");
+  if(!el) return;
+  el.textContent = JSON.stringify({
+    question: $("#advQuestion").value.trim() || "(your question)",
+    context: buildAdvisorContext()
+  }, null, 2);
+}
+
+/** The header badge must never overstate the guarantee. */
+function renderPrivacyBadge(){
+  const pill = $("#privacyPill");
+  if(!pill) return;
+  if(S.settings.advisorEnabled){
+    pill.textContent = "● Advisor on · summary sent when you ask";
+    pill.style.color = "var(--warn)";
+    pill.style.background = "var(--warn-soft)";
+    pill.title = "Everything stays local except the AI advisor, which sends a summary of your finances when you press Ask.";
+  } else {
+    pill.textContent = "● Local only · no network";
+    pill.style.color = "";
+    pill.style.background = "";
+    pill.title = "This page makes no network requests. Your data never leaves this browser.";
+  }
+}
+
+function renderAdvisorLog(){
+  const box = $("#advHistory");
+  if(!box) return;
+  const log = S.advisorLog || [];
+  box.innerHTML = log.length
+    ? '<div class="section-title">Earlier answers</div>' + log.map((e, i) =>
+        '<details class="card" style="margin-bottom:10px">' +
+          '<summary style="cursor:pointer;font-weight:600">' + esc(e.q.slice(0, 90)) +
+            (e.q.length > 90 ? "…" : "") +
+            ' <span class="muted" style="font-weight:400;font-size:12px">' + esc(e.at) + '</span></summary>' +
+          '<div style="margin-top:10px">' + renderMarkdown(e.a) + '</div>' +
+          '<button class="btn sm ghost" data-delans="' + i + '" style="margin-top:8px">Delete</button>' +
+        '</details>'
+      ).join("")
+    : "";
+}
+
+async function askAdvisor(){
+  const q = $("#advQuestion").value.trim();
+  if(!q) return alert("Type a question, or tap one of the suggestions.");
+  const endpoint = (S.settings.advisorEndpoint || "").trim();
+  if(!endpoint) return alert("Set the advisor endpoint in Settings & Data first.");
+  if(!S.accounts.length) return alert("Add your accounts first — the advisor works from your balances.");
+
+  const btn = $("#btnAsk");
+  btn.disabled = true;
+  $("#advStatus").textContent = "Thinking…";
+  $("#advAnswer").hidden = true;
+
+  try{
+    const res = await fetch(endpoint, {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ question: q, context: buildAdvisorContext() })
+    });
+    const data = await res.json().catch(() => ({}));
+    if(!res.ok){
+      throw new Error(data.error || ("The advisor service returned " + res.status + "."));
+    }
+    if(!data.answer) throw new Error("The advisor returned an empty answer.");
+
+    $("#advAnswer").hidden = false;
+    $("#advAnswer").innerHTML =
+      '<div class="card"><div class="spread" style="margin-bottom:6px">' +
+        '<h2 style="margin:0">Answer</h2>' +
+        '<span class="muted" style="font-size:11px">' + esc(data.model || "") + '</span></div>' +
+      renderMarkdown(data.answer) +
+      '<p class="hint" style="margin-top:14px;border-top:1px solid var(--line);padding-top:10px">' +
+        'General guidance from an AI, not licensed financial advice. It has no live market or rate data — ' +
+        'verify any rate, limit or fund detail before acting on it.</p></div>';
+
+    S.advisorLog = S.advisorLog || [];
+    S.advisorLog.unshift({ q, a: data.answer, at: todayISO() });
+    S.advisorLog = S.advisorLog.slice(0, 10);
+    save();
+    renderAdvisorLog();
+    $("#advAnswer").scrollIntoView({ behavior: "smooth", block: "start" });
+  }catch(e){
+    $("#advAnswer").hidden = false;
+    $("#advAnswer").innerHTML = '<div class="warnbox"><b>Couldn\'t get an answer.</b><br>' +
+      esc(e.message || String(e)) +
+      '<br><br>If this keeps happening, check that the advisor endpoint in Settings is deployed and reachable.</div>';
+  }finally{
+    btn.disabled = false;
+    $("#advStatus").textContent = "";
+  }
 }
 
 /* ==================================================================
@@ -2995,8 +3354,49 @@ $("#btnSaveSettings").addEventListener("click", () => {
   S.settings.limit401k       = Number($("#setLimit401k").value) || 0;
   S.settings.ytd401k         = Number($("#setYtd401k").value) || 0;
   S.settings.largeTx         = Number($("#setLargeTx").value) || 400;
-  save(); renderOverview(); renderSettings();
+  S.settings.advisorEndpoint = $("#setEndpoint").value.trim();
+  save(); renderOverview(); renderSettings(); renderAdvisor();
   alert("Saved. The agent's findings have been recalculated.");
+});
+
+/* --- advisor --- */
+$("#btnEnableAdvisor").addEventListener("click", () => {
+  if(!confirm("Turn on the AI advisor?\n\nWhen you press Ask, a summary of your balances and spending is sent to your proxy and on to OpenAI. Individual transactions and merchant names are never included.\n\nEverything else in Ledger stays on this device.")) return;
+  S.settings.advisorEnabled = true;
+  save(); renderAdvisor();
+});
+$("#btnDisableAdvisor").addEventListener("click", () => {
+  S.settings.advisorEnabled = false;
+  save(); renderAdvisor();
+});
+$("#btnSaveProfile").addEventListener("click", () => {
+  S.profile = {
+    age:    $("#advAge").value.trim(),
+    retire: $("#advRetire").value.trim(),
+    risk:   $("#advRisk").value,
+    match:  $("#advMatch").value.trim(),
+    apr:    $("#advApr").value.trim(),
+    funds:  $("#advFunds").value.trim()
+  };
+  save(); refreshPayloadPreview();
+  $("#btnSaveProfile").textContent = "Saved";
+  setTimeout(() => { $("#btnSaveProfile").textContent = "Save profile"; }, 1400);
+});
+$("#btnAsk").addEventListener("click", askAdvisor);
+$("#advQuestion").addEventListener("input", refreshPayloadPreview);
+document.addEventListener("click", e => {
+  const preset = e.target.closest("button.preset");
+  if(preset){
+    $("#advQuestion").value = preset.dataset.q;
+    refreshPayloadPreview();
+    $("#advQuestion").focus();
+    return;
+  }
+  const del = e.target.closest("[data-delans]");
+  if(del){
+    S.advisorLog.splice(Number(del.dataset.delans), 1);
+    save(); renderAdvisorLog();
+  }
 });
 
 $("#btnExport").addEventListener("click", exportBackup);
@@ -3009,7 +3409,7 @@ $("#restoreInput").addEventListener("change", e => {
 });
 
 $("#btnWipe").addEventListener("click", () => {
-  if(!confirm("Erase every account, transaction, budget and goal stored in this browser?\n\nThis cannot be undone. Export a backup first if you're not sure.")) return;
+  if(!confirm("Erase every account, transaction, budget, goal and saved advisor answer stored in this browser?\n\nThis cannot be undone. Export a backup first if you're not sure.")) return;
   if(!confirm("Really erase everything?")) return;
   S = defaultState(); save(); renderAll(); switchView("overview");
 });

@@ -15,12 +15,17 @@ Remote: `anishasubs/portfolio`, branch: `master`.
 - `whifff-case-study/` — Whifff case study page (single-file HTML/CSS/JS).
 - `coffeechain/` — CoffeeChain crypto case study page (single-file HTML/CSS/JS).
 - `inde-wild-case-study/` — Indē Wild beauty brand growth case study page.
+- `finance/` — Ledger, a private personal finance app (single-file HTML + vendored
+  pdf.js/tesseract.js in `finance/vendor/`). Real financial data; see its README.
+  Data lives in browser localStorage only and must never be committed.
 
 ## Deploy
 - **Homepage + case studies**: Push to `master` → GitHub Pages auto-deploys.
 - **Kaisey app**: `cd kaisey-src && npx vite build` (clean old `kaisey/assets/` first), then commit `kaisey/` + `kaisey-src/`.
 - **Kaisey proxy**: `cd kaisey-proxy && npx vercel --prod`. Deployed at `kaisey-proxy.vercel.app`. Env var `OPENAI_API_KEY` set in Vercel dashboard.
 - **Whifff**: Deployed separately on Vercel (root directory: `whifff`). Pushes to `master` trigger Vercel build.
+- **Ledger (`finance/`)**: Static, deploys with the site. Screenshot OCR needs an http origin, so it works on the Pages URL but not from `file://`.
+- **Ledger advisor**: Optional, off by default. Backed by `kaisey-proxy/api/advice.ts`; deploy with `cd kaisey-proxy && npx vercel --prod`. Reuses `OPENAI_API_KEY`; `ADVICE_MODEL` optionally overrides the model (defaults to `gpt-4o`, falls back to `gpt-4o-mini`).
 
 ## Key URLs
 - Portfolio: `https://anishasubs.github.io/portfolio/`
@@ -31,6 +36,8 @@ Remote: `anishasubs/portfolio`, branch: `master`.
 - Whifff case study: `https://anishasubs.github.io/portfolio/whifff-case-study/`
 - CoffeeChain: `https://anishasubs.github.io/portfolio/coffeechain/`
 - Indē Wild: `https://anishasubs.github.io/portfolio/inde-wild-case-study/`
+- Ledger: `https://anishasubs.github.io/portfolio/finance/`
+- Ledger advisor endpoint: `https://kaisey-proxy.vercel.app/api/advice`
 
 ## Case Study Pages
 All case study pages are single-file HTML/CSS/JS (vanilla, no frameworks). Always append CSS, never create new stylesheets. Match existing fonts, colors, and spacing.
