@@ -4,6 +4,8 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <meta name="robots" content="noindex, nofollow">
+<!-- Empty data: icon so the browser never even requests /favicon.ico. -->
+<link rel="icon" href="data:,">
 <title>Ledger — Personal Finance Agent</title>
 <style>
 /* ============================================================
@@ -390,13 +392,46 @@ svg .lbl{fill:var(--text-3);font-size:10px}
 <!-- ============================= IMPORT ============================= -->
 <section class="view" id="view-import">
   <div class="card">
-    <h2>Import a CSV statement</h2>
-    <p class="hint">Export transactions from Chase, Fidelity, J.P. Morgan, or any bank, then drop the file here. Parsing happens in this page &mdash; the file is never uploaded anywhere.</p>
-    <div class="drop" id="drop">
-      <strong>Drop a .csv file here</strong><br>
-      <span style="font-size:12px">or click to choose &mdash; nothing is uploaded</span>
-      <input type="file" id="fileInput" accept=".csv,text/csv" hidden>
+    <h2>Import a statement</h2>
+    <p class="hint">A CSV export, a PDF statement, or a screenshot of your account activity.
+      Everything is read inside this page &mdash; no file is ever uploaded.</p>
+
+    <div class="warnbox" id="impNoAccounts" hidden style="margin-bottom:14px">
+      <b>Add an account first.</b> Imported transactions and balances need somewhere to live &mdash;
+      set up your checking, card, or 401(k) on the Accounts tab, then come back.
     </div>
+
+    <div class="grid g2">
+      <label class="field"><span>This statement is for</span><select id="impAcct"></select></label>
+      <label class="field"><span>Account type</span>
+        <select id="impKind">
+          <option value="checking">Checking</option>
+          <option value="savings">Savings</option>
+          <option value="credit">Credit card</option>
+          <option value="brokerage">Brokerage / Investing</option>
+          <option value="retirement">401(k) / IRA</option>
+        </select>
+      </label>
+    </div>
+
+    <div class="drop" id="drop">
+      <strong>Drop a CSV, PDF, or screenshot here</strong><br>
+      <span style="font-size:12px">or click to choose &mdash; .csv, .pdf, .png, .jpg</span>
+      <input type="file" id="fileInput" accept=".csv,.pdf,.png,.jpg,.jpeg,.webp,text/csv,application/pdf,image/*" hidden>
+    </div>
+
+    <div id="impProgress" hidden style="margin-top:16px">
+      <div class="spread" style="margin-bottom:7px">
+        <span id="impProgLabel" style="font-size:13px">Working&hellip;</span>
+        <span id="impProgPct" class="muted num" style="font-size:12px"></span>
+      </div>
+      <div class="bar"><i id="impProgBar" style="width:0%"></i></div>
+      <p class="hint" style="margin:9px 0 0" id="impProgNote"></p>
+    </div>
+
+    <div id="impError" hidden style="margin-top:16px"></div>
+
+    <!-- CSV column mapping -->
     <div id="importCfg" hidden style="margin-top:18px">
       <div class="grid g2">
         <div>
@@ -405,7 +440,6 @@ svg .lbl{fill:var(--text-3);font-size:10px}
         </div>
         <div>
           <div class="section-title" style="margin-top:0">Options</div>
-          <label class="field"><span>Import into account</span><select id="impAcct"></select></label>
           <label class="field"><span>Date format</span>
             <select id="impDateFmt">
               <option value="auto">Detect automatically</option>
@@ -431,6 +465,38 @@ svg .lbl{fill:var(--text-3);font-size:10px}
         <button class="btn primary" id="btnCommitImport">Import transactions</button>
         <button class="btn ghost" id="btnCancelImport">Cancel</button>
       </div>
+    </div>
+
+    <!-- PDF / screenshot review -->
+    <div id="stmtReview" hidden style="margin-top:18px">
+      <div id="stmtMeta"></div>
+      <div id="stmtBalances"></div>
+      <div id="stmtTxWrap">
+        <div class="section-title">Transactions found</div>
+        <div class="row" style="margin-bottom:10px">
+          <button class="btn sm" id="btnStmtFlip">Flip all signs</button>
+          <button class="btn sm ghost" id="btnStmtNone">Deselect all</button>
+          <button class="btn sm ghost" id="btnStmtAll">Select all</button>
+          <span class="muted" style="font-size:12px">Everything here is editable &mdash; correct anything the parser got wrong before importing.</span>
+        </div>
+        <div class="scroll" style="max-height:420px">
+          <table>
+            <thead><tr>
+              <th style="width:34px"></th><th style="width:130px">Date</th><th>Description</th>
+              <th style="width:150px">Category</th><th class="r" style="width:120px">Amount</th>
+            </tr></thead>
+            <tbody id="stmtTxBody"></tbody>
+          </table>
+        </div>
+      </div>
+      <div class="row" style="margin-top:14px">
+        <button class="btn primary" id="btnStmtCommit">Import</button>
+        <button class="btn ghost" id="btnStmtCancel">Cancel</button>
+      </div>
+      <details style="margin-top:16px">
+        <summary class="muted" style="font-size:12px;cursor:pointer">Show the raw text that was read from the file</summary>
+        <pre id="stmtRaw" class="mono" style="font-size:11px;white-space:pre-wrap;background:var(--surface-2);border:1px solid var(--line);border-radius:8px;padding:12px;max-height:280px;overflow:auto;margin-top:9px"></pre>
+      </details>
     </div>
   </div>
 </section>
@@ -513,9 +579,10 @@ svg .lbl{fill:var(--text-3);font-size:10px}
     <h2>How your data is handled</h2>
     <p class="hint" style="margin-bottom:12px">Worth knowing, since this is real financial data.</p>
     <ul style="margin:0;padding-left:18px;color:var(--text-2);font-size:13px;line-height:1.75">
-      <li>This page loads <b>no</b> external scripts, fonts, or stylesheets, and makes <b>no</b> network requests of any kind. You can verify that in your browser's Network tab, or run it fully offline.</li>
-      <li>CSV files you drop are read in-page with the browser's FileReader. They are never uploaded.</li>
-      <li>Your transactions are <b>not</b> sent to any AI model. Every insight below is computed locally by rules in this file.</li>
+      <li>This page loads <b>nothing</b> from the internet &mdash; no external scripts, fonts, or stylesheets, and no network requests of any kind. You can verify that in your browser's Network tab, or run it fully offline.</li>
+      <li>PDF reading and screenshot OCR use libraries stored in <span class="mono">finance/vendor/</span> on your own disk. They are loaded only when you actually import a file, and they run entirely inside this page.</li>
+      <li>Files you drop &mdash; CSV, PDF, or image &mdash; are read in-page with the browser's FileReader. Nothing is ever uploaded, and no statement is sent to any service for processing.</li>
+      <li>Your transactions are <b>not</b> sent to any AI model. Every insight is computed locally by rules in this file, and OCR runs on your machine rather than through a vision API.</li>
       <li>Data is stored per-origin. Opening this file from disk and from a web address gives you two separate stores &mdash; use the JSON backup to move between them.</li>
       <li>Anyone with access to this browser profile can read the data. Don't use a shared machine.</li>
     </ul>
@@ -646,13 +713,16 @@ const NON_SPEND = new Set(["Transfer","Investment","Income"]);
 const BUILTIN_RULES = [
   [/\b(payroll|direct dep|dir dep|salary|paycheck)\b/i, "Income"],
   [/\b(interest paid|interest earned|dividend)\b/i, "Income"],
+  // Rent is often paid by online transfer, so it has to be tested before the
+  // transfer rules or "RENT PAYMENT ... XFER" lands in the wrong bucket.
+  [/\b(rent payment|rent|landlord|property mgmt|mortgage|hoa dues)\b/i, "Rent & Housing"],
   [/\b(venmo|zelle|cash app|paypal transfer|wire transfer|online transfer|transfer to|transfer from|xfer)\b/i, "Transfer"],
   // Paying off a card is moving your own money, not income — without this it
   // lands in Income and inflates the savings rate on every card statement.
   [/(automatic payment|autopay|auto pay|payment\s*[-—]?\s*thank you|thank you|card payment|payment received|electronic payment|online payment|bill pay|e-?payment)/i, "Transfer"],
   [/\b(fidelity|vanguard|schwab|robinhood|betterment|wealthfront|e\*?trade|coinbase|401k|403b|roth|ira contrib)\b/i, "Investment"],
   [/\b(starbucks|dunkin|blue bottle|peet|philz|la colombe|joe coffee|coffee|cafe|espresso|caffe)\b/i, "Coffee"],
-  [/\b(whole foods|trader joe|safeway|kroger|wegmans|aldi|publix|h mart|hmart|sprouts|costco|sam's club|fairway|gristedes|key food|tesco|sainsbury|asda|morrisons|lidl|waitrose|grocer|supermarket|bodega)\b/i, "Groceries"],
+  [/\b(whole foods|trader joe'?s?|safeway|kroger|wegmans|aldi|publix|h mart|hmart|sprouts|costco|sam's club|fairway|gristedes|key food|tesco|sainsbury|asda|morrisons|lidl|waitrose|grocer|supermarket|bodega)\b/i, "Groceries"],
   [/\b(doordash|uber eats|ubereats|grubhub|seamless|caviar|postmates|chipotle|sweetgreen|mcdonald|chick-?fil|shake shack|panera|pizza|sushi|restaurant|bar & grill|taqueria|deli|bakery|diner|kitchen|bistro|thai|ramen|noodle)\b/i, "Dining"],
   [/\b(uber|lyft|mta|metrocard|omny|subway fare|transit|amtrak|njt|path train|caltrain|bart|taxi|curb)\b/i, "Transport"],
   [/\b(shell|chevron|exxon|mobil|bp |sunoco|citgo|wawa|speedway|gas station|fuel)\b/i, "Gas"],
@@ -668,7 +738,7 @@ const BUILTIN_RULES = [
   [/\b(amc|regal|cinema|movie|ticketmaster|stubhub|eventbrite|steam games|playstation|xbox|nintendo|concert|theatre|theater|museum)\b/i, "Entertainment"],
   [/\b(geico|state farm|progressive|allstate|lemonade|insurance|premium payment)\b/i, "Insurance"],
   [/\b(irs |franchise tax|dept of revenue|tax payment|turbotax|h&r block)\b/i, "Taxes"],
-  [/\b(overdraft|nsf fee|late fee|annual fee|service charge|monthly maintenance|atm fee|foreign transaction|interest charge|finance charge|apr )\b/i, "Fees & Interest"],
+  [/\b(overdraft|nsf fee|late fee|annual fee|service charge|monthly maintenance|service fee|maintenance fee|atm fee|foreign transaction|interest charge|finance charge|apr )\b/i, "Fees & Interest"],
   [/\b(tuition|coursera|udemy|university|college|student loan|textbook|masterclass)\b/i, "Education"],
   [/\b(gofundme|donation|red cross|unicef|charity|church|temple|mosque)\b/i, "Gifts & Donations"],
   [/\b(amazon|amzn|target|walmart|best buy|ikea|wayfair|etsy|ebay|nike|lululemon|zara|uniqlo|h&m|nordstrom|macy|tj ?maxx|marshalls|home depot|lowes|apple store|shein|temu)\b/i, "Shopping"]
@@ -967,6 +1037,380 @@ function parseDate(raw, fmt){
 /** Stable fingerprint so re-importing an overlapping statement is a no-op. */
 function txHash(date, amount, desc, accountId){
   return [date, Number(amount).toFixed(2), normalizeMerchant(desc), accountId || ""].join("|");
+}
+
+/* ==================================================================
+   5b. Statements: PDF text extraction, screenshot OCR, and the parser
+   that turns either one into transactions and balances.
+
+   Both libraries are vendored under finance/vendor/ and loaded from
+   disk, so nothing here reaches the network and no statement ever
+   leaves this machine.
+   ================================================================== */
+
+/** Load a vendored library on demand. These are multi-megabyte files, so
+    paying for them at page load would make the app slow to open for the
+    common case of not importing anything. Cached per URL. */
+const _scriptCache = {};
+function loadScript(src){
+  if(_scriptCache[src]) return _scriptCache[src];
+  _scriptCache[src] = new Promise((resolve, reject) => {
+    const el = document.createElement("script");
+    el.src = src;
+    el.onload = () => resolve();
+    el.onerror = () => {
+      delete _scriptCache[src];
+      reject(new Error("Could not load " + src + ". Is finance/vendor/ present?"));
+    };
+    document.head.appendChild(el);
+  });
+  return _scriptCache[src];
+}
+
+async function ensurePdfLib(){
+  if(!window.pdfjsLib){
+    await loadScript("vendor/pdfjs/pdf.min.js");
+    // Loading the worker build in the main thread registers a fake worker,
+    // which avoids a cross-origin Worker fetch that file:// would block.
+    await loadScript("vendor/pdfjs/pdf.worker.min.js");
+  }
+  if(!window.pdfjsLib) throw new Error("PDF support failed to initialise.");
+}
+
+async function ensureOcrLib(){
+  if(!window.Tesseract) await loadScript("vendor/tesseract/tesseract.min.js");
+  if(!window.Tesseract) throw new Error("OCR support failed to initialise.");
+}
+
+/** Pull text out of a PDF, rebuilding visual rows from glyph positions.
+    Reading the raw text stream loses column structure; grouping items by
+    their y coordinate keeps "date  description  amount" on one line. */
+async function pdfToLines(arrayBuffer){
+  await ensurePdfLib();
+  const doc = await window.pdfjsLib.getDocument({ data: new Uint8Array(arrayBuffer) }).promise;
+  const lines = [];
+  for(let n = 1; n <= doc.numPages; n++){
+    const page = await doc.getPage(n);
+    const content = await page.getTextContent();
+    const rows = new Map();
+    for(const it of content.items){
+      if(!it.str || !it.str.trim()) continue;
+      // Round y to merge glyphs that sit on the same baseline.
+      const key = Math.round(it.transform[5] / 2) * 2;
+      if(!rows.has(key)) rows.set(key, []);
+      rows.get(key).push({ x: it.transform[4], s: it.str });
+    }
+    Array.from(rows.keys()).sort((a, b) => b - a).forEach(y => {
+      const text = rows.get(y).sort((a, b) => a.x - b.x)
+        .map(i => i.s).join(" ").replace(/\s+/g, " ").trim();
+      if(text) lines.push(text);
+    });
+  }
+  try{ await doc.destroy(); }catch(e){}
+  return lines;
+}
+
+/** Redraw an image at `factor` size, capped so a large screenshot doesn't
+    blow up memory. Returns the original blob if anything goes wrong. */
+function upscaleImage(blob, factor){
+  return new Promise(resolve => {
+    const img = new Image();
+    const url = URL.createObjectURL(blob);
+    img.onload = () => {
+      try{
+        const f = Math.max(1, Math.min(factor, 4000 / Math.max(img.width, img.height)));
+        const c = document.createElement("canvas");
+        c.width = Math.round(img.width * f);
+        c.height = Math.round(img.height * f);
+        const g = c.getContext("2d");
+        g.imageSmoothingEnabled = true;
+        g.imageSmoothingQuality = "high";
+        g.drawImage(img, 0, 0, c.width, c.height);
+        c.toBlob(b => { URL.revokeObjectURL(url); resolve(b || blob); }, "image/png");
+      }catch(e){ URL.revokeObjectURL(url); resolve(blob); }
+    };
+    img.onerror = () => { URL.revokeObjectURL(url); resolve(blob); };
+    img.src = url;
+  });
+}
+
+/** OCR an image. Needs an http(s) origin because the worker and language
+    model are fetched from disk, which file:// forbids. */
+async function imageToLines(blob, onProgress){
+  if(location.protocol === "file:"){
+    throw new Error(
+      "Screenshots need the app served over http to run OCR — browsers block local file loads from file:// pages.\n\n" +
+      "From the repo root run:  python3 -m http.server 8000\n" +
+      "then open:  http://localhost:8000/finance/\n\n" +
+      "That is still entirely local; nothing goes over the internet. PDFs work fine from file:// either way.");
+  }
+  await ensureOcrLib();
+  // Tesseract reads small UI text far better at roughly double size; measured
+  // on a phone screenshot, 2x fixed every misread date ("Sep 6" was coming out
+  // as "Seps"), while 3x started regressing again. Paths must be absolute —
+  // relative ones resolve against the blob worker and fail.
+  const scaled = await upscaleImage(blob, 2);
+  const abs = f => new URL("vendor/tesseract/" + f, location.href).href;
+  const worker = await window.Tesseract.createWorker("eng", 1, {
+    workerPath: abs("worker.min.js"),
+    corePath:   abs("tesseract-core-simd-lstm.wasm.js"),
+    langPath:   new URL("vendor/tesseract/", location.href).href,
+    gzip: true,
+    logger: m => {
+      if(onProgress && m.status) onProgress(m.status, m.progress || 0);
+    }
+  });
+  try{
+    const { data } = await worker.recognize(scaled);
+    return String(data.text || "").split("\n").map(l => l.replace(/\s+/g, " ").trim()).filter(Boolean);
+  } finally {
+    try{ await worker.terminate(); }catch(e){}
+  }
+}
+
+/* ---------- statement text -> structured data ---------- */
+
+const MONTHS = { jan:1, feb:2, mar:3, apr:4, may:5, jun:6, jul:7, aug:8, sep:9, oct:10, nov:11, dec:12 };
+// Money with cents, optionally $-prefixed, comma-grouped, negative via sign or parens.
+const AMOUNT_TOKEN = /(?:[-+]|\()?\$?\s?\d{1,3}(?:,\d{3})*\.\d{2}\)?|(?:[-+]|\()?\$?\s?\d+\.\d{2}\)?/g;
+
+function amountsIn(text){
+  const out = [];
+  const re = new RegExp(AMOUNT_TOKEN.source, "g");
+  let m;
+  while((m = re.exec(text))){
+    const v = parseAmount(m[0]);
+    if(!isNaN(v)) out.push({ raw: m[0], value: v, index: m.index, end: m.index + m[0].length });
+  }
+  return out;
+}
+
+/** Statement rows lead with a date in a dozen different shapes. */
+function leadingDate(text, year){
+  let m = text.match(/^\s*(\d{4})-(\d{1,2})-(\d{1,2})\b/);
+  if(m) return { date: iso(m[1], m[2], m[3]), rest: text.slice(m[0].length) };
+
+  m = text.match(/^\s*(\d{1,2})[\/\-.](\d{1,2})(?:[\/\-.](\d{2,4}))?\b/);
+  if(m){
+    let y = m[3];
+    if(y && String(y).length === 2) y = (Number(y) > 70 ? "19" : "20") + y;
+    return { date: dated(y, m[1], m[2]), rest: text.slice(m[0].length) };
+  }
+
+  m = text.match(/^\s*([a-z]{3,9})\.?\s+(\d{1,2})(?:,?\s*(\d{4}))?\b/i);
+  if(m){
+    const mo = MONTHS[m[1].slice(0, 3).toLowerCase()];
+    if(mo) return { date: dated(m[3], mo, m[2]), rest: text.slice(m[0].length) };
+  }
+
+  m = text.match(/^\s*(\d{1,2})\s+([a-z]{3,9})\.?(?:\s+(\d{4}))?\b/i);
+  if(m){
+    const mo = MONTHS[m[2].slice(0, 3).toLowerCase()];
+    if(mo) return { date: dated(m[3], mo, m[1]), rest: text.slice(m[0].length) };
+  }
+  return null;
+
+  function md(mo, d){
+    return "-" + String(mo).padStart(2, "0") + "-" + String(d).padStart(2, "0");
+  }
+  /** An explicit year wins; otherwise fall back to the statement's year, and
+      failing that to the most recent past occurrence of that month and day. */
+  function dated(explicit, mo, d){
+    if(explicit) return String(explicit).padStart(4, "0") + md(mo, d);
+    return resolveYear(md(mo, d), year ? Number(year) : null);
+  }
+}
+
+/** Labelled totals worth lifting off a statement. Order matters — the
+    first pattern that matches a line wins, so specific beats generic. */
+const BALANCE_LABELS = [
+  // "Beginning ..." must be tested before the generic value/balance patterns,
+  // or an opening figure gets mistaken for the closing one.
+  [/beginning\s+(account\s+)?(balance|value)/i,                 "Beginning balance",         "info"],
+  [/prior\s+(period\s+)?(balance|value)/i,                      "Previous balance",          "info"],
+  [/vested\s+(account\s+)?(balance|value)/i,                    "Vested balance",            "info"],
+  [/ending\s+(account\s+)?(balance|value)/i,                    "Ending balance",            "balance"],
+  [/closing\s+balance/i,                                        "Closing balance",           "balance"],
+  [/(new|statement)\s+balance/i,                                "Statement balance",         "balance"],
+  [/current\s+balance/i,                                        "Current balance",           "balance"],
+  [/total\s+account\s+value/i,                                  "Total account value",       "balance"],
+  [/(ending|total|present)\s+(market\s+)?value/i,               "Account value",             "balance"],
+  [/account\s+value/i,                                          "Account value",             "balance"],
+  [/employee\s+contributions?(\s+ytd|\s+year.to.date)?/i,       "Employee contributions YTD","ytd401k"],
+  [/(ytd|year.to.date)\s+contributions?/i,                      "Contributions YTD",         "ytd401k"],
+  [/employer\s+(match|contributions?)/i,                        "Employer match YTD",        "info"],
+  [/minimum\s+payment/i,                                        "Minimum payment",           "info"],
+  [/available\s+credit/i,                                       "Available credit",          "info"]
+];
+
+/** A line that is essentially just a date, e.g. the "Sep 4" under a
+    merchant name in a banking app's activity list. */
+function standaloneDate(line, year){
+  if(!line || line.length > 24) return null;
+  const d = leadingDate(line, year);
+  if(!d) return null;
+  // Anything substantial left over means it wasn't a bare date.
+  return d.rest.replace(/[^a-z0-9]/gi, "").length <= 2 ? d.date : null;
+}
+
+/** Year is often missing from row dates. Assume the most recent occurrence
+    of that month/day that isn't in the future. */
+function resolveYear(dateNoYear, fallbackYear){
+  const y = fallbackYear || Number(todayISO().slice(0, 4));
+  const candidate = y + dateNoYear;
+  // Without a year on the page, a date in the future is almost certainly
+  // last year's — an activity list only shows things that already happened.
+  if(!fallbackYear && candidate > todayISO()) return (y - 1) + dateNoYear;
+  return candidate;
+}
+
+/**
+ * Turn statement lines into transactions and balances.
+ *
+ * Two layouts are handled. Printed statements put the date, description and
+ * amount on one row. Banking apps stack them: merchant and amount on one
+ * line, the date on the line below. The second pass only runs if the first
+ * found almost nothing, so a normal statement never gets misread.
+ *
+ * `kind` is the account type the user says this statement is for; it decides
+ * the default sign convention, which is then verified against the running
+ * balance column whenever the statement has one.
+ */
+function parseStatement(lines, kind){
+  const joined = lines.join("\n");
+
+  // Fund names carry years too ("VANGUARD TARGET 2055"), so only accept a
+  // year a statement could plausibly have been issued in.
+  let year = null;
+  const thisYear = Number(todayISO().slice(0, 4));
+  const found = (joined.match(/\b(19|20)\d{2}\b/g) || [])
+    .map(Number).filter(y => y >= 1990 && y <= thisYear + 1);
+  if(found.length) year = String(Math.max.apply(null, found));
+
+  /* ---------- labelled totals ---------- */
+  const balances = [];
+  const seen = new Set();
+  const addBalance = (context, value, line) => {
+    for(const [re, label, role] of BALANCE_LABELS){
+      if(re.test(context) && !seen.has(label)){
+        seen.add(label);
+        balances.push({ label, role, value: Math.abs(value), line });
+        return true;
+      }
+    }
+    return false;
+  };
+  for(let i = 0; i < lines.length; i++){
+    const line = lines[i];
+    const amts = amountsIn(line);
+    if(!amts.length) continue;
+    const before = line.slice(0, amts[0].index);
+    if(addBalance(before, amts[amts.length - 1].value, line)) continue;
+    // Apps often print the number first and its label underneath.
+    if(before.replace(/[^a-z]/gi, "").length < 3){
+      const neighbour = (lines[i + 1] || "") + " " + (lines[i - 1] || "");
+      addBalance(neighbour, amts[0].value, line);
+    }
+  }
+
+  /* ---------- pass A: date-led rows ---------- */
+  const rows = [];
+  const consumed = new Set();
+  for(let i = 0; i < lines.length; i++){
+    const line = lines[i];
+    const d = leadingDate(line, year);
+    if(!d) continue;
+    const amts = amountsIn(line);
+    const offset = line.length - d.rest.length;
+    const tail = amts.filter(a => a.index >= offset);
+    if(!tail.length) continue;
+    const desc = d.rest.slice(0, tail[0].index - offset).replace(/\s+/g, " ").trim()
+                       .replace(/^[-–—:|]\s*/, "");
+    if(!desc || !/[a-z]{3}/i.test(desc)) continue;
+    rows.push({ date: d.date, desc, amount: tail[0].value,
+                trailing: tail.length > 1 ? tail[tail.length - 1].value : null });
+    consumed.add(i);
+  }
+
+  /* ---------- pass B: stacked layout ----------
+     Skipped for investment statements: their number columns are share counts
+     and holdings values, not transactions, and reading them as spending would
+     be worse than reading nothing. Balances are what those statements are for. */
+  const balancesOnly = kind === "retirement" || kind === "brokerage";
+  if(rows.length < 2 && !balancesOnly){
+    rows.length = 0;
+    for(let i = 0; i < lines.length; i++){
+      const line = lines[i];
+      const amts = amountsIn(line);
+      if(!amts.length) continue;
+      const desc = line.slice(0, amts[0].index).replace(/\s+/g, " ").trim();
+      if(!desc || !/[a-z]{3}/i.test(desc)) continue;
+      // Skip summary rows like "Current balance  $2,340.19".
+      if(BALANCE_LABELS.some(([re]) => re.test(desc))) continue;
+
+      const inline = leadingDate(line, year);
+      const date = (inline && inline.date) ||
+                   standaloneDate(lines[i + 1], year) ||
+                   standaloneDate(lines[i - 1], year) ||
+                   null;
+      rows.push({ date, desc, amount: amts[0].value,
+                  trailing: amts.length > 1 ? amts[amts.length - 1].value : null,
+                  dateGuessed: !date });
+    }
+  }
+
+  if(balancesOnly) rows.length = 0;
+
+  /* ---------- is the last column a running balance? ----------
+     If consecutive trailing values differ by each row's amount, we can drop
+     that column and, better, let the statement confirm its own sign
+     convention rather than guessing from the account type. */
+  let runningBalance = false, signFlip = false;
+  const trail = rows.filter(r => r.trailing != null);
+  if(trail.length >= 3){
+    let asIs = 0, flipped = 0;
+    for(let i = 1; i < trail.length; i++){
+      const delta = trail[i].trailing - trail[i - 1].trailing;
+      if(Math.abs(delta - trail[i].amount) < 0.02) asIs++;
+      else if(Math.abs(delta + trail[i].amount) < 0.02) flipped++;
+    }
+    const checks = trail.length - 1;
+    if(asIs / checks > 0.6) runningBalance = true;
+    else if(flipped / checks > 0.6){ runningBalance = true; signFlip = true; }
+  }
+
+  /* ---------- sign convention ---------- */
+  // Card statements print charges as bare positives; bank statements carry
+  // explicit minus signs. A proven running balance always wins.
+  const anyNegative = rows.some(r => r.amount < 0);
+  const cardStyle = (kind === "credit") && !anyNegative && !runningBalance;
+
+  const transactions = rows.map(r => {
+    let amount = r.amount;
+    if(signFlip) amount = -amount;
+    if(cardStyle){
+      const isCredit = /\b(payment|thank you|refund|credit|reversal|adjustment|cashback|cash back)\b/i.test(r.desc);
+      amount = isCredit ? Math.abs(amount) : -Math.abs(amount);
+    }
+    return {
+      date: r.date || todayISO(),
+      desc: r.desc,
+      amount,
+      category: categorize(r.desc, amount),
+      include: true,
+      uncertain: !r.date
+    };
+  });
+
+  return {
+    transactions,
+    balances,
+    meta: {
+      year, lineCount: lines.length, runningBalance, signFlip, cardStyle,
+      stacked: rows.some(r => r.dateGuessed !== undefined),
+      undated: transactions.filter(t => t.uncertain).length
+    }
+  };
 }
 
 /* ==================================================================
@@ -1663,6 +2107,17 @@ function fillAccountSelects(){
     el.innerHTML = opts;
     if(cur) el.value = cur;
   }
+  // A statement always belongs to some account, and leaving this unassigned
+  // silently drops the balance on import — so default it to a real account.
+  const imp = $("#impAcct");
+  if(imp && !imp.value && S.accounts.length){
+    imp.value = S.accounts[0].id;
+    const a = S.accounts[0];
+    const kindSel = $("#impKind");
+    if(kindSel && kindSel.querySelector('option[value="' + a.type + '"]')) kindSel.value = a.type;
+  }
+  const warn = $("#impNoAccounts");
+  if(warn) warn.hidden = S.accounts.length > 0;
   const f = $("#txFilterAcct"), cur = f.value;
   f.innerHTML = '<option value="">All accounts</option>' +
     S.accounts.map(a => '<option value="' + a.id + '">' + esc(a.name) + '</option>').join("");
@@ -1833,13 +2288,79 @@ function renderSettings(){
    9. CSV import flow
    ================================================================== */
 let importRows = null, importHeaders = null, importMap = null;
+let stmt = null;   // { transactions, balances, meta, lines, fileName }
 
-function handleFile(file){
+/* ---------- shared UI helpers ---------- */
+function impProgress(label, pct, note){
+  const box = $("#impProgress");
+  if(label == null){ box.hidden = true; return; }
+  box.hidden = false;
+  $("#impProgLabel").textContent = label;
+  $("#impProgPct").textContent = pct == null ? "" : Math.round(pct * 100) + "%";
+  $("#impProgBar").style.width = ((pct == null ? 0 : pct) * 100).toFixed(0) + "%";
+  $("#impProgNote").textContent = note || "";
+}
+function impError(msg){
+  const box = $("#impError");
+  if(!msg){ box.hidden = true; box.innerHTML = ""; return; }
+  box.hidden = false;
+  box.innerHTML = '<div class="warnbox" style="white-space:pre-line">' + esc(msg) + '</div>';
+}
+
+/** Route a dropped file by type: CSV to the column mapper, PDF and images
+    through text extraction into the statement review. */
+async function handleFile(file){
   if(!file) return;
-  if(!/\.csv$/i.test(file.name) && file.type && !/csv|text/.test(file.type)){
-    alert("That doesn't look like a CSV file. Export your statement as CSV and try again.");
-    return;
+  impError(null);
+  resetImport();
+
+  const name = (file.name || "").toLowerCase();
+  const isCsv = /\.csv$/.test(name) || /csv/.test(file.type || "");
+  const isPdf = /\.pdf$/.test(name) || (file.type || "") === "application/pdf";
+  const isImg = /\.(png|jpe?g|webp|gif|bmp)$/.test(name) || /^image\//.test(file.type || "");
+
+  if(isCsv) return handleCsvFile(file);
+  if(isPdf || isImg) return handleStatementFile(file, isPdf);
+  impError("Unsupported file type. Drop a .csv export, a .pdf statement, or a screenshot (.png / .jpg).");
+}
+
+async function handleStatementFile(file, isPdf){
+  const kind = $("#impKind").value;
+  try{
+    let lines;
+    if(isPdf){
+      impProgress("Reading PDF\u2026", 0.3, "Extracting text in this page — nothing is uploaded.");
+      const buf = await file.arrayBuffer();
+      lines = await pdfToLines(buf);
+      if(!lines.length){
+        impProgress(null);
+        impError("No text could be read from that PDF.\n\nIt is probably a scan rather than a text PDF. Take a screenshot of it and drop that in instead — screenshots go through OCR.");
+        return;
+      }
+    } else {
+      impProgress("Loading OCR engine\u2026", 0.05, "First run loads the language model from disk. This stays local.");
+      lines = await imageToLines(file, (status, p) => {
+        const label = status === "recognizing text" ? "Reading the screenshot\u2026" : status;
+        impProgress(label.charAt(0).toUpperCase() + label.slice(1), status === "recognizing text" ? 0.2 + p * 0.8 : 0.1);
+      });
+      if(!lines.length){
+        impProgress(null);
+        impError("No text could be read from that image. Try a sharper, more zoomed-in screenshot.");
+        return;
+      }
+    }
+    impProgress("Parsing\u2026", 0.95);
+    const parsed = parseStatement(lines, kind);
+    stmt = Object.assign(parsed, { lines, fileName: file.name, kind });
+    impProgress(null);
+    renderStmtReview();
+  }catch(e){
+    impProgress(null);
+    impError(e && e.message ? e.message : String(e));
   }
+}
+
+function handleCsvFile(file){
   const reader = new FileReader();
   reader.onerror = () => alert("Could not read that file.");
   reader.onload = () => {
@@ -1972,9 +2493,149 @@ function commitImport(){
   alert("Imported " + rows.length + " transaction" + (rows.length === 1 ? "" : "s") + ".");
 }
 
+/* ---------- statement review ---------- */
+const ROLE_NOTE = {
+  balance: "Set as this account's current balance",
+  ytd401k: "Set as your 401(k) contributed year-to-date",
+  info:    "Reference only — not saved"
+};
+
+function renderStmtReview(){
+  if(!stmt) return;
+  $("#stmtReview").hidden = false;
+  $("#stmtRaw").textContent = stmt.lines.join("\n");
+
+  const m = stmt.meta;
+  const notes = [];
+  if(m.runningBalance) notes.push("a running balance column confirmed the amounts" + (m.signFlip ? ", with signs flipped to match" : ""));
+  if(m.cardStyle)      notes.push("read as a card statement, so charges are money out and payments money in");
+  if(m.stacked)        notes.push("dates were read from the line next to each amount");
+  if(m.undated)        notes.push(m.undated + " row(s) had no readable date and defaulted to today");
+
+  $("#stmtMeta").innerHTML =
+    '<div class="section-title" style="margin-top:0">' + esc(stmt.fileName) + '</div>' +
+    '<p class="hint" style="margin-bottom:14px">' +
+      m.lineCount + " lines read · " + stmt.transactions.length + " transaction(s) and " +
+      stmt.balances.length + " balance(s) found" +
+      (notes.length ? " — " + esc(notes.join("; ")) + "." : ".") +
+    '</p>' +
+    (m.undated
+      ? '<div class="warnbox" style="margin-bottom:14px"><b>Check the dates.</b> Some rows had no readable date. Fix them below before importing.</div>'
+      : "");
+
+  /* --- balances --- */
+  const usable = stmt.balances.filter(b => b.role !== "info");
+  const info = stmt.balances.filter(b => b.role === "info");
+  // Tick the first true balance plus any YTD contribution figure. Keying off
+  // index 0 alone missed the balance whenever a YTD row was listed first.
+  const firstBalance = usable.findIndex(b => b.role === "balance");
+  $("#stmtBalances").innerHTML = stmt.balances.length
+    ? '<div class="section-title">Balances found</div>' +
+      usable.map((b, i) =>
+        '<div class="spread" style="border:1px solid var(--line);border-radius:8px;padding:10px 12px;margin-bottom:8px">' +
+          '<label style="display:flex;gap:9px;align-items:center;cursor:pointer">' +
+            '<input type="checkbox" class="bal-use" data-i="' + i + '"' +
+              (i === firstBalance || b.role === "ytd401k" ? " checked" : "") + '>' +
+            '<span><b>' + esc(b.label) + '</b> ' + fmtMoney(b.value) +
+            '<br><span class="muted" style="font-size:11px">' + esc(ROLE_NOTE[b.role] || "") + '</span></span>' +
+          '</label>' +
+        '</div>'
+      ).join("") +
+      (info.length
+        ? '<p class="hint">Also read, for reference: ' +
+          info.map(b => esc(b.label) + " " + fmtMoney(b.value, false)).join(" · ") + '</p>'
+        : "")
+    : "";
+
+  /* --- transactions --- */
+  $("#stmtTxWrap").hidden = !stmt.transactions.length;
+  if(!stmt.transactions.length) $("#stmtTxBody").innerHTML = "";
+  else {
+    $("#stmtTxBody").innerHTML = stmt.transactions.map((t, i) =>
+      '<tr' + (t.uncertain ? ' style="background:var(--warn-soft)"' : '') + '>' +
+        '<td><input type="checkbox" class="stx-use" data-i="' + i + '"' + (t.include ? " checked" : "") + '></td>' +
+        '<td><input type="date" class="stx-date" data-i="' + i + '" value="' + esc(t.date) + '"></td>' +
+        '<td><input type="text" class="stx-desc" data-i="' + i + '" value="' + esc(t.desc) + '"></td>' +
+        '<td><select class="stx-cat" data-i="' + i + '">' +
+          CATEGORIES.map(c => '<option' + (c === t.category ? " selected" : "") + '>' + esc(c) + '</option>').join("") +
+        '</select></td>' +
+        '<td class="r"><input type="number" step="0.01" class="stx-amt num" data-i="' + i + '" value="' + t.amount + '" style="text-align:right"></td>' +
+      '</tr>').join("");
+  }
+  updateStmtCommit();
+}
+
+function updateStmtCommit(){
+  if(!stmt) return;
+  const n = stmt.transactions.filter(t => t.include).length;
+  const b = $$(".bal-use").filter(c => c.checked).length;
+  const parts = [];
+  if(n) parts.push(n + " transaction" + (n === 1 ? "" : "s"));
+  if(b) parts.push(b + " balance" + (b === 1 ? "" : "s"));
+  const btn = $("#btnStmtCommit");
+  btn.disabled = !parts.length;
+  btn.textContent = parts.length ? "Import " + parts.join(" and ") : "Nothing selected";
+}
+
+function commitStatement(){
+  if(!stmt) return;
+  const acctId = $("#impAcct").value;
+  const chosen = stmt.transactions.filter(t => t.include);
+  const existing = new Set(S.transactions.map(t => t.hash));
+  let added = 0, dupes = 0;
+
+  for(const t of chosen){
+    const hash = txHash(t.date, t.amount, t.desc, acctId);
+    if(existing.has(hash)){ dupes++; continue; }
+    existing.add(hash);
+    S.transactions.push({
+      id: uid(), date: t.date, desc: t.desc, amount: t.amount,
+      category: t.category, accountId: acctId, hash
+    });
+    added++;
+  }
+
+  const usable = stmt.balances.filter(b => b.role !== "info");
+  const applied = [];
+  $$(".bal-use").forEach(c => {
+    if(!c.checked) return;
+    const b = usable[Number(c.dataset.i)];
+    if(!b) return;
+    if(b.role === "ytd401k"){
+      S.settings.ytd401k = b.value;
+      applied.push("401(k) year-to-date set to " + fmtMoney(b.value, false));
+    } else if(b.role === "balance"){
+      const a = acctById(acctId);
+      if(a){
+        a.balance = b.value;
+        a.updatedAt = todayISO();
+        a.history = (a.history || []).filter(h => h.date !== a.updatedAt);
+        a.history.push({ date: a.updatedAt, balance: a.balance });
+        a.history.sort((x, y) => x.date.localeCompare(y.date));
+        applied.push(a.name + " balance set to " + fmtMoney(b.value, false));
+      } else {
+        applied.push("No account selected, so the balance wasn't applied");
+      }
+    }
+  });
+
+  save();
+  resetImport();
+  renderAll();
+  switchView("overview");
+  alert([
+    added ? "Imported " + added + " transaction" + (added === 1 ? "" : "s") + "." : "No new transactions.",
+    dupes ? dupes + " were already imported and were skipped." : "",
+    applied.join(". ")
+  ].filter(Boolean).join("\n"));
+}
+
 function resetImport(){
   importRows = importHeaders = importMap = null;
+  stmt = null;
   $("#importCfg").hidden = true;
+  $("#stmtReview").hidden = true;
+  $("#impProgress").hidden = true;
   $("#fileInput").value = "";
 }
 
@@ -2244,10 +2905,51 @@ $("#fileInput").addEventListener("change", e => handleFile(e.target.files[0]));
   e.preventDefault(); drop.classList.remove("over");
 }));
 drop.addEventListener("drop", e => handleFile(e.dataTransfer.files[0]));
-["#impAcct","#impDateFmt","#impSign"].forEach(s =>
-  $(s).addEventListener("change", () => { if(importRows) previewImport(); }));
+["#impAcct","#impDateFmt","#impSign"].forEach(sel =>
+  $(sel).addEventListener("change", () => { if(importRows) previewImport(); }));
 $("#btnCommitImport").addEventListener("click", commitImport);
-$("#btnCancelImport").addEventListener("click", resetImport);
+$("#btnCancelImport").addEventListener("click", () => { resetImport(); impError(null); });
+
+/* --- statement review wiring --- */
+// Selecting the account pre-sets the statement type, since they almost
+// always agree and getting the type right drives the sign convention.
+$("#impAcct").addEventListener("change", () => {
+  const a = acctById($("#impAcct").value);
+  if(a && $("#impKind").querySelector('option[value="' + a.type + '"]')) $("#impKind").value = a.type;
+});
+
+document.addEventListener("input", e => {
+  if(!stmt) return;
+  const i = Number(e.target.dataset.i);
+  if(e.target.classList.contains("stx-date")) stmt.transactions[i].date = e.target.value;
+  else if(e.target.classList.contains("stx-desc")) stmt.transactions[i].desc = e.target.value;
+  else if(e.target.classList.contains("stx-amt")) stmt.transactions[i].amount = Number(e.target.value) || 0;
+});
+document.addEventListener("change", e => {
+  if(!stmt) return;
+  const i = Number(e.target.dataset.i);
+  if(e.target.classList.contains("stx-cat")) stmt.transactions[i].category = e.target.value;
+  else if(e.target.classList.contains("stx-use")){ stmt.transactions[i].include = e.target.checked; updateStmtCommit(); }
+  else if(e.target.classList.contains("bal-use")) updateStmtCommit();
+});
+
+$("#btnStmtFlip").addEventListener("click", () => {
+  if(!stmt) return;
+  stmt.transactions.forEach(t => { t.amount = -t.amount; });
+  renderStmtReview();
+});
+$("#btnStmtAll").addEventListener("click", () => {
+  if(!stmt) return;
+  stmt.transactions.forEach(t => { t.include = true; });
+  renderStmtReview();
+});
+$("#btnStmtNone").addEventListener("click", () => {
+  if(!stmt) return;
+  stmt.transactions.forEach(t => { t.include = false; });
+  renderStmtReview();
+});
+$("#btnStmtCommit").addEventListener("click", commitStatement);
+$("#btnStmtCancel").addEventListener("click", () => { resetImport(); impError(null); });
 
 /* --- budgets / goals / settings --- */
 document.addEventListener("click", e => {
