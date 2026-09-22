@@ -5,7 +5,6 @@ import {
   Users,
   Heart,
   Plus,
-  Pencil,
   Check,
   X,
 } from "lucide-react";
@@ -22,6 +21,7 @@ import {
   PRESET_PRIORITIES,
   PRIORITY_SUGGESTIONS,
   createCustomPriority,
+  inferCategory,
 } from "@/app/components/priority";
 
 const ICON_MAP = {
@@ -43,7 +43,6 @@ function CategoryIcon({
 }
 
 const MAX_LABEL_LENGTH = 24;
-const MAX_DESCRIPTION_LENGTH = 80;
 
 interface PrioritySelectorProps {
   mode: "onboarding" | "inline";
@@ -51,112 +50,122 @@ interface PrioritySelectorProps {
   onSave: (priorities: Priority[]) => void;
 }
 
-/** The "add your own" form, shared by both modes. */
+/**
+ * "Add your own" form. Deliberately two decisions, not six: type a name, and
+ * (rarely) correct the category Kaisey guessed from it. The description isn't
+ * asked for — suggestions carry their own, and a name alone is enough signal.
+ */
 function CustomPriorityForm({
   onAdd,
   onCancel,
-  compact = false,
 }: {
   onAdd: (priority: Priority) => void;
   onCancel: () => void;
-  compact?: boolean;
 }) {
   const [label, setLabel] = useState("");
-  const [description, setDescription] = useState("");
-  const [category, setCategory] = useState<EventCategory>("academics");
+  const [description, setDescription] = useState<string | undefined>(undefined);
+  // null means "whatever Kaisey infers"; set only once the user overrides.
+  const [override, setOverride] = useState<EventCategory | null>(null);
+  const [isChangingKind, setIsChangingKind] = useState(false);
+
+  const category = override ?? inferCategory(label);
+  const meta = CATEGORY_META[category];
+  const hasName = label.trim().length > 0;
 
   const submit = () => {
-    if (!label.trim()) return;
+    if (!hasName) return;
     onAdd(createCustomPriority(label, category, description));
-    setLabel("");
-    setDescription("");
   };
 
   return (
     <div className="space-y-3 text-left">
-      <div>
-        <Input
-          autoFocus
-          value={label}
-          maxLength={MAX_LABEL_LENGTH}
-          placeholder="Name your priority — e.g. Thesis"
-          onChange={(e) => setLabel(e.target.value)}
-          onKeyDown={(e) => {
-            if (e.key === "Enter") submit();
-            if (e.key === "Escape") onCancel();
-          }}
-        />
-      </div>
-
-      {!compact && (
-        <div>
-          <div className="text-xs text-muted-foreground mb-1.5">
-            Need an idea?
-          </div>
-          <div className="flex flex-wrap gap-1.5">
-            {PRIORITY_SUGGESTIONS.map((s) => (
-              <button
-                key={s.label}
-                type="button"
-                onClick={() => {
-                  setLabel(s.label);
-                  setCategory(s.category);
-                  setDescription(s.description);
-                }}
-                className="px-2.5 py-1 rounded-full text-[11px] font-medium bg-muted/70 text-muted-foreground hover:bg-muted transition-colors"
-              >
-                {s.label}
-              </button>
-            ))}
-          </div>
-        </div>
-      )}
-
-      <div>
-        <div className="text-xs text-muted-foreground mb-1.5">
-          What kind of thing is it?
-        </div>
-        <div className="grid grid-cols-2 gap-1.5">
-          {EVENT_CATEGORIES.map((c) => {
-            const meta = CATEGORY_META[c];
-            const isActive = category === c;
-            return (
-              <button
-                key={c}
-                type="button"
-                onClick={() => setCategory(c)}
-                className={`flex items-center gap-1.5 px-2.5 py-1.5 rounded-lg text-[11px] font-medium border-2 transition-all ${
-                  isActive
-                    ? `${meta.bgColor} ${meta.textColor} ${meta.borderColor}`
-                    : "border-transparent bg-muted/50 text-muted-foreground hover:bg-muted"
-                }`}
-              >
-                <CategoryIcon category={c} className="w-3.5 h-3.5 shrink-0" />
-                <span className="truncate">{meta.kindLabel}</span>
-              </button>
-            );
-          })}
-        </div>
-        <p className="text-[10px] text-muted-foreground mt-1.5">
-          This tells Kaisey how to schedule it — you'll still see your own name
-          for it.
-        </p>
-      </div>
-
       <Input
-        value={description}
-        maxLength={MAX_DESCRIPTION_LENGTH}
-        placeholder="Why it matters (optional)"
-        onChange={(e) => setDescription(e.target.value)}
+        autoFocus
+        value={label}
+        maxLength={MAX_LABEL_LENGTH}
+        placeholder="Name it — Thesis, Marathon training…"
+        onChange={(e) => {
+          setLabel(e.target.value);
+          setDescription(undefined);
+        }}
         onKeyDown={(e) => {
           if (e.key === "Enter") submit();
           if (e.key === "Escape") onCancel();
         }}
       />
 
+      {/* Ideas, only while the field is empty — they're a starting point, not a menu. */}
+      {!hasName && (
+        <div className="flex flex-wrap gap-1.5">
+          {PRIORITY_SUGGESTIONS.map((s) => (
+            <button
+              key={s.label}
+              type="button"
+              onClick={() => {
+                setLabel(s.label);
+                setOverride(s.category);
+                setDescription(s.description);
+              }}
+              className="px-2.5 py-1 rounded-full text-[11px] font-medium bg-muted/70 text-muted-foreground hover:bg-muted transition-colors"
+            >
+              {s.label}
+            </button>
+          ))}
+        </div>
+      )}
+
+      {/* What Kaisey worked out, stated plainly and correctable in one click. */}
+      {hasName && (
+        <div className="text-xs">
+          {isChangingKind ? (
+            <div className="grid grid-cols-2 gap-1.5">
+              {EVENT_CATEGORIES.map((c) => {
+                const m = CATEGORY_META[c];
+                const isActive = category === c;
+                return (
+                  <button
+                    key={c}
+                    type="button"
+                    onClick={() => {
+                      setOverride(c);
+                      setIsChangingKind(false);
+                    }}
+                    className={`flex items-center gap-1.5 px-2.5 py-1.5 rounded-lg text-[11px] font-medium border-2 transition-all ${
+                      isActive
+                        ? `${m.bgColor} ${m.textColor} ${m.borderColor}`
+                        : "border-transparent bg-muted/50 text-muted-foreground hover:bg-muted"
+                    }`}
+                  >
+                    <CategoryIcon category={c} className="w-3.5 h-3.5 shrink-0" />
+                    <span className="truncate">{m.kindLabel}</span>
+                  </button>
+                );
+              })}
+            </div>
+          ) : (
+            <div className="flex items-center gap-1.5 text-muted-foreground">
+              <CategoryIcon
+                category={category}
+                className={`w-3.5 h-3.5 ${meta.textColor}`}
+              />
+              <span>
+                Scheduled like <span className="text-foreground font-medium">{meta.kindLabel.toLowerCase()}</span>
+              </span>
+              <button
+                type="button"
+                onClick={() => setIsChangingKind(true)}
+                className="text-xs underline underline-offset-2 hover:text-foreground transition-colors"
+              >
+                Change
+              </button>
+            </div>
+          )}
+        </div>
+      )}
+
       <div className="flex gap-2">
-        <Button size="sm" onClick={submit} disabled={!label.trim()}>
-          Add priority
+        <Button size="sm" onClick={submit} disabled={!hasName}>
+          Add
         </Button>
         <Button size="sm" variant="ghost" onClick={onCancel}>
           Cancel
@@ -248,7 +257,7 @@ export function PrioritySelector({
                   ? `Remove one first — ${MAX_PRIORITIES} is the max`
                   : `Add ${p.label} to your priorities`
               }
-              className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-full text-xs font-medium transition-all bg-muted/50 text-muted-foreground border-2 border-transparent hover:bg-muted disabled:opacity-40 disabled:hover:bg-muted/50"
+              className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-full text-xs font-medium transition-all text-muted-foreground border-2 border-dashed border-muted-foreground/30 hover:border-muted-foreground/50 hover:text-foreground disabled:opacity-40"
             >
               <CategoryIcon category={p.category} className="w-3.5 h-3.5" />
               {p.label}
@@ -300,9 +309,8 @@ export function PrioritySelector({
               What are you focusing on?
             </h2>
             <p className="text-muted-foreground">
-              Pick up to {MAX_PRIORITIES}. Rename them or add your own — Kaisey
-              protects time for whatever you choose. You can change this
-              anytime.
+              Pick up to {MAX_PRIORITIES}. Kaisey protects time for whatever you
+              choose — you can change this anytime.
             </p>
           </div>
 
@@ -336,22 +344,10 @@ export function PrioritySelector({
                     }`}
                   >
                     {active && (
-                      <div className="absolute top-2 right-2 flex items-center gap-1">
-                        <button
-                          onClick={(e) => {
-                            e.stopPropagation();
-                            startRename(p);
-                          }}
-                          title="Rename"
-                          className="p-1 rounded-md text-muted-foreground hover:text-foreground hover:bg-background/60 transition-colors"
-                        >
-                          <Pencil className="w-3 h-3" />
-                        </button>
-                        <div
-                          className={`w-4 h-4 rounded-full ${meta.dotColor} flex items-center justify-center`}
-                        >
-                          <Check className="w-2.5 h-2.5 text-white" />
-                        </div>
+                      <div
+                        className={`absolute top-2 right-2 w-4 h-4 rounded-full ${meta.dotColor} flex items-center justify-center`}
+                      >
+                        <Check className="w-2.5 h-2.5 text-white" />
                       </div>
                     )}
 
@@ -383,6 +379,17 @@ export function PrioritySelector({
                             }}
                           />
                         </div>
+                      ) : active ? (
+                        <h3
+                          onClick={(e) => {
+                            e.stopPropagation();
+                            startRename(p);
+                          }}
+                          title="Click to rename"
+                          className="font-semibold text-sm break-words decoration-dotted underline-offset-4 hover:underline"
+                        >
+                          {p.label}
+                        </h3>
                       ) : (
                         <h3 className="font-semibold text-sm break-words">
                           {p.label}

@@ -156,6 +156,67 @@ export function createCustomPriority(
   };
 }
 
+// --- Classification --------------------------------------------------------
+
+/**
+ * Keywords per category, checked in the order of EVENT_CATEGORY_PRECEDENCE so a
+ * title matching two categories resolves the same way it always has.
+ */
+const CATEGORY_KEYWORDS: Record<EventCategory, string[]> = {
+  wellness: [
+    "gym", "yoga", "meditation", "workout", "wellness", "fitness", "exercise",
+    "run", "running", "marathon", "training", "sleep", "rest", "recovery",
+    "health", "therapy", "nap", "walk", "swim", "lift", "hike", "pilates",
+  ],
+  social: [
+    "coffee", "lunch", "dinner", "brunch", "follow-up", "networking",
+    "happy hour", "party", "friend", "family", "social", "club", "community",
+    "hangout", "roommate", "birthday", "reunion",
+  ],
+  recruiting: [
+    "goldman", "mckinsey", "info session", "recruiting", "recruit", "interview",
+    "career", "job", "internship", "intern", "resume", "cover letter", "offer",
+    "startup", "founder", "consulting", "banking", "referral", "networking event",
+  ],
+  academics: [
+    "thesis", "class", "study", "studying", "exam", "homework", "assignment",
+    "research", "paper", "essay", "course", "lecture", "lab", "quiz", "midterm",
+    "final", "grad school", "reading", "problem set", "dissertation", "language",
+  ],
+};
+
+/** Ties resolve toward the first match in this order. */
+const EVENT_CATEGORY_PRECEDENCE: EventCategory[] = [
+  "wellness",
+  "social",
+  "recruiting",
+  "academics",
+];
+
+/**
+ * Best-guess category for a piece of free text — an event title, or the name
+ * someone gave their own priority. Falls back to academics, which is both the
+ * most common case for students and the app's long-standing default.
+ */
+export function inferCategory(text: string): EventCategory {
+  const lower = text.toLowerCase();
+
+  let best: EventCategory = "academics";
+  let bestScore = 0;
+
+  for (const category of EVENT_CATEGORY_PRECEDENCE) {
+    const score = CATEGORY_KEYWORDS[category].filter((kw) =>
+      lower.includes(kw)
+    ).length;
+    if (score > bestScore) {
+      best = category;
+      bestScore = score;
+    }
+  }
+
+  return best;
+}
+
 // --- Persistence -----------------------------------------------------------
 
 function isEventCategory(value: unknown): value is EventCategory {

@@ -55,6 +55,12 @@ sees their own words everywhere.
 Stored as JSON under `kaisey-priorities`. The v1 single-mode key `kaisey-priority`
 is migrated on first read by `loadPriorities()`.
 
+When someone names their own priority, `inferCategory()` guesses the category from
+the name by keyword ("Marathon training" -> wellness) and the UI shows that guess as
+one correctable line, rather than asking the user to classify it. NOTE: App.tsx still
+has its own narrower keyword classifiers for event titles (in the calendar fetch and
+in `getEventTypeAndColor()`); folding those into `inferCategory()` is an open cleanup.
+
 Priorities control:
 - **AI scheduling bias** — `buildPriorityPromptHint()` composes one instruction block
   covering every chosen priority, naming the categories left out as the ones to move first
