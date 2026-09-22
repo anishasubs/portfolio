@@ -7,7 +7,12 @@ import { Badge } from "@/app/components/ui/badge";
 import { ScrollArea } from "@/app/components/ui/scroll-area";
 import { motion } from "motion/react";
 import { toast } from "sonner";
-import { type PriorityMode, PRIORITY_CONFIG, PRIORITY_MODES } from "@/app/components/priority";
+import {
+  type Priority,
+  CATEGORY_META,
+  buildPriorityPromptHint,
+  categoryDisplayLabel,
+} from "@/app/components/priority";
 import { env } from "@/config/env";
 
 // --- Shared Type Definitions ---
@@ -187,12 +192,12 @@ interface KaiseyChatbotProps {
   onScheduleChange: (action: CalendarAction) => void;
   onSuggestionsGenerated?: (suggestions: PlannerSuggestion[]) => void;
   variant?: "widget" | "panel";
-  priority?: PriorityMode | null;
+  priorities?: Priority[];
   calendarEvents?: CalendarEvent[];
   ouraMetrics?: Omit<import("@/utils/ouraClient").OuraMetrics, "auth"> | null;
 }
 
-export function KaiseyChatbot({ onScheduleChange, onSuggestionsGenerated, variant = "floating", priority, calendarEvents = [], ouraMetrics }: KaiseyChatbotProps) {
+export function KaiseyChatbot({ onScheduleChange, onSuggestionsGenerated, variant = "floating", priorities = [], calendarEvents = [], ouraMetrics }: KaiseyChatbotProps) {
   const [isOpen, setIsOpen] = useState(variant === "widget");
   const [messages, setMessages] = useState<Message[]>([
     {
@@ -255,7 +260,7 @@ Current Context:
 - Today's date: ${localToday()} (${new Date().toLocaleDateString("en-US", { weekday: "long" })})
 - Current time: ${`${String(new Date().getHours()).padStart(2, "0")}:${String(new Date().getMinutes()).padStart(2, "0")}`}
 - Timezone: ${userTimezone()}
-${priority ? `- User's current priority: ${priority}\n- ${PRIORITY_CONFIG[priority].promptHint}` : ""}
+${buildPriorityPromptHint(priorities)}
 
 Existing calendar events (DO NOT schedule over these):
 ${calendarEvents.length > 0 ? calendarEvents.map(e => `- ${e.date} ${e.time} (${e.duration}min): ${e.title}`).join('\n') : '(no events)'}
@@ -507,7 +512,7 @@ CRITICAL RULES:
 Today: ${todayISO}
 Current time: ${currentTime}
 Timezone: ${userTimezone()}
-${priority ? `\n${PRIORITY_CONFIG[priority].promptHint}` : ""}
+${priorities.length > 0 ? `\n${buildPriorityPromptHint(priorities)}` : ""}
 
 Existing events on relevant days:
 ${JSON.stringify(relevantEvents, null, 2)}
@@ -523,7 +528,7 @@ Return ONLY by calling propose_schedule.`,
       msgs.push({ role: "assistant", content: `Previously proposed schedule: ${JSON.stringify(previousSchedule.filter((b) => !b.isExisting))}` });
       msgs.push({ role: "user", content: `Please revise the schedule: ${revisionRequest}` });
     } else {
-      msgs.push({ role: "user", content: `Create an optimized schedule fitting these tasks around my existing events.${priority ? ` Priority: ${priority}.` : ""}` });
+      msgs.push({ role: "user", content: `Create an optimized schedule fitting these tasks around my existing events.${priorities.length > 0 ? ` My priorities: ${priorities.map(p => p.label).join(", ")}.` : ""}` });
     }
 
     const response = await fetch(env.openai.proxyUrl, {
@@ -767,7 +772,7 @@ Return ONLY by calling propose_schedule.`,
         dueDate: t.preferredTime ? (t.dueDate || todayISO) : t.dueDate,
         preferredTime: t.preferredTime || null,
         priority: t.priority || "medium",
-        priorityCategory: (t.priorityCategory && PRIORITY_CONFIG[t.priorityCategory]) ? t.priorityCategory : "Academics",
+        priorityCategory: (t.priorityCategory && priorityCategoryToCalCategory[t.priorityCategory]) ? t.priorityCategory : "Academics",
         category: t.category || "academics",
       }));
 
@@ -1294,8 +1299,8 @@ Return ONLY by calling propose_schedule.`,
                       <div className={`w-2 h-2 rounded-full shrink-0 ${categoryColors[task.category] || "bg-gray-400"}`} />
                     )}
                     <span className="text-xs font-medium flex-1">{task.title}</span>
-                    <Badge className={`text-[9px] px-1.5 py-0 ${PRIORITY_CONFIG[task.priorityCategory]?.bgColor || ""} ${PRIORITY_CONFIG[task.priorityCategory]?.textColor || ""} border ${PRIORITY_CONFIG[task.priorityCategory]?.borderColor || ""}`}>
-                      {task.priorityCategory}
+                    <Badge className={`text-[9px] px-1.5 py-0 ${CATEGORY_META[task.category]?.bgColor || ""} ${CATEGORY_META[task.category]?.textColor || ""} border ${CATEGORY_META[task.category]?.borderColor || ""}`}>
+                      {categoryDisplayLabel(task.category, priorities)}
                     </Badge>
                     <Badge className={`text-[9px] px-1.5 py-0 ${priorityColors[task.priority]}`}>
                       {task.priority}

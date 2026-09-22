@@ -6,7 +6,11 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/app/components/ui/ta
 import { Badge } from "@/app/components/ui/badge";
 import { Input } from "@/app/components/ui/input";
 import { toast } from "sonner";
-import { type PriorityMode, PRIORITY_CONFIG } from "@/app/components/priority";
+import {
+  type Priority,
+  categoryDisplayLabel,
+  isPriorityCategory,
+} from "@/app/components/priority";
 
 interface CalendarEvent {
   id: string;
@@ -36,7 +40,7 @@ interface CalendarAction {
 interface CalendarViewProps {
   events: CalendarEvent[];
   onScheduleChange?: (action: CalendarAction) => void;
-  priority?: PriorityMode | null;
+  priorities?: Priority[];
 }
 
 const daysOfWeek = ["Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"];
@@ -66,10 +70,11 @@ function formatDateKey(date: Date): string {
   return `${year}-${month}-${day}`;
 }
 
-export function CalendarView({ events, onScheduleChange, priority }: CalendarViewProps) {
+export function CalendarView({ events, onScheduleChange, priorities = [] }: CalendarViewProps) {
+  // With no priorities set nothing is dimmed — everything reads as equal.
   const isPriorityEvent = (event: CalendarEvent) => {
-    if (!priority) return true;
-    return PRIORITY_CONFIG[priority].eventTypes.includes(event.type);
+    if (priorities.length === 0) return true;
+    return isPriorityCategory(event.type, priorities);
   };
 
   const [view, setView] = useState<"day" | "week" | "month">("day");
@@ -203,10 +208,10 @@ export function CalendarView({ events, onScheduleChange, priority }: CalendarVie
               onChange={(e) => setEditType(e.target.value as CalendarEvent["type"])}
               className="h-8 text-xs rounded-md border border-input bg-background px-2"
             >
-              <option value="academics">Academics</option>
-              <option value="recruiting">Recruiting</option>
-              <option value="social">Social</option>
-              <option value="wellness">Wellness</option>
+              <option value="academics">{categoryDisplayLabel("academics", priorities)}</option>
+              <option value="recruiting">{categoryDisplayLabel("recruiting", priorities)}</option>
+              <option value="social">{categoryDisplayLabel("social", priorities)}</option>
+              <option value="wellness">{categoryDisplayLabel("wellness", priorities)}</option>
             </select>
             <div className="flex-1" />
             <Button size="sm" variant="ghost" onClick={handleEditCancel} className="h-7 w-7 p-0">

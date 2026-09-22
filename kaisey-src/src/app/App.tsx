@@ -12,7 +12,12 @@ import { SettingsPage } from "@/app/components/SettingsPage";
 import { ProfileSection } from "@/app/components/ProfileSection";
 import { toast } from "sonner";
 import { PrioritySelector } from "@/app/components/PrioritySelector";
-import { type PriorityMode, PRIORITY_STORAGE_KEY } from "@/app/components/priority";
+import {
+  type Priority,
+  loadPriorities,
+  savePriorities,
+  clearPriorities,
+} from "@/app/components/priority";
 import { OnboardingTour, isTourComplete } from "@/app/components/OnboardingTour";
 import { OuraSleepCard } from "@/app/components/OuraSleepCard";
 import { OuraActivityCard } from "@/app/components/OuraActivityCard";
@@ -266,10 +271,9 @@ export default function App() {
     googleCredentials: "",
   });
   const [suggestions, setSuggestions] = useState<Array<{id: string; type: "conflict" | "optimization" | "alert" | "success"; title: string; description: string; actions?: CalendarAction[]}>>([]);
-  const [userPriority, setUserPriority] = useState<PriorityMode | null>(() => {
-    const stored = localStorage.getItem(PRIORITY_STORAGE_KEY);
-    return stored ? (stored as PriorityMode) : null;
-  });
+  const [userPriorities, setUserPriorities] = useState<Priority[]>(
+    () => loadPriorities() ?? []
+  );
   const [needsPrioritySelection, setNeedsPrioritySelection] = useState(false);
   const [showTour, setShowTour] = useState(false);
   const [ouraMetrics, setOuraMetrics] = useState<Omit<OuraMetrics, "auth"> | null>(null);
@@ -398,17 +402,21 @@ export default function App() {
     return `${String(h).padStart(2, '0')}:${String(m).padStart(2, '0')}`;
   }
 
-  const handlePrioritySelect = (priority: PriorityMode) => {
-    const isFirstSelection = userPriority === null;
-    const isChange = userPriority !== null && userPriority !== priority;
-    setUserPriority(priority);
-    localStorage.setItem(PRIORITY_STORAGE_KEY, priority);
+  const handlePrioritiesChange = (priorities: Priority[]) => {
+    const isFirstSelection = userPriorities.length === 0;
+    setUserPriorities(priorities);
+    savePriorities(priorities);
     setNeedsPrioritySelection(false);
-    if (isChange) {
-      toast.success(`Priority updated to ${priority}`);
+    if (!isFirstSelection) {
+      const labels = priorities.map((p) => p.label);
+      toast.success(
+        labels.length > 0
+          ? `Priorities updated: ${labels.join(", ")}`
+          : "Priorities cleared"
+      );
     }
     // Show tour after first priority selection if not already seen
-    if (isFirstSelection && !isTourComplete()) {
+    if (isFirstSelection && priorities.length > 0 && !isTourComplete()) {
       setTimeout(() => setShowTour(true), 500);
     }
   };
@@ -417,8 +425,8 @@ export default function App() {
     setCredentials({ googleCredentials: googleCreds });
     setIsLoggedIn(true);
 
-    // Trigger priority onboarding if user hasn't set one
-    if (!localStorage.getItem(PRIORITY_STORAGE_KEY)) {
+    // Trigger priority onboarding if user hasn't set any
+    if (!loadPriorities()) {
       setNeedsPrioritySelection(true);
     }
 
@@ -777,11 +785,11 @@ export default function App() {
           setSuggestions([]);
           setUserProfile(null);
           setUserFocus(null);
-          setUserPriority(null);
+          setUserPriorities([]);
           setNeedsPrioritySelection(false);
           setOuraMetrics(null);
           clearOuraData();
-          localStorage.removeItem(PRIORITY_STORAGE_KEY);
+          clearPriorities();
           localStorage.removeItem("google_calendar_token");
           toast.success("Logged out successfully");
         }}
@@ -798,8 +806,8 @@ export default function App() {
       <>
         <PrioritySelector
           mode="onboarding"
-          currentPriority={userPriority}
-          onSelect={handlePrioritySelect}
+          currentPriorities={userPriorities}
+          onSave={handlePrioritiesChange}
         />
         <Toaster />
       </>
@@ -845,7 +853,7 @@ export default function App() {
       <main className="max-w-7xl mx-auto px-6 py-6">
         {/* Quick Insight of the Day */}
         <div className="mb-6">
-          <CommandCenter events={calendarEvents} userFocus={userFocus} userName={userProfile?.name} priority={userPriority} onPriorityChange={handlePrioritySelect} />
+          <CommandCenter events={calendarEvents} userFocus={userFocus} userName={userProfile?.name} priorities={userPriorities} onPrioritiesChange={handlePrioritiesChange} />
         </div>
 
         {/* Chat with Kaisey */}
@@ -854,7 +862,7 @@ export default function App() {
             onScheduleChange={handleScheduleChange}
             onSuggestionsGenerated={handleBrainDumpSuggestions}
             variant="widget"
-            priority={userPriority}
+            priorities={userPriorities}
             calendarEvents={calendarEvents}
             ouraMetrics={ouraMetrics}
           />
@@ -888,7 +896,7 @@ export default function App() {
         <div className="grid grid-cols-1 lg:grid-cols-3 gap-6 mb-6">
           {/* Left Column - Calendar */}
           <div className="lg:col-span-2 space-y-6">
-            <CalendarView events={calendarEvents} onScheduleChange={handleScheduleChange} priority={userPriority} />
+            <CalendarView events={calendarEvents} onScheduleChange={handleScheduleChange} priorities={userPriorities} />
           </div>
 
           {/* Right Column - Profile */}

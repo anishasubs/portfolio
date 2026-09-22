@@ -19,7 +19,7 @@ kaisey-src/
       App.tsx                    # Root component — all state lives here
       components/
         WelcomePage.tsx          # Landing page with demo video + Google OAuth
-        PrioritySelector.tsx     # Pick Academics/Recruiting/Social/Wellness
+        PrioritySelector.tsx     # Pick up to 4 priorities (presets + custom labels)
         CommandCenter.tsx        # "Your Day at a Glance" — next event, weekly balance bar
         KaiseyChatbot.tsx        # Chat + brain dump (7-phase state machine)
         CalendarView.tsx         # Day/Week/Month calendar with edit/delete
@@ -27,7 +27,7 @@ kaisey-src/
         ProfileSection.tsx       # Google profile display
         SettingsPage.tsx         # Integration settings
         OnboardingTour.tsx       # 4-step spotlight walkthrough for first-time users
-        priority.ts              # Priority mode configs, EventCategory type, balance utilities
+        priority.ts              # Priority model, category metadata, prompt hints, balance utilities
       ui/                        # shadcn/ui primitives (Button, Card, etc.)
     config/
       env.ts                     # Vite env var mapping
@@ -35,7 +35,8 @@ kaisey-src/
 ```
 
 ## Event Categories (4 types)
-Events have exactly 4 categories, mapping 1:1 with priority modes:
+Events have exactly 4 categories. These are the fixed taxonomy — the AI classifies
+into them, the calendar colours by them, and priorities are named lenses on top:
 - `academics` (blue) — classes, studying, prep, homework, deep work
 - `recruiting` (red) — interviews, info sessions, career events
 - `social` (orange) — coffee chats, networking, happy hours, lunches
@@ -43,14 +44,33 @@ Events have exactly 4 categories, mapping 1:1 with priority modes:
 
 Defined as `EventCategory` type in `priority.ts`. Keywords for auto-classification are in `getEventTypeAndColor()` in App.tsx.
 
-## Priority Modes
-Four modes defined in `priority.ts`. Priority mode controls:
-- **Agent recommendations** — suggestions are filtered by selected priority
-- **Weekly balance bar** — shows time breakdown per category (all categories always visible)
+## Priorities
+The user picks **up to 4 priorities** (`MAX_PRIORITIES`), flat — there is no ranking
+between them. A `Priority` is `{ id, label, category, description?, isCustom }`:
+the four presets are the categories under their own names, and a custom priority is
+a user-supplied label pinned to one of the same four categories. That keeps the
+taxonomy stable (the AI tool schema and colour palette never change) while the user
+sees their own words everywhere.
 
-Priority mode does NOT affect:
-- Brain dump categorization (GPT classifies neutrally)
-- Calendar event visibility (no dimming of non-priority events)
+Stored as JSON under `kaisey-priorities`. The v1 single-mode key `kaisey-priority`
+is migrated on first read by `loadPriorities()`.
+
+Priorities control:
+- **AI scheduling bias** — `buildPriorityPromptHint()` composes one instruction block
+  covering every chosen priority, naming the categories left out as the ones to move first
+- **Calendar dimming** — non-priority events are dimmed; nothing is dimmed when no
+  priorities are set
+- **Weekly balance bar** — all categories stay visible, non-priority ones dimmed, each
+  labelled with the user's own name for it
+- **"Up Next"** — surfaces the soonest event in any priority category
+- **Imbalance callouts** — flags priorities getting no time, and non-priorities crowding them out
+
+Priorities do NOT affect:
+- Brain dump categorization (GPT still classifies into the 4 categories neutrally)
+
+Two priorities may share a category (e.g. "Wellness" and "Marathon training"). When
+that happens `categoryDisplayLabel()` falls back to the built-in category name rather
+than picking one arbitrarily.
 
 ## Key Architecture Decisions
 - **No router** — conditional rendering in App.tsx swaps between views

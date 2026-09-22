@@ -3,11 +3,16 @@ import { Card } from "@/app/components/ui/card";
 import { Badge } from "@/app/components/ui/badge";
 import { PrioritySelector } from "@/app/components/PrioritySelector";
 import {
-  type PriorityMode,
-  PRIORITY_CONFIG,
-  PRIORITY_MODES,
+  type EventCategory,
+  type Priority,
+  CATEGORY_META,
+  EVENT_CATEGORIES,
+  categoryDisplayLabel,
   computeWeeklyBalance,
   computeImbalanceCallouts,
+  isPriorityCategory,
+  priorityCategories,
+  priorityForCategory,
 } from "@/app/components/priority";
 import { AnimatePresence, motion } from "motion/react";
 
@@ -25,8 +30,8 @@ interface CommandCenterProps {
   events: CalendarEvent[];
   userFocus?: string | null;
   userName?: string;
-  priority?: PriorityMode | null;
-  onPriorityChange?: (priority: PriorityMode) => void;
+  priorities?: Priority[];
+  onPrioritiesChange?: (priorities: Priority[]) => void;
 }
 
 // Format time from 24h to 12h format
@@ -56,14 +61,7 @@ function getWeekEnd(): Date {
   return sunday;
 }
 
-const BALANCE_COLORS: Record<PriorityMode, string> = {
-  Academics: "bg-blue-500",
-  Recruiting: "bg-red-500",
-  Social: "bg-orange-500",
-  Wellness: "bg-green-500",
-};
-
-export function CommandCenter({ events, userFocus, userName, priority, onPriorityChange }: CommandCenterProps) {
+export function CommandCenter({ events, userFocus, userName, priorities = [], onPrioritiesChange }: CommandCenterProps) {
   // Get current time-based greeting
   const now = new Date();
   const currentHour = now.getHours();
@@ -88,14 +86,16 @@ export function CommandCenter({ events, userFocus, userName, priority, onPriorit
   const currentTime = `${now.getHours().toString().padStart(2, '0')}:${now.getMinutes().toString().padStart(2, '0')}`;
   const upcomingEvents = todayEvents.filter(event => event.time > currentTime);
 
-  // Priority-aware "What's Next"
-  let nextEvent = upcomingEvents[0] || null;
-  let nextPriorityEvent: CalendarEvent | null = null;
-
-  if (priority) {
-    const matchingTypes = PRIORITY_CONFIG[priority].eventTypes;
-    nextPriorityEvent = upcomingEvents.find(e => matchingTypes.includes(e.type)) || null;
-  }
+  // Priority-aware "What's Next" — the soonest event in any chosen category.
+  const nextEvent = upcomingEvents[0] || null;
+  const chosenCategories = priorityCategories(priorities);
+  const nextPriorityEvent: CalendarEvent | null =
+    priorities.length > 0
+      ? upcomingEvents.find(e => chosenCategories.has(e.type)) || null
+      : null;
+  const nextPriority = nextPriorityEvent
+    ? priorityForCategory(nextPriorityEvent.type, priorities)
+    : null;
 
   // Weekly balance
   const weekStart = getWeekStart();
@@ -105,8 +105,8 @@ export function CommandCenter({ events, userFocus, userName, priority, onPriorit
     return d >= weekStart && d <= weekEnd;
   });
   const weeklyBalance = computeWeeklyBalance(weekEvents);
-  const totalWeekHours = Object.values(weeklyBalance).reduce((a, b) => a + b, 0);
-  const imbalanceCallouts = priority ? computeImbalanceCallouts(weeklyBalance, priority) : [];
+  const totalWeekHours = EVENT_CATEGORIES.reduce((sum, c) => sum + weeklyBalance[c], 0);
+  const imbalanceCallouts = computeImbalanceCallouts(weeklyBalance, priorities);
 
   // Message
   let message = `${greeting}, ${firstName}! `;
@@ -144,7 +144,7 @@ export function CommandCenter({ events, userFocus, userName, priority, onPriorit
           <AnimatePresence mode="wait">
             {(nextPriorityEvent || nextEvent) && (
               <motion.div
-                key={priority || "default"}
+                key={priorities.map(p => p.id).join("|") || "default"}
                 initial={{ opacity: 0, y: 5 }}
                 animate={{ opacity: 1, y: 0 }}
                 exit={{ opacity: 0, y: -5 }}
@@ -155,10 +155,10 @@ export function CommandCenter({ events, userFocus, userName, priority, onPriorit
                   <>
                     <div className="text-xs text-muted-foreground mb-1.5 flex items-center gap-1">
                       <Clock className="w-3 h-3" />
-                      Next {priority} Event
+                      Next {nextPriority?.label ?? "Priority"} Event
                     </div>
                     <div className="flex items-center gap-3">
-                      <div className={`w-2 h-2 rounded-full ${nextPriorityEvent.color} ring-2 ${PRIORITY_CONFIG[priority!].ringColor} ring-offset-1`}></div>
+                      <div className={`w-2 h-2 rounded-full ${nextPriorityEvent.color} ring-2 ${CATEGORY_META[nextPriorityEvent.type].ringColor} ring-offset-1`}></div>
                       <span className="font-mono text-xs text-muted-foreground w-16">
                         {formatTime(nextPriorityEvent.time)}
                       </span>
@@ -176,8 +176,8 @@ export function CommandCenter({ events, userFocus, userName, priority, onPriorit
                     </div>
                     <div className="flex items-center gap-3">
                       <div className={`w-2 h-2 rounded-full ${nextEvent.color} ${
-                        priority && PRIORITY_CONFIG[priority].eventTypes.includes(nextEvent.type)
-                          ? `ring-2 ${PRIORITY_CONFIG[priority].ringColor} ring-offset-1`
+                        isPriorityCategory(nextEvent.type, priorities)
+                          ? `ring-2 ${CATEGORY_META[nextEvent.type].ringColor} ring-offset-1`
                           : ""
                       }`}></div>
                       <span className="font-mono text-xs text-muted-foreground w-16">
@@ -205,31 +205,36 @@ export function CommandCenter({ events, userFocus, userName, priority, onPriorit
             <div className="mb-4">
               <div className="text-xs text-muted-foreground mb-1.5">Weekly Balance ({totalWeekHours.toFixed(1)}h)</div>
               <div className="h-3 rounded-full overflow-hidden flex bg-muted/50">
-                {PRIORITY_MODES.map(mode => {
-                  const hours = weeklyBalance[mode];
+                {EVENT_CATEGORIES.map((category: EventCategory) => {
+                  const hours = weeklyBalance[category];
                   if (hours === 0) return null;
                   const pct = (hours / totalWeekHours) * 100;
+                  const label = categoryDisplayLabel(category, priorities);
+                  const isPriority = isPriorityCategory(category, priorities);
                   return (
                     <div
-                      key={mode}
-                      className={`${BALANCE_COLORS[mode]} transition-all duration-300 ${
-                        "opacity-100"
+                      key={category}
+                      className={`${CATEGORY_META[category].dotColor} transition-all duration-300 ${
+                        priorities.length > 0 && !isPriority ? "opacity-40" : "opacity-100"
                       }`}
                       style={{ width: `${pct}%` }}
-                      title={`${mode}: ${hours.toFixed(1)}h (${Math.round(pct)}%)`}
+                      title={`${label}: ${hours.toFixed(1)}h (${Math.round(pct)}%)`}
                     />
                   );
                 })}
               </div>
               <div className="flex gap-3 mt-1.5 flex-wrap">
-                {PRIORITY_MODES.map(mode => {
-                  const hours = weeklyBalance[mode];
+                {EVENT_CATEGORIES.map((category: EventCategory) => {
+                  const hours = weeklyBalance[category];
                   if (hours === 0) return null;
+                  const isPriority = isPriorityCategory(category, priorities);
                   return (
-                    <div key={mode} className="flex items-center gap-1">
-                      <div className={`w-2 h-2 rounded-full ${BALANCE_COLORS[mode]}`} />
-                      <span className="text-[10px] text-muted-foreground">
-                        {mode} {hours.toFixed(1)}h
+                    <div key={category} className="flex items-center gap-1">
+                      <div className={`w-2 h-2 rounded-full ${CATEGORY_META[category].dotColor} ${
+                        priorities.length > 0 && !isPriority ? "opacity-40" : ""
+                      }`} />
+                      <span className={`text-[10px] ${isPriority ? "text-foreground font-medium" : "text-muted-foreground"}`}>
+                        {categoryDisplayLabel(category, priorities)} {hours.toFixed(1)}h
                       </span>
                     </div>
                   );
@@ -253,12 +258,12 @@ export function CommandCenter({ events, userFocus, userName, priority, onPriorit
           <div className="flex items-start gap-2">
             <Target className="w-4 h-4 text-blue-500 mt-0.5 shrink-0" />
             <div className="flex-1">
-              <div className="text-xs text-muted-foreground mb-1.5">Today's Focus</div>
-              {onPriorityChange ? (
+              <div className="text-xs text-muted-foreground mb-1.5">Your Priorities</div>
+              {onPrioritiesChange ? (
                 <PrioritySelector
                   mode="inline"
-                  currentPriority={priority ?? null}
-                  onSelect={onPriorityChange}
+                  currentPriorities={priorities}
+                  onSave={onPrioritiesChange}
                 />
               ) : (
                 <div className="text-sm font-semibold">{userFocus || "Balanced Schedule"}</div>
