@@ -14,6 +14,8 @@ import { toast } from "sonner";
 import { PrioritySelector } from "@/app/components/PrioritySelector";
 import {
   type Priority,
+  categoryColor,
+  inferCategory,
   loadPriorities,
   savePriorities,
   clearPriorities,
@@ -194,20 +196,8 @@ async function fetchGoogleCalendarEvents(accessToken: string): Promise<CalendarE
 
       // Determine event type based on title
       const title = item.summary || "Untitled Event";
-      const lowerTitle = title.toLowerCase();
-      let type: CalendarEvent["type"] = "academics";
-      let color = "bg-blue-500";
-
-      if (lowerTitle.includes("gym") || lowerTitle.includes("yoga") || lowerTitle.includes("workout") || lowerTitle.includes("exercise") || lowerTitle.includes("meditation") || lowerTitle.includes("wellness")) {
-        type = "wellness";
-        color = "bg-green-500";
-      } else if (lowerTitle.includes("coffee") || lowerTitle.includes("lunch") || lowerTitle.includes("network") || lowerTitle.includes("chat") || lowerTitle.includes("happy hour") || lowerTitle.includes("party")) {
-        type = "social";
-        color = "bg-orange-500";
-      } else if (lowerTitle.includes("recruit") || lowerTitle.includes("interview") || lowerTitle.includes("info session") || lowerTitle.includes("goldman") || lowerTitle.includes("mckinsey") || lowerTitle.includes("career")) {
-        type = "recruiting";
-        color = "bg-red-500";
-      }
+      const type = inferCategory(title);
+      const color = categoryColor(type);
 
       return {
         id: item.id || String(index + 1),
@@ -634,28 +624,12 @@ export default function App() {
       // No valid credentials
     }
 
-    const getColorForType = (type: CalendarEvent["type"]): string => {
-      const map: Record<CalendarEvent["type"], string> = {
-        academics: "bg-blue-500",
-        recruiting: "bg-red-500",
-        social: "bg-orange-500",
-        wellness: "bg-green-500",
-      };
-      return map[type] || "bg-blue-500";
-    };
+    const getColorForType = categoryColor;
 
     // Determine event type and color based on title
     const getEventTypeAndColor = (title: string): { type: CalendarEvent["type"], color: string } => {
-      const lowerTitle = title.toLowerCase();
-      if (lowerTitle.includes("gym") || lowerTitle.includes("yoga") || lowerTitle.includes("meditation") || lowerTitle.includes("workout") || lowerTitle.includes("wellness")) {
-        return { type: "wellness", color: "bg-green-500" };
-      } else if (lowerTitle.includes("coffee") || lowerTitle.includes("lunch") || lowerTitle.includes("follow-up") || lowerTitle.includes("networking") || lowerTitle.includes("happy hour")) {
-        return { type: "social", color: "bg-orange-500" };
-      } else if (lowerTitle.includes("goldman") || lowerTitle.includes("info session") || lowerTitle.includes("recruiting") || lowerTitle.includes("interview") || lowerTitle.includes("career")) {
-        return { type: "recruiting", color: "bg-red-500" };
-      } else {
-        return { type: "academics", color: "bg-blue-500" };
-      }
+      const type = inferCategory(title);
+      return { type, color: categoryColor(type) };
     };
 
     if (calendarAction.type === "add") {

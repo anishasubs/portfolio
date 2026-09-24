@@ -55,11 +55,21 @@ sees their own words everywhere.
 Stored as JSON under `kaisey-priorities`. The v1 single-mode key `kaisey-priority`
 is migrated on first read by `loadPriorities()`.
 
-When someone names their own priority, `inferCategory()` guesses the category from
-the name by keyword ("Marathon training" -> wellness) and the UI shows that guess as
-one correctable line, rather than asking the user to classify it. NOTE: App.tsx still
-has its own narrower keyword classifiers for event titles (in the calendar fetch and
-in `getEventTypeAndColor()`); folding those into `inferCategory()` is an open cleanup.
+## Classification
+`inferCategory()` in `priority.ts` is the single classifier for free text — both
+event titles (Google Calendar fetch and `getEventTypeAndColor()` in App.tsx) and the
+name someone types for their own priority. It scores a string against per-category
+keyword lists and returns the best match, defaulting to academics.
+
+Keywords match at **word starts**, not as bare substrings, so a keyword covers its
+suffixes ("recruit" catches "recruiting" and "recruiter") without matching mid-word.
+That boundary matters: plain `includes()` finds "run" inside "brunch" and "lab"
+inside "collaborate". Ties go to the first match in `EVENT_CATEGORY_PRECEDENCE`
+(wellness, social, recruiting, academics), which is the order the old if/else chains
+used. `categoryColor()` gives the Tailwind class for a category.
+
+When someone names their own priority the UI shows the guess as one correctable line
+("Scheduled like health & rest · Change") rather than asking the user to classify it.
 
 Priorities control:
 - **AI scheduling bias** — `buildPriorityPromptHint()` composes one instruction block

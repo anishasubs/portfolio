@@ -159,29 +159,31 @@ export function createCustomPriority(
 // --- Classification --------------------------------------------------------
 
 /**
- * Keywords per category, checked in the order of EVENT_CATEGORY_PRECEDENCE so a
- * title matching two categories resolves the same way it always has.
+ * Keywords per category. Matched at word starts, so a keyword also covers its
+ * suffixes ("recruit" catches "recruiting" and "recruiter") without matching
+ * mid-word — which matters, since plain substring matching finds "run" inside
+ * "brunch" and "lab" inside "collaborate".
  */
 const CATEGORY_KEYWORDS: Record<EventCategory, string[]> = {
   wellness: [
     "gym", "yoga", "meditation", "workout", "wellness", "fitness", "exercise",
-    "run", "running", "marathon", "training", "sleep", "rest", "recovery",
-    "health", "therapy", "nap", "walk", "swim", "lift", "hike", "pilates",
+    "run", "marathon", "training", "sleep", "recovery", "health", "therapy",
+    "nap", "walk", "swim", "lift", "hike", "pilates", "stretch",
   ],
   social: [
-    "coffee", "lunch", "dinner", "brunch", "follow-up", "networking",
+    "coffee", "lunch", "dinner", "brunch", "follow-up", "network", "chat",
     "happy hour", "party", "friend", "family", "social", "club", "community",
-    "hangout", "roommate", "birthday", "reunion",
+    "hangout", "roommate", "birthday", "reunion", "catch-up",
   ],
   recruiting: [
-    "goldman", "mckinsey", "info session", "recruiting", "recruit", "interview",
-    "career", "job", "internship", "intern", "resume", "cover letter", "offer",
-    "startup", "founder", "consulting", "banking", "referral", "networking event",
+    "goldman", "mckinsey", "info session", "recruit", "interview", "career",
+    "job", "internship", "resume", "cover letter", "offer", "startup",
+    "founder", "consulting", "banking", "referral",
   ],
   academics: [
-    "thesis", "class", "study", "studying", "exam", "homework", "assignment",
-    "research", "paper", "essay", "course", "lecture", "lab", "quiz", "midterm",
-    "final", "grad school", "reading", "problem set", "dissertation", "language",
+    "thesis", "class", "study", "exam", "homework", "assignment", "research",
+    "paper", "essay", "course", "lecture", "lab", "quiz", "midterm", "final",
+    "grad school", "reading", "problem set", "dissertation", "language",
   ],
 };
 
@@ -193,21 +195,33 @@ const EVENT_CATEGORY_PRECEDENCE: EventCategory[] = [
   "academics",
 ];
 
+function escapeRegExp(value: string): string {
+  return value.replace(/[.*+?^${}()|[\]\\]/g, "\\$&");
+}
+
+const CATEGORY_MATCHERS: Record<EventCategory, RegExp[]> = EVENT_CATEGORIES.reduce(
+  (acc, category) => {
+    acc[category] = CATEGORY_KEYWORDS[category].map(
+      (kw) => new RegExp(`\\b${escapeRegExp(kw)}`, "i")
+    );
+    return acc;
+  },
+  {} as Record<EventCategory, RegExp[]>
+);
+
 /**
  * Best-guess category for a piece of free text — an event title, or the name
- * someone gave their own priority. Falls back to academics, which is both the
- * most common case for students and the app's long-standing default.
+ * someone gave their own priority. Scores each category by how many of its
+ * keywords appear, so a title matching several recruiting terms and one social
+ * term reads as recruiting. Falls back to academics, which is both the most
+ * common case for students and the app's long-standing default.
  */
 export function inferCategory(text: string): EventCategory {
-  const lower = text.toLowerCase();
-
   let best: EventCategory = "academics";
   let bestScore = 0;
 
   for (const category of EVENT_CATEGORY_PRECEDENCE) {
-    const score = CATEGORY_KEYWORDS[category].filter((kw) =>
-      lower.includes(kw)
-    ).length;
+    const score = CATEGORY_MATCHERS[category].filter((re) => re.test(text)).length;
     if (score > bestScore) {
       best = category;
       bestScore = score;
@@ -215,6 +229,11 @@ export function inferCategory(text: string): EventCategory {
   }
 
   return best;
+}
+
+/** The Tailwind dot/background class an event of this category is drawn with. */
+export function categoryColor(category: EventCategory): string {
+  return CATEGORY_META[category].dotColor;
 }
 
 // --- Persistence -----------------------------------------------------------
