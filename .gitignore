@@ -16,3 +16,14 @@ Thumbs.db
 .vscode/
 .idea/
 .vercel
+
+# Personal finance data (finance/) — NEVER commit real financial data.
+# The app stores everything in browser localStorage; these are the files
+# it exports and the statements you might drop next to it.
+ledger-backup-*.json
+ledger-transactions-*.csv
+finance/data/
+finance/**/*.csv
+finance/**/*.ofx
+finance/**/*.qfx
+finance/**/*.qbo
