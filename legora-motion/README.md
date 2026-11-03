@@ -14,6 +14,11 @@ Each GIF maps to a slot rectangle in the deck; a static vector icon (`static/<Na
 | Lock.gif | 5:7 | 5:31 | 2 — callout |
 | Landmark.gif | 5:8 | 5:34 | 3 — Law firms |
 | Building.gif | 5:9 | 5:41 | 3 — In-house |
+| Relationship.gif | — | — | 2 — It's about the relationship (replaces Compound) |
+| LawBook.gif | — | — | 3 — Law firms (replaces Landmark) |
 
 To place: `upload_assets` with `nodeIds` = slot IDs, POST each GIF, then delete the static icon nodes.
-Re-render: `npm i && npm run render` (pass `--browser-executable` if Chrome can't be downloaded).
+Re-render: `npm i && npm run render`
+
+GIFs uploaded via the Figma MCP don't animate; drag the GIF into Figma by hand, then swap it into the slot.
+ (pass `--browser-executable` if Chrome can't be downloaded).

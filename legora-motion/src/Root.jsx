@@ -160,7 +160,59 @@ const Building = () => {
   );
 };
 
-const comps = {Scale: [Scale, 90], Hammer: [Hammer, 45], Copy: [Copy, 75], Tag: [Tag, 60], Compound: [Compound, 90], Lock: [Lock, 75], Landmark: [Landmark, 90], Building: [Building, 90]};
+// Slide 2 — it's about the relationship: a second person steps in beside the first, value keeps rising
+const Relationship = () => {
+  const f = useCurrentFrame() % 90;
+  const {fps} = useVideoConfig();
+  const out = interpolate(f, [80, 89], [0, 1], {extrapolateLeft: 'clamp', extrapolateRight: 'clamp'});
+  const join = spring({frame: f - 4, fps, config: {damping: 13}}) * (1 - out);
+  const plus = (start) => {
+    const t = interpolate(f, [start, start + 24], [0, 1], {extrapolateLeft: 'clamp', extrapolateRight: 'clamp'});
+    return {y: 6 - t * 5, o: f < start ? 0 : interpolate(t, [0, 0.15, 0.7, 1], [0, 1, 1, 0])};
+  };
+  const ps = [plus(30), plus(52)];
+  return (
+    <Svg>
+      <g>
+        <circle cx="9" cy="7" r="4" />
+        <path d="M2 21v-2a4 4 0 0 1 4-4h6a4 4 0 0 1 4 4v2" />
+      </g>
+      <g transform={`translate(${5 * (1 - join)} 0)`} opacity={join}>
+        <path d="M16 3.13a4 4 0 0 1 0 7.75" />
+        <path d="M22 21v-2a4 4 0 0 0-3-3.87" />
+      </g>
+      {ps.map((p, i) => (
+        <g key={i} opacity={p.o} transform={`translate(21.5 ${p.y})`}>
+          <path d="M0 -1.3v2.6M-1.3 0h2.6" strokeWidth={1.4} />
+        </g>
+      ))}
+    </Svg>
+  );
+};
+
+// Slide 3 — law firms: an open law book, lines written in, a section mark appears
+const LawBook = () => {
+  const f = useCurrentFrame() % 90;
+  const {fps} = useVideoConfig();
+  const fade = interpolate(f, [78, 89], [1, 0], {extrapolateLeft: 'clamp', extrapolateRight: 'clamp'});
+  const line = (s) => interpolate(f, [s, s + 10], [1, 0], {extrapolateLeft: 'clamp', extrapolateRight: 'clamp'});
+  const sec = spring({frame: f - 40, fps, config: {damping: 11, stiffness: 140}});
+  return (
+    <Svg>
+      <path d="M2 5h6a4 4 0 0 1 4 4v12a3 3 0 0 0-3-3H2z" />
+      <path d="M22 5h-6a4 4 0 0 0-4 4v12a3 3 0 0 1 3-3h7z" />
+      <g opacity={fade}>
+        {[9, 12, 15].map((y, i) => (
+          <path key={y} d={`M4.5 ${y}h4.5`} pathLength={1} strokeDasharray={1} strokeDashoffset={line(8 + i * 8)} strokeWidth={1.2} />
+        ))}
+        <text x="17" y="15.2" textAnchor="middle" fontSize="8" fontFamily="DejaVu Serif, Georgia, serif" fill={TEAL} stroke="none"
+          opacity={sec} transform={`translate(17 12.5) scale(${0.6 + 0.4 * sec}) translate(-17 -12.5)`}>§</text>
+      </g>
+    </Svg>
+  );
+};
+
+const comps = {Scale: [Scale, 90], Hammer: [Hammer, 45], Copy: [Copy, 75], Tag: [Tag, 60], Compound: [Compound, 90], Lock: [Lock, 75], Landmark: [Landmark, 90], Building: [Building, 90], Relationship: [Relationship, 90], LawBook: [LawBook, 90]};
 export const Root = () => (
   <>
     {Object.entries(comps).map(([id, [C, d]]) => (
