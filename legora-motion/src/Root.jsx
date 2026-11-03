@@ -212,20 +212,51 @@ const LawBook = () => {
   );
 };
 
-// Slide 1 — job-search skill demo (illustrative): one command, every application step done
+// Slide 1 — get-me-a-job skill demo (illustrative): one command, every step, then the PDFs get dragged into an application
 const JobSkill = () => {
   const f = useCurrentFrame();
   const {fps} = useVideoConfig();
-  const INK = '#16181C', GREY = '#6B7076', LINE = '#DEDED9', PANEL = '#F0F0EC';
+  const INK = '#16181C', GREY = '#6B7076', LINE = '#DEDED9', PANEL = '#F0F0EC', RED = '#C2453B';
+  const font = 'Inter, Helvetica, Arial, sans-serif';
+  const clamp = {extrapolateLeft: 'clamp', extrapolateRight: 'clamp'};
+  // Phase 1: command + checklist
   const cmd = '/get-me-a-job  paste a job link';
-  const typed = Math.floor(interpolate(f, [8, 48], [0, cmd.length], {extrapolateLeft: 'clamp', extrapolateRight: 'clamp'}));
+  const typed = Math.floor(interpolate(f, [8, 48], [0, cmd.length], clamp));
   const steps = ['Analysed the role', 'Preview: highlights and gaps', 'Tailored resume, .docx + .pdf', 'Cover letter in your voice', 'Outreach and referral ask', 'Tracker updated'];
   const at = (i) => 60 + i * 30;
   const done = spring({frame: f - 250, fps, config: {damping: 14}});
-  const font = 'Inter, Helvetica, Arial, sans-serif';
+  // Phase 2: files appear, cursor drags them into the application
+  const p2 = interpolate(f, [282, 300], [0, 1], clamp);
+  const filesIn = spring({frame: f - 298, fps, config: {damping: 15}});
+  const zoneIn = spring({frame: f - 306, fps, config: {damping: 15}});
+  const R = {x: 30, y: 112}, CL = {x: 30, y: 184};          // file start (top-left)
+  const D1 = {x: 338, y: 128}, D2 = {x: 338, y: 182};        // file landing spots
+  const FW = 212, FH = 46;
+  const cx = (p) => p.x + FW / 2, cy = (p) => p.y + FH / 2;
+  const T = [312, 334, 340, 372, 380, 398, 404, 436, 450];
+  const X = [600, cx(R), cx(R), cx(D1), cx(D1), cx(CL), cx(CL), cx(D2), cx(D2) + 30];
+  const Y = [330, cy(R), cy(R), cy(D1), cy(D1), cy(CL), cy(CL), cy(D2), cy(D2) + 30];
+  const curX = interpolate(f, T, X, {...clamp, easing: Easing.inOut(Easing.cubic)});
+  const curY = interpolate(f, T, Y, {...clamp, easing: Easing.inOut(Easing.cubic)});
+  const holding1 = f >= 340 && f < 374, holding2 = f >= 404 && f < 438;
+  const pos = (start, land, g0, g1) => {
+    if (f < g0) return start;
+    if (f < g1) return {x: curX - FW / 2, y: curY - FH / 2};
+    return land;
+  };
+  const p1 = pos(R, D1, 340, 374), pC = pos(CL, D2, 404, 438);
+  const File = ({p, name, held}) => (
+    <div style={{position: 'absolute', left: p.x, top: p.y, width: FW, height: FH, background: '#fff', border: `1px solid ${LINE}`, borderRadius: 8,
+      display: 'flex', alignItems: 'center', gap: 10, padding: '0 10px', boxSizing: 'border-box', opacity: filesIn,
+      boxShadow: held ? '0 8px 18px rgba(0,0,0,0.14)' : '0 1px 2px rgba(0,0,0,0.04)', transform: `scale(${held ? 1.04 : 1})`, zIndex: held ? 5 : 2}}>
+      <div style={{width: 26, height: 30, borderRadius: 4, background: RED, color: '#fff', fontSize: 8, fontWeight: 700, display: 'flex', alignItems: 'flex-end', justifyContent: 'center', paddingBottom: 4, boxSizing: 'border-box'}}>PDF</div>
+      <div style={{fontSize: 10.5, color: INK, lineHeight: 1.25}}>{name.split('_').join('_\u200B')}</div>
+    </div>
+  );
+  const landed = (f >= 374 ? 1 : 0) + (f >= 438 ? 1 : 0);
   return (
     <div style={{width: 640, height: 360, background: '#FAFAF8', fontFamily: font, padding: 26, boxSizing: 'border-box'}}>
-      <div style={{background: '#fff', border: `1px solid ${LINE}`, borderRadius: 10, height: '100%', padding: '16px 18px', boxSizing: 'border-box', position: 'relative'}}>
+      <div style={{background: '#fff', border: `1px solid ${LINE}`, borderRadius: 10, height: '100%', padding: '16px 18px', boxSizing: 'border-box', position: 'relative', overflow: 'hidden'}}>
         <div style={{display: 'flex', alignItems: 'center', gap: 8, border: `1px solid ${LINE}`, borderRadius: 8, padding: '9px 12px', fontSize: 15, color: INK}}>
           <span style={{color: TEAL, fontWeight: 600}}>{'>'}</span>
           <span style={{fontFamily: 'DejaVu Sans Mono, Menlo, monospace', fontSize: 14}}>
@@ -233,7 +264,7 @@ const JobSkill = () => {
           </span>
           <span style={{width: 2, height: 16, background: INK, opacity: f < 56 && Math.floor(f / 8) % 2 === 0 ? 1 : 0}} />
         </div>
-        <div style={{marginTop: 14, display: 'flex', flexDirection: 'column', gap: 7}}>
+        <div style={{marginTop: 14, display: 'flex', flexDirection: 'column', gap: 7, opacity: 1 - p2}}>
           {steps.map((s, i) => {
             const appear = spring({frame: f - at(i), fps, config: {damping: 16}});
             const fin = f > at(i) + 26;
@@ -251,10 +282,26 @@ const JobSkill = () => {
           })}
         </div>
         <div style={{position: 'absolute', left: 18, right: 18, bottom: 16, background: TEAL, color: '#fff', borderRadius: 8, padding: '10px 14px',
-          fontSize: 15, fontWeight: 600, opacity: done, transform: `translateY(${(1 - done) * 10}px)`, display: 'flex', justifyContent: 'space-between'}}>
+          fontSize: 15, fontWeight: 600, opacity: done * (1 - p2), transform: `translateY(${(1 - done) * 10}px)`, display: 'flex', justifyContent: 'space-between'}}>
           <span>Ready to apply</span><span style={{fontWeight: 400, opacity: 0.85}}>one folder per application</span>
         </div>
-        <div style={{position: 'absolute', right: 18, top: 62, background: PANEL, borderRadius: 6, padding: '4px 8px', fontSize: 11, color: GREY}}>illustrative</div>
+        {/* Phase 2 */}
+        <div style={{position: 'absolute', left: 30, top: 78, fontSize: 12, fontWeight: 600, color: GREY, letterSpacing: 0.6, opacity: filesIn}}>YOUR FILES</div>
+        <div style={{position: 'absolute', left: 326, top: 78, width: 236, height: 196, borderRadius: 10, boxSizing: 'border-box',
+          border: `2px dashed ${landed === 2 ? TEAL : LINE}`, background: landed === 2 ? 'rgba(14,106,94,0.05)' : '#FCFCFA', opacity: zoneIn,
+          transform: `translateY(${(1 - zoneIn) * 8}px)`}}>
+          <div style={{padding: '10px 12px', fontSize: 12, fontWeight: 600, color: landed === 2 ? TEAL : GREY, letterSpacing: 0.6}}>
+            {landed === 2 ? 'APPLICATION READY  ✓' : 'UPLOAD TO APPLICATION'}
+          </div>
+        </div>
+        <File p={pC} name="CoverLetter_Legora.pdf" held={holding2} />
+        <File p={p1} name="Anisha_Subberwal_Resume_Legora.pdf" held={holding1} />
+        {f >= 306 && (
+          <svg style={{position: 'absolute', left: curX - 3, top: curY - 2, zIndex: 9, transform: `scale(${holding1 || holding2 ? 0.9 : 1})`}} width="20" height="22" viewBox="0 0 20 22">
+            <path d="M2 2 L2 18 L6.5 13.8 L9.6 20.4 L12.6 19 L9.6 12.6 L16 12.4 Z" fill={INK} stroke="#fff" strokeWidth="1.3" strokeLinejoin="round" />
+          </svg>
+        )}
+        <div style={{position: 'absolute', right: 18, top: 62, background: PANEL, borderRadius: 6, padding: '4px 8px', fontSize: 11, color: GREY, opacity: 1 - p2}}>illustrative</div>
       </div>
     </div>
   );
@@ -266,6 +313,6 @@ export const Root = () => (
     {Object.entries(comps).map(([id, [C, d]]) => (
       <Composition key={id} id={id} component={C} durationInFrames={d} fps={30} width={SIZE} height={SIZE} />
     ))}
-    <Composition id="JobSkill" component={JobSkill} durationInFrames={300} fps={30} width={640} height={360} />
+    <Composition id="JobSkill" component={JobSkill} durationInFrames={465} fps={30} width={640} height={360} />
   </>
 );
