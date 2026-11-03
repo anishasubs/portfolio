@@ -3,17 +3,22 @@
 Figma design file (current deck): https://www.figma.com/design/ncrt6W6GMXesoevfG2LTet
 Original Figma Slides deck (earlier version): `gRCLSVJLyXUKteE40F3hv4`
 
-## Slides (1920×1080 frames, auto-layout)
+## Slides (1920×1080 frames, auto-layout, prototype flow "Legora deck": click / → advances)
 
-1. **Why Legora, and why me**: portrait header, "Why Legora" and "What I bring" columns.
-   Kaisey (links to the case study) + get-me-a-job (links to GitHub) paragraph with two demo slots: `video/Kaisey demo`, `video/Job-search skill demo`.
-2. **From "we signed" to "wait, you don't have Legora?"**: relationship section
-   (Land → Adopt → Anticipate → Pull) plus six creative ideas: Legora × Rogo bundle,
-   Legora in the classroom, AI-first community hackathon (Luma phone mockup),
-   Legora Certified (profile mockup), Legora behind the scenes, "Every firm needs a Mike".
-3. **Where I want to be**: closing quote ("Legora anticipates the features I need." —
-   Angela Prochnow, Director of Legal Operations, Y Combinator), closing line, sign-off,
-   Legora × Jude Law campaign clip (bottom right).
+1. **Why Legora, and why me**: portrait header; "Why Legora" and "What I bring" columns
+   (one lead line each); "Fun things I've built" with Kaisey (→ case study) and
+   get-me-a-job (→ GitHub) demo clips; "More on my portfolio →" link. Animates in reading order (~9s).
+2. **When everyone throws everything… how do you keep winning?** Subtext: From "let's pilot first"
+   to "wait, you don't have Legora?". How Legora does it today: Land → Adopt → Expand;
+   firm dot-cluster chain reaction; green banner "Winning continuously is about the relationship."
+3. **Creative, crazy ideas only**: six idea cards (Rogo bundle, classroom, Luma hackathon,
+   Legora Certified, behind the scenes, "Every firm needs a Mike"), images at 1.5×, pop-in animation;
+   "And of course, the core GTM work" row based on the GTM Associate – Strategic Accounts postings.
+4. **Where I want to be**: closing quote (Angela Prochnow, Director of Legal Operations, Y Combinator),
+   closing line, sign-off, Legora × Jude Law campaign clip.
+
+Type scale: Eyebrow Semi Bold 15 caps · Title Semi Bold 62 · Lead Medium 26 · Heading Semi Bold 22 ·
+Body 19 · Caption 15. Animated timelines are extended to 600s so they play once and hold.
 
 ## Hard rules
 
@@ -45,6 +50,6 @@ Figma file, not in this public repo.
 
 ## Open items
 
-- Drop `demos/Kaisey-demo.mp4` into Figma and swap it into `video/Kaisey demo`.
-- Confirm the YC quote is verbatim (it's in quotation marks on slide 3).
+- Confirm the YC quote is verbatim (in quotation marks on slide 4).
+- Check the core GTM line against the actual New York job posting.
 - Check the Anthropic comparison on the Legora Certified card.
