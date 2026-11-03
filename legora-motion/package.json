@@ -1,0 +1,13 @@
+{
+  "name": "legora-motion",
+  "private": true,
+  "scripts": {
+    "render": "for c in Scale Hammer Copy Tag Compound Lock Landmark Building; do remotion render src/index.jsx $c gif/$c.gif --codec=gif; done"
+  },
+  "dependencies": {
+    "@remotion/cli": "^4",
+    "remotion": "^4",
+    "react": "^18",
+    "react-dom": "^18"
+  }
+}
