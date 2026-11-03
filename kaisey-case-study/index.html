@@ -574,7 +574,7 @@
         <div class="hero-content">
             <span class="hero-tag">Smart Calendar</span>
             <h1>Kaisey: Your AI Chief of Staff for Student Life</h1>
-            <p class="hero-subtitle">An AI co-pilot for Google Calendar. Brain-dump everything on your plate and Kaisey schedules it around your classes, recruiting, and social life, adjusting for your priorities this week and how your Oura Ring says you slept.</p>
+            <p class="hero-subtitle">An AI co-pilot for Google Calendar. Brain-dump everything on your plate and Kaisey schedules it around your classes, recruiting, and social life, adjusting for what matters most to you this week.</p>
             <div class="hero-ctas">
                 <a href="#demo" class="cta-btn cta-primary">Watch Demo</a>
                 <a href="#architecture" class="cta-btn cta-secondary">See AI Architecture &rarr;</a>
@@ -589,7 +589,7 @@
         <div class="container fade-in">
             <span class="section-tag">The Problem</span>
             <h2 class="section-title">The Recruiting &harr; Academics Collision</h2>
-            <p class="problem-intro">Students don't have busy calendars &mdash; they have <strong>competing calendars</strong> that actively work against each other. Your Canvas deadline doesn't know about your Super Day. Your CampusGroups invite doesn't know you slept four hours. The result is a daily triage problem that costs real opportunities.</p>
+            <p class="problem-intro">Students don't have busy calendars &mdash; they have <strong>competing calendars</strong> that actively work against each other. Your problem-set deadline doesn't know about your Super Day. Your club dinner doesn't know about either one. The result is a daily triage problem that costs real opportunities.</p>
 
             <div class="cards-grid stats-grid" style="margin-bottom: 2rem;">
                 <div class="card" style="text-align: center;">
@@ -610,7 +610,7 @@
                 <div class="card">
                     <div class="card-icon">&#128218;</div>
                     <h3>Academics</h3>
-                    <p>Canvas deadlines, group projects, and reading lists exist in a silo with zero connection to your recruiting calendar or energy levels.</p>
+                    <p>Assignment deadlines, group projects, and reading lists exist in a silo with zero connection to your recruiting calendar or energy levels.</p>
                 </div>
                 <div class="card">
                     <div class="card-icon">&#128188;</div>
@@ -620,7 +620,7 @@
                 <div class="card">
                     <div class="card-icon">&#127881;</div>
                     <h3>Social Life</h3>
-                    <p>Club events on CampusGroups, networking dinners, weekend trips &mdash; the first thing sacrificed when workload spikes, but the hardest to rebuild once dropped.</p>
+                    <p>Club events, networking dinners, weekend trips &mdash; the first thing sacrificed when workload spikes, but the hardest to rebuild once dropped.</p>
                 </div>
                 <div class="card">
                     <div class="card-icon">&#128154;</div>
@@ -658,9 +658,9 @@
                     <p>Choose Academics, Recruiting, Social, or Wellness as this week's focus. The mode steers the AI: recruiting mode gives interview prep the best slots, wellness mode spaces out intense blocks. It also changes &ldquo;Up Next&rdquo; to show your next event in that category and flags when your week drifts away from it.</p>
                 </div>
                 <div class="card">
-                    <div class="card-icon">&#128154;</div>
-                    <h3>Oura Ring Recovery Signal</h3>
-                    <p>Connect an Oura Ring and Kaisey reads your last few days of sleep, readiness, and activity. It turns that into a recovery level: <em>rest day</em>, <em>light activity</em>, <em>normal</em>, or <em>push</em>. Short on sleep? The AI schedules a lighter day with breaks. Well rested? It's comfortable stacking demanding work.</p>
+                    <div class="card-icon">&#128197;</div>
+                    <h3>Day, Week &amp; Month Views</h3>
+                    <p>Every event is color-coded by category: blue for academics, red for recruiting, orange for social, green for wellness. Switch between day, week, and month to see where your time is going. Edit or delete any event in place, and the change syncs back to Google Calendar.</p>
                 </div>
                 <div class="card">
                     <div class="card-icon">&#128680;</div>
@@ -670,7 +670,7 @@
                 <div class="card">
                     <div class="card-icon">&#128274;</div>
                     <h3>No Server-Side Storage</h3>
-                    <p>There's no Kaisey database. Events come straight from Google Calendar into your browser, and AI requests go through a thin stateless proxy that only exists to keep the API key out of the client. Your preferences and Oura sync stay in your own browser.</p>
+                    <p>There's no Kaisey database. Events come straight from Google Calendar into your browser, and AI requests go through a thin stateless proxy that only exists to keep the API key out of the client. Your preferences stay in your own browser.</p>
                 </div>
             </div>
         </div>
@@ -681,15 +681,13 @@
         <div class="container fade-in">
             <span class="section-tag">AI Integration</span>
             <h2 class="section-title">How OpenAI Powers Kaisey</h2>
-            <p class="section-desc" style="margin-bottom: 2.5rem;">Every AI feature in Kaisey uses OpenAI function calling with a strict schema. The model never returns free text that the app has to interpret. It returns structured calendar actions, task lists, and schedule blocks that the UI renders and the user approves. Each call gets the same context: your existing events, your priority mode, and your Oura recovery signal.</p>
+            <p class="section-desc" style="margin-bottom: 2.5rem;">Every AI feature in Kaisey uses OpenAI function calling with a strict schema. The model never returns free text that the app has to interpret. It returns structured calendar actions, task lists, and schedule blocks that the UI renders and the user approves. Each call gets the same context: your existing events, the current date and time, and your priority mode.</p>
 
             <!-- Architecture flow diagram -->
             <div style="display: flex; align-items: center; justify-content: center; gap: 12px; flex-wrap: wrap; padding: 2rem; background: white; border-radius: 12px; border: 1px solid rgba(0,0,0,0.06); margin-bottom: 2rem; overflow-x: auto;">
                 <div style="text-align: center; padding: 14px 18px; background: var(--pill-bg); border-radius: 10px; min-width: 120px;"><div style="font-size: 0.7rem; text-transform: uppercase; letter-spacing: 1.5px; color: var(--text-secondary); margin-bottom: 4px;">Input</div><div style="font-weight: 600; font-size: 0.9rem;">Chat / Brain Dump</div></div>
                 <span style="color: var(--text-secondary); font-size: 1.2rem;">&rarr;</span>
                 <div style="text-align: center; padding: 14px 18px; background: var(--pill-bg); border-radius: 10px; min-width: 120px;"><div style="font-size: 0.7rem; text-transform: uppercase; letter-spacing: 1.5px; color: var(--text-secondary); margin-bottom: 4px;">Context</div><div style="font-weight: 600; font-size: 0.9rem;">Google Calendar + Priority</div></div>
-                <span style="color: var(--text-secondary); font-size: 1.2rem;">&rarr;</span>
-                <div style="text-align: center; padding: 14px 18px; background: var(--pill-bg); border-radius: 10px; min-width: 120px;"><div style="font-size: 0.7rem; text-transform: uppercase; letter-spacing: 1.5px; color: var(--text-secondary); margin-bottom: 4px;">Biometrics</div><div style="font-weight: 600; font-size: 0.9rem;">Oura Recovery</div></div>
                 <span style="color: var(--text-secondary); font-size: 1.2rem;">&rarr;</span>
                 <div style="text-align: center; padding: 14px 18px; background: var(--violet); color: white; border-radius: 10px; min-width: 120px; box-shadow: 0 4px 16px rgba(124, 58, 237, 0.3);"><div style="font-size: 0.7rem; text-transform: uppercase; letter-spacing: 1.5px; opacity: 0.8; margin-bottom: 4px;">Reasoning</div><div style="font-weight: 600; font-size: 0.9rem;">GPT-4o mini</div></div>
                 <span style="color: var(--text-secondary); font-size: 1.2rem;">&rarr;</span>
@@ -707,7 +705,7 @@
                 </div>
                 <div class="card">
                     <h3>Guardrails in the Prompt</h3>
-                    <p>The scheduler is told never to overlap existing events, never to book anything in the past, to leave 15-minute buffers, to stop at 10 PM, and to honor any exact time you asked for. Your priority mode and the Oura recovery level are added to the prompt, so the same task list gets scheduled differently on a rest day than on a push day.</p>
+                    <p>The scheduler is told never to overlap existing events, never to book anything in the past, to leave 15-minute buffers, to stop at 10 PM, and to honor any exact time you asked for. Your priority mode is added to the prompt, so the same task list gets scheduled differently in a recruiting week than in a finals week.</p>
                 </div>
                 <div class="card">
                     <h3>Human in the Loop</h3>
@@ -756,7 +754,7 @@
                         <span style="padding: 6px 14px; border-radius: 20px; font-size: 0.8rem; font-weight: 500; background: #f3f4f6; color: #6b7280;">&#128154; Wellness</span>
                     </div>
                     <div style="padding: 12px 14px; border-radius: 8px; margin-bottom: 8px; background: rgba(59, 130, 246, 0.06); border-left: 3px solid #3b82f6;"><strong>Up Next: Corporate Finance</strong><br><span style="font-size: 0.8rem; color: var(--text-secondary);">8:00 AM &middot; 90 min</span></div>
-                    <div style="padding: 12px 14px; border-radius: 8px; margin-bottom: 8px; background: rgba(59, 130, 246, 0.06); border-left: 3px solid #3b82f6;"><strong>Strategy Canvas Quiz</strong><br><span style="font-size: 0.8rem; color: var(--text-secondary);">11:00 AM &middot; 60 min</span></div>
+                    <div style="padding: 12px 14px; border-radius: 8px; margin-bottom: 8px; background: rgba(59, 130, 246, 0.06); border-left: 3px solid #3b82f6;"><strong>Strategy Quiz</strong><br><span style="font-size: 0.8rem; color: var(--text-secondary);">11:00 AM &middot; 60 min</span></div>
                     <div style="padding: 12px 14px; border-radius: 8px; margin-bottom: 8px; background: rgba(239, 68, 68, 0.06); border-left: 3px solid #ef4444;"><strong>Goldman Sachs Info Session</strong><br><span style="font-size: 0.8rem; color: var(--text-secondary);">12:00 PM &middot; 60 min</span></div>
                     <div style="padding: 12px 14px; border-radius: 8px; background: rgba(34, 197, 94, 0.06); border-left: 3px solid #22c55e;"><strong>Gym Session</strong><br><span style="font-size: 0.8rem; color: var(--text-secondary);">1:00 PM &middot; 45 min</span></div>
                 </div>
@@ -794,10 +792,9 @@
                 <div class="decision-card">
                     <div class="label">Build Stack</div>
                     <h3>Hosted APIs Over Custom Infrastructure</h3>
-                    <p>Every layer of Kaisey leans on a hosted service so the build stays focused on the product, not the plumbing. The OpenAI API handles reasoning. Oura's API streams biometrics. Google OAuth handles auth. And Claude Code + Figma MCP turn design specs into shipped components without manual handoff.</p>
+                    <p>Every layer of Kaisey leans on a hosted service so the build stays focused on the product, not the plumbing. The OpenAI API handles reasoning. Google OAuth handles auth. And Claude Code + Figma MCP turn design specs into shipped components without manual handoff.</p>
                     <div style="margin-top: 12px; display: flex; flex-wrap: wrap; gap: 8px; font-size: 0.85rem;">
                         <span style="background: rgba(124, 58, 237, 0.1); color: var(--violet); padding: 4px 12px; border-radius: 6px; border: 1px solid rgba(124, 58, 237, 0.2);">OpenAI API</span>
-                        <span style="background: rgba(124, 58, 237, 0.1); color: var(--violet); padding: 4px 12px; border-radius: 6px; border: 1px solid rgba(124, 58, 237, 0.2);">Oura Ring API</span>
                         <span style="background: rgba(124, 58, 237, 0.1); color: var(--violet); padding: 4px 12px; border-radius: 6px; border: 1px solid rgba(124, 58, 237, 0.2);">Google Calendar OAuth</span>
                         <span style="background: rgba(124, 58, 237, 0.1); color: var(--violet); padding: 4px 12px; border-radius: 6px; border: 1px solid rgba(124, 58, 237, 0.2);">Claude Code</span>
                         <span style="background: rgba(124, 58, 237, 0.1); color: var(--violet); padding: 4px 12px; border-radius: 6px; border: 1px solid rgba(124, 58, 237, 0.2);">Figma MCP</span>
@@ -851,9 +848,9 @@
                     <p style="color: var(--text-secondary); line-height: 1.7;">Closed beta measuring daily active usage, toggle frequency, and whether students report fewer missed deadlines after 2 weeks.</p>
                 </div>
                 <div>
-                    <h3 style="font-size: 1.1rem; margin-bottom: 4px;">Phase 2 &mdash; Academic &amp; Campus Feeds</h3>
-                    <div style="font-size: 0.8rem; color: var(--text-secondary); letter-spacing: 0.5px; margin-bottom: 6px;">Summer 2026 &middot; API Partnerships</div>
-                    <p style="color: var(--text-secondary); line-height: 1.7;">Kaisey already writes back to Google Calendar. Next it pulls Canvas deadlines (through a CUIT partnership for the Canvas API) and CampusGroups events straight into the same context. That way the model sees your problem-set due date next to the club dinner, without you copying either one over.</p>
+                    <h3 style="font-size: 1.1rem; margin-bottom: 4px;">Phase 2 &mdash; A Co-Pilot That Learns</h3>
+                    <div style="font-size: 0.8rem; color: var(--text-secondary); letter-spacing: 0.5px; margin-bottom: 6px;">Summer 2026 &middot; Personalization</div>
+                    <p style="color: var(--text-secondary); line-height: 1.7;">Kaisey already writes back to Google Calendar. Next it learns from your corrections. Every time you re-categorize a task or change a duration estimate, the next brain dump gets closer to right the first time, without you tuning anything.</p>
                 </div>
                 <div>
                     <h3 style="font-size: 1.1rem; margin-bottom: 4px;">Phase 3 &mdash; Event Discovery via LinkUp</h3>
@@ -863,14 +860,14 @@
                 <div>
                     <h3 style="font-size: 1.1rem; margin-bottom: 4px;">Phase 4 &mdash; Multi-University</h3>
                     <div style="font-size: 0.8rem; color: var(--text-secondary); letter-spacing: 0.5px; margin-bottom: 6px;">Fall 2026 &middot; 5 partner schools</div>
-                    <p style="color: var(--text-secondary); line-height: 1.7;">Career services partnerships at 4&ndash;5 university programs. Oura integration as differentiator. Each school adds scheduling pattern data that sharpens the model's reasoning.</p>
+                    <p style="color: var(--text-secondary); line-height: 1.7;">Career services partnerships at 4&ndash;5 university programs. Each school adds scheduling pattern data that sharpens the model's reasoning.</p>
                 </div>
                 <div>
                     <h3 style="font-size: 1.1rem; margin-bottom: 4px;">Phase 5 &mdash; Beyond Students</h3>
                     <div style="font-size: 0.8rem; color: var(--text-secondary); letter-spacing: 0.5px; margin-bottom: 6px;">2027 &middot; Working professionals</div>
-                    <p style="color: var(--text-secondary); line-height: 1.7;">The priority toggle + biometrics pattern generalizes to professionals. Oura's 2M+ user base becomes a natural distribution channel via the Oura app marketplace.</p>
+                    <p style="color: var(--text-secondary); line-height: 1.7;">The priority-mode and brain-dump pattern works for professionals too: anyone juggling deep work, meetings, and a life outside them.</p>
 
-                    <p style="color: var(--text-secondary); line-height: 1.7; margin-top: 12px; font-size: 0.85rem; font-style: italic; border-top: 1px solid rgba(0,0,0,0.06); padding-top: 12px;">Built with React + Vite + Tailwind + shadcn/ui, OpenAI GPT-4o mini with function calling through a Vercel serverless proxy, the Oura Ring API v2, and Google Calendar OAuth. Developed with Claude Code (agentic dev) and Figma MCP (design-to-component handoff).</p>
+                    <p style="color: var(--text-secondary); line-height: 1.7; margin-top: 12px; font-size: 0.85rem; font-style: italic; border-top: 1px solid rgba(0,0,0,0.06); padding-top: 12px;">Built with React + Vite + Tailwind + shadcn/ui, OpenAI GPT-4o mini with function calling through a Vercel serverless proxy, and Google Calendar OAuth. Developed with Claude Code (agentic dev) and Figma MCP (design-to-component handoff).</p>
                 </div>
             </div>
 
