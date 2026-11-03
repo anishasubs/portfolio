@@ -212,11 +212,60 @@ const LawBook = () => {
   );
 };
 
+// Slide 1 — job-search skill demo (illustrative): one command, every application step done
+const JobSkill = () => {
+  const f = useCurrentFrame();
+  const {fps} = useVideoConfig();
+  const INK = '#16181C', GREY = '#6B7076', LINE = '#DEDED9', PANEL = '#F0F0EC';
+  const cmd = '/get-me-a-job  paste a job link';
+  const typed = Math.floor(interpolate(f, [8, 48], [0, cmd.length], {extrapolateLeft: 'clamp', extrapolateRight: 'clamp'}));
+  const steps = ['Analysed the role', 'Preview: highlights and gaps', 'Tailored resume, .docx + .pdf', 'Cover letter in your voice', 'Outreach and referral ask', 'Tracker updated'];
+  const at = (i) => 60 + i * 30;
+  const done = spring({frame: f - 250, fps, config: {damping: 14}});
+  const font = 'Inter, Helvetica, Arial, sans-serif';
+  return (
+    <div style={{width: 640, height: 360, background: '#FAFAF8', fontFamily: font, padding: 26, boxSizing: 'border-box'}}>
+      <div style={{background: '#fff', border: `1px solid ${LINE}`, borderRadius: 10, height: '100%', padding: '16px 18px', boxSizing: 'border-box', position: 'relative'}}>
+        <div style={{display: 'flex', alignItems: 'center', gap: 8, border: `1px solid ${LINE}`, borderRadius: 8, padding: '9px 12px', fontSize: 15, color: INK}}>
+          <span style={{color: TEAL, fontWeight: 600}}>{'>'}</span>
+          <span style={{fontFamily: 'DejaVu Sans Mono, Menlo, monospace', fontSize: 14}}>
+            <span style={{color: TEAL, fontWeight: 600}}>{cmd.slice(0, Math.min(typed, 13))}</span>{cmd.slice(13, Math.max(typed, 13))}
+          </span>
+          <span style={{width: 2, height: 16, background: INK, opacity: f < 56 && Math.floor(f / 8) % 2 === 0 ? 1 : 0}} />
+        </div>
+        <div style={{marginTop: 14, display: 'flex', flexDirection: 'column', gap: 7}}>
+          {steps.map((s, i) => {
+            const appear = spring({frame: f - at(i), fps, config: {damping: 16}});
+            const fin = f > at(i) + 26;
+            const spin = (f * 12) % 360;
+            return (
+              <div key={s} style={{display: 'flex', alignItems: 'center', gap: 10, opacity: appear, transform: `translateY(${(1 - appear) * 6}px)`, fontSize: 15, color: fin ? INK : GREY}}>
+                <div style={{width: 18, height: 18, borderRadius: 9, display: 'flex', alignItems: 'center', justifyContent: 'center',
+                  background: fin ? TEAL : 'transparent', border: fin ? 'none' : `2px solid ${LINE}`, borderTopColor: fin ? 'none' : TEAL,
+                  transform: fin ? 'none' : `rotate(${spin}deg)`, boxSizing: 'border-box'}}>
+                  {fin && <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="#fff" strokeWidth="3.5" strokeLinecap="round" strokeLinejoin="round"><path d="M20 6 9 17l-5-5" /></svg>}
+                </div>
+                <span>{s}</span>
+              </div>
+            );
+          })}
+        </div>
+        <div style={{position: 'absolute', left: 18, right: 18, bottom: 16, background: TEAL, color: '#fff', borderRadius: 8, padding: '10px 14px',
+          fontSize: 15, fontWeight: 600, opacity: done, transform: `translateY(${(1 - done) * 10}px)`, display: 'flex', justifyContent: 'space-between'}}>
+          <span>Ready to apply</span><span style={{fontWeight: 400, opacity: 0.85}}>one folder per application</span>
+        </div>
+        <div style={{position: 'absolute', right: 18, top: 62, background: PANEL, borderRadius: 6, padding: '4px 8px', fontSize: 11, color: GREY}}>illustrative</div>
+      </div>
+    </div>
+  );
+};
+
 const comps = {Scale: [Scale, 90], Hammer: [Hammer, 45], Copy: [Copy, 75], Tag: [Tag, 60], Compound: [Compound, 90], Lock: [Lock, 75], Landmark: [Landmark, 90], Building: [Building, 90], Relationship: [Relationship, 90], LawBook: [LawBook, 90]};
 export const Root = () => (
   <>
     {Object.entries(comps).map(([id, [C, d]]) => (
       <Composition key={id} id={id} component={C} durationInFrames={d} fps={30} width={SIZE} height={SIZE} />
     ))}
+    <Composition id="JobSkill" component={JobSkill} durationInFrames={300} fps={30} width={640} height={360} />
   </>
 );
