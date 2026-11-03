@@ -574,7 +574,7 @@
         <div class="hero-content">
             <span class="hero-tag">Smart Calendar</span>
             <h1>Kaisey: Your AI Chief of Staff for Student Life</h1>
-            <p class="hero-subtitle">The first calendar system that unifies Google Calendar, Canvas, and CampusGroups &mdash; then uses OpenAI and your Oura Ring data to tell you what actually matters most right now.</p>
+            <p class="hero-subtitle">An AI co-pilot for Google Calendar. Brain-dump everything on your plate and Kaisey schedules it around your classes, recruiting, and social life, adjusting for your priorities this week and how your Oura Ring says you slept.</p>
             <div class="hero-ctas">
                 <a href="#demo" class="cta-btn cta-primary">Watch Demo</a>
                 <a href="#architecture" class="cta-btn cta-secondary">See AI Architecture &rarr;</a>
@@ -639,29 +639,38 @@
     <section class="solution">
         <div class="container fade-in">
             <span class="section-tag">The Solution</span>
-            <h2 class="section-title">One Intelligent Layer Across Everything</h2>
-            <p class="section-desc" style="margin-bottom: 2.5rem;">Kaisey syncs your Google Calendar, Canvas Calendar, and CampusGroups into one intelligent feed &mdash; then uses OpenAI to reason about what actually matters most right now. Not a new calendar. A smarter layer over the three you already use.</p>
-
+            <h2 class="section-title">An AI Co-Pilot on Top of Your Calendar</h2>
+            <p class="section-desc" style="margin-bottom: 2.5rem;">Kaisey sits on top of Google Calendar, the place students already live, and adds an AI co-pilot that turns messy to-do lists into scheduled time. You tell it what matters this week and what's on your mind, and it finds the slots, flags conflicts, and writes the events back to your calendar.</p>
             <div class="cards-grid">
                 <div class="card">
-                    <div class="card-icon">&#9889;</div>
-                    <h3>Dynamic Priority Toggle</h3>
-                    <p>One tap shifts your entire day. Slide between Academics, Recruiting, Social, and Wellness modes &mdash; Kaisey re-ranks every event using the model's reasoning, not a simple sort. When your Oura readiness score is below 60, Wellness mode auto-activates.</p>
+                    <div class="card-icon">&#129504;</div>
+                    <h3>Brain Dump Planner</h3>
+                    <p>Paste everything on your mind in one go: &ldquo;finish the strategy case, email the Goldman recruiter, gym tomorrow at 9, call mom.&rdquo; Kaisey pulls out each task with a category, priority, and duration estimate. It then proposes a multi-day schedule around your existing events. You can tweak it in chat (&ldquo;move the gym to the evening&rdquo;) before accepting.</p>
                 </div>
                 <div class="card">
-                    <div class="card-icon">&#128279;</div>
-                    <h3>Three Calendars, One Brain</h3>
-                    <p>Google Calendar, Canvas Calendar, and CampusGroups &mdash; synced into a single unified feed. For the first time, your class deadlines, recruiting coffee chats, and club events live in the same view, and the model can reason across all of them at once.</p>
+                    <div class="card-icon">&#128172;</div>
+                    <h3>Chat to Schedule</h3>
+                    <p>&ldquo;Add gym Monday, Wednesday, Friday at 7am for six weeks.&rdquo; The co-pilot adds, removes, or reschedules events, including recurring series, from plain language. If you leave out a time, it looks at your free slots and suggests one instead of asking a blank &ldquo;what time?&rdquo;</p>
+                </div>
+                <div class="card">
+                    <div class="card-icon">&#9889;</div>
+                    <h3>Priority Mode</h3>
+                    <p>Choose Academics, Recruiting, Social, or Wellness as this week's focus. The mode steers the AI: recruiting mode gives interview prep the best slots, wellness mode spaces out intense blocks. It also changes &ldquo;Up Next&rdquo; to show your next event in that category and flags when your week drifts away from it.</p>
                 </div>
                 <div class="card">
                     <div class="card-icon">&#128154;</div>
-                    <h3>Oura Ring Biometric Sync</h3>
-                    <p>Kaisey pulls your sleep score, readiness score, and recovery data from the Oura Ring API &mdash; then factors it into every prioritization decision. Slept 4 hours? Kaisey promotes wellness blocks and defers low-stakes meetings.</p>
+                    <h3>Oura Ring Recovery Signal</h3>
+                    <p>Connect an Oura Ring and Kaisey reads your last few days of sleep, readiness, and activity. It turns that into a recovery level: <em>rest day</em>, <em>light activity</em>, <em>normal</em>, or <em>push</em>. Short on sleep? The AI schedules a lighter day with breaks. Well rested? It's comfortable stacking demanding work.</p>
+                </div>
+                <div class="card">
+                    <div class="card-icon">&#128680;</div>
+                    <h3>Agent Suggestions</h3>
+                    <p>Kaisey scans today's schedule for overlapping events, back-to-back meetings with no buffer, and blocks of two hours or longer. Each issue becomes a card with the fix written out: move this event, add a 15-minute buffer, split this into two halves with a break. One tap applies it.</p>
                 </div>
                 <div class="card">
                     <div class="card-icon">&#128274;</div>
-                    <h3>Privacy-First, Session-Only</h3>
-                    <p>Calendar data is processed in-session and never persisted on any server. The model sees what it needs to reason about priorities, then the context is discarded. No data warehouse, no profile building.</p>
+                    <h3>No Server-Side Storage</h3>
+                    <p>There's no Kaisey database. Events come straight from Google Calendar into your browser, and AI requests go through a thin stateless proxy that only exists to keep the API key out of the client. Your preferences and Oura sync stay in your own browser.</p>
                 </div>
             </div>
         </div>
@@ -672,37 +681,37 @@
         <div class="container fade-in">
             <span class="section-tag">AI Integration</span>
             <h2 class="section-title">How OpenAI Powers Kaisey</h2>
-            <p class="section-desc" style="margin-bottom: 2.5rem;">The OpenAI API isn't a chatbot bolted onto a calendar. It's the reasoning core &mdash; every prioritization decision flows through structured tool calls, JSON-mode output, and a multi-source context window. Remove the model and there is no product.</p>
+            <p class="section-desc" style="margin-bottom: 2.5rem;">Every AI feature in Kaisey uses OpenAI function calling with a strict schema. The model never returns free text that the app has to interpret. It returns structured calendar actions, task lists, and schedule blocks that the UI renders and the user approves. Each call gets the same context: your existing events, your priority mode, and your Oura recovery signal.</p>
 
             <!-- Architecture flow diagram -->
             <div style="display: flex; align-items: center; justify-content: center; gap: 12px; flex-wrap: wrap; padding: 2rem; background: white; border-radius: 12px; border: 1px solid rgba(0,0,0,0.06); margin-bottom: 2rem; overflow-x: auto;">
-                <div style="text-align: center; padding: 14px 18px; background: var(--pill-bg); border-radius: 10px; min-width: 120px;"><div style="font-size: 0.7rem; text-transform: uppercase; letter-spacing: 1.5px; color: var(--text-secondary); margin-bottom: 4px;">Input</div><div style="font-weight: 600; font-size: 0.9rem;">Priority Toggle</div></div>
+                <div style="text-align: center; padding: 14px 18px; background: var(--pill-bg); border-radius: 10px; min-width: 120px;"><div style="font-size: 0.7rem; text-transform: uppercase; letter-spacing: 1.5px; color: var(--text-secondary); margin-bottom: 4px;">Input</div><div style="font-weight: 600; font-size: 0.9rem;">Chat / Brain Dump</div></div>
                 <span style="color: var(--text-secondary); font-size: 1.2rem;">&rarr;</span>
-                <div style="text-align: center; padding: 14px 18px; background: var(--pill-bg); border-radius: 10px; min-width: 120px;"><div style="font-size: 0.7rem; text-transform: uppercase; letter-spacing: 1.5px; color: var(--text-secondary); margin-bottom: 4px;">Data Layer</div><div style="font-weight: 600; font-size: 0.9rem;">3-Calendar Sync</div></div>
+                <div style="text-align: center; padding: 14px 18px; background: var(--pill-bg); border-radius: 10px; min-width: 120px;"><div style="font-size: 0.7rem; text-transform: uppercase; letter-spacing: 1.5px; color: var(--text-secondary); margin-bottom: 4px;">Context</div><div style="font-weight: 600; font-size: 0.9rem;">Google Calendar + Priority</div></div>
                 <span style="color: var(--text-secondary); font-size: 1.2rem;">&rarr;</span>
-                <div style="text-align: center; padding: 14px 18px; background: var(--pill-bg); border-radius: 10px; min-width: 120px;"><div style="font-size: 0.7rem; text-transform: uppercase; letter-spacing: 1.5px; color: var(--text-secondary); margin-bottom: 4px;">Biometrics</div><div style="font-weight: 600; font-size: 0.9rem;">Oura Ring API</div></div>
+                <div style="text-align: center; padding: 14px 18px; background: var(--pill-bg); border-radius: 10px; min-width: 120px;"><div style="font-size: 0.7rem; text-transform: uppercase; letter-spacing: 1.5px; color: var(--text-secondary); margin-bottom: 4px;">Biometrics</div><div style="font-weight: 600; font-size: 0.9rem;">Oura Recovery</div></div>
                 <span style="color: var(--text-secondary); font-size: 1.2rem;">&rarr;</span>
-                <div style="text-align: center; padding: 14px 18px; background: var(--violet); color: white; border-radius: 10px; min-width: 120px; box-shadow: 0 4px 16px rgba(124, 58, 237, 0.3);"><div style="font-size: 0.7rem; text-transform: uppercase; letter-spacing: 1.5px; opacity: 0.8; margin-bottom: 4px;">Reasoning</div><div style="font-weight: 600; font-size: 0.9rem;">OpenAI API</div></div>
+                <div style="text-align: center; padding: 14px 18px; background: var(--violet); color: white; border-radius: 10px; min-width: 120px; box-shadow: 0 4px 16px rgba(124, 58, 237, 0.3);"><div style="font-size: 0.7rem; text-transform: uppercase; letter-spacing: 1.5px; opacity: 0.8; margin-bottom: 4px;">Reasoning</div><div style="font-weight: 600; font-size: 0.9rem;">GPT-4o mini</div></div>
                 <span style="color: var(--text-secondary); font-size: 1.2rem;">&rarr;</span>
-                <div style="text-align: center; padding: 14px 18px; background: var(--pill-bg); border-radius: 10px; min-width: 120px;"><div style="font-size: 0.7rem; text-transform: uppercase; letter-spacing: 1.5px; color: var(--text-secondary); margin-bottom: 4px;">Output</div><div style="font-weight: 600; font-size: 0.9rem;">Ranked Day</div></div>
+                <div style="text-align: center; padding: 14px 18px; background: var(--pill-bg); border-radius: 10px; min-width: 120px;"><div style="font-size: 0.7rem; text-transform: uppercase; letter-spacing: 1.5px; color: var(--text-secondary); margin-bottom: 4px;">Output</div><div style="font-weight: 600; font-size: 0.9rem;">Events in Your Calendar</div></div>
             </div>
 
             <div class="cards-grid">
                 <div class="card">
-                    <h3>Why an LLM, Not a Sorting Algorithm?</h3>
-                    <p>A sort/filter can reorder by category. But only a language model can reason across three calendar sources and your biometric state simultaneously &mdash; multi-source reasoning, not sorting.</p>
+                    <h3>Three Function-Calling Tools</h3>
+                    <p><code>calendar_action</code> adds, removes, or replaces an event, including recurring series, from chat. <code>extract_tasks</code> turns a brain dump into tasks with a category, priority, duration, and due date. <code>propose_schedule</code> returns dated time blocks plus recommendations and a summary.</p>
                 </div>
                 <div class="card">
-                    <h3>What Oura Data Powers</h3>
-                    <p>Sleep score, readiness score, and activity deficit. A readiness score below 60 triggers automatic wellness promotion. High readiness + recruiting mode means the model stacks demanding events together.</p>
+                    <h3>Two-Step Brain Dump Pipeline</h3>
+                    <p>Pulling out the tasks and scheduling them are separate model calls. In between, you can fix a category or a duration estimate before anything is scheduled. The schedule then runs as a seven-stage state machine: extract &rarr; edit &rarr; propose &rarr; review &rarr; revise &rarr; accept. You can send revisions back to the model as many times as you like.</p>
                 </div>
                 <div class="card">
-                    <h3>Tool Use Pattern</h3>
-                    <p>The model calls <code>get_gcal_events()</code>, <code>get_canvas_deadlines()</code>, <code>get_campusgroups_events()</code>, and <code>get_oura_readiness()</code> through OpenAI function calling to build the full picture before reasoning.</p>
+                    <h3>Guardrails in the Prompt</h3>
+                    <p>The scheduler is told never to overlap existing events, never to book anything in the past, to leave 15-minute buffers, to stop at 10 PM, and to honor any exact time you asked for. Your priority mode and the Oura recovery level are added to the prompt, so the same task list gets scheduled differently on a rest day than on a push day.</p>
                 </div>
                 <div class="card">
-                    <h3>Structured Output</h3>
-                    <p>The model returns ranked JSON: each event gets a priority score (0&ndash;100), a rank position, and a one-line rationale. The frontend renders this directly &mdash; the model's reasoning <em>is</em> the engine.</p>
+                    <h3>Human in the Loop</h3>
+                    <p>Nothing reaches your calendar without your approval. Proposed events show up as cards you accept, revise, or dismiss. Accepted changes go through a single handler that updates the UI and writes to the Google Calendar API at the same time.</p>
                 </div>
             </div>
         </div>
@@ -739,7 +748,7 @@
                 </div>
                 <div style="background: white; border-radius: 12px; padding: 1.5rem; border: 1px solid rgba(0,0,0,0.06);">
                     <h4 style="font-size: 0.9rem; font-weight: 700; margin-bottom: 1rem; color: var(--navy);">&#9889; Today's Focus</h4>
-                    <p style="font-size: 0.85rem; color: var(--text-secondary); margin-bottom: 1rem;">Toggle between modes to set your priority for the day. Kaisey highlights what matters most.</p>
+                    <p style="font-size: 0.85rem; color: var(--text-secondary); margin-bottom: 1rem;">Pick a focus for the day. Up Next switches to your next event in that category.</p>
                     <div style="display: flex; gap: 8px; flex-wrap: wrap; margin-bottom: 1.25rem;">
                         <span style="padding: 6px 14px; border-radius: 20px; font-size: 0.8rem; font-weight: 600; background: #3b82f6; color: white;">&#128218; Academics</span>
                         <span style="padding: 6px 14px; border-radius: 20px; font-size: 0.8rem; font-weight: 500; background: #f3f4f6; color: #6b7280;">&#128188; Recruiting</span>
@@ -753,7 +762,7 @@
                 </div>
             </div>
 
-            <p style="margin-top: 1.25rem; font-size: 0.9rem; color: var(--text-secondary); line-height: 1.7;">The weekly balance bar shows at a glance where your time is going. Events are color-coded by category so you can instantly spot imbalances &mdash; like zero wellness hours during finals week. The day view surfaces your next event and full schedule, grouped by the priority mode you've selected.</p>
+            <p style="margin-top: 1.25rem; font-size: 0.9rem; color: var(--text-secondary); line-height: 1.7;">The weekly balance bar shows at a glance where your time is going. Events are color-coded by category so you can instantly spot imbalances &mdash; like zero wellness hours during finals week. Up Next shows your next event in whichever priority mode you've picked, and the callouts warn you when the week is drifting away from it.</p>
         </div>
     </section>
 
@@ -767,7 +776,7 @@
                 <div class="decision-card">
                     <div class="label">Authentication</div>
                     <h3>Google OAuth &rarr; Instant Calendar Access</h3>
-                    <p>One sign-in gives Kaisey read access to Google Calendar with zero onboarding friction. No separate account creation, no permission pop-ups later. Students are in under 10 seconds.</p>
+                    <p>One sign-in gives Kaisey read and write access to Google Calendar, so there's no separate account and nothing to import. If you don't want to connect yet, Demo Mode loads a sample student week so you can try every feature in seconds.</p>
                     <div style="margin-top: 12px; display: flex; gap: 8px; font-size: 0.85rem;">
                         <span style="background: rgba(124, 58, 237, 0.1); color: var(--violet); padding: 4px 12px; border-radius: 6px; border: 1px solid rgba(124, 58, 237, 0.2);">&check; Google OAuth</span>
                         <span style="color: var(--text-secondary); text-decoration: line-through; padding: 4px 12px;">Email / Password</span>
@@ -775,8 +784,8 @@
                 </div>
                 <div class="decision-card">
                     <div class="label">Interaction</div>
-                    <h3>Toggle Over Manual Ranking</h3>
-                    <p>A four-mode selector beats a complex drag-and-drop ranking UI. One tap shifts the entire priority stack &mdash; fast enough to switch contexts mid-day between a lecture and a recruiting event.</p>
+                    <h3>Four Modes Over Manual Ranking</h3>
+                    <p>Picking one of four modes beats a drag-and-drop ranking UI. One tap changes how the AI schedules your tasks, what Up Next shows, and which imbalances get flagged. It's quick enough to switch between a lecture and a recruiting event in the middle of the day.</p>
                     <div style="margin-top: 12px; display: flex; gap: 8px; font-size: 0.85rem;">
                         <span style="background: rgba(124, 58, 237, 0.1); color: var(--violet); padding: 4px 12px; border-radius: 6px; border: 1px solid rgba(124, 58, 237, 0.2);">&check; Priority Toggle</span>
                         <span style="color: var(--text-secondary); text-decoration: line-through; padding: 4px 12px;">Manual Ranking UI</span>
@@ -794,6 +803,15 @@
                         <span style="background: rgba(124, 58, 237, 0.1); color: var(--violet); padding: 4px 12px; border-radius: 6px; border: 1px solid rgba(124, 58, 237, 0.2);">Figma MCP</span>
                     </div>
                 </div>
+                <div class="decision-card">
+                    <div class="label">Trust</div>
+                    <h3>Propose, Then Write</h3>
+                    <p>The AI never edits your calendar on its own. Every schedule, conflict fix, and buffer shows up first as a proposal you accept, revise in chat, or dismiss. A student who has been burned by a bad auto-reschedule never trusts the tool again, so the extra tap is worth it.</p>
+                    <div style="margin-top: 12px; display: flex; gap: 8px; font-size: 0.85rem;">
+                        <span style="background: rgba(124, 58, 237, 0.1); color: var(--violet); padding: 4px 12px; border-radius: 6px; border: 1px solid rgba(124, 58, 237, 0.2);">&check; Review &amp; Accept</span>
+                        <span style="color: var(--text-secondary); text-decoration: line-through; padding: 4px 12px;">Silent Auto-Apply</span>
+                    </div>
+                </div>
             </div>
         </div>
     </section>
@@ -803,7 +821,7 @@
         <div class="container fade-in">
             <span class="section-tag">Demo</span>
             <h2 class="section-title">See Kaisey in Action</h2>
-            <p class="section-desc" style="margin-bottom: 1.5rem;">A walkthrough of the priority toggle with a real student calendar &mdash; watch the model re-rank events in real time.</p>
+            <p class="section-desc" style="margin-bottom: 1.5rem;">A walkthrough with a real student calendar: set a priority, brain-dump the week, and watch Kaisey propose a schedule and write it to Google Calendar.</p>
 
             <div class="video-wrapper">
                 <video controls preload="metadata" poster="">
@@ -815,7 +833,7 @@
             <div style="margin-top: 2rem;">
                 <a href="../kaisey/index.html" class="cta-btn cta-primary" target="_blank" style="background: var(--violet); color: white;">Try the Live App &rarr;</a>
             </div>
-            <p class="demo-note">Sign in with Google to try the live app &mdash; your data is processed in-session and never stored.</p>
+            <p class="demo-note">Sign in with Google or try Demo Mode. Kaisey has no backend database, so your calendar stays between your browser and Google.</p>
         </div>
     </section>
 
@@ -833,9 +851,9 @@
                     <p style="color: var(--text-secondary); line-height: 1.7;">Closed beta measuring daily active usage, toggle frequency, and whether students report fewer missed deadlines after 2 weeks.</p>
                 </div>
                 <div>
-                    <h3 style="font-size: 1.1rem; margin-bottom: 4px;">Phase 2 &mdash; Deepen Integrations</h3>
+                    <h3 style="font-size: 1.1rem; margin-bottom: 4px;">Phase 2 &mdash; Academic &amp; Campus Feeds</h3>
                     <div style="font-size: 0.8rem; color: var(--text-secondary); letter-spacing: 0.5px; margin-bottom: 6px;">Summer 2026 &middot; API Partnerships</div>
-                    <p style="color: var(--text-secondary); line-height: 1.7;">Two-way write-back into Google Calendar, CUIT partnership for Canvas API. Kaisey doesn't just read your schedule &mdash; it proposes blocks and writes them directly.</p>
+                    <p style="color: var(--text-secondary); line-height: 1.7;">Kaisey already writes back to Google Calendar. Next it pulls Canvas deadlines (through a CUIT partnership for the Canvas API) and CampusGroups events straight into the same context. That way the model sees your problem-set due date next to the club dinner, without you copying either one over.</p>
                 </div>
                 <div>
                     <h3 style="font-size: 1.1rem; margin-bottom: 4px;">Phase 3 &mdash; Event Discovery via LinkUp</h3>
@@ -852,7 +870,7 @@
                     <div style="font-size: 0.8rem; color: var(--text-secondary); letter-spacing: 0.5px; margin-bottom: 6px;">2027 &middot; Working professionals</div>
                     <p style="color: var(--text-secondary); line-height: 1.7;">The priority toggle + biometrics pattern generalizes to professionals. Oura's 2M+ user base becomes a natural distribution channel via the Oura app marketplace.</p>
 
-                    <p style="color: var(--text-secondary); line-height: 1.7; margin-top: 12px; font-size: 0.85rem; font-style: italic; border-top: 1px solid rgba(0,0,0,0.06); padding-top: 12px;">Built with Claude Code (agentic dev), Figma MCP (design-to-component handoff), OpenAI API (reasoning), Oura Ring API (biometrics), and Google Calendar OAuth.</p>
+                    <p style="color: var(--text-secondary); line-height: 1.7; margin-top: 12px; font-size: 0.85rem; font-style: italic; border-top: 1px solid rgba(0,0,0,0.06); padding-top: 12px;">Built with React + Vite + Tailwind + shadcn/ui, OpenAI GPT-4o mini with function calling through a Vercel serverless proxy, the Oura Ring API v2, and Google Calendar OAuth. Developed with Claude Code (agentic dev) and Figma MCP (design-to-component handoff).</p>
                 </div>
             </div>
 
