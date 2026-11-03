@@ -6,7 +6,7 @@ Original Figma Slides deck (earlier version): `gRCLSVJLyXUKteE40F3hv4`
 ## Slides (1920×1080 frames, auto-layout)
 
 1. **Why Legora, and why me**: portrait header, "Why Legora" and "What I bring" columns.
-   Kaisey + get-me-a-job paragraph with two demo slots: `video/Kaisey demo`, `video/Job-search skill demo`.
+   Kaisey (links to the case study) + get-me-a-job (links to GitHub) paragraph with two demo slots: `video/Kaisey demo`, `video/Job-search skill demo`.
 2. **From "we signed" to "wait, you don't have Legora?"**: relationship section
    (Land → Adopt → Anticipate → Pull) plus six creative ideas: Legora × Rogo bundle,
    Legora in the classroom, AI-first community hackathon (Luma phone mockup),
@@ -33,7 +33,8 @@ non-animated copy with the same hash.
   `LawBook` replaced `Compound` and `Landmark`.
 - `demos/Kaisey-demo.mp4|gif`: 14s cut of `kaisey/kaisey-demo.mp4`
   (priorities → brain dump → proposed schedule → calendar). Avoids the 10.0s layout
-  jump in the source.
+  jump in the source. Text labels added: "Powered by OpenAI · gpt-4o-mini" (brain dump +
+  schedule) and "Google Calendar · read/write sync" (calendar), per `kaisey-src`.
 - `demos/JobSkill-demo.mp4|gif`: illustrative 15s walkthrough of
   [get-me-a-job](https://github.com/anishasubs/get-me-a-job), ending with the resume
   and cover letter PDFs dragged into an application. Re-render with
