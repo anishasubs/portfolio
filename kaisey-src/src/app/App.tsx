@@ -14,10 +14,6 @@ import { toast } from "sonner";
 import { PrioritySelector } from "@/app/components/PrioritySelector";
 import { type PriorityMode, PRIORITY_STORAGE_KEY } from "@/app/components/priority";
 import { OnboardingTour, isTourComplete } from "@/app/components/OnboardingTour";
-import { OuraSleepCard } from "@/app/components/OuraSleepCard";
-import { OuraActivityCard } from "@/app/components/OuraActivityCard";
-import { fetchOuraData, exchangeOuraCodeClientSide, initOuraOAuth, type OuraMetrics } from "@/utils/ouraClient";
-import { saveOuraMetrics, loadOuraMetrics, loadOuraAuth, saveOuraAuth, clearOuraData, isCacheValid } from "@/utils/ouraStorage";
 
 // Helper function to fetch Google user profile
 async function fetchGoogleUserProfile(accessToken: string): Promise<{ name: string; email: string; picture?: string } | null> {
@@ -272,37 +268,17 @@ export default function App() {
   });
   const [needsPrioritySelection, setNeedsPrioritySelection] = useState(false);
   const [showTour, setShowTour] = useState(false);
-  const [ouraMetrics, setOuraMetrics] = useState<Omit<OuraMetrics, "auth"> | null>(null);
-  const [ouraLoading, setOuraLoading] = useState(false);
 
   const now = new Date();
   const today = `${now.getFullYear()}-${String(now.getMonth() + 1).padStart(2, '0')}-${String(now.getDate()).padStart(2, '0')}`;
   const demoEvents: CalendarEvent[] = [
     { id: "1", title: "Corporate Finance", time: "08:00", date: today, duration: 90, type: "academics", color: "bg-blue-500" },
     { id: "2", title: "Coffee Chat: Sarah (McKinsey)", time: "10:15", date: today, duration: 45, type: "social", color: "bg-orange-500" },
-    { id: "3", title: "Strategy Canvas Quiz", time: "11:00", date: today, duration: 60, type: "academics", color: "bg-blue-500" },
+    { id: "3", title: "Strategy Quiz", time: "11:00", date: today, duration: 60, type: "academics", color: "bg-blue-500" },
     { id: "4", title: "Goldman Sachs Info Session", time: "12:00", date: today, duration: 60, type: "recruiting", color: "bg-red-500" },
     { id: "5", title: "Gym Session", time: "13:00", date: today, duration: 45, type: "wellness", color: "bg-green-500" },
   ];
   const [calendarEvents, setCalendarEvents] = useState<CalendarEvent[]>([]);
-
-  const demoOuraMetrics: Omit<OuraMetrics, "auth"> = {
-    lastFetch: Date.now(),
-    sleep: [
-      { date: today, duration: 25200, efficiency: 88, restfulness: 3, latency: 480, deep: 5400, rem: 6300, awakeTime: 1200 },
-      { date: `${now.getFullYear()}-${String(now.getMonth() + 1).padStart(2, '0')}-${String(now.getDate() - 1).padStart(2, '0')}`, duration: 27000, efficiency: 91, restfulness: 2, latency: 360, deep: 6000, rem: 7200, awakeTime: 900 },
-      { date: `${now.getFullYear()}-${String(now.getMonth() + 1).padStart(2, '0')}-${String(now.getDate() - 2).padStart(2, '0')}`, duration: 22800, efficiency: 78, restfulness: 5, latency: 720, deep: 4200, rem: 5400, awakeTime: 1800 },
-    ],
-    activity: [
-      { date: today, activeEnergy: 420, steps: 8750, avgHeartRate: 45, peakHeartRate: 12, equivalentWalkingDistance: 6800, nonWearTime: 30, inactivityAlerts: 2 },
-      { date: `${now.getFullYear()}-${String(now.getMonth() + 1).padStart(2, '0')}-${String(now.getDate() - 1).padStart(2, '0')}`, activeEnergy: 510, steps: 11200, avgHeartRate: 52, peakHeartRate: 18, equivalentWalkingDistance: 8500, nonWearTime: 15, inactivityAlerts: 1 },
-      { date: `${now.getFullYear()}-${String(now.getMonth() + 1).padStart(2, '0')}-${String(now.getDate() - 2).padStart(2, '0')}`, activeEnergy: 380, steps: 7200, avgHeartRate: 38, peakHeartRate: 8, equivalentWalkingDistance: 5500, nonWearTime: 45, inactivityAlerts: 3 },
-    ],
-    readiness: [
-      { date: today, score: 82, sleepLatency: 85, sleepDuration: 78, sleepEfficiency: 88, previousNight: 80, activityBalance: 75, bodyRecoveryIndex: 90, heartRateVariability: 72 },
-      { date: `${now.getFullYear()}-${String(now.getMonth() + 1).padStart(2, '0')}-${String(now.getDate() - 1).padStart(2, '0')}`, score: 76, sleepLatency: 80, sleepDuration: 82, sleepEfficiency: 85, previousNight: 75, activityBalance: 70, bodyRecoveryIndex: 85, heartRateVariability: 68 },
-    ],
-  };
 
   // Generate schedule-based suggestions
   useEffect(() => {
@@ -466,123 +442,10 @@ export default function App() {
     } else {
       // No Google credentials — load demo events
       setCalendarEvents(demoEvents);
-      setOuraMetrics(demoOuraMetrics);
       toast.success("Welcome to Kaisey!", {
         description: "Your AI Co-Pilot is ready.",
       });
     }
-
-    // Load Oura data (cached or fresh)
-    const cachedOura = loadOuraMetrics();
-    if (isCacheValid(cachedOura)) {
-      setOuraMetrics(cachedOura);
-    } else {
-      const ouraAuth = loadOuraAuth();
-      if (ouraAuth) {
-        setOuraLoading(true);
-        try {
-          const freshMetrics = await fetchOuraData(ouraAuth.accessToken);
-          setOuraMetrics(freshMetrics);
-          saveOuraMetrics(freshMetrics);
-        } catch (err) {
-          console.error("Oura fetch error:", err);
-          if (cachedOura) setOuraMetrics(cachedOura);
-        } finally {
-          setOuraLoading(false);
-        }
-      }
-    }
-  };
-
-  // Handle Oura OAuth callback (code in URL after redirect)
-  // Handle Oura OAuth callback (token saved by oura-callback.html) + load cached data on mount
-  useEffect(() => {
-    const justConnected = localStorage.getItem("kaisey_oura_just_connected");
-
-    if (justConnected) {
-      console.log("🔵 Oura just connected via callback page, fetching data...");
-      localStorage.removeItem("kaisey_oura_just_connected");
-      const auth = loadOuraAuth();
-      if (auth) {
-        setOuraLoading(true);
-        fetchOuraData(auth.accessToken)
-          .then((freshMetrics) => {
-            console.log("🔵 Oura data fetched:", {
-              sleep: freshMetrics.sleep.length,
-              activity: freshMetrics.activity.length,
-              readiness: freshMetrics.readiness.length,
-            });
-            setOuraMetrics(freshMetrics);
-            saveOuraMetrics(freshMetrics);
-            toast.success("Oura Ring connected!", { description: `Synced ${freshMetrics.sleep.length} days of health data.` });
-          })
-          .catch((err) => {
-            console.error("🔴 Oura data fetch error, using demo data:", err);
-            setOuraMetrics(demoOuraMetrics);
-            saveOuraMetrics(demoOuraMetrics);
-            toast.success("Oura Ring connected!", { description: "Showing sample health data." });
-          })
-          .finally(() => setOuraLoading(false));
-      } else {
-        // Callback flag was set but no auth found — show demo data
-        console.log("🔵 Oura callback detected but no auth, showing demo data");
-        setOuraMetrics(demoOuraMetrics);
-        saveOuraMetrics(demoOuraMetrics);
-        toast.success("Oura Ring connected!", { description: "Showing sample health data." });
-      }
-    } else {
-      // No OAuth callback — try loading cached Oura data
-      const cached = loadOuraMetrics();
-      if (cached && isCacheValid(cached)) {
-        console.log("🔵 Loaded cached Oura data");
-        setOuraMetrics(cached);
-      } else if (loadOuraAuth()) {
-        // Have auth but stale cache — refresh
-        console.log("🔵 Oura auth found, refreshing data...");
-        const auth = loadOuraAuth()!;
-        setOuraLoading(true);
-        fetchOuraData(auth.accessToken)
-          .then((freshMetrics) => {
-            setOuraMetrics(freshMetrics);
-            saveOuraMetrics(freshMetrics);
-          })
-          .catch((err) => console.error("🔴 Oura refresh error:", err))
-          .finally(() => setOuraLoading(false));
-      }
-    }
-  }, []);
-
-  const handleOuraConnect = () => {
-    try {
-      initOuraOAuth();
-    } catch (err) {
-      toast.error("Oura Ring not configured", {
-        description: err instanceof Error ? err.message : "Check environment variables.",
-      });
-    }
-  };
-
-  const handleOuraRefresh = async () => {
-    const ouraAuth = loadOuraAuth();
-    if (!ouraAuth) throw new Error("Oura not connected");
-    setOuraLoading(true);
-    try {
-      const freshMetrics = await fetchOuraData(ouraAuth.accessToken);
-      setOuraMetrics(freshMetrics);
-      saveOuraMetrics(freshMetrics);
-      toast.success("Oura data refreshed");
-    } catch (err) {
-      toast.error("Failed to refresh Oura data");
-      throw err;
-    } finally {
-      setOuraLoading(false);
-    }
-  };
-
-  const handleOuraDisconnect = () => {
-    clearOuraData();
-    setOuraMetrics(null);
-    toast.success("Oura Ring disconnected");
   };
 
   const handleAcceptSuggestion = (id: string) => {
@@ -779,15 +642,10 @@ export default function App() {
           setUserFocus(null);
           setUserPriority(null);
           setNeedsPrioritySelection(false);
-          setOuraMetrics(null);
-          clearOuraData();
           localStorage.removeItem(PRIORITY_STORAGE_KEY);
           localStorage.removeItem("google_calendar_token");
           toast.success("Logged out successfully");
         }}
-        ouraMetrics={ouraMetrics}
-        onOuraRefresh={handleOuraRefresh}
-        onOuraDisconnect={handleOuraDisconnect}
       />
     );
   }
@@ -856,7 +714,6 @@ export default function App() {
             variant="widget"
             priority={userPriority}
             calendarEvents={calendarEvents}
-            ouraMetrics={ouraMetrics}
           />
         </div>
 
@@ -893,17 +750,9 @@ export default function App() {
 
           {/* Right Column - Profile */}
           <div className="space-y-6">
-            <ProfileSection userProfile={userProfile} ouraMetrics={ouraMetrics} ouraLoading={ouraLoading} onOuraConnect={handleOuraConnect} />
+            <ProfileSection userProfile={userProfile} />
           </div>
         </div>
-
-        {/* Oura Health Cards */}
-        {(ouraMetrics || ouraLoading) && (
-          <div className="mb-6 grid grid-cols-1 lg:grid-cols-2 gap-4">
-            <OuraSleepCard metrics={ouraMetrics} isLoading={ouraLoading} />
-            <OuraActivityCard metrics={ouraMetrics} isLoading={ouraLoading} />
-          </div>
-        )}
       </main>
 
       {/* Onboarding Tour */}

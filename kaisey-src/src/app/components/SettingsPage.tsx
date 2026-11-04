@@ -4,9 +4,6 @@ import { Button } from "@/app/components/ui/button";
 import { Input } from "@/app/components/ui/input";
 import { Label } from "@/app/components/ui/label";
 import { Card } from "@/app/components/ui/card";
-import { OuraDataSync } from "@/app/components/OuraDataSync";
-import type { OuraMetrics } from "@/utils/ouraClient";
-import { loadOuraAuth } from "@/utils/ouraStorage";
 
 interface SettingsPageProps {
   credentials: {
@@ -15,12 +12,9 @@ interface SettingsPageProps {
   onSave: (credentials: { googleCredentials: string }) => void;
   onClose: () => void;
   onLogout: () => void;
-  ouraMetrics?: Omit<OuraMetrics, "auth"> | null;
-  onOuraRefresh?: () => Promise<void>;
-  onOuraDisconnect?: () => void;
 }
 
-export function SettingsPage({ credentials, onSave, onClose, onLogout, ouraMetrics, onOuraRefresh, onOuraDisconnect }: SettingsPageProps) {
+export function SettingsPage({ credentials, onSave, onClose, onLogout }: SettingsPageProps) {
   const [googleCredentials, setGoogleCredentials] = useState(credentials.googleCredentials);
 
   const handleSave = () => {
@@ -52,9 +46,9 @@ export function SettingsPage({ credentials, onSave, onClose, onLogout, ouraMetri
         <Card className="p-6">
           <div className="space-y-6">
             <div>
-              <h3 className="text-lg font-semibold mb-4">Calendar & Health Integrations</h3>
+              <h3 className="text-lg font-semibold mb-4">Calendar Integration</h3>
               <p className="text-sm text-muted-foreground mb-6">
-                Connect your calendar and health platforms for comprehensive schedule optimization.
+                Connect Google Calendar so Kaisey can read your schedule and write accepted changes back to it.
               </p>
             </div>
 
@@ -75,32 +69,6 @@ export function SettingsPage({ credentials, onSave, onClose, onLogout, ouraMetri
                 <p className="text-xs text-muted-foreground">
                   Enables read/write access to your Google Calendar for dynamic rescheduling
                 </p>
-              </div>
-
-              <div className="space-y-4">
-                <h4 className="font-semibold text-sm">Health Platform Integrations</h4>
-                <OuraDataSync
-                  metrics={ouraMetrics || null}
-                  isConnected={!!loadOuraAuth()}
-                  onRefresh={onOuraRefresh}
-                  onDisconnect={onOuraDisconnect}
-                />
-                <div className="p-4 rounded-lg border bg-muted/50">
-                  <div className="space-y-2 text-sm">
-                    <div className="flex items-center justify-between p-2 rounded bg-background">
-                      <span className="text-muted-foreground">Apple Health</span>
-                      <span className="text-xs text-yellow-500 font-semibold">Available</span>
-                    </div>
-                    <div className="flex items-center justify-between p-2 rounded bg-background">
-                      <span className="text-muted-foreground">Strava</span>
-                      <span className="text-xs text-yellow-500 font-semibold">Available</span>
-                    </div>
-                    <div className="flex items-center justify-between p-2 rounded bg-background">
-                      <span className="text-muted-foreground">Whoop</span>
-                      <span className="text-xs text-yellow-500 font-semibold">Available</span>
-                    </div>
-                  </div>
-                </div>
               </div>
             </div>
           </div>

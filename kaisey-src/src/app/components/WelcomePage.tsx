@@ -20,7 +20,7 @@ export function WelcomePage({ onLogin }: WelcomePageProps) {
     const accessToken = hashParams.get("access_token");
     const error = hashParams.get("error");
     
-    // Handle OAuth errors (only for Google, not Oura)
+    // Handle Google OAuth errors
     const state = hashParams.get("state");
     if (error && state === "kaisey_calendar_auth") {
       const errorDescription = hashParams.get("error_description") || "Unknown error";
@@ -337,7 +337,7 @@ export function WelcomePage({ onLogin }: WelcomePageProps) {
         {/* Footer */}
         <div className="mt-8 pt-6 border-t text-center space-y-3">
           <p className="text-xs text-muted-foreground">
-            Kaisey integrates with Canvas/LMS, Google Calendar, Oura Ring, Apple Health, Strava, and Whoop to optimize your student experience.
+            Kaisey works on top of Google Calendar. Accepted changes are written straight back to it.
           </p>
           <a
             href="/portfolio/"

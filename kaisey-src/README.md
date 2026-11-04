@@ -1,8 +1,8 @@
-# Kaisey — Your AI Chief of Staff for Student Life
+# Kaisey — Your AI Co-Pilot for Student Life
 
-> **Claude Hackathon Project** | The first calendar system that unifies Google Calendar, Canvas, and CampusGroups — then uses Claude and your Oura Ring data to tell you what actually matters most right now.
+> An AI co-pilot for Google Calendar. Brain-dump everything on your plate and Kaisey schedules it around your classes, recruiting, and social life, adjusting for what matters most to you this week.
 
-**[Case Study](https://anishasubs.github.io/portfolio/kaisey-case-study/)**
+**[Case Study](https://anishasubs.github.io/portfolio/kaisey-case-study/)** · **[Live App](https://anishasubs.github.io/portfolio/kaisey/index.html)**
 
 <p align="center">
   <img src="kaisey-qr.jpeg" alt="Scan to try Kaisey" width="250" />
@@ -14,18 +14,17 @@
 
 ## Why Kaisey Stands Out
 
-- **Real student problem, not a toy demo** — built by students who live the competing-calendars problem every day
-- **Claude is the product, not a feature** — remove Claude and there is no prioritization engine. Every decision flows through tool use + structured output
-- **Biometric-aware scheduling** — Oura Ring sleep/readiness data makes Kaisey the only calendar tool that knows how your body feels, not just what's on your schedule
-- **Multi-source calendar unification** — Google Calendar + Canvas + CampusGroups in a single intelligent feed
-- **Privacy-first** — calendar data processed in-session, never persisted. Zero data warehouse, zero profile building
-- **Event discovery via LinkUp** — future integration with Luma (lu.ma) and Meetup (meetup.com) to automatically surface relevant social and recruiting events — hackathons, networking mixers, info sessions — happening in your city and add them to your calendar
+- **Real student problem, not a toy demo.** Built by students who deal with competing calendars every day.
+- **Brain dump to calendar in one flow.** Paste a messy to-do list. Kaisey turns it into tasks, proposes a schedule, and writes it to Google Calendar once you approve.
+- **Priority-aware scheduling.** Pick Academics, Recruiting, Social, or Wellness. That choice changes how the AI fills your week.
+- **Human in the loop.** Every change is shown as a proposal first. Nothing is written to your calendar until you accept it.
+- **No server-side storage.** There's no Kaisey database. AI requests go through a stateless proxy that only exists to keep the API key off the client.
 
 ---
 
 ## The Problem
 
-Students don't have busy calendars — they have **competing calendars** that actively work against each other.
+Students don't have busy calendars. They have **competing calendars** that work against each other.
 
 | | |
 |---|---|
@@ -33,9 +32,7 @@ Students don't have busy calendars — they have **competing calendars** that ac
 | **73%** | have missed a deadline because the reminder lived in a different app |
 | **2.4 hrs/week** | lost mentally stitching calendars, inboxes, and to-do lists together |
 
-Your Canvas deadline doesn't know about your Super Day. Your CampusGroups invite doesn't know you slept four hours. One missed recruiting deadline is a lost job offer. One forgotten group meeting is a trust deficit with your team.
-
-**Kaisey connects the dots.**
+Your problem-set deadline doesn't know about your Super Day. Your club dinner doesn't know about either one. Miss one recruiting deadline and you can lose a job offer. Forget one group meeting and your team stops trusting you.
 
 ---
 
@@ -43,12 +40,13 @@ Your Canvas deadline doesn't know about your Super Day. Your CampusGroups invite
 
 | Feature | Description |
 |---------|-------------|
-| **Dynamic Priority Toggle** | One tap shifts your entire day. Slide between Academics, Recruiting, Social, and Wellness modes — Claude re-ranks every event using reasoning, not a simple sort. When your Oura readiness score drops below 60, Wellness mode auto-activates. |
-| **Three Calendars, One Brain** | Google Calendar, Canvas Calendar, and CampusGroups synced into a single unified feed. Class deadlines, recruiting coffee chats, and club events in one view. |
-| **Oura Ring Biometric Sync** | Sleep score, readiness score, and recovery data from the Oura API. Slept 4 hours? Claude promotes wellness blocks and defers low-stakes meetings. |
-| **AI Brain Dump** | Paste everything on your mind — Claude extracts tasks, categorizes them, proposes an optimized multi-day schedule, and adds events to your calendar. |
-| **Weekly Balance View** | See exactly how many hours you're dedicating to each category. Spot imbalances instantly — like zero wellness hours during finals week. |
-| **Privacy-First** | Calendar data processed in-session, never stored. Claude sees what it needs, then the context is discarded. |
+| **Brain Dump Planner** | Paste everything on your mind. Kaisey extracts each task with a category, priority, and duration estimate, then proposes a multi-day schedule around your existing events. Revise it in chat, then accept. |
+| **Chat to Schedule** | "Add gym Monday, Wednesday, Friday at 7am for six weeks." Add, remove, or reschedule events (including recurring series) in plain language. If you don't give a time, Kaisey suggests a free slot. |
+| **Priority Mode** | Academics, Recruiting, Social, or Wellness. Steers the AI's scheduling, switches "Up Next" to your next event in that category, and flags when your week drifts away from it. |
+| **Your Day at a Glance** | Next event, weekly time balance across all four categories, and warnings like "No wellness time scheduled this week." |
+| **Agent Suggestions** | Spots overlapping events, back-to-back meetings with no buffer, and blocks of 2 hours or more. Offers a fix for each: move the event, add a 15-minute buffer, or split the block with a break. |
+| **Day / Week / Month Calendar** | Color-coded by category. Edit or delete in place; changes sync to Google Calendar. |
+| **Demo Mode** | Try every feature on a sample student week without connecting a calendar. |
 
 ---
 
@@ -58,86 +56,56 @@ Your Canvas deadline doesn't know about your Super Day. Your CampusGroups invite
 
 ```mermaid
 flowchart LR
-    A["Priority Toggle\n(User Input)"] --> B["Calendar Sync\nGoogle + Canvas\n+ CampusGroups"]
-    B --> C["Oura Ring API\nSleep · Readiness\n· Activity"]
-    C --> D["Claude Sonnet\n(Reasoning Core)"]
-    D --> E["Ranked Day\n+ Recommendations"]
+    A["Chat / Brain Dump\n(User Input)"] --> B["Context\nGoogle Calendar events\n+ Priority Mode"]
+    B --> C["GPT-4o mini\n(Function Calling)"]
+    C --> D["Proposed Actions\n(User Reviews)"]
+    D --> E["Google Calendar\n(Write-back)"]
 
-    style D fill:#7C3AED,stroke:#5B21B6,color:#fff
+    style C fill:#7C3AED,stroke:#5B21B6,color:#fff
     style A fill:#f0eeff,stroke:#5B21B6,color:#1c4e89
     style B fill:#f0eeff,stroke:#5B21B6,color:#1c4e89
-    style C fill:#f0eeff,stroke:#5B21B6,color:#1c4e89
+    style D fill:#f0eeff,stroke:#5B21B6,color:#1c4e89
     style E fill:#f0eeff,stroke:#5B21B6,color:#1c4e89
 ```
 
-### How Claude Powers Kaisey
-
-Claude isn't a chatbot bolted onto a calendar. It's the **reasoning core** — every prioritization decision flows through Claude's tool use, structured output, and multi-source context window.
-
 ```
-┌─────────────────────────────────────────────────────────────────┐
-│                        KAISEY ARCHITECTURE                       │
-├─────────────────────────────────────────────────────────────────┤
-│                                                                  │
-│  ┌──────────┐   ┌──────────────┐   ┌───────────────┐           │
-│  │  React    │   │  Vercel      │   │  Oura Ring    │           │
-│  │  Frontend │──▶│  Serverless  │──▶│  API v2       │           │
-│  │  (Vite)   │   │  Proxy       │   │  (OAuth 2.0)  │           │
-│  └──────────┘   └──────┬───────┘   └───────────────┘           │
-│       │                 │                                        │
-│       │                 ▼                                        │
-│       │          ┌──────────────┐                                │
-│       │          │   Claude     │                                │
-│       ├─────────▶│   Sonnet     │◀── Tool Use + Structured JSON │
-│       │          │  (via proxy) │                                │
-│       │          └──────┬───────┘                                │
-│       │                 │                                        │
-│       │                 ▼                                        │
-│       │          ┌──────────────┐                                │
-│       └──────────│  Google      │                                │
-│                  │  Calendar    │                                │
-│                  │  API (R/W)   │                                │
-│                  └──────────────┘                                │
-│                                                                  │
-│  Data Flow:                                                      │
-│  1. User sets priority mode (Academics/Recruiting/Social/Well.) │
-│  2. Frontend fetches events from 3 calendar sources             │
-│  3. Oura Ring data fetched via backend proxy (CORS)             │
-│  4. Claude receives full context + priority + biometrics        │
-│  5. Claude returns ranked JSON with scores + rationales         │
-│  6. Frontend renders prioritized schedule + recommendations     │
-│  7. Accepted changes write back to Google Calendar              │
-│                                                                  │
-└─────────────────────────────────────────────────────────────────┘
+┌──────────────┐        ┌──────────────────┐        ┌──────────────┐
+│ React (Vite) │───────▶│ Vercel serverless│───────▶│ OpenAI API   │
+│ GitHub Pages │        │ proxy /api/chat  │        │ gpt-4o-mini  │
+└──────┬───────┘        └──────────────────┘        └──────────────┘
+       │
+       │  OAuth 2.0 (read/write)
+       ▼
+┌──────────────────┐
+│ Google Calendar  │
+│ API              │
+└──────────────────┘
 ```
 
-### Claude's Role — Why Not a Sorting Algorithm?
+**Data flow**
 
-A sort/filter can reorder by category. Claude does **multi-source reasoning**:
+1. User signs in with Google (or starts Demo Mode) and picks a priority mode.
+2. Frontend loads events from Google Calendar.
+3. Chat or brain-dump input is sent to the proxy with the existing events, the current date/time, and the priority mode.
+4. The model replies with a structured function call (never free text that the app has to interpret).
+5. The UI renders the proposal; the user accepts, revises, or dismisses.
+6. Accepted changes go through `handleScheduleChange()` in `App.tsx`, which updates local state and writes to Google Calendar.
 
-> *"Your Oura readiness is 52, this CampusGroups event has 3 alumni from your target firm, and your Canvas case prep is due tomorrow — so move the gym to Wednesday and add a 20-minute prep block before the coffee chat."*
+### Function-Calling Tools
 
-That's reasoning across calendar context **and** body state simultaneously.
+| Tool | Used by | Returns |
+|------|---------|---------|
+| `calendar_action` | Chat | Add / remove / replace an event, with optional recurrence (daily/weekly/monthly, days, until/count) |
+| `extract_tasks` | Brain dump, step 1 | Tasks with title, duration, due date, preferred time, priority, category |
+| `propose_schedule` | Brain dump, step 2 | Dated time blocks, recommendations, and a summary |
 
-### Tool Use Pattern
+### Scheduling Guardrails (in the prompt)
 
-Claude calls these tools to build the full picture before reasoning:
-
-```
-get_gcal_events()           → Google Calendar events for the week
-get_canvas_deadlines()      → Canvas assignment due dates
-get_campusgroups_events()   → Club and networking events
-get_oura_readiness()        → Sleep score, readiness, activity deficit
-```
-
-### Structured Output
-
-Claude returns ranked JSON — each event gets:
-- **Priority score** (0–100)
-- **Rank position**
-- **One-line rationale** referencing both schedule context and biometric state
-
-The frontend renders this directly. No post-processing, no parsing. Claude's reasoning **is** the prioritization engine.
+- Never overlap existing events; never schedule in the past
+- 15-minute buffer between back-to-back events
+- Nothing after 10:00 PM
+- Honor any exact time the user asked for
+- Apply the priority-mode hint (e.g. recruiting mode gives interview prep the best slots)
 
 ### Brain Dump Pipeline
 
@@ -145,47 +113,13 @@ The frontend renders this directly. No post-processing, no parsing. Claude's rea
 stateDiagram-v2
     [*] --> IDLE
     IDLE --> EXTRACTING: User pastes brain dump
-    EXTRACTING --> EDITING: Claude extracts tasks with categories + times
+    EXTRACTING --> EDITING: Model extracts tasks with categories + durations
     EDITING --> PROPOSING: User adjusts, clicks "Schedule All"
-    PROPOSING --> REVIEW_SCHEDULE: Claude proposes optimized multi-day schedule
+    PROPOSING --> REVIEW_SCHEDULE: Model proposes optimized multi-day schedule
     REVIEW_SCHEDULE --> REVISING: User requests changes
-    REVISING --> REVIEW_SCHEDULE: Claude revises
+    REVISING --> REVIEW_SCHEDULE: Model revises
     REVIEW_SCHEDULE --> ACCEPTED: User accepts
     ACCEPTED --> [*]: Events added to Google Calendar
-```
-
-### Oura Ring Integration
-
-```
-┌─────────────────────────────────────────┐
-│         OURA RING DATA PIPELINE         │
-├─────────────────────────────────────────┤
-│                                         │
-│  OAuth 2.0 (Implicit Flow)              │
-│  ├── Redirect to Oura consent           │
-│  ├── Token captured via callback page   │
-│  └── Stored in localStorage             │
-│                                         │
-│  Data Fetch (via Vercel proxy → CORS)   │
-│  ├── /v2/usercollection/sleep           │
-│  ├── /v2/usercollection/daily_sleep     │
-│  ├── /v2/usercollection/daily_activity  │
-│  └── /v2/usercollection/daily_readiness │
-│                                         │
-│  Context Builder → Claude Prompt        │
-│  ├── Activity level (low/moderate/high) │
-│  ├── Avg sleep hours + efficiency       │
-│  ├── Readiness score                    │
-│  └── Recovery recommendation            │
-│       (rest-day / light / normal / push) │
-│                                         │
-│  Dashboard Cards                        │
-│  ├── Sleep Quality (score, duration,    │
-│  │   deep/REM/light, 3-day trend)       │
-│  └── Activity & Energy (kcal, steps,    │
-│      readiness, 7-day trend)            │
-│                                         │
-└─────────────────────────────────────────┘
 ```
 
 ---
@@ -194,11 +128,11 @@ stateDiagram-v2
 
 | Decision | Chose | Over | Why |
 |----------|-------|------|-----|
-| **Auth** | Google OAuth | Email/Password | Instant calendar access, zero onboarding friction. Students are in under 10 seconds. |
-| **Interaction** | Priority Toggle | Manual Ranking UI | One tap shifts the entire priority stack. Fast enough to switch mid-day. |
-| **AI Model** | Claude Sonnet | GPT-4o | Claude's tool use and structured output beat GPT-4o for agentic calendar workflows. We need ranked JSON, not freeform text. |
-| **Data** | Session-only | Persistent storage | Calendar data processed and discarded. No data warehouse, no profile building. |
-| **Biometrics** | Oura Ring API | Self-reported | Objective sleep/readiness data beats "how do you feel?" surveys. Removes human bias from recovery decisions. |
+| **Auth** | Google OAuth | Email/Password | One sign-in gives calendar read/write access. No separate account and nothing to import. |
+| **Interaction** | Four priority modes | Manual ranking UI | One tap changes scheduling bias, Up Next, and imbalance warnings. Fast enough to switch mid-day. |
+| **Output** | Function calling | Free-text replies | Structured actions the UI can render and the user can approve; no parsing guesswork. |
+| **Trust** | Propose, then write | Silent auto-apply | One bad auto-reschedule and a student stops trusting the tool. The extra tap is worth it. |
+| **Data** | No backend database | Persistent storage | Events go straight from Google to the browser; the proxy is stateless. |
 
 ---
 
@@ -207,11 +141,11 @@ stateDiagram-v2
 | Layer | Technology |
 |-------|-----------|
 | **Frontend** | React 18, TypeScript, Vite, Tailwind CSS, shadcn/ui, Framer Motion |
-| **AI** | Claude Sonnet (via Anthropic API), OpenAI gpt-4o-mini (brain dump extraction) |
+| **AI** | OpenAI gpt-4o-mini with function calling |
 | **Calendar** | Google Calendar API (OAuth 2.0, read/write) |
-| **Health** | Oura Ring API v2 (OAuth 2.0, sleep/activity/readiness) |
-| **Backend** | Vercel Serverless Functions (Node.js) — API proxy for Claude, OpenAI, and Oura |
-| **Deployment** | GitHub Pages (frontend), Vercel (serverless proxy) |
+| **Backend** | Vercel serverless function (`kaisey-proxy/api/chat.ts`) — OpenAI proxy with CORS allow-list and per-IP rate limiting |
+| **Deployment** | GitHub Pages (frontend), Vercel (proxy) |
+| **Built with** | Claude Code (agentic dev), Figma MCP (design-to-component handoff) |
 
 ---
 
@@ -225,17 +159,18 @@ cd portfolio/kaisey-src
 # 2. Install dependencies
 npm install
 
-# 3. Set up environment variables
-cp .env.example .env
-# Fill in:
+# 3. (Optional) environment overrides in .env
 #   VITE_GOOGLE_CLIENT_ID=your_google_client_id
-#   VITE_OURA_CLIENT_ID=your_oura_client_id
+#   VITE_OPENAI_PROXY_URL=http://localhost:3000/api/chat
 
 # 4. Start the dev server
-npm run dev
+npm run dev   # http://localhost:5173
+```
 
-# 5. Open in browser
-# http://localhost:5173
+### Build
+
+```bash
+rm -rf ../kaisey/assets && npx vite build   # outputs to ../kaisey/
 ```
 
 ### Backend Proxy
@@ -243,14 +178,8 @@ npm run dev
 ```bash
 cd ../kaisey-proxy
 npm install
-
-# Set Vercel env vars:
-#   OPENAI_API_KEY
-#   OURA_CLIENT_ID
-#   OURA_CLIENT_SECRET
-
-# Deploy
-vercel deploy --prod
+# Set OPENAI_API_KEY in the Vercel dashboard
+npx vercel --prod
 ```
 
 ---
@@ -259,31 +188,27 @@ vercel deploy --prod
 
 | File | Role |
 |------|------|
-| `src/app/App.tsx` | Root component — all state, Oura integration, calendar mutations |
+| `src/app/App.tsx` | Root component — all state, demo data, agent suggestions, calendar mutations |
 | `src/app/components/KaiseyChatbot.tsx` | AI chat + brain dump (7-phase state machine) |
 | `src/app/components/CommandCenter.tsx` | "Your Day at a Glance" — next event, weekly balance |
 | `src/app/components/CalendarView.tsx` | Day/Week/Month calendar with edit/delete |
-| `src/app/components/PrioritySelector.tsx` | Four-mode priority toggle |
-| `src/app/components/OuraSleepCard.tsx` | Sleep quality dashboard card |
-| `src/app/components/OuraActivityCard.tsx` | Activity & energy dashboard card |
-| `src/app/components/ProfileSection.tsx` | Google profile + Connected Services |
-| `src/utils/ouraClient.ts` | Oura OAuth flow + API data fetching |
-| `src/utils/ouraContext.ts` | Builds health context for Claude prompts |
+| `src/app/components/PrioritySelector.tsx` | Four-mode priority selector |
+| `src/app/components/priority.ts` | Priority configs, prompt hints, balance + imbalance logic |
+| `src/app/components/ProfileSection.tsx` | Google profile + connected services |
 | `src/config/env.ts` | Environment variable configuration |
-| `../kaisey-proxy/api/chat.ts` | OpenAI/Claude serverless proxy |
-| `../kaisey-proxy/api/oura.ts` | Oura API serverless proxy (CORS) |
+| `../kaisey-proxy/api/chat.ts` | OpenAI serverless proxy |
 
 ---
 
-## From Hackathon to Platform
+## Roadmap
 
 | Phase | Timeline | Description |
 |-------|----------|-------------|
-| **Phase 1 — Validate** | Spring 2026 · 20 CBS students | Closed beta measuring daily active usage, toggle frequency, missed deadlines |
-| **Phase 2 — Deepen** | Summer 2026 · API Partnerships | Two-way write-back into Google Calendar, CUIT partnership for Canvas API |
-| **Phase 3 — Scale** | Fall 2026 · 5 partner schools | Career services partnerships, Oura as differentiator, school-specific patterns |
-| **Phase 4 — Event Discovery** | Fall 2026 · LinkUp Integration | Connect to Luma and Meetup via LinkUp to surface recruiting events, hackathons, and networking mixers in your city. Claude auto-recommends events that match your priority mode. |
-| **Phase 5 — Generalize** | 2027 · Professionals | Priority toggle + biometrics for working professionals. Oura's 2M+ user base as distribution. |
+| **Phase 1 — Validate** | Spring 2026 · 20 CBS students | Closed beta measuring daily active usage, mode switches, missed deadlines |
+| **Phase 2 — A Co-Pilot That Learns** | Summer 2026 · Personalization | Learn from re-categorized tasks and corrected durations so each brain dump gets closer to right the first time |
+| **Phase 3 — Event Discovery** | Fall 2026 · LinkUp Integration | Connect to Luma and Meetup via LinkUp to surface recruiting events, hackathons, and networking mixers that match your priority mode |
+| **Phase 4 — Multi-University** | Fall 2026 · 5 partner schools | Career services partnerships; each school sharpens the model's scheduling patterns |
+| **Phase 5 — Beyond Students** | 2027 · Professionals | The priority-mode + brain-dump pattern for anyone juggling deep work, meetings, and a life outside them |
 
 ---
 
@@ -291,16 +216,10 @@ vercel deploy --prod
 
 | Name | Role |
 |------|------|
-| **Anisha Subberwal** | Product Lead, Frontend, Oura Integration |
-| **Annie Kaur** | AI Architecture, Claude Integration |
+| **Anisha Subberwal** | Product Lead, Frontend |
+| **Annie Kaur** | AI Architecture |
 | **Tiantian Luo** | Backend, API Proxy, Calendar Sync |
 | **Siddhant Patra** | UX Design, Brain Dump Flow |
-
----
-
-## Competition
-
-**Claude Hackathon** — Built with Claude Sonnet as the core reasoning engine.
 
 ---
 

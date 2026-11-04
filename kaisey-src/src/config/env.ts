@@ -22,24 +22,6 @@ export const env = {
     proxyUrl: import.meta.env.VITE_OPENAI_PROXY_URL || "https://kaisey-proxy.vercel.app/api/chat",
   },
 
-  // Canvas LMS
-  canvas: {
-    apiUrl: import.meta.env.VITE_CANVAS_API_URL || "",
-    apiKey: import.meta.env.VITE_CANVAS_API_KEY || "",
-  },
-
-  // Health Integrations
-  health: {
-    appleHealthKey: import.meta.env.VITE_APPLE_HEALTH_API_KEY || "",
-    stravaClientId: import.meta.env.VITE_STRAVA_CLIENT_ID || "",
-    stravaClientSecret: import.meta.env.VITE_STRAVA_CLIENT_SECRET || "",
-    whoopApiKey: import.meta.env.VITE_WHOOP_API_KEY || "",
-    ouraClientId: import.meta.env.VITE_OURA_CLIENT_ID || "",
-    ouraRedirectUri: import.meta.env.PROD
-      ? window.location.origin + '/portfolio/kaisey'
-      : (import.meta.env.VITE_OURA_REDIRECT_URI || window.location.origin),
-  },
-
   // App Config
   app: {
     name: import.meta.env.VITE_APP_NAME || "Kaisey",
@@ -61,6 +43,4 @@ if (typeof window !== 'undefined') {
 // Export individual configs for convenience
 export const googleConfig = env.google;
 export const openaiConfig = env.openai;
-export const canvasConfig = env.canvas;
-export const healthConfig = env.health;
 export const appConfig = env.app;
