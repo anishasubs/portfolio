@@ -706,6 +706,15 @@
                 overflow: hidden;
             }
         }
+
+        /* ── Artboard flex fix ───────────────────────────────────
+           The artboards are 1440px-wide fixed-coordinate canvases that
+           JS scales with transform-origin: top center. As flex children
+           they were shrinking to the viewport width, which moved the
+           transform origin off the canvas centre and pushed the right
+           edge (the final WELCOME balloon) out of view below 1440px.
+           Keep them at their intrinsic width so the scale stays centred. */
+        .artboard, .text-artboard, .about-artboard { flex: 0 0 auto; }
     </style>
 </head>
 <body>
@@ -728,10 +737,10 @@
             <a href="index.html">Work</a>
             <ul class="nav-work-dropdown">
                 <li><a href="nba-league-pass/index.html">nba league pass · retention</a></li>
-                <li><a href="inde-wild-case-study/index.html">beauty brand growth</a></li>
-                <li><a href="coffeechain/index.html">crypto coffee case</a></li>
-                <li><a href="kaisey-case-study/index.html">smart calendar</a></li>
-                <li><a href="whifff-case-study/index.html">perfume scent quiz</a></li>
+                <li><a href="inde-wild-case-study/index.html">ind&#275; wild &middot; campaign identity</a></li>
+                <li><a href="coffeechain/index.html">coffeechain &middot; loyalty app design</a></li>
+                <li><a href="kaisey-case-study/index.html">kaisey &middot; ai calendar, designed &amp; coded</a></li>
+                <li><a href="whifff-case-study/index.html">whifff &middot; ai fragrance recommender</a></li>
             </ul>
         </li>
         <li><a href="#about" id="nav-about-link">About</a></li>
@@ -785,19 +794,19 @@
     <div class="mobile-grid" id="mobile-grid">
         <div class="mg-cell" id="mg-tube">
             <img src="./assets/tube.webp" alt="Cosmetic tube" draggable="false">
-            <span class="mg-label">BEAUTY<br><strong>BRAND GROWTH</strong></span>
+            <span class="mg-label">IND&#274; WILD<br><strong>CAMPAIGN IDENTITY</strong></span>
         </div>
         <div class="mg-cell" id="mg-receipt">
             <img src="./assets/receipt.svg" alt="Receipt" draggable="false">
-            <span class="mg-label">A CRYPTO<br><strong>COFFEE CASE</strong></span>
+            <span class="mg-label">COFFEECHAIN<br><strong>LOYALTY APP DESIGN</strong></span>
         </div>
         <div class="mg-cell" id="mg-rollon">
             <img src="./assets/perfume-bottle.webp" alt="Perfume bottle" draggable="false">
-            <span class="mg-label">PERFUME<br><strong>RECOMMENDER</strong></span>
+            <span class="mg-label">WHIFFF<br><strong>AI FRAGRANCE</strong></span>
         </div>
         <div class="mg-cell" id="mg-todo">
             <img src="./assets/todo.webp" alt="To-Do List" draggable="false">
-            <span class="mg-label">A SMART<br><strong>CALENDAR</strong></span>
+            <span class="mg-label">KAISEY<br><strong>AI CALENDAR</strong></span>
         </div>
         <div class="mg-cell" id="mg-phone-case">
             <img src="./assets/phone-case.webp" alt="Phone case" draggable="false">
@@ -819,7 +828,7 @@
                 <span class="by-name">Anisha Subberwal</span>
                 <img class="by-underline" src="./assets/byline-underline.svg" alt="">
             </div>
-            <p class="portfolio-desc" id="portfolio-desc">WELCOME TO ALL THE SKILLS IN MY BACK POCKET. CLICK ON AN OBJECT TO TAKE YOU TO A PROJECT.</p>
+            <p class="portfolio-desc" id="portfolio-desc">I&rsquo;M A DESIGNER WHO BUILDS. PARSONS, THEN COLUMBIA &mdash; I MAKE BRAND SYSTEMS AND SHIP THE PRODUCTS TOO. CLICK ON AN OBJECT TO OPEN A PROJECT.</p>
         </div>
     </div>
 
