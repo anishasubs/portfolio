@@ -715,6 +715,30 @@
            edge (the final WELCOME balloon) out of view below 1440px.
            Keep them at their intrinsic width so the scale stays centred. */
         .artboard, .text-artboard, .about-artboard { flex: 0 0 auto; }
+
+        /* ── Hero text block, inline in the artboard ────────────
+           On desktop the title sits bottom-right inside the scaled
+           artboard so the whole composition reads in one screen. JS moves
+           the node in and out of .text-section at the mobile breakpoint. */
+        .text-artboard.hero-inline {
+            position: absolute;
+            padding: 0;
+            transform: none !important;
+            text-align: left;
+        }
+        .text-artboard.hero-inline .portfolio-title {
+            font-size: 130px;
+            letter-spacing: -12px;
+        }
+        .text-artboard.hero-inline .portfolio-desc {
+            margin: 28px 0 0;
+            max-width: 560px;
+        }
+        .text-artboard.hero-inline .byline {
+            display: block;
+            margin: 0 0 4px;
+        }
+        .text-artboard.hero-inline .by-name { font-size: 46px; }
     </style>
 </head>
 <body>
@@ -776,10 +800,10 @@
                 <div class="object" id="basketball"><img src="./nba-league-pass/assets/basketball-keychain.png" alt="Basketball keychain" draggable="false"></div>
 
                 <!-- Hover labels -->
-                <div class="hover-label" id="label-tube">BEAUTY<br><strong>BRAND GROWTH</strong><span class="metric-subtitle">160+ creators · 481K views · $344K revenue</span></div>
-                <div class="hover-label" id="label-receipt">A CRYPTO<br><strong>COFFEE CASE</strong><span class="metric-subtitle">Blockchain loyalty · Solana-powered</span></div>
-                <div class="hover-label" id="label-todo">A SMART<br><strong>CALENDAR</strong><span class="metric-subtitle">AI scheduling · Google Calendar integration</span></div>
-                <div class="hover-label" id="label-rollon">PERFUME<br><strong>RECOMMENDER</strong><span class="metric-subtitle">20,000+ fragrances · Personalized scent quiz</span></div>
+                <div class="hover-label" id="label-tube">INDĒ WILD<br><strong>CAMPAIGN IDENTITY</strong><span class="metric-subtitle">Art direction · 160+ creators · 28% activation</span></div>
+                <div class="hover-label" id="label-receipt">COFFEECHAIN<br><strong>LOYALTY APP DESIGN</strong><span class="metric-subtitle">Solana dApp concept · rewards for indie cafés</span></div>
+                <div class="hover-label" id="label-todo">KAISEY<br><strong>AI CALENDAR</strong><span class="metric-subtitle">Designed &amp; coded end to end · 20-user beta</span></div>
+                <div class="hover-label" id="label-rollon">WHIFFF<br><strong>AI FRAGRANCE RECOMMENDER</strong><span class="metric-subtitle">20,000+ products · L’Oréal Brandstorm 2026</span></div>
                 <div class="hover-label" id="label-phone-case">ABOUT<br><strong>ME</strong></div>
                 <div class="hover-label" id="label-basketball">NBA<br><strong>LEAGUE PASS</strong><span class="metric-subtitle">Retention redesign · game-night → daily habit</span></div>
 
@@ -822,12 +846,10 @@
     <!-- Text section below scroll zone -->
     <div class="text-section" id="text-section">
         <div class="text-artboard" id="text-artboard">
-            <h1 class="portfolio-title" id="portfolio-title">A Designer<br>Who Builds</h1>
             <div class="byline" id="byline">
-                <span class="by-label">BY:</span>
-                <span class="by-name">Anisha Subberwal</span>
-                <img class="by-underline" src="./assets/byline-underline.svg" alt="">
+                <span class="by-name">Anisha&rsquo;s Portfolio</span>
             </div>
+            <h1 class="portfolio-title" id="portfolio-title">A Designer<br>Who Builds</h1>
             <p class="portfolio-desc" id="portfolio-desc">PARSONS BFA TO COLUMBIA BUSINESS SCHOOL. BRAND SYSTEMS, CAMPAIGNS, AND PRODUCTS I DESIGN AND SHIP MYSELF. CLICK ON AN OBJECT TO OPEN A PROJECT.</p>
         </div>
     </div>
@@ -893,53 +915,54 @@
        ================================================================ */
     var ARTBOARD_W     = 1440;
     var ABOUT_H        = 1950;
-    var POCKET         = { x: 475, y: 647, w: 490, h: 490 };
-    var HOME_ARTBOARD_H = POCKET.y + POCKET.h; // 1137
+    var POCKET         = { x: 100, y: 460, w: 360, h: 360 };
+    var HOME_ARTBOARD_H = 820;  // one-screen composition
+    var HERO_TEXT      = { x: 620, y: 320, w: 790 };
 
     var LETTERS = [
-        { x: 84,   y: 304, w: 203, h: 203 },
-        { x: 262,  y: 304, w: 203, h: 203 },
-        { x: 440,  y: 304, w: 203, h: 203 },
-        { x: 618,  y: 304, w: 204, h: 203 },
-        { x: 797,  y: 304, w: 203, h: 203 },
-        { x: 975,  y: 304, w: 203, h: 203 },
-        { x: 1153, y: 304, w: 203, h: 203 }
+        { x: 84,   y: 110, w: 203, h: 203 },
+        { x: 262,  y: 110, w: 203, h: 203 },
+        { x: 440,  y: 110, w: 203, h: 203 },
+        { x: 618,  y: 110, w: 204, h: 203 },
+        { x: 797,  y: 110, w: 203, h: 203 },
+        { x: 975,  y: 110, w: 203, h: 203 },
+        { x: 1153, y: 110, w: 203, h: 203 }
     ];
 
     var OBJECTS = {
         tube: {
-            start: { x: 497, y: 450, w: 85, h: 350 },
-            end:   { x: 107, y: 237, w: 85, h: 350 },
+            start: { x: 190, y: 350, w: 51,  h: 210 },
+            end:   { x: 120, y: 135, w: 51,  h: 210 },
             startRot: -18.77, endRot: 0
         },
         receipt: {
-            start: { x: 584, y: 495, w: 151, h: 300 },
-            end:   { x: 244, y: 273, w: 151, h: 300 },
+            start: { x: 215, y: 380, w: 91,  h: 180 },
+            end:   { x: 290, y: 148, w: 91,  h: 180 },
             startRot: 0, endRot: 0
         },
         'phone-case': {
-            start: { x: 679, y: 427, w: 150, h: 307 },
-            end:   { x: 911, y: 240, w: 150, h: 307 },
+            start: { x: 250, y: 360, w: 90,  h: 184 },
+            end:   { x: 900, y: 125, w: 90,  h: 184 },
             startRot: 0, endRot: 0
         },
         todo: {
-            start: { x: 614, y: 543, w: 218, h: 257 },
-            end:   { x: 447, y: 308, w: 201, h: 239 },
+            start: { x: 230, y: 400, w: 121, h: 143 },
+            end:   { x: 470, y: 170, w: 121, h: 143 },
             startRot: 0, endRot: 0
         },
         rollon: {
-            start: { x: 740, y: 580, w: 159, h: 270 },
-            end:   { x: 700, y: 277, w: 159, h: 270 },
+            start: { x: 270, y: 375, w: 95,  h: 162 },
+            end:   { x: 700, y: 150, w: 95,  h: 162 },
             startRot: 0, endRot: 0
         },
         basketball: {
-            start: { x: 620, y: 560, w: 220, h: 156 },
-            end:   { x: 1113, y: 330, w: 220, h: 156 },
+            start: { x: 240, y: 410, w: 132, h: 94  },
+            end:   { x: 1120, y: 215, w: 132, h: 94 },
             startRot: -16, endRot: 0
         }
     };
 
-    var SCROLL_VH = 3;
+    var SCROLL_VH = 1.5;
 
     /* ── Mobile constants ─────────────────────────────────── */
     var MOBILE_BREAKPOINT = 768;
@@ -1021,6 +1044,7 @@
     var aboutFrameEl  = document.getElementById('about-frame-inner');
     var aboutArtboard = document.getElementById('about-artboard-inner');
     var textArtboard  = document.getElementById('text-artboard');
+    var textSection   = document.getElementById('text-section');
 
     var mobileGridEl = document.getElementById('mobile-grid');
 
@@ -1072,10 +1096,14 @@
             var vh = window.innerHeight;
             scrollZone.style.height = Math.ceil(vh * MOBILE_SCROLL_VH + ah * scale) + 'px';
 
-            // Text section — no scaling on mobile, CSS handles it
+            // Text section — flows below the artboard on mobile
+            if (textArtboard.parentNode !== textSection) textSection.appendChild(textArtboard);
+            textArtboard.classList.remove('hero-inline');
+            textArtboard.style.left      = '';
+            textArtboard.style.top       = '';
             textArtboard.style.width     = '100%';
             textArtboard.style.transform = 'none';
-            textArtboard.parentElement.style.height = 'auto';
+            textSection.style.height     = 'auto';
 
             // About — CSS flexbox handles layout
             aboutArtboard.style.width     = '100%';
@@ -1091,11 +1119,17 @@
             artboardFrame.style.height = Math.ceil(HOME_ARTBOARD_H * scale) + 'px';
 
             var vh = window.innerHeight;
-            scrollZone.style.height = Math.ceil(vh * SCROLL_VH + HOME_ARTBOARD_H * scale) + 'px';
+            // Zone must leave vh*SCROLL_VH of travel AFTER the sticky frame, or the
+            // animation never reaches 1.0 and the objects never become clickable.
+            scrollZone.style.height = Math.ceil(vh * SCROLL_VH + Math.max(vh, HOME_ARTBOARD_H * scale)) + 'px';
 
-            textArtboard.style.width     = ARTBOARD_W + 'px';
-            textArtboard.style.transform = 'scale(' + scale + ')';
-            textArtboard.parentElement.style.height = Math.ceil(760 * scale) + 'px';
+            // Text block lives inside the artboard, bottom-right
+            if (textArtboard.parentNode !== artboard) artboard.appendChild(textArtboard);
+            textArtboard.classList.add('hero-inline');
+            textArtboard.style.left      = HERO_TEXT.x + 'px';
+            textArtboard.style.top       = HERO_TEXT.y + 'px';
+            textArtboard.style.width     = HERO_TEXT.w + 'px';
+            textSection.style.height     = '0px';
 
             aboutArtboard.style.width     = ARTBOARD_W + 'px';
             aboutArtboard.style.height    = ABOUT_H + 'px';
