@@ -461,19 +461,27 @@
 
         /* ── Scroll hint ─────────────────────────────────────── */
         .scroll-hint {
-            position: fixed; bottom: 32px; right: 32px;
+            position: fixed; bottom: 26px; left: 50%;
+            transform: translateX(-50%);
             z-index: 199;
+            display: flex; flex-direction: column;
+            align-items: center; gap: 6px;
             font-family: 'Raleway', sans-serif;
-            font-size: 20px; color: #1c4e89;
+            font-size: 12px; font-weight: 700;
+            letter-spacing: 0.22em; text-transform: uppercase;
+            color: #1c4e89;
             opacity: 0;
             transition: opacity 0.6s ease;
             pointer-events: none;
         }
-        .scroll-hint.visible { opacity: 0.85; }
+        .scroll-hint::before { content: "Scroll"; }
         .scroll-hint span {
             display: inline-block;
+            font-size: 26px;
+            line-height: 1;
             animation: bob 1.6s ease-in-out infinite;
         }
+        .scroll-hint.visible { opacity: 1; }
         @keyframes bob { 0%, 100% { transform: translateY(0); } 50% { transform: translateY(5px); } }
 
         /* ── Voiceover button ─────────────────────────────── */
@@ -728,20 +736,20 @@
             text-align: left;
         }
         .text-artboard.hero-inline .portfolio-title {
-            font-size: 80px;
-            letter-spacing: -2.5px;
+            font-size: 92px;
+            letter-spacing: -3px;
             line-height: 1.02;
         }
         .text-artboard.hero-inline .portfolio-desc {
             margin: 20px 0 0;
-            max-width: 430px;
-            font-size: 13px;
+            max-width: 480px;
+            font-size: 14.5px;
         }
         .text-artboard.hero-inline .byline {
             display: block;
             margin: 0 0 2px;
         }
-        .text-artboard.hero-inline .by-name { font-size: 30px; }
+        .text-artboard.hero-inline .by-name { font-size: 35px; }
 
         /* ── Object hover fixes ───────────────────────────────
            #basketball sets a resting drop-shadow by id, which outranks
@@ -951,7 +959,7 @@
     var ABOUT_H        = 1950;
     var POCKET         = { x: 235, y: 460, w: 360, h: 360 };
     var HOME_ARTBOARD_H = 820;  // one-screen composition
-    var HERO_TEXT      = { x: 775, y: 487, w: 430 };  // lower right, centred on the pocket band
+    var HERO_TEXT      = { x: 735, y: 467, w: 480 };  // lower right, centred on the pocket band
 
     var LETTERS = [
         { x: 84,   y: 110, w: 203, h: 203 },
@@ -1145,7 +1153,12 @@
             aboutArtboard.style.transform = 'none';
             aboutFrameEl.style.height     = 'auto';
         } else {
-            scale = Math.min(1, window.innerWidth / ARTBOARD_W);
+            // Fill the viewport instead of capping at the canvas size: cap
+            // at 1 meant a 1920 screen showed the 1440 artboard centred with
+            // 480px of dead margin, which read as everything being too small.
+            // Constrained by height too, so the composition stays one screen.
+            scale = Math.min(window.innerWidth / ARTBOARD_W,
+                             window.innerHeight / HOME_ARTBOARD_H);
 
             artboard.style.width     = ARTBOARD_W + 'px';
             artboard.style.height    = HOME_ARTBOARD_H + 'px';
@@ -1360,6 +1373,7 @@
             var ep     = easeInOutCubic(oPhase);
 
             var LABEL_GAP = 12;
+            var LABEL_EDGE = 72;
             for (var key in OBJECTS) {
                 var cfg   = OBJECTS[key];
                 var objEl = objectEls[key];
@@ -1376,7 +1390,16 @@
                 objEl.style.transform = 'rotate(' + rot + 'deg)';
 
                 if (labelEls[key]) {
-                    labelEls[key].style.left = (curX + curW / 2) + 'px';
+                    // Labels are centred on their object, so the outermost ones
+                    // sat hard against the canvas edge. Clamp the centre so the
+                    // label box keeps LABEL_EDGE clear on both sides, without
+                    // moving the objects themselves.
+                    var halfLabel = labelEls[key].offsetWidth / 2;
+                    var centre = curX + curW / 2;
+                    var minC = LABEL_EDGE + halfLabel;
+                    var maxC = ARTBOARD_W - LABEL_EDGE - halfLabel;
+                    if (maxC > minC) centre = Math.min(Math.max(centre, minC), maxC);
+                    labelEls[key].style.left = centre + 'px';
                     labelEls[key].style.top  = (curY + curH + LABEL_GAP) + 'px';
                 }
             }
