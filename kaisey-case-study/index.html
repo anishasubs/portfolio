@@ -561,13 +561,41 @@
             inset: 0;
             z-index: 1;
             background:
-                radial-gradient(ellipse 62% 46% at 50% 44%, rgba(13,11,22,0.80) 0%, rgba(13,11,22,0.45) 62%, rgba(13,11,22,0.05) 100%),
-                linear-gradient(180deg, rgba(13,11,22,0.62) 0%, rgba(13,11,22,0.34) 40%, rgba(13,11,22,0.86) 100%),
-                radial-gradient(ellipse at 50% 42%, rgba(124,58,237,0.34) 0%, rgba(13,11,22,0.10) 66%);
+                linear-gradient(180deg,
+                    rgba(13,11,22,0.70) 0%,
+                    rgba(13,11,22,0.30) 22%,
+                    rgba(13,11,22,0.00) 44%,
+                    rgba(13,11,22,0.00) 70%,
+                    rgba(13,11,22,0.55) 100%);
         }
-        .hero-wide { max-width: 860px; width: 100%; }
-        .hero-content h1,
-        .hero-content .hero-subtitle { text-shadow: 0 2px 18px rgba(13, 11, 22, 0.55); }
+        .hero { align-items: stretch; padding: 0; }
+        .hero-lockup {
+            position: absolute;
+            top: 104px; left: 50%;
+            transform: translateX(-50%);
+            z-index: 2;
+            width: min(620px, calc(100% - 48px));
+            text-align: center;
+        }
+        .hero-lockup h1 {
+            font-family: 'Bodoni Moda', serif;
+            font-size: clamp(2.1rem, 4vw, 3.1rem);
+            font-weight: 600;
+            line-height: 1;
+            margin: 0 0 0.6rem;
+            color: var(--cream);
+            text-shadow: 0 2px 14px rgba(13, 11, 22, 0.9);
+            animation: fadeInUp 0.8s ease-out 0.2s both;
+        }
+        .hero-standfirst {
+            margin: 0;
+            font-size: 0.92rem;
+            font-weight: 300;
+            line-height: 1.6;
+            color: var(--cream-dark);
+            text-shadow: 0 1px 10px rgba(13, 11, 22, 0.95);
+            animation: fadeInUp 0.8s ease-out 0.4s both;
+        }
         .scroll-indicator {
             display: inline-flex;
             flex-direction: column;
@@ -619,13 +647,9 @@
     <section class="hero">
         <video class="hero-bg" id="hero-bg" autoplay muted loop playsinline preload="metadata" poster="assets/hero-demo-wide-poster.jpg" aria-hidden="true"></video>
         <div class="hero-scrim" aria-hidden="true"></div>
-        <div class="hero-content hero-wide">
-            <span class="hero-tag">Smart Calendar</span>
-            <h1>Kaisey: Your AI Chief of Staff for Student Life</h1>
-            <p class="hero-subtitle">An AI calendar assistant that reads your Google Calendar, reasons over it with OpenAI, and tells you what actually matters right now &mdash; including how well you actually slept.</p>
-            <div class="hero-ctas">
-                <a href="../kaisey/index.html" class="cta-btn cta-primary" target="_blank">Try Kaisey</a>
-            </div>
+        <div class="hero-lockup">
+            <h1>Kaisey</h1>
+            <p class="hero-standfirst">An AI calendar assistant that reads your Google Calendar, reasons over it with OpenAI, and tells you what actually matters right now.</p>
         </div>
         <a class="scroll-indicator" href="#problem">Scroll to read the case study<span class="scroll-arrow">&darr;</span></a>
     </section>
