@@ -781,6 +781,22 @@
             }
         }
 
+
+        /* -- Edge hover labels -------------------------------------
+           The two outermost labels anchor to their object rather than
+           centring on it: left-aligned from the lip balm, right-aligned
+           to the keychain. Scoped above the mobile breakpoint, since an
+           id selector would otherwise beat the mobile .hover-label rule. */
+        @media (min-width: 769px) {
+            #label-tube {
+                text-align: left;
+                transform: none;
+            }
+            #label-basketball {
+                text-align: right;
+                transform: translateX(-100%);
+            }
+        }
     </style>
 </head>
 <body>
@@ -1394,12 +1410,21 @@
                     // sat hard against the canvas edge. Clamp the centre so the
                     // label box keeps LABEL_EDGE clear on both sides, without
                     // moving the objects themselves.
-                    var halfLabel = labelEls[key].offsetWidth / 2;
-                    var centre = curX + curW / 2;
-                    var minC = LABEL_EDGE + halfLabel;
-                    var maxC = ARTBOARD_W - LABEL_EDGE - halfLabel;
-                    if (maxC > minC) centre = Math.min(Math.max(centre, minC), maxC);
-                    labelEls[key].style.left = centre + 'px';
+                    var anchor;
+                    if (key === 'tube') {
+                        // left-aligned, starting at the lip balm
+                        anchor = curX;
+                    } else if (key === 'basketball') {
+                        // right-aligned, ending at the keychain
+                        anchor = curX + curW;
+                    } else {
+                        var halfLabel = labelEls[key].offsetWidth / 2;
+                        anchor = curX + curW / 2;
+                        var minC = LABEL_EDGE + halfLabel;
+                        var maxC = ARTBOARD_W - LABEL_EDGE - halfLabel;
+                        if (maxC > minC) anchor = Math.min(Math.max(anchor, minC), maxC);
+                    }
+                    labelEls[key].style.left = anchor + 'px';
                     labelEls[key].style.top  = (curY + curH + LABEL_GAP) + 'px';
                 }
             }
