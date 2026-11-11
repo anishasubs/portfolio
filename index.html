@@ -7,7 +7,7 @@
     <title>Anisha Subberwal — Portfolio</title>
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Bodoni+Moda:opsz@6..96&family=Parisienne&family=Raleway:wght@400;700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Bodoni+Moda:opsz,wght@6..96,400..900&family=Parisienne&family=Raleway:wght@400;700&display=swap" rel="stylesheet">
     <style>
         *, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
         html { overscroll-behavior: none; scroll-behavior: smooth; }
@@ -129,7 +129,7 @@
         .portfolio-title {
             font-family: 'Bodoni Moda', serif;
             font-size: 200px;
-            font-weight: 400;
+            font-weight: 600;
             letter-spacing: -19px;
             line-height: 1;
             color: #1c4e89;
@@ -219,7 +219,7 @@
             position: absolute;
             font-family: 'Bodoni Moda', serif;
             font-size: 140px;
-            font-weight: 400;
+            font-weight: 600;
             letter-spacing: -6px;
             line-height: 1;
             color: #1c4e89;
@@ -728,7 +728,7 @@
             text-align: left;
         }
         .text-artboard.hero-inline .portfolio-title {
-            font-size: 84px;
+            font-size: 80px;
             letter-spacing: -2.5px;
             line-height: 1.02;
         }
@@ -770,6 +770,34 @@
                 white-space: normal !important;
                 width: 105px;
                 overflow-wrap: break-word;
+            }
+        }
+
+        /* -- Pocket caption ------------------------------------
+           Keeps the original "all the skills in my back pocket" line,
+           captioning the pocket the objects come out of rather than
+           competing with the statement on the right. Desktop sits it in
+           the gap between the hover labels and the pocket; mobile hangs
+           it under the pocket, which MOBILE_ARTBOARD_H makes room for. */
+        .pocket-caption {
+            position: absolute;
+            left: 415px;
+            top: 422px;
+            transform: translateX(-50%);
+            margin: 0;
+            font-family: 'Parisienne', cursive;
+            font-size: 22px;
+            color: #1c4e89;
+            opacity: 0.72;
+            white-space: nowrap;
+            pointer-events: none;
+            z-index: 20;
+        }
+        @media (max-width: 768px) {
+            .pocket-caption {
+                left: 187px;
+                top: 752px;
+                font-size: 19px;
             }
         }
     </style>
@@ -842,6 +870,7 @@
 
                 <!-- Denim pocket -->
                 <div class="pocket" id="pocket"><img src="./assets/denim-pocket.webp" alt="Denim pocket" draggable="false"></div>
+                <p class="pocket-caption" id="pocket-caption">All the skills in my back pocket</p>
 
             </div>
         </div>
@@ -1000,7 +1029,7 @@
     /* ── Mobile constants ─────────────────────────────────── */
     var MOBILE_BREAKPOINT = 768;
     var MOBILE_ARTBOARD_W = 375;
-    var MOBILE_ARTBOARD_H = 760;
+    var MOBILE_ARTBOARD_H = 798;
     var MOBILE_SCROLL_VH  = 2.5;
 
     // Pocket: centered horizontally, starts near bottom, ends further down
