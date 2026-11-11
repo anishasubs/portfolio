@@ -760,6 +760,18 @@
         }
         .object.clickable { transition: filter 0.3s ease, translate 0.3s ease; }
         .object.clickable:hover { translate: 0 -2px; }
+
+        /* -- Mobile hover labels --------------------------------
+           All six labels are shown at once on mobile, so nowrap let the
+           longer ones (WHIFFF, COFFEECHAIN) spill into their neighbours
+           and off the right edge. Cap each to its grid column and wrap. */
+        @media (max-width: 768px) {
+            .hover-label {
+                white-space: normal !important;
+                width: 105px;
+                overflow-wrap: break-word;
+            }
+        }
     </style>
 </head>
 <body>
