@@ -574,7 +574,7 @@
         <div class="hero-content">
             <span class="hero-tag">Smart Calendar</span>
             <h1>Kaisey: Your AI Chief of Staff for Student Life</h1>
-            <p class="hero-subtitle">The first calendar system that unifies Google Calendar, Canvas, and CampusGroups &mdash; then uses OpenAI and your Oura Ring data to tell you what actually matters most right now.</p>
+            <p class="hero-subtitle">An AI calendar assistant that reads your Google Calendar, reasons over it with OpenAI, and tells you what actually matters right now &mdash; including how well you actually slept.</p>
             <div class="hero-ctas">
                 <a href="#demo" class="cta-btn cta-primary">Watch Demo</a>
                 <a href="#architecture" class="cta-btn cta-secondary">See AI Architecture &rarr;</a>
@@ -589,7 +589,7 @@
         <div class="container fade-in">
             <span class="section-tag">The Problem</span>
             <h2 class="section-title">The Recruiting &harr; Academics Collision</h2>
-            <p class="problem-intro">Students don't have busy calendars &mdash; they have <strong>competing calendars</strong> that actively work against each other. Your Canvas deadline doesn't know about your Super Day. Your CampusGroups invite doesn't know you slept four hours. The result is a daily triage problem that costs real opportunities.</p>
+            <p class="problem-intro">Students don't have busy calendars &mdash; they have <strong>competing calendars</strong> that actively work against each other. Your coursework deadline doesn't know about your Super Day. Your calendar doesn't know you slept four hours. The result is a daily triage problem that costs real opportunities.</p>
 
             <div class="cards-grid stats-grid" style="margin-bottom: 2rem;">
                 <div class="card" style="text-align: center;">
@@ -610,7 +610,7 @@
                 <div class="card">
                     <div class="card-icon">&#128218;</div>
                     <h3>Academics</h3>
-                    <p>Canvas deadlines, group projects, and reading lists exist in a silo with zero connection to your recruiting calendar or energy levels.</p>
+                    <p>Coursework deadlines, group projects, and reading lists exist in a silo with zero connection to your recruiting calendar or energy levels.</p>
                 </div>
                 <div class="card">
                     <div class="card-icon">&#128188;</div>
@@ -620,7 +620,7 @@
                 <div class="card">
                     <div class="card-icon">&#127881;</div>
                     <h3>Social Life</h3>
-                    <p>Club events on CampusGroups, networking dinners, weekend trips &mdash; the first thing sacrificed when workload spikes, but the hardest to rebuild once dropped.</p>
+                    <p>Club events, networking dinners, weekend trips &mdash; the first thing sacrificed when workload spikes, but the hardest to rebuild once dropped.</p>
                 </div>
                 <div class="card">
                     <div class="card-icon">&#128154;</div>
@@ -640,23 +640,23 @@
         <div class="container fade-in">
             <span class="section-tag">The Solution</span>
             <h2 class="section-title">One Intelligent Layer Across Everything</h2>
-            <p class="section-desc" style="margin-bottom: 2.5rem;">Kaisey syncs your Google Calendar, Canvas Calendar, and CampusGroups into one intelligent feed &mdash; then uses OpenAI to reason about what actually matters most right now. Not a new calendar. A smarter layer over the three you already use.</p>
+            <p class="section-desc" style="margin-bottom: 2.5rem;">Kaisey reads your Google Calendar and reasons over it with OpenAI to work out what actually matters most right now. Not a new calendar. A smarter layer over the three you already use.</p>
 
             <div class="cards-grid">
                 <div class="card">
                     <div class="card-icon">&#9889;</div>
                     <h3>Dynamic Priority Toggle</h3>
-                    <p>One tap shifts your entire day. Slide between Academics, Recruiting, Social, and Wellness modes &mdash; Kaisey re-ranks every event using the model's reasoning, not a simple sort. When your Oura readiness score is below 60, Wellness mode auto-activates.</p>
+                    <p>One tap shifts your entire day. Slide between Academics, Recruiting, Social, and Wellness modes &mdash; Kaisey re-ranks every event using the model's reasoning, not a simple sort. When a connected Oura readiness score is below 60, Wellness mode auto-activates.</p>
                 </div>
                 <div class="card">
                     <div class="card-icon">&#128279;</div>
-                    <h3>Three Calendars, One Brain</h3>
-                    <p>Google Calendar, Canvas Calendar, and CampusGroups &mdash; synced into a single unified feed. For the first time, your class deadlines, recruiting coffee chats, and club events live in the same view, and the model can reason across all of them at once.</p>
+                    <h3>Plain English In, Schedule Out</h3>
+                    <p>Describe your week the way you would to a person and Kaisey pulls the commitments out of it, proposes times against your real calendar, and writes the blocks back. The model can reason across all of them at once.</p>
                 </div>
                 <div class="card">
                     <div class="card-icon">&#128154;</div>
-                    <h3>Oura Ring Biometric Sync</h3>
-                    <p>Kaisey pulls your sleep score, readiness score, and recovery data from the Oura Ring API &mdash; then factors it into every prioritization decision. Slept 4 hours? Kaisey promotes wellness blocks and defers low-stakes meetings.</p>
+                    <h3>Optional Oura Ring Sync</h3>
+                    <p>Connect an Oura Ring and Kaisey pulls sleep, readiness and recovery through the Oura API, then feeds it into the ranking. Slept four hours? Wellness blocks get promoted and low-stakes meetings defer. It is wired end to end &mdash; OAuth, sync and cards &mdash; and entirely optional: everything else works without it.</p>
                 </div>
                 <div class="card">
                     <div class="card-icon">&#128274;</div>
@@ -690,7 +690,7 @@
             <div class="cards-grid">
                 <div class="card">
                     <h3>Why an LLM, Not a Sorting Algorithm?</h3>
-                    <p>A sort/filter can reorder by category. But only a language model can reason across three calendar sources and your biometric state simultaneously &mdash; multi-source reasoning, not sorting.</p>
+                    <p>A sort/filter can reorder by category. But only a language model can reason across your calendar, what you tell it in plain English, and your biometric state at the same time &mdash; multi-source reasoning, not sorting.</p>
                 </div>
                 <div class="card">
                     <h3>What Oura Data Powers</h3>
@@ -698,7 +698,7 @@
                 </div>
                 <div class="card">
                     <h3>Tool Use Pattern</h3>
-                    <p>The model calls <code>get_gcal_events()</code>, <code>get_canvas_deadlines()</code>, <code>get_campusgroups_events()</code>, and <code>get_oura_readiness()</code> through OpenAI function calling to build the full picture before reasoning.</p>
+                    <p>Three functions do the work: <code>extract_tasks()</code> pulls commitments out of freeform text, <code>propose_schedule()</code> fits them around what is already booked, and <code>calendar_action()</code> writes the result back. Calendar and Oura data are gathered client-side and passed in as context.</p>
                 </div>
                 <div class="card">
                     <h3>Structured Output</h3>
@@ -835,7 +835,7 @@
                 <div>
                     <h3 style="font-size: 1.1rem; margin-bottom: 4px;">Phase 2 &mdash; Deepen Integrations</h3>
                     <div style="font-size: 0.8rem; color: var(--text-secondary); letter-spacing: 0.5px; margin-bottom: 6px;">Summer 2026 &middot; API Partnerships</div>
-                    <p style="color: var(--text-secondary); line-height: 1.7;">Two-way write-back into Google Calendar, CUIT partnership for Canvas API. Kaisey doesn't just read your schedule &mdash; it proposes blocks and writes them directly.</p>
+                    <p style="color: var(--text-secondary); line-height: 1.7;">Deeper two-way write-back into Google Calendar, and an LMS integration so coursework deadlines arrive automatically instead of being typed in.</p>
                 </div>
                 <div>
                     <h3 style="font-size: 1.1rem; margin-bottom: 4px;">Phase 3 &mdash; Event Discovery via LinkUp</h3>
@@ -845,12 +845,12 @@
                 <div>
                     <h3 style="font-size: 1.1rem; margin-bottom: 4px;">Phase 4 &mdash; Multi-University</h3>
                     <div style="font-size: 0.8rem; color: var(--text-secondary); letter-spacing: 0.5px; margin-bottom: 6px;">Fall 2026 &middot; 5 partner schools</div>
-                    <p style="color: var(--text-secondary); line-height: 1.7;">Career services partnerships at 4&ndash;5 university programs. Oura integration as differentiator. Each school adds scheduling pattern data that sharpens the model's reasoning.</p>
+                    <p style="color: var(--text-secondary); line-height: 1.7;">Career services partnerships at 4&ndash;5 university programs. Each school adds scheduling pattern data that sharpens the model's reasoning.</p>
                 </div>
                 <div>
                     <h3 style="font-size: 1.1rem; margin-bottom: 4px;">Phase 5 &mdash; Beyond Students</h3>
                     <div style="font-size: 0.8rem; color: var(--text-secondary); letter-spacing: 0.5px; margin-bottom: 6px;">2027 &middot; Working professionals</div>
-                    <p style="color: var(--text-secondary); line-height: 1.7;">The priority toggle + biometrics pattern generalizes to professionals. Oura's 2M+ user base becomes a natural distribution channel via the Oura app marketplace.</p>
+                    <p style="color: var(--text-secondary); line-height: 1.7;">The priority toggle generalizes to professionals, and the optional biometrics hook extends to any wearable with a public API.</p>
 
                     <p style="color: var(--text-secondary); line-height: 1.7; margin-top: 12px; font-size: 0.85rem; font-style: italic; border-top: 1px solid rgba(0,0,0,0.06); padding-top: 12px;">Built with Claude Code (agentic dev), Figma MCP (design-to-component handoff), OpenAI API (reasoning), Oura Ring API (biometrics), and Google Calendar OAuth.</p>
                 </div>

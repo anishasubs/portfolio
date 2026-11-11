@@ -79,6 +79,7 @@ export function SettingsPage({ credentials, onSave, onClose, onLogout, ouraMetri
 
               <div className="space-y-4">
                 <h4 className="font-semibold text-sm">Health Platform Integrations</h4>
+                <p className="text-xs text-muted-foreground -mt-2">Oura Ring is connected below. The rest are not built yet.</p>
                 <OuraDataSync
                   metrics={ouraMetrics || null}
                   isConnected={!!loadOuraAuth()}
@@ -89,15 +90,15 @@ export function SettingsPage({ credentials, onSave, onClose, onLogout, ouraMetri
                   <div className="space-y-2 text-sm">
                     <div className="flex items-center justify-between p-2 rounded bg-background">
                       <span className="text-muted-foreground">Apple Health</span>
-                      <span className="text-xs text-yellow-500 font-semibold">Available</span>
+                      <span className="text-xs text-muted-foreground font-semibold">Coming soon</span>
                     </div>
                     <div className="flex items-center justify-between p-2 rounded bg-background">
                       <span className="text-muted-foreground">Strava</span>
-                      <span className="text-xs text-yellow-500 font-semibold">Available</span>
+                      <span className="text-xs text-muted-foreground font-semibold">Coming soon</span>
                     </div>
                     <div className="flex items-center justify-between p-2 rounded bg-background">
                       <span className="text-muted-foreground">Whoop</span>
-                      <span className="text-xs text-yellow-500 font-semibold">Available</span>
+                      <span className="text-xs text-muted-foreground font-semibold">Coming soon</span>
                     </div>
                   </div>
                 </div>

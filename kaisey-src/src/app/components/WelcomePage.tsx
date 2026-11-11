@@ -337,7 +337,7 @@ export function WelcomePage({ onLogin }: WelcomePageProps) {
         {/* Footer */}
         <div className="mt-8 pt-6 border-t text-center space-y-3">
           <p className="text-xs text-muted-foreground">
-            Kaisey integrates with Canvas/LMS, Google Calendar, Oura Ring, Apple Health, Strava, and Whoop to optimize your student experience.
+            Kaisey works with your Google Calendar and OpenAI, with optional Oura Ring sync.
           </p>
           <a
             href="/portfolio/"
