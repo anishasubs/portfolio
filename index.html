@@ -773,33 +773,6 @@
             }
         }
 
-        /* -- Pocket caption ------------------------------------
-           Keeps the original "all the skills in my back pocket" line,
-           captioning the pocket the objects come out of rather than
-           competing with the statement on the right. Desktop sits it in
-           the gap between the hover labels and the pocket; mobile hangs
-           it under the pocket, which MOBILE_ARTBOARD_H makes room for. */
-        .pocket-caption {
-            position: absolute;
-            left: 415px;
-            top: 422px;
-            transform: translateX(-50%);
-            margin: 0;
-            font-family: 'Parisienne', cursive;
-            font-size: 22px;
-            color: #1c4e89;
-            opacity: 0.72;
-            white-space: nowrap;
-            pointer-events: none;
-            z-index: 20;
-        }
-        @media (max-width: 768px) {
-            .pocket-caption {
-                left: 187px;
-                top: 752px;
-                font-size: 19px;
-            }
-        }
     </style>
 </head>
 <body>
@@ -870,7 +843,6 @@
 
                 <!-- Denim pocket -->
                 <div class="pocket" id="pocket"><img src="./assets/denim-pocket.webp" alt="Denim pocket" draggable="false"></div>
-                <p class="pocket-caption" id="pocket-caption">All the skills in my back pocket</p>
 
             </div>
         </div>
@@ -912,7 +884,7 @@
                 <span class="by-name">Anisha&rsquo;s Portfolio</span>
             </div>
             <h1 class="portfolio-title" id="portfolio-title">A Designer<br>Who Builds</h1>
-            <p class="portfolio-desc" id="portfolio-desc">PARSONS BFA TO COLUMBIA BUSINESS SCHOOL. BRAND SYSTEMS, CAMPAIGNS, AND PRODUCTS I DESIGN AND SHIP MYSELF. CLICK ON AN OBJECT TO OPEN A PROJECT.</p>
+            <p class="portfolio-desc" id="portfolio-desc">PARSONS BFA TO COLUMBIA BUSINESS SCHOOL. BRAND SYSTEMS, CAMPAIGNS, AND PRODUCTS I DESIGN AND SHIP MYSELF. ALL THE SKILLS IN MY BACK POCKET &mdash; CLICK ON AN OBJECT TO OPEN A PROJECT.</p>
         </div>
     </div>
 
@@ -979,7 +951,7 @@
     var ABOUT_H        = 1950;
     var POCKET         = { x: 235, y: 460, w: 360, h: 360 };
     var HOME_ARTBOARD_H = 820;  // one-screen composition
-    var HERO_TEXT      = { x: 775, y: 493, w: 430 };  // lower right, centred on the pocket band
+    var HERO_TEXT      = { x: 775, y: 487, w: 430 };  // lower right, centred on the pocket band
 
     var LETTERS = [
         { x: 84,   y: 110, w: 203, h: 203 },
@@ -1029,7 +1001,7 @@
     /* ── Mobile constants ─────────────────────────────────── */
     var MOBILE_BREAKPOINT = 768;
     var MOBILE_ARTBOARD_W = 375;
-    var MOBILE_ARTBOARD_H = 798;
+    var MOBILE_ARTBOARD_H = 760;
     var MOBILE_SCROLL_VH  = 2.5;
 
     // Pocket: centered horizontally, starts near bottom, ends further down
