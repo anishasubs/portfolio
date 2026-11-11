@@ -542,78 +542,126 @@
             .card, .decision-card, .persona-card { padding: 1.5rem; }
         }
 
-        /* -- Full-bleed hero ---------------------------------------
-           The demo is the landing screen rather than a panel on it. A
-           scrim keeps the copy legible over moving UI. A 16:9 cut cropped
-           to cover a 375px phone shows only a sliver, so the portrait cut
-           is swapped in below 768px (picked in JS so only one loads). */
+        /* -- Split hero --------------------------------------------
+           Copy on a near-black panel, the demo running full height beside
+           it. The portrait cut is used on the tall desktop panel and the
+           wide cut when the panes stack on mobile, so neither gets badly
+           cropped. Source is picked in JS so only one file is fetched. */
+        .hero {
+            min-height: 100vh;
+            display: grid;
+            grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
+            align-items: stretch;
+            padding: 0;
+            background: #0b0a12;
+            text-align: left;
+            overflow: hidden;
+        }
+        .hero-pane { position: relative; min-width: 0; }
+        .hero-pane-copy {
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            gap: 2.5rem;
+            padding: clamp(84px, 7vw, 120px) clamp(28px, 5vw, 86px) clamp(32px, 4vw, 56px);
+            background:
+                radial-gradient(120% 90% at 0% 0%, rgba(124, 58, 237, 0.26) 0%, rgba(11, 10, 18, 0) 58%),
+                #0b0a12;
+        }
+        .hero-copy { max-width: 30rem; }
+        .hero-eyebrow {
+            display: inline-block;
+            font-size: 0.7rem;
+            letter-spacing: 0.22em;
+            text-transform: uppercase;
+            color: rgba(255, 250, 237, 0.62);
+            margin-bottom: 1.5rem;
+        }
+        .hero-pane-copy h1 {
+            font-family: 'Bodoni Moda', serif;
+            font-size: clamp(3.2rem, 6.4vw, 5.4rem);
+            font-weight: 600;
+            line-height: 0.96;
+            letter-spacing: -0.02em;
+            margin: 0 0 1.1rem;
+            color: var(--cream);
+        }
+        .hero-standfirst {
+            margin: 0;
+            font-size: clamp(1rem, 1.2vw, 1.12rem);
+            font-weight: 300;
+            line-height: 1.65;
+            color: rgba(255, 250, 237, 0.74);
+        }
+        .hero-meta {
+            display: grid;
+            gap: 0.9rem;
+            margin: 2.4rem 0 0;
+            padding-top: 1.6rem;
+            border-top: 1px solid rgba(255, 250, 237, 0.14);
+        }
+        .hero-meta div { display: grid; grid-template-columns: 5.5rem 1fr; gap: 1rem; align-items: baseline; }
+        .hero-meta dt {
+            font-size: 0.64rem;
+            letter-spacing: 0.18em;
+            text-transform: uppercase;
+            color: rgba(255, 250, 237, 0.42);
+        }
+        .hero-meta dd { margin: 0; font-size: 0.86rem; color: rgba(255, 250, 237, 0.82); }
+        .hero-pane-media { background: #0b0a12; }
         .hero-bg {
             position: absolute;
             inset: 0;
             width: 100%;
             height: 100%;
             object-fit: cover;
-            z-index: 0;
-            background: #0d0b16;
+            display: block;
         }
-        .hero-scrim {
+        .hero-pane-media::after {
+            content: "";
             position: absolute;
             inset: 0;
-            z-index: 1;
-            background:
-                linear-gradient(180deg,
-                    rgba(13,11,22,0.70) 0%,
-                    rgba(13,11,22,0.30) 22%,
-                    rgba(13,11,22,0.00) 44%,
-                    rgba(13,11,22,0.00) 70%,
-                    rgba(13,11,22,0.55) 100%);
-        }
-        .hero { align-items: stretch; padding: 0; }
-        .hero-lockup {
-            position: absolute;
-            top: 104px; left: 50%;
-            transform: translateX(-50%);
-            z-index: 2;
-            width: min(620px, calc(100% - 48px));
-            text-align: center;
-        }
-        .hero-lockup h1 {
-            font-family: 'Bodoni Moda', serif;
-            font-size: clamp(2.1rem, 4vw, 3.1rem);
-            font-weight: 600;
-            line-height: 1;
-            margin: 0 0 0.6rem;
-            color: var(--cream);
-            text-shadow: 0 2px 14px rgba(13, 11, 22, 0.9);
-            animation: fadeInUp 0.8s ease-out 0.2s both;
-        }
-        .hero-standfirst {
-            margin: 0;
-            font-size: 0.92rem;
-            font-weight: 300;
-            line-height: 1.6;
-            color: var(--cream-dark);
-            text-shadow: 0 1px 10px rgba(13, 11, 22, 0.95);
-            animation: fadeInUp 0.8s ease-out 0.4s both;
+            pointer-events: none;
+            background: linear-gradient(90deg, rgba(11,10,18,0.55) 0%, rgba(11,10,18,0) 22%);
         }
         .scroll-indicator {
+            position: static;
+            /* the inherited bounce keyframes set translateX(-50%), which
+               beats a declared transform, so the animation has to go */
+            animation: none;
+            transform: none;
             display: inline-flex;
-            flex-direction: column;
             align-items: center;
-            gap: 6px;
-            z-index: 2;
+            gap: 0.7rem;
+            align-self: flex-start;
             text-decoration: none;
-            letter-spacing: 0.08em;
+            font-size: 0.68rem;
+            letter-spacing: 0.2em;
             text-transform: uppercase;
-            font-size: 0.72rem;
-            opacity: 0.9;
+            color: rgba(255, 250, 237, 0.58);
+            transition: color 0.2s ease;
         }
-        .scroll-indicator:hover { opacity: 1; }
-        .scroll-arrow { font-size: 1rem; }
+        .scroll-indicator:hover { color: var(--cream); }
+        .scroll-arrow { font-size: 0.95rem; }
+        @media (max-width: 900px) {
+            .hero {
+                grid-template-columns: 1fr;
+                grid-template-rows: auto minmax(220px, 34vh);
+                min-height: 100vh;
+            }
+            .hero-pane-copy { padding: 92px 24px 26px; gap: 1.4rem; }
+            .hero-pane-copy h1 { font-size: clamp(2.8rem, 13vw, 3.6rem); }
+            .hero-meta { margin-top: 1.6rem; padding-top: 1.2rem; gap: 0.7rem; }
+            .hero-copy { max-width: none; }
+            .hero-pane-media::after { background: linear-gradient(180deg, rgba(11,10,18,0.55) 0%, rgba(11,10,18,0) 18%); }
+        }
         @media (prefers-reduced-motion: reduce) {
             .hero-bg { display: none; }
-            .hero { background-image: url("assets/hero-demo-wide-poster.jpg"); background-size: cover; background-position: center; }
-            .scroll-indicator { animation: none; }
+            .hero-pane-media {
+                background-image: url("assets/hero-demo-wide-poster.jpg");
+                background-size: cover;
+                background-position: center;
+            }
         }
     </style>
 </head>
@@ -645,13 +693,22 @@
 
     <!-- ═══ 1. HERO ═══ -->
     <section class="hero">
-        <video class="hero-bg" id="hero-bg" autoplay muted loop playsinline preload="metadata" poster="assets/hero-demo-wide-poster.jpg" aria-hidden="true"></video>
-        <div class="hero-scrim" aria-hidden="true"></div>
-        <div class="hero-lockup">
-            <h1>Kaisey</h1>
-            <p class="hero-standfirst">An AI calendar assistant that reads your Google Calendar, reasons over it with OpenAI, and tells you what actually matters right now.</p>
+        <div class="hero-pane hero-pane-copy">
+            <div class="hero-copy">
+                <span class="hero-eyebrow">AI calendar assistant</span>
+                <h1>Kaisey</h1>
+                <p class="hero-standfirst">Reads your Google Calendar, reasons over it with OpenAI, and tells you what actually matters right now.</p>
+                <dl class="hero-meta">
+                    <div><dt>Role</dt><dd>Design &amp; build, end to end</dd></div>
+                    <div><dt>Stack</dt><dd>React, OpenAI, Google Calendar</dd></div>
+                    <div><dt>Status</dt><dd>Closed beta</dd></div>
+                </dl>
+            </div>
+            <a class="scroll-indicator" href="#problem"><span class="scroll-arrow">&darr;</span>Scroll to read the case study</a>
         </div>
-        <a class="scroll-indicator" href="#problem">Scroll to read the case study<span class="scroll-arrow">&darr;</span></a>
+        <div class="hero-pane hero-pane-media">
+            <video class="hero-bg" id="hero-bg" autoplay muted loop playsinline preload="metadata" poster="assets/hero-demo-wide-poster.jpg" aria-hidden="true"></video>
+        </div>
     </section>
 
     <!-- ═══ 2. THE PROBLEM ═══ -->
@@ -971,8 +1028,8 @@
     (function () {
         var v = document.getElementById('hero-bg');
         if (!v) return;
-        var tall = window.matchMedia('(max-width: 768px)').matches;
-        v.src = tall ? 'assets/hero-demo-tall.mp4' : 'assets/hero-demo-wide.mp4';
+        var stacked = window.matchMedia('(max-width: 900px)').matches;
+        v.src = stacked ? 'assets/hero-demo-wide.mp4' : 'assets/hero-demo-tall.mp4';
         var p = v.play();
         if (p && p.catch) { p.catch(function () {}); }
     })();
