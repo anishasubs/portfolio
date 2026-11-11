@@ -608,21 +608,21 @@
             color: rgba(255, 250, 237, 0.42);
         }
         .hero-meta dd { margin: 0; font-size: 0.86rem; color: rgba(255, 250, 237, 0.82); }
-        .hero-pane-media { background: #0b0a12; }
+        /* contain so nothing is cropped -- cover was cutting 31% off the
+           width of the stacked mobile band. The pane matches the colour
+           the browser actually paints the demo's background, #00091f, so
+           the letterboxing reads as the video's own padding. ffmpeg
+           reports #0f172a for those pixels; H.264 limited-range decoding
+           is why the rendered value differs, and using the ffmpeg figure
+           left a visible edge. */
+        .hero-pane-media { background: #00091f; }
         .hero-bg {
             position: absolute;
             inset: 0;
             width: 100%;
             height: 100%;
-            object-fit: cover;
+            object-fit: contain;
             display: block;
-        }
-        .hero-pane-media::after {
-            content: "";
-            position: absolute;
-            inset: 0;
-            pointer-events: none;
-            background: linear-gradient(90deg, rgba(11,10,18,0.55) 0%, rgba(11,10,18,0) 22%);
         }
         .scroll-indicator {
             position: static;
@@ -653,7 +653,6 @@
             .hero-pane-copy h1 { font-size: clamp(2.8rem, 13vw, 3.6rem); }
             .hero-meta { margin-top: 1.6rem; padding-top: 1.2rem; gap: 0.7rem; }
             .hero-copy { max-width: none; }
-            .hero-pane-media::after { background: linear-gradient(180deg, rgba(11,10,18,0.55) 0%, rgba(11,10,18,0) 18%); }
         }
         @media (prefers-reduced-motion: reduce) {
             .hero-bg { display: none; }
