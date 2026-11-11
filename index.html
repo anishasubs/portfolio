@@ -461,14 +461,18 @@
 
         /* ── Scroll hint ─────────────────────────────────────── */
         .scroll-hint {
-            position: fixed; bottom: 26px; left: 50%;
+            position: fixed; bottom: 34px; left: 50%;
             transform: translateX(-50%);
             z-index: 199;
             display: flex; flex-direction: column;
-            align-items: center; gap: 6px;
+            align-items: center; gap: 10px;
             font-family: 'Raleway', sans-serif;
-            font-size: 12px; font-weight: 700;
-            letter-spacing: 0.22em; text-transform: uppercase;
+            font-size: 11px; font-weight: 700;
+            line-height: 1;
+            /* letter-spacing leaves a trailing space after the last letter,
+               which pulls centred text off its axis; indent balances it */
+            letter-spacing: 0.22em; text-indent: 0.22em;
+            text-transform: uppercase;
             color: #1c4e89;
             opacity: 0;
             transition: opacity 0.6s ease;
@@ -477,7 +481,7 @@
         .scroll-hint::before { content: "Scroll"; }
         .scroll-hint span {
             display: inline-block;
-            font-size: 26px;
+            font-size: 17px;
             line-height: 1;
             animation: bob 1.6s ease-in-out infinite;
         }
