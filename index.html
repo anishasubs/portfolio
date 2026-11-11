@@ -742,6 +742,24 @@
             margin: 0 0 2px;
         }
         .text-artboard.hero-inline .by-name { font-size: 30px; }
+
+        /* ── Object hover fixes ───────────────────────────────
+           #basketball sets a resting drop-shadow by id, which outranks
+           .object.clickable:hover, so the keychain never picked up the
+           hover treatment. Match the id specificity and stack its resting
+           shadow with the shared hover one. (#phone-case already did this.)
+
+           The lift is applied with the translate property rather than
+           transform,
+           because the scroll animation writes an inline transform on every
+           object each frame, which overrides any transform set in CSS. */
+        #basketball.clickable:hover {
+            filter: drop-shadow(0 10px 18px rgba(0,0,0,0.28))
+                    drop-shadow(4px 6px 4px rgba(0,0,0,0.25))
+                    brightness(1.02);
+        }
+        .object.clickable { transition: filter 0.3s ease, translate 0.3s ease; }
+        .object.clickable:hover { translate: 0 -2px; }
     </style>
 </head>
 <body>
@@ -918,9 +936,9 @@
        ================================================================ */
     var ARTBOARD_W     = 1440;
     var ABOUT_H        = 1950;
-    var POCKET         = { x: 100, y: 460, w: 360, h: 360 };
+    var POCKET         = { x: 235, y: 460, w: 360, h: 360 };
     var HOME_ARTBOARD_H = 820;  // one-screen composition
-    var HERO_TEXT      = { x: 910, y: 462, w: 430 };  // lower right, centred on the pocket band
+    var HERO_TEXT      = { x: 775, y: 493, w: 430 };  // lower right, centred on the pocket band
 
     var LETTERS = [
         { x: 84,   y: 110, w: 203, h: 203 },
@@ -934,32 +952,32 @@
 
     var OBJECTS = {
         tube: {
-            start: { x: 190, y: 350, w: 51,  h: 210 },
+            start: { x: 325, y: 350, w: 51,  h: 210 },
             end:   { x: 120, y: 135, w: 51,  h: 210 },
             startRot: -18.77, endRot: 0
         },
         receipt: {
-            start: { x: 215, y: 380, w: 91,  h: 180 },
+            start: { x: 350, y: 380, w: 91,  h: 180 },
             end:   { x: 290, y: 148, w: 91,  h: 180 },
             startRot: 0, endRot: 0
         },
         'phone-case': {
-            start: { x: 250, y: 360, w: 90,  h: 184 },
+            start: { x: 385, y: 360, w: 90,  h: 184 },
             end:   { x: 900, y: 125, w: 90,  h: 184 },
             startRot: 0, endRot: 0
         },
         todo: {
-            start: { x: 230, y: 400, w: 121, h: 143 },
+            start: { x: 365, y: 400, w: 121, h: 143 },
             end:   { x: 470, y: 170, w: 121, h: 143 },
             startRot: 0, endRot: 0
         },
         rollon: {
-            start: { x: 270, y: 375, w: 95,  h: 162 },
+            start: { x: 405, y: 375, w: 95,  h: 162 },
             end:   { x: 700, y: 150, w: 95,  h: 162 },
             startRot: 0, endRot: 0
         },
         basketball: {
-            start: { x: 240, y: 410, w: 132, h: 94  },
+            start: { x: 375, y: 410, w: 132, h: 94  },
             end:   { x: 1120, y: 215, w: 132, h: 94 },
             startRot: -16, endRot: 0
         }
