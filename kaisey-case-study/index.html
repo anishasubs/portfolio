@@ -543,14 +543,19 @@
         }
 
         /* -- Split hero --------------------------------------------
-           Copy on a near-black panel, the demo running full height beside
-           it. The portrait cut is used on the tall desktop panel and the
-           wide cut when the panes stack on mobile, so neither gets badly
-           cropped. Source is picked in JS so only one file is fetched. */
+           Copy on a near-black panel, the landscape demo filling the pane
+           beside it. Height is capped rather than 100vh: a full-height
+           pane forces a 16:9 frame to zoom about 2.2x to cover, which
+           clipped the demo's content whatever object-position was used.
+           At ~660 the pane is close enough to 16:9 that the frame
+           survives almost intact. Mobile drops the video entirely. */
         .hero {
-            min-height: 100vh;
+            min-height: min(100vh, 660px);
             display: grid;
-            grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
+            /* media pane gets the larger share: a 16:9 frame covering a
+               full-height pane is zoomed, so the wider the pane the more
+               of the frame survives the crop */
+            grid-template-columns: minmax(0, 1fr) minmax(0, 1.25fr);
             align-items: stretch;
             padding: 0;
             background: #0b0a12;
@@ -608,20 +613,23 @@
             color: rgba(255, 250, 237, 0.42);
         }
         .hero-meta dd { margin: 0; font-size: 0.86rem; color: rgba(255, 250, 237, 0.82); }
-        /* contain so nothing is cropped -- cover was cutting 31% off the
-           width of the stacked mobile band. The pane matches the colour
-           the browser actually paints the demo's background, #00091f, so
-           the letterboxing reads as the video's own padding. ffmpeg
-           reports #0f172a for those pixels; H.264 limited-range decoding
-           is why the rendered value differs, and using the ffmpeg figure
-           left a visible edge. */
+        /* The demo is 16:9 and the pane is a tall half screen, so contain
+           left it as a thin strip in a lot of empty background. Mobile no
+           longer shows the video at all, so cover only applies here: it
+           fills the pane and reads as a real split screen. The UI is far
+           too small to read at this size either way -- the legible pass is
+           the section 5 player -- so the crop costs nothing that matters.
+           Background is the colour the browser actually paints the demo's
+           own background (ffmpeg reports #0f172a; H.264 limited-range
+           decoding is why the rendered value differs). */
         .hero-pane-media { background: #00091f; }
         .hero-bg {
             position: absolute;
             inset: 0;
             width: 100%;
             height: 100%;
-            object-fit: contain;
+            object-fit: cover;
+            object-position: 50% 50%;
             display: block;
         }
         .scroll-indicator {
@@ -1046,7 +1054,7 @@
         // fetch the file at all
         if (window.matchMedia('(max-width: 900px)').matches) return;
         v.poster = 'assets/hero-demo-wide-poster.jpg';
-        v.src = 'assets/hero-demo-tall.mp4';
+        v.src = 'assets/hero-demo-wide.mp4';
         var p = v.play();
         if (p && p.catch) { p.catch(function () {}); }
     })();
