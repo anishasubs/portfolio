@@ -7,7 +7,7 @@
     <title>Anisha Subberwal — Portfolio</title>
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Bodoni+Moda:opsz,wght@6..96,400..900&family=Parisienne&family=Raleway:wght@400;700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Bodoni+Moda:opsz,wght@6..96,400..900&family=Parisienne&family=Raleway:wght@400;500;700&display=swap" rel="stylesheet">
     <style>
         *, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
         html { overscroll-behavior: none; scroll-behavior: smooth; }
@@ -133,6 +133,11 @@
             letter-spacing: -19px;
             line-height: 1;
             color: #1c4e89;
+            /* The display cut (opsz 96) has hairlines too fine to read on
+               cream at these sizes; a mid optical size keeps them visible. */
+            font-optical-sizing: none;
+            font-variation-settings: "opsz" 36;
+            font-kerning: normal;
             opacity: 0;
             transform: translateY(30px);
             transition: opacity 0.8s ease, transform 0.8s ease;
@@ -176,12 +181,13 @@
         .portfolio-desc {
             font-family: 'Raleway', sans-serif;
             font-size: 18.6px;
-            font-weight: 700;
-            line-height: 1.55;
-            color: #1c4e89;
-            text-transform: uppercase;
+            font-weight: 500;
+            line-height: 1.6;
+            color: #3d6088;
+            text-transform: none;
             text-align: left;
-            letter-spacing: 0.04em;
+            letter-spacing: 0.005em;
+            text-wrap: pretty;
             max-width: 535px;
             margin: 40px auto 0;
             opacity: 0;
@@ -643,13 +649,15 @@
 
             /* Text section — responsive type */
             .portfolio-title {
-                font-size: clamp(48px, 12vw, 200px) !important;
-                letter-spacing: -4px !important;
+                font-size: clamp(48px, 13vw, 200px) !important;
+                letter-spacing: -0.015em !important;
+                line-height: 0.98 !important;
             }
             .text-artboard {
                 width: 100% !important;
                 transform: none !important;
-                padding: 40px 24px 60px !important;
+                /* clears the fixed nav now that the text leads the page */
+                padding: 92px 24px 8px !important;
             }
             .text-section {
                 height: auto !important;
@@ -664,9 +672,10 @@
                 width: 200px;
             }
             .portfolio-desc {
-                font-size: 15px;
+                font-size: 16px;
                 padding: 0;
-                max-width: 100%;
+                max-width: 340px;
+                margin: 20px auto 0;
                 text-align: center;
             }
 
@@ -740,15 +749,19 @@
             text-align: left;
         }
         .text-artboard.hero-inline .portfolio-title {
-            font-size: 92px;
-            letter-spacing: -3px;
-            line-height: 1.02;
+            font-size: 88px;
+            letter-spacing: -0.015em;
+            line-height: 0.98;
         }
         .text-artboard.hero-inline .portfolio-desc {
-            margin: 20px 0 0;
-            max-width: 480px;
-            font-size: 14.5px;
+            margin: 22px 0 0;
+            max-width: 470px;
+            font-size: 16.5px;
         }
+        .text-artboard.hero-inline .portfolio-title { white-space: nowrap; }
+        /* Bodoni's W carries a wide right sidebearing, which opened a gap
+           in "Who"; pull the h in. */
+        .kern-w { letter-spacing: -0.07em; }
         .text-artboard.hero-inline .byline {
             display: block;
             margin: 0 0 2px;
@@ -911,8 +924,8 @@
             <div class="byline" id="byline">
                 <span class="by-name">Anisha&rsquo;s Portfolio</span>
             </div>
-            <h1 class="portfolio-title" id="portfolio-title">A Designer<br>Who Builds</h1>
-            <p class="portfolio-desc" id="portfolio-desc">PARSONS BFA TO COLUMBIA BUSINESS SCHOOL. BRAND SYSTEMS, CAMPAIGNS, AND PRODUCTS I DESIGN AND SHIP MYSELF. ALL THE SKILLS IN MY BACK POCKET &mdash; CLICK ON AN OBJECT TO OPEN A PROJECT.</p>
+            <h1 class="portfolio-title" id="portfolio-title">A Designer<br><span class="kern-w">W</span>ho Builds</h1>
+            <p class="portfolio-desc" id="portfolio-desc">Parsons BFA to Columbia Business School. Brand systems, campaigns, and products I design and ship myself. All the skills in my back pocket &mdash; click on an object to open a project.</p>
         </div>
     </div>
 
@@ -979,7 +992,14 @@
     var ABOUT_H        = 1950;
     var POCKET         = { x: 235, y: 460, w: 360, h: 360 };
     var HOME_ARTBOARD_H = 820;  // one-screen composition
-    var HERO_TEXT      = { x: 735, y: 467, w: 480 };  // lower right, centred on the pocket band
+    var HERO_TEXT      = { x: 735, w: 560 };
+    // Vertical centre of the pocket and its objects (tube top ~350, pocket
+    // bottom 820). The block is centred here, but kept clear of the object
+    // row above (objects + labels end ~400) and of the scroll cue below.
+    var HERO_CENTER_Y  = 585;
+    var HERO_MIN_TOP   = 405;
+    var HERO_MAX_BOTTOM = 725;
+    var HINT_X         = 665;
 
     var LETTERS = [
         { x: 84,   y: 110, w: 203, h: 203 },
@@ -1158,14 +1178,18 @@
             var vh = window.innerHeight;
             scrollZone.style.height = Math.ceil(vh * MOBILE_SCROLL_VH + ah * scale) + 'px';
 
-            // Text section — flows below the artboard on mobile
+            // Text section — leads the page on mobile, above the pocket, so
+            // the headline is the first thing on screen instead of arriving
+            // after ~3000px of scroll animation.
             if (textArtboard.parentNode !== textSection) textSection.appendChild(textArtboard);
+            if (textSection.nextElementSibling !== scrollZone) scrollZone.parentNode.insertBefore(textSection, scrollZone);
             textArtboard.classList.remove('hero-inline');
             textArtboard.style.left      = '';
             textArtboard.style.top       = '';
             textArtboard.style.width     = '100%';
             textArtboard.style.transform = 'none';
             textSection.style.height     = 'auto';
+            hintEl.style.left            = '';
 
             // About — CSS flexbox handles layout
             aboutArtboard.style.width     = '100%';
@@ -1194,15 +1218,28 @@
             if (textArtboard.parentNode !== artboard) artboard.appendChild(textArtboard);
             textArtboard.classList.add('hero-inline');
             textArtboard.style.left      = HERO_TEXT.x + 'px';
-            textArtboard.style.top       = HERO_TEXT.y + 'px';
             textArtboard.style.width     = HERO_TEXT.w + 'px';
+            positionHeroText();
             textSection.style.height     = '0px';
+
+            // Centre the scroll cue in the gutter between pocket (ends x 595)
+            // and text (starts x 735), so it can't sit on the paragraph.
+            hintEl.style.left = Math.round((window.innerWidth - ARTBOARD_W * scale) / 2 + HINT_X * scale) + 'px';
 
             aboutArtboard.style.width     = ARTBOARD_W + 'px';
             aboutArtboard.style.height    = ABOUT_H + 'px';
             aboutArtboard.style.transform = 'scale(' + scale + ')';
             aboutFrameEl.style.height     = Math.ceil(ABOUT_H * scale) + 'px';
         }
+    }
+
+    function positionHeroText() {
+        if (isMobile) return;
+        var h   = textArtboard.offsetHeight;
+        var top = HERO_CENTER_Y - h / 2;
+        top = Math.min(top, HERO_MAX_BOTTOM - h);
+        top = Math.max(top, HERO_MIN_TOP);
+        textArtboard.style.top = Math.round(top) + 'px';
     }
 
     /* ================================================================
@@ -1337,7 +1374,9 @@
         var vh        = window.innerHeight;
         var svh       = isMobile ? MOBILE_SCROLL_VH : SCROLL_VH;
         var maxScroll = vh * svh;
-        var raw       = clamp(window.scrollY / maxScroll, 0, 1);
+        // Measured from the top of the scroll zone: on mobile the hero text
+        // sits above it, so progress starts once the pocket reaches the top.
+        var raw       = clamp((window.scrollY - scrollZone.offsetTop) / maxScroll, 0, 1);
 
         if (raw > 0.01) hintEl.classList.remove('visible');
         else if (balloonsPlayed) hintEl.classList.add('visible');
@@ -1565,6 +1604,7 @@
             initPlacement();
         }
     });
+    if (document.fonts && document.fonts.ready) document.fonts.ready.then(positionHeroText);
     requestAnimationFrame(animate);
     startBalloonAnimation();
     // Show scroll hint immediately on mobile (no balloons to wait for)
