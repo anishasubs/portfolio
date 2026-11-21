@@ -618,6 +618,14 @@
             }
         }
 
+        /* Winner videos: .winner-video is a flex row, so each caption sat
+           beside its video and spilled over the next column. Stack the
+           caption under the video instead. */
+        .winner-video {
+            flex-direction: column;
+            align-items: center;
+        }
+
         /* Responsive */
         @media (max-width: 1024px) {
             .stats-grid {
