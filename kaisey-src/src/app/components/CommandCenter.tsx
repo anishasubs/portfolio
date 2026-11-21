@@ -1,4 +1,5 @@
 import { Sparkles, Target, Calendar, Clock, ChevronRight, AlertTriangle } from "lucide-react";
+import { KaiseyMark } from "@/app/components/KaiseyLogo";
 import { Card } from "@/app/components/ui/card";
 import { Badge } from "@/app/components/ui/badge";
 import { PrioritySelector } from "@/app/components/PrioritySelector";
@@ -121,16 +122,14 @@ export function CommandCenter({ events, userFocus, userName, priority, onPriorit
   }
 
   return (
-    <Card className="p-6 bg-gradient-to-br from-blue-500/10 via-purple-500/10 to-pink-500/10 border-2 border-blue-500/20" data-tour-id="command-center">
+    <Card className="p-6 border" data-tour-id="command-center">
       <div className="flex items-start gap-4">
-        <div className="p-3 rounded-xl bg-gradient-to-br from-blue-500 to-purple-500 shadow-lg shrink-0">
-          <Sparkles className="w-6 h-6 text-white" />
-        </div>
+        <KaiseyMark size={48} />
 
         <div className="flex-1 min-w-0">
           <div className="flex items-center gap-2 mb-4">
-            <h2 className="text-xl font-bold">Your Day at a Glance</h2>
-            <Badge className="bg-blue-500 text-white shrink-0">
+            <h2 className="text-xl font-semibold">Your Day at a Glance</h2>
+            <Badge className="bg-primary text-primary-foreground font-mono font-normal shrink-0">
               <Calendar className="w-3 h-3 mr-1" />
               {todayFormatted}
             </Badge>

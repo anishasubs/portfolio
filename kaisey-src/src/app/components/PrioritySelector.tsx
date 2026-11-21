@@ -135,7 +135,7 @@ export function PrioritySelector({
               size="lg"
               disabled={!selected}
               onClick={() => selected && onSelect(selected)}
-              className="gap-2 bg-gradient-to-r from-blue-600 to-purple-600 hover:from-blue-700 hover:to-purple-700 px-8"
+              className="gap-2 bg-primary text-primary-foreground hover:bg-primary/90 px-8"
             >
               Continue
             </Button>

@@ -184,7 +184,7 @@ export function OnboardingTour({ onComplete }: OnboardingTourProps) {
               <Button
                 size="sm"
                 onClick={handleNext}
-                className="h-8 gap-1 bg-gradient-to-r from-blue-500 to-purple-500 hover:from-blue-600 hover:to-purple-600"
+                className="h-8 gap-1 bg-primary text-primary-foreground hover:bg-primary/90"
               >
                 {currentStep === STEPS.length - 1 ? "Get Started" : "Next"}
                 {currentStep < STEPS.length - 1 && <ChevronRight className="w-3 h-3" />}

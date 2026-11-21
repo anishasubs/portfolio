@@ -1,5 +1,6 @@
 import { useState, useRef, useEffect } from "react";
 import { MessageSquare, Send, X, Bot, Check, Plus, Minus, RefreshCw, Sparkles, Clock, ListTodo, CalendarPlus, Loader2, Brain } from "lucide-react";
+import { KaiseyMark, KaiseyK } from "@/app/components/KaiseyLogo";
 import { Button } from "@/app/components/ui/button";
 import { Card } from "@/app/components/ui/card";
 import { Input } from "@/app/components/ui/input";
@@ -1273,7 +1274,7 @@ Return ONLY by calling propose_schedule.`,
 
     return (
       <div className="flex gap-2">
-        <div className="w-6 h-6 rounded-full bg-purple-500 flex items-center justify-center shrink-0 mt-0.5">
+        <div className="w-6 h-6 rounded-md bg-brand flex items-center justify-center shrink-0 mt-0.5">
           <ListTodo className="w-3 h-3 text-white" />
         </div>
         <div className="max-w-[90%] flex-1">
@@ -1334,7 +1335,7 @@ Return ONLY by calling propose_schedule.`,
                               onClick={() => handleTaskTimePreferenceChange(task.id, opt.value)}
                               className={`px-2 py-0.5 rounded-full text-[10px] font-medium transition-colors ${
                                 getTimePreferenceLabel(task.preferredTime) === opt.value
-                                  ? "bg-purple-500 text-white"
+                                  ? "bg-brand text-white"
                                   : "bg-muted-foreground/10 text-muted-foreground hover:bg-muted-foreground/20"
                               }`}
                             >
@@ -1364,7 +1365,7 @@ Return ONLY by calling propose_schedule.`,
               <Button
                 size="sm"
                 onClick={handleScheduleAll}
-                className="w-full mt-3 bg-gradient-to-r from-green-600 to-emerald-600 hover:from-green-700 hover:to-emerald-700 h-8 text-xs font-semibold"
+                className="w-full mt-3 bg-emerald-600 hover:bg-emerald-700 text-white h-8 text-xs font-semibold"
               >
                 <CalendarPlus className="w-3.5 h-3.5 mr-1.5" /> Schedule All
               </Button>
@@ -1385,7 +1386,7 @@ Return ONLY by calling propose_schedule.`,
 
     return (
       <div className="flex gap-2">
-        <div className="w-6 h-6 rounded-full bg-purple-500 flex items-center justify-center shrink-0">
+        <div className="w-6 h-6 rounded-md bg-brand flex items-center justify-center shrink-0">
           <CalendarPlus className="w-3 h-3 text-white" />
         </div>
         <div className="max-w-[90%] flex-1">
@@ -1396,9 +1397,9 @@ Return ONLY by calling propose_schedule.`,
             </div>
 
             {message.scheduleSummary && (
-              <div className="bg-purple-500/5 border border-purple-500/20 rounded p-2 mb-2">
+              <div className="bg-brand/5 border border-brand/20 rounded p-2 mb-2">
                 <div className="flex items-start gap-1.5">
-                  <Sparkles className="w-3 h-3 text-purple-500 mt-0.5 shrink-0" />
+                  <Sparkles className="w-3 h-3 text-brand mt-0.5 shrink-0" />
                   <p className="text-[11px]">{message.scheduleSummary}</p>
                 </div>
               </div>
@@ -1440,7 +1441,7 @@ Return ONLY by calling propose_schedule.`,
 
             {isActive && (
               <div className="flex gap-2 mt-3">
-                <Button size="sm" onClick={handleAcceptSchedule} className="flex-1 bg-gradient-to-r from-green-600 to-emerald-600 hover:from-green-700 hover:to-emerald-700 h-7 text-xs">
+                <Button size="sm" onClick={handleAcceptSchedule} className="flex-1 bg-emerald-600 hover:bg-emerald-700 text-white h-7 text-xs">
                   <Check className="w-3 h-3 mr-1" /> Accept Schedule
                 </Button>
                 <Button size="sm" variant="outline" onClick={resetBrainDump} className="h-7 text-xs">
@@ -1482,12 +1483,10 @@ Return ONLY by calling propose_schedule.`,
 
   if (variant === "widget") {
     return (
-      <Card className="p-4 border-2 border-blue-500/20 bg-gradient-to-r from-blue-500/5 to-purple-500/5">
+      <Card className="p-4 border">
         <div className="flex items-center justify-between mb-3">
           <div className="flex items-center gap-3">
-            <div className="p-2 rounded-lg bg-gradient-to-br from-blue-500 to-purple-500">
-              <MessageSquare className="w-5 h-5 text-white" />
-            </div>
+            <KaiseyMark size={36} />
             <div>
               <h3 className="font-semibold flex items-center gap-2">
                 Chat with Kaisey
@@ -1513,7 +1512,7 @@ Return ONLY by calling propose_schedule.`,
           <Button
             onClick={handleSendMessage}
             disabled={!inputValue.trim() || isInputDisabled}
-            className="bg-gradient-to-r from-blue-500 to-purple-500 hover:from-blue-600 hover:to-purple-600"
+            className="bg-primary text-primary-foreground hover:bg-primary/90"
           >
             <Send className="w-4 h-4" />
           </Button>
@@ -1533,9 +1532,7 @@ Return ONLY by calling propose_schedule.`,
                       </div>
                     ) : message.type === "agent" ? (
                       <div className="flex gap-2">
-                        <div className="w-6 h-6 rounded-full bg-gradient-to-br from-blue-500 to-purple-500 flex items-center justify-center shrink-0">
-                          <Bot className="w-3 h-3 text-white" />
-                        </div>
+                        <KaiseyMark size={24} />
                         <div className="max-w-[80%]">
                           <div className="rounded-lg bg-muted p-2">
                             <p className="text-xs whitespace-pre-line">{message.content}</p>
@@ -1556,9 +1553,7 @@ Return ONLY by calling propose_schedule.`,
 
                 {isTyping && (
                   <div className="flex gap-2">
-                    <div className="w-6 h-6 rounded-full bg-gradient-to-br from-blue-500 to-purple-500 flex items-center justify-center shrink-0">
-                      <Bot className="w-3 h-3 text-white" />
-                    </div>
+                    <KaiseyMark size={24} />
                     <div className="rounded-lg bg-muted p-2">
                       <div className="flex gap-1">
                         <span className="w-1.5 h-1.5 rounded-full bg-muted-foreground/50 animate-bounce"></span>
@@ -1585,7 +1580,7 @@ Return ONLY by calling propose_schedule.`,
         <div className="fixed bottom-6 right-24 z-50" data-tour-id="kaisey-chat">
           <Button
             onClick={() => setIsOpen(true)}
-            className="h-14 w-14 rounded-full shadow-lg bg-gradient-to-br from-blue-500 to-purple-500 hover:from-blue-600 hover:to-purple-600 relative group"
+            className="h-14 w-14 rounded-full shadow-lg bg-primary hover:bg-primary/90 relative group"
           >
             <MessageSquare className="w-6 h-6 text-white" />
             <span className="absolute -top-1 -right-1 h-3 w-3 rounded-full bg-green-500 border-2 border-background animate-pulse"></span>
@@ -1596,9 +1591,9 @@ Return ONLY by calling propose_schedule.`,
       {isOpen && (
         <div className="fixed bottom-6 right-6 z-50 w-96 h-[600px] shadow-2xl">
           <Card className="h-full flex flex-col border-2">
-            <div className="flex items-center justify-between p-4 border-b bg-gradient-to-r from-blue-500 to-purple-500">
+            <div className="flex items-center justify-between p-4 border-b bg-primary">
               <div className="flex items-center gap-2">
-                <Bot className="w-4 h-4 text-white" />
+                <KaiseyK size={16} color="#FAFAFC" />
                 <div>
                   <h3 className="font-semibold text-white text-sm">Kaisey</h3>
                   <p className="text-xs text-white/80">Your Student Co-Pilot</p>
@@ -1627,7 +1622,7 @@ Return ONLY by calling propose_schedule.`,
                 <Button
                   onClick={handleSendMessage}
                   disabled={!inputValue.trim() || isInputDisabled}
-                  className="bg-gradient-to-r from-blue-500 to-purple-500"
+                  className="bg-primary text-primary-foreground hover:bg-primary/90"
                 >
                   <Send className="w-4 h-4" />
                 </Button>

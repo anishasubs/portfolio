@@ -1,5 +1,6 @@
 import { useState } from "react";
 import { X, LogIn, LogOut, Save, Brain } from "lucide-react";
+import { KaiseyMark } from "@/app/components/KaiseyLogo";
 import { Button } from "@/app/components/ui/button";
 import { Input } from "@/app/components/ui/input";
 import { Label } from "@/app/components/ui/label";
@@ -33,11 +34,9 @@ export function SettingsPage({ credentials, onSave, onClose, onLogout, ouraMetri
       <header className="border-b bg-card sticky top-0 z-50">
         <div className="max-w-4xl mx-auto px-6 py-4 flex items-center justify-between">
           <div className="flex items-center gap-3">
-            <div className="p-2 rounded-lg bg-gradient-to-br from-blue-500 to-purple-500">
-              <Brain className="w-6 h-6 text-white" />
-            </div>
+            <KaiseyMark size={36} />
             <div>
-              <h1 className="text-xl font-bold">Kaisey Settings</h1>
+              <h1 className="text-xl font-semibold">Settings</h1>
               <p className="text-xs text-muted-foreground">Manage your integrations</p>
             </div>
           </div>
@@ -119,7 +118,7 @@ export function SettingsPage({ credentials, onSave, onClose, onLogout, ouraMetri
             </Button>
             <Button
               onClick={handleSave}
-              className="bg-gradient-to-r from-blue-500 to-purple-500 hover:from-blue-600 hover:to-purple-600"
+              className="bg-primary text-primary-foreground hover:bg-primary/90"
             >
               <Save className="w-4 h-4 mr-2" />
               Save Settings

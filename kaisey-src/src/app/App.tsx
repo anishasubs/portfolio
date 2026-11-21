@@ -1,5 +1,6 @@
 import { useState, useEffect } from "react";
-import { Bot, Bell, Settings, ArrowLeft } from "lucide-react";
+import { Bell, Settings, ArrowLeft } from "lucide-react";
+import { KaiseyMark, KaiseyLogo } from "@/app/components/KaiseyLogo";
 import { Button } from "@/app/components/ui/button";
 import { Badge } from "@/app/components/ui/badge";
 import { Toaster } from "@/app/components/ui/sonner";
@@ -815,13 +816,9 @@ export default function App() {
             <a href="/portfolio/" className="text-muted-foreground hover:text-foreground transition-colors" title="Back to Portfolio">
               <ArrowLeft className="w-5 h-5" />
             </a>
-            <div className="p-2 rounded-lg bg-gradient-to-br from-blue-500 to-purple-500">
-              <Bot className="w-6 h-6 text-white" />
-            </div>
-            <div>
-              <h1 className="text-xl font-bold">Kaisey</h1>
-              <p className="text-xs text-muted-foreground">Student Co-Pilot</p>
-            </div>
+            <h1 className="m-0">
+              <KaiseyLogo size={36} subtitle="student co-pilot" />
+            </h1>
           </div>
 
           <div className="flex items-center gap-2">
@@ -864,7 +861,7 @@ export default function App() {
         {suggestions.length > 0 && (
           <div className="mb-6">
             <div className="flex items-center gap-2 mb-3">
-              <Bot className="w-4 h-4 text-blue-500" />
+              <KaiseyMark size={20} />
               <h3 className="font-semibold">My Recommendations</h3>
               <Badge variant="outline" className="text-xs">{suggestions.length}</Badge>
             </div>

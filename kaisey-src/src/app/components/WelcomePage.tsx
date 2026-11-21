@@ -1,5 +1,6 @@
 import { useState, useEffect, useRef } from "react";
 import { Brain, LogIn, Sparkles, Calendar, Play, ArrowLeft } from "lucide-react";
+import { KaiseyMark } from "@/app/components/KaiseyLogo";
 import { Button } from "@/app/components/ui/button";
 import { Label } from "@/app/components/ui/label";
 import { Card } from "@/app/components/ui/card";
@@ -195,7 +196,7 @@ export function WelcomePage({ onLogin }: WelcomePageProps) {
       : `${import.meta.env.BASE_URL}kaisey-instruction.mp4`;
 
     return (
-      <div className="min-h-screen bg-gradient-to-br from-gray-950 via-gray-900 to-gray-950 flex flex-col items-center justify-center p-4 md:p-8">
+      <div className="min-h-screen bg-[#0E0E12] flex flex-col items-center justify-center p-4 md:p-8">
         <div className={`w-full ${isPortrait ? 'max-w-sm' : 'max-w-5xl'}`}>
           {!videoReady && (
             <div className="flex flex-col items-center justify-center py-20">
@@ -237,14 +238,12 @@ export function WelcomePage({ onLogin }: WelcomePageProps) {
   }
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-blue-50 via-purple-50 to-pink-50 dark:from-gray-900 dark:via-gray-800 dark:to-gray-900 flex items-center justify-center p-6">
+    <div className="min-h-screen bg-[#FAFAFC] dark:bg-background flex items-center justify-center p-6">
       <Card className="w-full max-w-lg p-8 shadow-2xl">
         {/* Header */}
         <div className="text-center mb-8">
-          <div className="inline-flex p-4 rounded-2xl bg-gradient-to-br from-blue-500 to-purple-500 mb-4">
-            <Brain className="w-12 h-12 text-white" />
-          </div>
-          <h1 className="text-3xl font-bold mb-2">Welcome to Kaisey</h1>
+          <KaiseyMark size={72} className="mb-5" />
+          <h1 className="text-4xl font-semibold mb-2" style={{ letterSpacing: "-0.04em" }}>Welcome to Kaisey</h1>
           <p className="text-muted-foreground">
             Your AI-powered Co-Pilot for Academic Excellence, Professional Networking, and Personal Well-being
           </p>
@@ -253,20 +252,20 @@ export function WelcomePage({ onLogin }: WelcomePageProps) {
         {/* Features */}
         <div className="grid grid-cols-3 gap-4 mb-8 p-4 rounded-lg bg-muted/50">
           <div className="text-center">
-            <div className="w-10 h-10 rounded-full bg-blue-500/10 flex items-center justify-center mx-auto mb-2">
-              <Sparkles className="w-5 h-5 text-blue-500" />
+            <div className="w-10 h-10 rounded-full bg-brand/10 flex items-center justify-center mx-auto mb-2">
+              <Sparkles className="w-5 h-5 text-brand" />
             </div>
             <p className="text-xs font-semibold">AI Insights</p>
           </div>
           <div className="text-center">
-            <div className="w-10 h-10 rounded-full bg-purple-500/10 flex items-center justify-center mx-auto mb-2">
-              <Brain className="w-5 h-5 text-purple-500" />
+            <div className="w-10 h-10 rounded-full bg-brand/10 flex items-center justify-center mx-auto mb-2">
+              <Brain className="w-5 h-5 text-brand" />
             </div>
             <p className="text-xs font-semibold">Smart Scheduling</p>
           </div>
           <div className="text-center">
-            <div className="w-10 h-10 rounded-full bg-green-500/10 flex items-center justify-center mx-auto mb-2">
-              <LogIn className="w-5 h-5 text-green-500" />
+            <div className="w-10 h-10 rounded-full bg-brand/10 flex items-center justify-center mx-auto mb-2">
+              <LogIn className="w-5 h-5 text-brand" />
             </div>
             <p className="text-xs font-semibold">Integrations</p>
           </div>
@@ -286,7 +285,7 @@ export function WelcomePage({ onLogin }: WelcomePageProps) {
               <Button
                 onClick={handleGoogleCalendarConnect}
                 disabled={isConnectingGoogle}
-                className="w-full h-14 bg-gradient-to-r from-blue-500 to-purple-500 hover:from-blue-600 hover:to-purple-600"
+                className="w-full h-14 bg-primary text-primary-foreground hover:bg-primary/90"
                 size="lg"
               >
                 <Calendar className="w-5 h-5 mr-2" />
@@ -325,7 +324,7 @@ export function WelcomePage({ onLogin }: WelcomePageProps) {
             
             <Button
               onClick={handleDemoMode}
-              className="w-full h-14 bg-gradient-to-r from-blue-500 to-purple-500 hover:from-blue-600 hover:to-purple-600"
+              className="w-full h-14 bg-primary text-primary-foreground hover:bg-primary/90"
               size="lg"
             >
               <Sparkles className="w-5 h-5 mr-2" />

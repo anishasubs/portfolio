@@ -37,7 +37,7 @@ export function ProfileSection({ userProfile: googleProfile, ouraMetrics, ouraLo
       <div className="flex items-start gap-4 mb-6">
         <Avatar className="h-16 w-16 border-2 border-blue-500">
           {picture && <AvatarImage src={picture} alt={name} />}
-          <AvatarFallback className="bg-gradient-to-br from-blue-500 to-purple-500 text-white text-xl">
+          <AvatarFallback className="bg-primary text-primary-foreground text-xl">
             {initials}
           </AvatarFallback>
         </Avatar>
