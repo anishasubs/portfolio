@@ -817,7 +817,7 @@ export default function App() {
               <ArrowLeft className="w-5 h-5" />
             </a>
             <h1 className="m-0">
-              <KaiseyLogo size={36} subtitle="student co-pilot" />
+              <KaiseyLogo size={36} subtitle="student co-pilot" motion="assemble" />
             </h1>
           </div>
 

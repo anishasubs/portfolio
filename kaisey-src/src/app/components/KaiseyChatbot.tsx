@@ -1553,7 +1553,7 @@ Return ONLY by calling propose_schedule.`,
 
                 {isTyping && (
                   <div className="flex gap-2">
-                    <KaiseyMark size={24} />
+                    <KaiseyMark size={24} motion="shuffle" />
                     <div className="rounded-lg bg-muted p-2">
                       <div className="flex gap-1">
                         <span className="w-1.5 h-1.5 rounded-full bg-muted-foreground/50 animate-bounce"></span>

@@ -200,7 +200,7 @@ export function WelcomePage({ onLogin }: WelcomePageProps) {
         <div className={`w-full ${isPortrait ? 'max-w-sm' : 'max-w-5xl'}`}>
           {!videoReady && (
             <div className="flex flex-col items-center justify-center py-20">
-              <div className="w-10 h-10 border-2 border-white/20 border-t-white/80 rounded-full animate-spin mb-4" />
+              <KaiseyMark size={56} className="mb-4 ring-1 ring-white/10" motion="shuffle" />
               <p className="text-white/60 text-sm">Loading demo...</p>
             </div>
           )}
@@ -242,7 +242,7 @@ export function WelcomePage({ onLogin }: WelcomePageProps) {
       <Card className="w-full max-w-lg p-8 shadow-2xl">
         {/* Header */}
         <div className="text-center mb-8">
-          <KaiseyMark size={72} className="mb-5" />
+          <KaiseyMark size={72} className="mb-5" motion="assemble" />
           <h1 className="text-4xl font-semibold mb-2" style={{ letterSpacing: "-0.04em" }}>Welcome to Kaisey</h1>
           <p className="text-muted-foreground">
             Your AI-powered Co-Pilot for Academic Excellence, Professional Networking, and Personal Well-being
