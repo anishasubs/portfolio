@@ -951,6 +951,14 @@
         .k-piece .k-cat { opacity: 0; }
         .js-kfly .problem .cat-block { transition: opacity 0.18s ease; }
         .js-kfly .problem .cat-block.is-waiting { opacity: 0; }
+        /* -- Three screens: the Figma designs (file "Kaisey · Time Blocks"),
+           one per row with the question and notes beside them -- */
+        .screens-grid { grid-template-columns: 1fr; gap: 3rem; }
+        .screens-grid .wf { display: grid; grid-template-columns: minmax(0, 2.2fr) minmax(0, 1fr); gap: 2rem; align-items: center; }
+        .screen-shot { display: block; width: 100%; height: auto; border-radius: 14px; border: 1px solid #E6E6EE; box-shadow: 0 24px 60px rgba(14, 14, 18, 0.08); background: #FAFAFC; }
+        @media (max-width: 900px) {
+            .screens-grid .wf { grid-template-columns: 1fr; gap: 1rem; }
+        }
     </style>
 </head>
 <body>
@@ -1154,48 +1162,21 @@
     <!-- ═══ WIREFRAMES ═══ -->
     <section class="wireframes" id="design">
         <div class="container fade-in">
-            <span class="section-tag">03 · Design · wireframes</span>
+            <span class="section-tag">03 · Design · screens</span>
             <h2 class="section-title">Three Screens That Carry the Product</h2>
-            <p class="section-desc">Before any colour, each screen was sketched in greyscale around one question it has to answer for a student. These are the three that shaped the build.</p>
+            <p class="section-desc">Each screen was designed in Figma around one question it has to answer for a student. These are the three that shaped the build.</p>
 
-            <div class="wf-grid">
+            <div class="wf-grid screens-grid">
                 <figure class="wf">
-                    <div class="wf-screen">
-                        <div class="wf-bar"><i class="wf-dot"></i><i class="wf-line" style="width:30%"></i></div>
-                        <div class="wf-card">
-                            <i class="wf-line" style="width:55%"></i>
-                            <div class="wf-row"><i class="wf-chip"></i><i class="wf-line" style="width:60%"></i></div>
-                            <div class="wf-balance"><i style="flex:5"></i><i style="flex:2"></i><i style="flex:1.5"></i><i style="flex:1"></i></div>
-                            <div class="wf-row"><i class="wf-pill"></i><i class="wf-pill"></i><i class="wf-pill"></i><i class="wf-pill"></i></div>
-                        </div>
-                        <div class="wf-list">
-                            <div class="wf-event"><i class="wf-time"></i><i class="wf-tick"></i><i class="wf-line" style="width:62%"></i></div><div class="wf-event"><i class="wf-time"></i><i class="wf-tick"></i><i class="wf-line" style="width:48%"></i></div><div class="wf-event"><i class="wf-time"></i><i class="wf-tick"></i><i class="wf-line" style="width:70%"></i></div><div class="wf-event"><i class="wf-time"></i><i class="wf-tick"></i><i class="wf-line" style="width:40%"></i></div>
-                        </div>
-                    </div>
-                    <figcaption><span class="mono-label">A · Today</span><b>What matters right now?</b>Next event first, the week's balance as one bar, and the focus switch one tap away. The calendar list underneath stayed almost unchanged into the final UI.</figcaption>
+                    <img class="screen-shot" src="assets/screen-today.webp" width="1440" height="1079" alt="Kaisey Today screen: your day at a glance with the next event, weekly balance bar and focus chips, two recommendation cards, the calendar list, and an Ask Kaisey panel." loading="lazy" decoding="async">
+                    <figcaption><span class="mono-label">A · Today</span><b>What matters right now?</b>Next event first, the week's balance as one bar, and the focus switch one tap away. The calendar list sits underneath, one row per event.</figcaption>
                 </figure>
                 <figure class="wf">
-                    <div class="wf-screen">
-                        <div class="wf-bar wf-bar-dark"><i class="wf-dot"></i><i class="wf-line" style="width:25%"></i></div>
-                        <div class="wf-chat">
-                            <div class="wf-bubble wf-bubble-me"><i class="wf-line" style="width:90%"></i><i class="wf-line" style="width:70%"></i></div>
-                            <div class="wf-bubble">
-                                <i class="wf-line" style="width:50%"></i><div class="wf-row"><i class="wf-chip"></i><i class="wf-line" style="width:55%"></i><i class="wf-tag"></i></div><div class="wf-row"><i class="wf-chip"></i><i class="wf-line" style="width:40%"></i><i class="wf-tag"></i></div><div class="wf-row"><i class="wf-chip"></i><i class="wf-line" style="width:48%"></i><i class="wf-tag"></i></div><div class="wf-row"><i class="wf-chip"></i><i class="wf-line" style="width:35%"></i><i class="wf-tag"></i></div>
-                                <i class="wf-button"></i>
-                            </div>
-                        </div>
-                        <div class="wf-input"><i class="wf-line" style="width:60%"></i><i class="wf-send"></i></div>
-                    </div>
+                    <img class="screen-shot" src="assets/screen-braindump.webp" width="1440" height="960" alt="Kaisey brain dump screen: a typed message turned into four editable tasks with category, length and timing, and a progress panel showing Read, Edit, Propose, Review, Accept." loading="lazy" decoding="async">
                     <figcaption><span class="mono-label">B · Brain dump</span><b>Can I just say it?</b>Type the week the way you'd tell a friend. Kaisey answers with tasks you can correct (category, length, timing) before anything touches the calendar.</figcaption>
                 </figure>
                 <figure class="wf">
-                    <div class="wf-screen">
-                        <div class="wf-bar"><i class="wf-line" style="width:35%"></i><i class="wf-chip" style="margin-left:auto"></i></div>
-                        <div class="wf-week">
-                            <div class="wf-day"><i class="wf-block" style="top:8%;height:18%"></i><i class="wf-block" style="top:32%;height:10%"></i><i class="wf-block" style="top:50%;height:18%"></i></div><div class="wf-day"><i class="wf-block" style="top:8%;height:14%"></i><i class="wf-block" style="top:28%;height:18%"></i><i class="wf-block wf-new" style="top:62%;height:8%"></i></div><div class="wf-day"><i class="wf-block" style="top:8%;height:18%"></i><i class="wf-block wf-new" style="top:34%;height:8%"></i><i class="wf-block" style="top:50%;height:18%"></i></div><div class="wf-day"><i class="wf-block" style="top:8%;height:14%"></i><i class="wf-block wf-new" style="top:30%;height:8%"></i><i class="wf-block" style="top:50%;height:18%"></i></div><div class="wf-day"><i class="wf-block" style="top:18%;height:18%"></i><i class="wf-block" style="top:42%;height:9%"></i><i class="wf-block" style="top:58%;height:9%"></i></div>
-                            <div class="wf-rec"><i class="wf-line" style="width:70%"></i><div class="wf-row"><i class="wf-chip"></i><i class="wf-line" style="width:60%"></i></div><div class="wf-row"><i class="wf-chip"></i><i class="wf-line" style="width:55%"></i></div><div class="wf-row"><i class="wf-chip"></i><i class="wf-line" style="width:62%"></i></div><div class="wf-row"><i class="wf-button"></i><i class="wf-button wf-button-ghost"></i></div></div>
-                        </div>
-                    </div>
+                    <img class="screen-shot" src="assets/screen-week.webp" width="1440" height="960" alt="Kaisey week view: a Monday to Friday calendar mostly in blue academics, with dashed red proposed coffee chats, and a Kaisey recommends panel showing recruiting rising from 4% to 16%." loading="lazy" decoding="async">
                     <figcaption><span class="mono-label">C · Recommendation</span><b>What should change?</b>Kaisey proposes specific blocks against the real week, shown in place (dashed) so the trade-off is visible before you accept. Nothing moves without a tap.</figcaption>
                 </figure>
             </div>
