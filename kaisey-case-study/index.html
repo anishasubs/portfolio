@@ -748,6 +748,147 @@
         .cat-social { background: var(--k-social); }
         .cat-wellness { background: var(--k-wellness); }
         .video-wrapper video { border-radius: 14px; background: #FAFAFC; }
+        /* ── Case study structure: branding, wireframes, technical build ── */
+        .line-icon { width: 28px; height: 28px; fill: none; stroke: var(--violet); stroke-width: 1.8; stroke-linecap: round; stroke-linejoin: round; }
+        .mono-label { display: block; font-family: 'JetBrains Mono', ui-monospace, monospace; font-size: 0.72rem; letter-spacing: 0.08em; text-transform: uppercase; color: var(--text-secondary); margin-bottom: 0.5rem; }
+        .sub-title { font-size: 1.35rem; font-weight: 600; letter-spacing: -0.02em; margin: 3.5rem 0 1.25rem; }
+        .brand, .build { background: #FFFFFF; }
+        .wireframes { background: var(--cream); }
+        .brand .section-desc, .wireframes .section-desc, .build .section-desc { max-width: 46rem; }
+
+        .brand-compare { display: flex; align-items: center; gap: 2rem; flex-wrap: wrap; margin-top: 2.5rem; }
+        .brand-tile-wrap { margin: 0; display: flex; align-items: center; gap: 1rem; }
+        .brand-tile-wrap figcaption { font-size: 0.95rem; color: var(--text-secondary); max-width: 14rem; }
+        .brand-tile { width: 96px; height: 96px; border-radius: 24px; display: flex; align-items: center; justify-content: center; flex-shrink: 0; }
+        .brand-tile svg { width: 52px; height: 52px; }
+        .brand-tile-old { background: linear-gradient(135deg, #3b82f6, #a855f7); opacity: 0.85; }
+        .brand-tile-old svg { fill: none; stroke: #fff; stroke-width: 1.8; stroke-linecap: round; stroke-linejoin: round; width: 44px; height: 44px; }
+        .brand-tile-new { background: #0E0E12; }
+        .brand-tile-new svg { width: 46px; height: 53px; }
+        .brand-arrow { font-size: 1.5rem; color: var(--text-secondary); }
+
+        .build-steps { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 1.5rem; }
+        .build-steps figure { margin: 0; display: flex; flex-direction: column; gap: 0.9rem; }
+        .build-steps figcaption { font-size: 0.95rem; color: var(--navy); }
+        .build-box { position: relative; width: 100%; max-width: 200px; aspect-ratio: 160 / 184; }
+        .build-tile { width: 100%; max-width: 200px; aspect-ratio: 1; background: #0E0E12; border-radius: 44px; display: flex; align-items: center; justify-content: center; }
+        .build-tile .build-box { width: 50%; }
+        .bb { position: absolute; border-radius: 8px; }
+
+        .brand-grid { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 1.25rem; margin-top: 3.5rem; }
+        .brand-card { background: var(--cream); border: 1px solid #ECECF2; border-radius: 14px; padding: 1.5rem; display: flex; flex-direction: column; gap: 1rem; min-width: 0; }
+        .brand-card p { font-size: 0.92rem; color: var(--text-secondary); line-height: 1.6; margin: 0; }
+        .motion-stage { background: #0E0E12; border-radius: 12px; height: 200px; display: flex; align-items: center; justify-content: center; }
+        .motion-box { position: relative; width: 80px; height: 92px; display: block; }
+        .mk { position: absolute; border-radius: 6px; }
+        .mk-stem { animation: mk-stem 5.5s cubic-bezier(.65,0,.35,1) infinite both; }
+        .mk-top { animation: mk-top 5.5s cubic-bezier(.65,0,.35,1) infinite both; }
+        .mk-mid { animation: mk-mid 5.5s cubic-bezier(.65,0,.35,1) infinite both; }
+        .mk-bot { animation: mk-bot 5.5s cubic-bezier(.65,0,.35,1) infinite both; }
+        @keyframes mk-stem {
+            0% { left:0; top:0; width:36px; height:42px; transform:scale(.3); opacity:0; background:#2F62E8 }
+            5.5%, 30% { left:0; top:0; width:36px; height:42px; transform:none; opacity:1; background:#2F62E8 }
+            40%, 44% { left:44px; top:0; width:36px; height:42px; background:#2F62E8 }
+            54%, 58% { left:44px; top:50px; width:36px; height:42px; background:#2F62E8 }
+            66%, 70% { left:0; top:0; width:22px; height:28px; background:#2F62E8 }
+            78% { left:0; top:0; width:22px; height:96px; background:#2F62E8 }
+            81%, 84% { left:0; top:0; width:22px; height:92px; background:#2F62E8 }
+            90%, 100% { left:0; top:0; width:22px; height:92px; transform:none; opacity:1; background:#FAFAFC } }
+        @keyframes mk-top {
+            0%, 6.4% { left:44px; top:0; width:36px; height:42px; transform:scale(.3); opacity:0; background:#DC3F4A }
+            11.8%, 30% { left:44px; top:0; width:36px; height:42px; transform:none; opacity:1; background:#DC3F4A }
+            40%, 58% { left:0; top:0; width:36px; height:42px; background:#DC3F4A }
+            66%, 84% { left:54px; top:0; width:26px; height:28px; background:#DC3F4A }
+            90%, 100% { left:54px; top:0; width:26px; height:28px; transform:none; opacity:1; background:#8B7FFF } }
+        @keyframes mk-mid {
+            0%, 12.7% { left:0; top:50px; width:36px; height:42px; transform:scale(.3); opacity:0; background:#EA7F23 }
+            18.2%, 58% { left:0; top:50px; width:36px; height:42px; transform:none; opacity:1; background:#EA7F23 }
+            66%, 84% { left:28px; top:34px; width:20px; height:24px; background:#EA7F23 }
+            90%, 100% { left:28px; top:34px; width:20px; height:24px; transform:none; opacity:1; background:#FAFAFC } }
+        @keyframes mk-bot {
+            0%, 19.1% { left:44px; top:50px; width:36px; height:42px; transform:scale(.3); opacity:0; background:#22995C }
+            24.5%, 44% { left:44px; top:50px; width:36px; height:42px; transform:none; opacity:1; background:#22995C }
+            54%, 58% { left:44px; top:0; width:36px; height:42px; background:#22995C }
+            66%, 84% { left:54px; top:64px; width:26px; height:28px; background:#22995C }
+            90%, 100% { left:54px; top:64px; width:26px; height:28px; transform:none; opacity:1; background:#FAFAFC } }
+        @media (prefers-reduced-motion: reduce) {
+            .mk { animation: none; }
+            .mk-stem { left:0; top:0; width:22px; height:92px; background:#FAFAFC; }
+            .mk-top { left:54px; top:0; width:26px; height:28px; background:#8B7FFF; }
+            .mk-mid { left:28px; top:34px; width:20px; height:24px; background:#FAFAFC; }
+            .mk-bot { left:54px; top:64px; width:26px; height:28px; background:#FAFAFC; }
+        }
+        .type-spec { display: flex; flex-direction: column; gap: 0.9rem; }
+        .type-spec > div { display: flex; flex-direction: column; gap: 0.2rem; }
+        .type-name { font-family: 'JetBrains Mono', ui-monospace, monospace; font-size: 0.7rem; color: var(--text-secondary); }
+        .type-sample-display { font-size: 1.7rem; font-weight: 600; letter-spacing: -0.035em; line-height: 1.1; }
+        .type-sample-body { font-size: 0.95rem; line-height: 1.5; }
+        .type-sample-mono { font-family: 'JetBrains Mono', ui-monospace, monospace; font-size: 0.95rem; }
+        .swatch-row { display: flex; gap: 0.5rem; flex-wrap: wrap; }
+        .swatch { display: flex; flex-direction: column; gap: 0.25rem; font-size: 0.72rem; min-width: 52px; }
+        .swatch span { display: block; width: 52px; height: 36px; border-radius: 8px; }
+        .swatch b { font-weight: 600; }
+        .swatch code { font-family: 'JetBrains Mono', ui-monospace, monospace; font-size: 0.68rem; color: var(--text-secondary); background: none; padding: 0; }
+
+        /* wireframes: greyscale on purpose */
+        .wf-grid { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 1.5rem; margin-top: 2.5rem; }
+        .wf { margin: 0; display: flex; flex-direction: column; gap: 1rem; min-width: 0; }
+        .wf figcaption { font-size: 0.92rem; color: var(--text-secondary); line-height: 1.6; }
+        .wf figcaption b { display: block; color: var(--navy); font-size: 1.05rem; font-weight: 600; margin-bottom: 0.25rem; }
+        .wf-screen { background: #FFFFFF; border: 1.5px solid #C9C9D3; border-radius: 14px; padding: 12px; height: 340px; box-sizing: border-box; display: flex; flex-direction: column; gap: 10px; overflow: hidden; }
+        .wf i { display: block; }
+        .wf-line { height: 7px; border-radius: 4px; background: #D9D9E0; }
+        .wf-bar { display: flex; align-items: center; gap: 8px; padding: 6px 8px; border: 1.5px solid #E2E2E8; border-radius: 8px; }
+        .wf-bar-dark { background: #2A2A31; border-color: #2A2A31; }
+        .wf-bar-dark .wf-line { background: #5A5A64; }
+        .wf-dot { width: 14px; height: 14px; border-radius: 4px; background: #9C9CA8; }
+        .wf-card { border: 1.5px dashed #C9C9D3; border-radius: 10px; padding: 10px; display: flex; flex-direction: column; gap: 9px; }
+        .wf-row { display: flex; align-items: center; gap: 7px; }
+        .wf-row .wf-line { flex: 0 0 auto; }
+        .wf-chip { width: 10px; height: 10px; border-radius: 3px; background: #9C9CA8; flex-shrink: 0; }
+        .wf-pill { width: 36px; height: 14px; border-radius: 7px; border: 1.5px solid #C9C9D3; }
+        .wf-balance { display: flex; gap: 3px; height: 9px; }
+        .wf-balance i { border-radius: 3px; background: #B4B4BF; }
+        .wf-balance i:nth-child(2) { background: #8E8E9A; }
+        .wf-balance i:nth-child(3) { background: #C9C9D3; }
+        .wf-balance i:nth-child(4) { background: #A4A4B0; }
+        .wf-list { display: flex; flex-direction: column; gap: 7px; }
+        .wf-event { display: flex; align-items: center; gap: 8px; padding: 7px 8px; border: 1.5px solid #E2E2E8; border-radius: 8px; }
+        .wf-time { width: 26px; height: 7px; border-radius: 3px; background: #C9C9D3; flex-shrink: 0; }
+        .wf-tick { width: 3px; height: 18px; border-radius: 2px; background: #9C9CA8; flex-shrink: 0; }
+        .wf-chat { flex: 1; display: flex; flex-direction: column; gap: 9px; }
+        .wf-bubble { border: 1.5px solid #E2E2E8; border-radius: 10px; padding: 9px; display: flex; flex-direction: column; gap: 7px; }
+        .wf-bubble-me { align-self: flex-end; width: 70%; background: #F1F1F4; border-color: #F1F1F4; }
+        .wf-tag { width: 30px; height: 7px; border-radius: 3px; background: #E2E2E8; margin-left: auto; }
+        .wf-button { width: 74px; height: 18px; border-radius: 5px; background: #6E6E7A; }
+        .wf-button-ghost { background: none; border: 1.5px solid #C9C9D3; width: 54px; }
+        .wf-input { display: flex; align-items: center; justify-content: space-between; border: 1.5px solid #C9C9D3; border-radius: 9px; padding: 8px; }
+        .wf-send { width: 18px; height: 18px; border-radius: 5px; background: #6E6E7A; }
+        .wf-week { position: relative; flex: 1; display: grid; grid-template-columns: repeat(5, minmax(0, 1fr)); gap: 5px; }
+        .wf-day { position: relative; border: 1.5px solid #E2E2E8; border-radius: 6px; }
+        .wf-block { position: absolute; left: 3px; right: 3px; border-radius: 3px; background: #C9C9D3; }
+        .wf-new { background: none; border: 1.5px dashed #6E6E7A; }
+        .wf-rec { position: absolute; right: 4px; top: 18%; width: 62%; background: #FFFFFF; border: 1.5px solid #9C9CA8; border-radius: 10px; padding: 10px; display: flex; flex-direction: column; gap: 8px; box-shadow: 0 8px 24px rgba(14,14,18,0.12); }
+
+        /* technical build */
+        .stack-grid { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 1.25rem; margin-top: 2rem; }
+        .stack-card { border: 1px solid #ECECF2; border-radius: 14px; padding: 1.4rem; background: var(--cream); }
+        .stack-card h3 { font-size: 1.1rem; font-weight: 600; letter-spacing: -0.02em; margin: 0 0 0.5rem; }
+        .stack-card p { font-size: 0.92rem; color: var(--text-secondary); line-height: 1.6; margin: 0; }
+        .phase-row { list-style: none; margin: 0; padding: 0; display: grid; grid-template-columns: repeat(7, minmax(0, 1fr)); gap: 0.5rem; counter-reset: ph; }
+        .phase-row li { position: relative; border: 1px solid #ECECF2; border-radius: 10px; padding: 0.8rem 0.7rem; background: var(--cream); display: flex; flex-direction: column; gap: 0.35rem; min-width: 0; }
+        .phase-row li:last-child { background: #0E0E12; border-color: #0E0E12; }
+        .phase-row li:last-child code { color: #8B7FFF; }
+        .phase-row li:last-child span { color: rgba(250,250,252,0.75); }
+        .phase-row code { font-family: 'JetBrains Mono', ui-monospace, monospace; font-size: 0.68rem; font-weight: 500; color: var(--violet); background: none; padding: 0; overflow-wrap: anywhere; }
+        .phase-row span { font-size: 0.78rem; color: var(--text-secondary); line-height: 1.4; }
+
+        @media (max-width: 900px) {
+            .build-steps, .brand-grid, .wf-grid, .stack-grid { grid-template-columns: 1fr; }
+            .phase-row { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+            .build-box { max-width: 160px; }
+            .build-tile { max-width: 160px; border-radius: 36px; }
+        }
     </style>
 </head>
 <body>
@@ -799,7 +940,7 @@
     <!-- ═══ 2. THE PROBLEM ═══ -->
     <section class="problem" id="problem">
         <div class="container fade-in">
-            <span class="section-tag">The Problem</span>
+            <span class="section-tag">01 · What Kaisey solves</span>
             <h2 class="section-title">The Recruiting &harr; Academics Collision</h2>
             <p class="problem-intro">Students don't have busy calendars &mdash; they have <strong>competing calendars</strong> that actively work against each other. Your coursework deadline doesn't know about your Super Day. Your calendar doesn't know you slept four hours. The result is a daily triage problem that costs real opportunities.</p>
 
@@ -850,28 +991,28 @@
     <!-- ═══ 3. THE SOLUTION ═══ -->
     <section class="solution">
         <div class="container fade-in">
-            <span class="section-tag">The Solution</span>
+            <span class="section-tag">01 · What Kaisey solves</span>
             <h2 class="section-title">One Intelligent Layer Across Everything</h2>
             <p class="section-desc" style="margin-bottom: 2.5rem;">Kaisey reads your Google Calendar and reasons over it with OpenAI to work out what actually matters most right now. Not a new calendar. A smarter layer over the three you already use.</p>
 
             <div class="cards-grid">
                 <div class="card">
-                    <div class="card-icon">&#9889;</div>
+                    <div class="card-icon"><svg class="line-icon" viewBox="0 0 24 24" aria-hidden="true"><path d="M13 2 3 14h9l-1 8 10-12h-9l1-8z"/></svg></div>
                     <h3>Dynamic Priority Toggle</h3>
                     <p>One tap shifts your entire day. Slide between Academics, Recruiting, Social, and Wellness modes &mdash; Kaisey re-ranks every event using the model's reasoning, not a simple sort. When a connected Oura readiness score is below 60, Wellness mode auto-activates.</p>
                 </div>
                 <div class="card">
-                    <div class="card-icon">&#128279;</div>
+                    <div class="card-icon"><svg class="line-icon" viewBox="0 0 24 24" aria-hidden="true"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg></div>
                     <h3>Plain English In, Schedule Out</h3>
                     <p>Describe your week the way you would to a person and Kaisey pulls the commitments out of it, proposes times against your real calendar, and writes the blocks back. The model can reason across all of them at once.</p>
                 </div>
                 <div class="card">
-                    <div class="card-icon">&#128154;</div>
+                    <div class="card-icon"><svg class="line-icon" viewBox="0 0 24 24" aria-hidden="true"><path d="M22 12h-4l-3 9L9 3l-3 9H2"/></svg></div>
                     <h3>Optional Oura Ring Sync</h3>
                     <p>Connect an Oura Ring and Kaisey pulls sleep, readiness and recovery through the Oura API, then feeds it into the ranking. Slept four hours? Wellness blocks get promoted and low-stakes meetings defer. It is wired end to end &mdash; OAuth, sync and cards &mdash; and entirely optional: everything else works without it.</p>
                 </div>
                 <div class="card">
-                    <div class="card-icon">&#128274;</div>
+                    <div class="card-icon"><svg class="line-icon" viewBox="0 0 24 24" aria-hidden="true"><rect x="3" y="11" width="18" height="11" rx="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg></div>
                     <h3>Privacy-First, Session-Only</h3>
                     <p>Calendar data is processed in-session and never persisted on any server. The model sees what it needs to reason about priorities, then the context is discarded. No data warehouse, no profile building.</p>
                 </div>
@@ -879,10 +1020,245 @@
         </div>
     </section>
 
+    <!-- ═══ BRANDING ═══ -->
+    <section class="brand" id="branding">
+        <div class="container fade-in">
+            <span class="section-tag">02 · Branding</span>
+            <h2 class="section-title">A K Built From Calendar Blocks</h2>
+            <p class="section-desc">The first version wore a stock robot icon on a blue-to-purple gradient and the browser's default font, the same look as a thousand AI apps. The rebrand draws the mark from what Kaisey actually does: four calendar blocks, one per part of a student's week, arranged into a K.</p>
+
+            <div class="brand-compare">
+                <figure class="brand-tile-wrap">
+                    <div class="brand-tile brand-tile-old"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 8V4H8"/><rect x="4" y="8" width="16" height="12" rx="2"/><path d="M2 14h2M20 14h2M15 13v2M9 13v2"/></svg></div>
+                    <figcaption><span class="mono-label">Before</span>Stock icon, gradient, system font</figcaption>
+                </figure>
+                <span class="brand-arrow" aria-hidden="true">&rarr;</span>
+                <figure class="brand-tile-wrap">
+                    <div class="brand-tile brand-tile-new"><svg viewBox="0 0 40 46" aria-hidden="true"><rect x="0" y="0" width="11" height="46" rx="3" fill="#FAFAFC"/><rect x="14" y="17" width="10" height="12" rx="3" fill="#FAFAFC"/><rect x="27" y="32" width="13" height="14" rx="3" fill="#FAFAFC"/><rect x="27" y="0" width="13" height="14" rx="3" fill="#8B7FFF"/></svg></div>
+                    <figcaption><span class="mono-label">After</span>Time Blocks: a K drawn from the product</figcaption>
+                </figure>
+            </div>
+
+            <h3 class="sub-title">How the mark is built</h3>
+            <div class="build-steps">
+                <figure>
+                    <div class="build-box"><span class="bb" style="left:0;top:0;width:44%;height:45%;background:var(--k-academics)"></span><span class="bb" style="left:56%;top:0;width:44%;height:45%;background:var(--k-recruiting)"></span><span class="bb" style="left:0;top:55%;width:44%;height:45%;background:var(--k-social)"></span><span class="bb" style="left:56%;top:55%;width:44%;height:45%;background:var(--k-wellness)"></span></div>
+                    <figcaption><span class="mono-label">1</span>Four blocks, one per category</figcaption>
+                </figure>
+                <figure>
+                    <div class="build-box"><span class="bb" style="left:0;top:0;width:27.5%;height:100%;background:var(--k-academics)"></span><span class="bb" style="left:35%;top:37%;width:25%;height:26%;background:var(--k-social)"></span><span class="bb" style="left:67.5%;top:0;width:32.5%;height:30%;background:var(--k-recruiting)"></span><span class="bb" style="left:67.5%;top:70%;width:32.5%;height:30%;background:var(--k-wellness)"></span></div>
+                    <figcaption><span class="mono-label">2</span>Rearranged into a K, like rescheduling</figcaption>
+                </figure>
+                <figure>
+                    <div class="build-tile"><div class="build-box"><span class="bb" style="left:0;top:0;width:27.5%;height:100%;background:#FAFAFC"></span><span class="bb" style="left:35%;top:37%;width:25%;height:26%;background:#FAFAFC"></span><span class="bb" style="left:67.5%;top:0;width:32.5%;height:30%;background:#8B7FFF"></span><span class="bb" style="left:67.5%;top:70%;width:32.5%;height:30%;background:#FAFAFC"></span></div></div>
+                    <figcaption><span class="mono-label">3</span>Settled to ink and one violet block</figcaption>
+                </figure>
+            </div>
+
+            <div class="brand-grid">
+                <div class="brand-card brand-motion">
+                    <span class="mono-label">Motion</span>
+                    <div class="motion-stage" aria-hidden="true">
+                        <span class="motion-box">
+                            <span class="mk mk-mid"></span><span class="mk mk-bot"></span><span class="mk mk-stem"></span><span class="mk mk-top"></span>
+                        </span>
+                    </div>
+                    <p>The blocks pop in one at a time, turn like a cube, form the K, and the stem grows: one category taking up more of the week. It plays once when Kaisey opens, and a smaller shuffle loops while Kaisey is thinking.</p>
+                </div>
+                <div class="brand-card">
+                    <span class="mono-label">Typography</span>
+                    <div class="type-spec">
+                        <div><span class="type-name">Instrument Sans</span><span class="type-sample-display">Your day at a glance</span></div>
+                        <div><span class="type-name">Instrument Sans</span><span class="type-sample-body">Good morning. You have 5 events today and a free hour after lunch.</span></div>
+                        <div><span class="type-name">JetBrains Mono</span><span class="type-sample-mono">08:00 &nbsp;10:15 &nbsp;11:00 &nbsp;12:00</span></div>
+                    </div>
+                    <p>A tight, precise grotesque for everything people read, and a monospace for times and labels so the interface reads like a calendar.</p>
+                </div>
+                <div class="brand-card brand-colour">
+                    <span class="mono-label">Colour</span>
+                    <div class="swatch-row">
+                        <div class="swatch"><span style="background:#0E0E12"></span><b>Ink</b><code>#0E0E12</code></div>
+                        <div class="swatch"><span style="background:#5B4CF0"></span><b>Violet</b><code>#5B4CF0</code></div>
+                        <div class="swatch"><span style="background:#FAFAFC;box-shadow:inset 0 0 0 1px #E6E6EE"></span><b>Paper</b><code>#FAFAFC</code></div>
+                    </div>
+                    <div class="swatch-row">
+                        <div class="swatch"><span style="background:var(--k-academics)"></span><b>Academics</b><code>#2F62E8</code></div>
+                        <div class="swatch"><span style="background:var(--k-recruiting)"></span><b>Recruiting</b><code>#DC3F4A</code></div>
+                        <div class="swatch"><span style="background:var(--k-social)"></span><b>Social</b><code>#EA7F23</code></div>
+                        <div class="swatch"><span style="background:var(--k-wellness)"></span><b>Wellness</b><code>#22995C</code></div>
+                    </div>
+                    <p>Black and white with one violet accent keeps the chrome quiet, so the four category colours are what you notice. They mean the same thing everywhere: calendar, balance bar and logo.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- ═══ WIREFRAMES ═══ -->
+    <section class="wireframes" id="design">
+        <div class="container fade-in">
+            <span class="section-tag">03 · Design · wireframes</span>
+            <h2 class="section-title">Three Screens That Carry the Product</h2>
+            <p class="section-desc">Before any colour, each screen was sketched in greyscale around one question it has to answer for a student. These are the three that shaped the build.</p>
+
+            <div class="wf-grid">
+                <figure class="wf">
+                    <div class="wf-screen">
+                        <div class="wf-bar"><i class="wf-dot"></i><i class="wf-line" style="width:30%"></i></div>
+                        <div class="wf-card">
+                            <i class="wf-line" style="width:55%"></i>
+                            <div class="wf-row"><i class="wf-chip"></i><i class="wf-line" style="width:60%"></i></div>
+                            <div class="wf-balance"><i style="flex:5"></i><i style="flex:2"></i><i style="flex:1.5"></i><i style="flex:1"></i></div>
+                            <div class="wf-row"><i class="wf-pill"></i><i class="wf-pill"></i><i class="wf-pill"></i><i class="wf-pill"></i></div>
+                        </div>
+                        <div class="wf-list">
+                            <div class="wf-event"><i class="wf-time"></i><i class="wf-tick"></i><i class="wf-line" style="width:62%"></i></div><div class="wf-event"><i class="wf-time"></i><i class="wf-tick"></i><i class="wf-line" style="width:48%"></i></div><div class="wf-event"><i class="wf-time"></i><i class="wf-tick"></i><i class="wf-line" style="width:70%"></i></div><div class="wf-event"><i class="wf-time"></i><i class="wf-tick"></i><i class="wf-line" style="width:40%"></i></div>
+                        </div>
+                    </div>
+                    <figcaption><span class="mono-label">A · Today</span><b>What matters right now?</b>Next event first, the week's balance as one bar, and the focus switch one tap away. The calendar list underneath stayed almost unchanged into the final UI.</figcaption>
+                </figure>
+                <figure class="wf">
+                    <div class="wf-screen">
+                        <div class="wf-bar wf-bar-dark"><i class="wf-dot"></i><i class="wf-line" style="width:25%"></i></div>
+                        <div class="wf-chat">
+                            <div class="wf-bubble wf-bubble-me"><i class="wf-line" style="width:90%"></i><i class="wf-line" style="width:70%"></i></div>
+                            <div class="wf-bubble">
+                                <i class="wf-line" style="width:50%"></i><div class="wf-row"><i class="wf-chip"></i><i class="wf-line" style="width:55%"></i><i class="wf-tag"></i></div><div class="wf-row"><i class="wf-chip"></i><i class="wf-line" style="width:40%"></i><i class="wf-tag"></i></div><div class="wf-row"><i class="wf-chip"></i><i class="wf-line" style="width:48%"></i><i class="wf-tag"></i></div><div class="wf-row"><i class="wf-chip"></i><i class="wf-line" style="width:35%"></i><i class="wf-tag"></i></div>
+                                <i class="wf-button"></i>
+                            </div>
+                        </div>
+                        <div class="wf-input"><i class="wf-line" style="width:60%"></i><i class="wf-send"></i></div>
+                    </div>
+                    <figcaption><span class="mono-label">B · Brain dump</span><b>Can I just say it?</b>Type the week the way you'd tell a friend. Kaisey answers with tasks you can correct (category, length, timing) before anything touches the calendar.</figcaption>
+                </figure>
+                <figure class="wf">
+                    <div class="wf-screen">
+                        <div class="wf-bar"><i class="wf-line" style="width:35%"></i><i class="wf-chip" style="margin-left:auto"></i></div>
+                        <div class="wf-week">
+                            <div class="wf-day"><i class="wf-block" style="top:8%;height:18%"></i><i class="wf-block" style="top:32%;height:10%"></i><i class="wf-block" style="top:50%;height:18%"></i></div><div class="wf-day"><i class="wf-block" style="top:8%;height:14%"></i><i class="wf-block" style="top:28%;height:18%"></i><i class="wf-block wf-new" style="top:62%;height:8%"></i></div><div class="wf-day"><i class="wf-block" style="top:8%;height:18%"></i><i class="wf-block wf-new" style="top:34%;height:8%"></i><i class="wf-block" style="top:50%;height:18%"></i></div><div class="wf-day"><i class="wf-block" style="top:8%;height:14%"></i><i class="wf-block wf-new" style="top:30%;height:8%"></i><i class="wf-block" style="top:50%;height:18%"></i></div><div class="wf-day"><i class="wf-block" style="top:18%;height:18%"></i><i class="wf-block" style="top:42%;height:9%"></i><i class="wf-block" style="top:58%;height:9%"></i></div>
+                            <div class="wf-rec"><i class="wf-line" style="width:70%"></i><div class="wf-row"><i class="wf-chip"></i><i class="wf-line" style="width:60%"></i></div><div class="wf-row"><i class="wf-chip"></i><i class="wf-line" style="width:55%"></i></div><div class="wf-row"><i class="wf-chip"></i><i class="wf-line" style="width:62%"></i></div><div class="wf-row"><i class="wf-button"></i><i class="wf-button wf-button-ghost"></i></div></div>
+                        </div>
+                    </div>
+                    <figcaption><span class="mono-label">C · Recommendation</span><b>What should change?</b>Kaisey proposes specific blocks against the real week, shown in place (dashed) so the trade-off is visible before you accept. Nothing moves without a tap.</figcaption>
+                </figure>
+            </div>
+        </div>
+    </section>
+
+    <!-- ═══ IN ACTION ═══ -->
+    <section class="problem">
+        <div class="container fade-in">
+            <span class="section-tag">03 · Design · final UI</span>
+            <h2 class="section-title">Your Day at a Glance</h2>
+            <p class="problem-intro">Kaisey gives you an instant snapshot of your day and week &mdash; showing your next event, weekly time balance across all four categories, and where your focus is going. No manual tracking required.</p>
+
+            <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 1.5rem; margin-top: 2rem;">
+                <div style="background: white; border-radius: 12px; padding: 1.5rem; border: 1px solid rgba(0,0,0,0.06);">
+                    <h4 style="font-size: 0.9rem; font-weight: 700; margin-bottom: 1rem; color: var(--navy);">Weekly Balance View</h4>
+                    <p style="font-size: 0.85rem; color: var(--text-secondary); margin-bottom: 1rem;">See exactly how many hours you're dedicating to each category this week.</p>
+                    <div style="margin-bottom: 10px;">
+                        <div style="display: flex; justify-content: space-between; font-size: 0.8rem; margin-bottom: 4px;"><span style="color: var(--k-academics); font-weight: 600;">Academics</span><span>8.5h</span></div>
+                        <div style="height: 8px; border-radius: 4px; background: #e5e7eb; overflow: hidden;"><div style="width: 65%; height: 100%; background: var(--k-academics); border-radius: 4px;"></div></div>
+                    </div>
+                    <div style="margin-bottom: 10px;">
+                        <div style="display: flex; justify-content: space-between; font-size: 0.8rem; margin-bottom: 4px;"><span style="color: var(--k-recruiting); font-weight: 600;">Recruiting</span><span>4.0h</span></div>
+                        <div style="height: 8px; border-radius: 4px; background: #e5e7eb; overflow: hidden;"><div style="width: 35%; height: 100%; background: var(--k-recruiting); border-radius: 4px;"></div></div>
+                    </div>
+                    <div style="margin-bottom: 10px;">
+                        <div style="display: flex; justify-content: space-between; font-size: 0.8rem; margin-bottom: 4px;"><span style="color: var(--k-social); font-weight: 600;">Social</span><span>3.0h</span></div>
+                        <div style="height: 8px; border-radius: 4px; background: #e5e7eb; overflow: hidden;"><div style="width: 25%; height: 100%; background: var(--k-social); border-radius: 4px;"></div></div>
+                    </div>
+                    <div>
+                        <div style="display: flex; justify-content: space-between; font-size: 0.8rem; margin-bottom: 4px;"><span style="color: var(--k-wellness); font-weight: 600;">Wellness</span><span>0h</span></div>
+                        <div style="height: 8px; border-radius: 4px; background: #e5e7eb; overflow: hidden;"><div style="width: 0%; height: 100%; background: var(--k-wellness); border-radius: 4px;"></div></div>
+                    </div>
+                    <div style="margin-top: 12px; padding: 8px 12px; border-radius: 8px; background: rgba(251, 191, 36, 0.08); border: 1px solid rgba(251, 191, 36, 0.2); font-size: 0.8rem; color: #92400e;">No wellness time scheduled this week.</div>
+                </div>
+                <div style="background: white; border-radius: 12px; padding: 1.5rem; border: 1px solid rgba(0,0,0,0.06);">
+                    <h4 style="font-size: 0.9rem; font-weight: 700; margin-bottom: 1rem; color: var(--navy);">Today's Focus</h4>
+                    <p style="font-size: 0.85rem; color: var(--text-secondary); margin-bottom: 1rem;">Toggle between modes to set your priority for the day. Kaisey highlights what matters most.</p>
+                    <div style="display: flex; gap: 8px; flex-wrap: wrap; margin-bottom: 1.25rem;">
+                        <span style="padding: 6px 14px; border-radius: 20px; font-size: 0.8rem; font-weight: 600; background: var(--k-academics); color: white;">Academics</span>
+                        <span style="padding: 6px 14px; border-radius: 20px; font-size: 0.8rem; font-weight: 500; background: #f3f4f6; color: #6b7280;">Recruiting</span>
+                        <span style="padding: 6px 14px; border-radius: 20px; font-size: 0.8rem; font-weight: 500; background: #f3f4f6; color: #6b7280;">Social</span>
+                        <span style="padding: 6px 14px; border-radius: 20px; font-size: 0.8rem; font-weight: 500; background: #f3f4f6; color: #6b7280;">Wellness</span>
+                    </div>
+                    <div style="padding: 12px 14px; border-radius: 8px; margin-bottom: 8px; background: rgba(47, 98, 232, 0.06); border-left: 3px solid var(--k-academics);"><strong>Up Next: Corporate Finance</strong><br><span style="font-size: 0.8rem; color: var(--text-secondary);">8:00 AM &middot; 90 min</span></div>
+                    <div style="padding: 12px 14px; border-radius: 8px; margin-bottom: 8px; background: rgba(47, 98, 232, 0.06); border-left: 3px solid var(--k-academics);"><strong>Strategy Canvas Quiz</strong><br><span style="font-size: 0.8rem; color: var(--text-secondary);">11:00 AM &middot; 60 min</span></div>
+                    <div style="padding: 12px 14px; border-radius: 8px; margin-bottom: 8px; background: rgba(220, 63, 74, 0.06); border-left: 3px solid var(--k-recruiting);"><strong>Goldman Sachs Info Session</strong><br><span style="font-size: 0.8rem; color: var(--text-secondary);">12:00 PM &middot; 60 min</span></div>
+                    <div style="padding: 12px 14px; border-radius: 8px; background: rgba(34, 153, 92, 0.06); border-left: 3px solid var(--k-wellness);"><strong>Gym Session</strong><br><span style="font-size: 0.8rem; color: var(--text-secondary);">1:00 PM &middot; 45 min</span></div>
+                </div>
+            </div>
+
+            <p style="margin-top: 1.25rem; font-size: 0.9rem; color: var(--text-secondary); line-height: 1.7;">The weekly balance bar shows at a glance where your time is going. Events are color-coded by category so you can instantly spot imbalances &mdash; like zero wellness hours during finals week. The day view surfaces your next event and full schedule, grouped by the priority mode you've selected.</p>
+        </div>
+    </section>
+
+    <!-- ═══ 4. KEY PRODUCT DECISIONS ═══ -->
+    <section class="decisions">
+        <div class="container fade-in">
+            <span class="section-tag">03 · Design · decisions</span>
+            <h2 class="section-title">What We Chose and Why</h2>
+
+            <div class="cards-grid">
+                <div class="decision-card">
+                    <div class="label">Authentication</div>
+                    <h3>Google OAuth &rarr; Instant Calendar Access</h3>
+                    <p>One sign-in gives Kaisey read access to Google Calendar with zero onboarding friction. No separate account creation, no permission pop-ups later. Students are in under 10 seconds.</p>
+                    <div style="margin-top: 12px; display: flex; gap: 8px; font-size: 0.85rem;">
+                        <span style="background: rgba(91, 76, 240, 0.1); color: var(--violet); padding: 4px 12px; border-radius: 6px; border: 1px solid rgba(91, 76, 240, 0.2);">&check; Google OAuth</span>
+                        <span style="color: var(--text-secondary); text-decoration: line-through; padding: 4px 12px;">Email / Password</span>
+                    </div>
+                </div>
+                <div class="decision-card">
+                    <div class="label">Interaction</div>
+                    <h3>Toggle Over Manual Ranking</h3>
+                    <p>A four-mode selector beats a complex drag-and-drop ranking UI. One tap shifts the entire priority stack &mdash; fast enough to switch contexts mid-day between a lecture and a recruiting event.</p>
+                    <div style="margin-top: 12px; display: flex; gap: 8px; font-size: 0.85rem;">
+                        <span style="background: rgba(91, 76, 240, 0.1); color: var(--violet); padding: 4px 12px; border-radius: 6px; border: 1px solid rgba(91, 76, 240, 0.2);">&check; Priority Toggle</span>
+                        <span style="color: var(--text-secondary); text-decoration: line-through; padding: 4px 12px;">Manual Ranking UI</span>
+                    </div>
+                </div>
+                <div class="decision-card">
+                    <div class="label">Build Stack</div>
+                    <h3>Hosted APIs Over Custom Infrastructure</h3>
+                    <p>Every layer of Kaisey leans on a hosted service so the build stays focused on the product, not the plumbing. The OpenAI API handles reasoning. Oura's API streams biometrics. Google OAuth handles auth. And Claude Code + Figma MCP turn design specs into shipped components without manual handoff.</p>
+                    <div style="margin-top: 12px; display: flex; flex-wrap: wrap; gap: 8px; font-size: 0.85rem;">
+                        <span style="background: rgba(91, 76, 240, 0.1); color: var(--violet); padding: 4px 12px; border-radius: 6px; border: 1px solid rgba(91, 76, 240, 0.2);">OpenAI API</span>
+                        <span style="background: rgba(91, 76, 240, 0.1); color: var(--violet); padding: 4px 12px; border-radius: 6px; border: 1px solid rgba(91, 76, 240, 0.2);">Oura Ring API</span>
+                        <span style="background: rgba(91, 76, 240, 0.1); color: var(--violet); padding: 4px 12px; border-radius: 6px; border: 1px solid rgba(91, 76, 240, 0.2);">Google Calendar OAuth</span>
+                        <span style="background: rgba(91, 76, 240, 0.1); color: var(--violet); padding: 4px 12px; border-radius: 6px; border: 1px solid rgba(91, 76, 240, 0.2);">Claude Code</span>
+                        <span style="background: rgba(91, 76, 240, 0.1); color: var(--violet); padding: 4px 12px; border-radius: 6px; border: 1px solid rgba(91, 76, 240, 0.2);">Figma MCP</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- ═══ 5. DEMO / VIDEO ═══ -->
+    <section class="demo" id="demo">
+        <div class="container fade-in">
+            <span class="section-tag">Demo</span>
+            <h2 class="section-title">See Kaisey in Action</h2>
+            <p class="section-desc" style="margin-bottom: 1.5rem;">A student tells Kaisey to focus on recruiting. Kaisey reads a week that is mostly academics, recommends time-blocking coffee chats, and the calendar rebalances toward recruiting.</p>
+
+            <div class="video-wrapper">
+                <video controls preload="metadata" playsinline poster="../kaisey/kaisey-demo-poster.jpg">
+                    <source src="../kaisey/kaisey-demo.mp4" type="video/mp4">
+                    Your browser does not support the video tag.
+                </video>
+            </div>
+
+            <div style="margin-top: 2rem;">
+                <a href="../kaisey/index.html" class="cta-btn cta-primary" target="_blank" style="background: var(--violet); color: white;">Try the Live App &rarr;</a>
+            </div>
+            <p class="demo-note">Sign in with Google to try the live app &mdash; your data is processed in-session and never stored.</p>
+        </div>
+    </section>
+
     <!-- ═══ AI ARCHITECTURE ═══ -->
     <section class="solution" id="architecture">
         <div class="container fade-in">
-            <span class="section-tag">AI Integration</span>
+            <span class="section-tag">04 · Technical build</span>
             <h2 class="section-title">How OpenAI Powers Kaisey</h2>
             <p class="section-desc" style="margin-bottom: 2.5rem;">The OpenAI API isn't a chatbot bolted onto a calendar. It's the reasoning core &mdash; every prioritization decision flows through structured tool calls, JSON-mode output, and a multi-source context window. Remove the model and there is no product.</p>
 
@@ -894,7 +1270,7 @@
                 <span style="color: var(--text-secondary); font-size: 1.2rem;">&rarr;</span>
                 <div style="text-align: center; padding: 14px 18px; background: var(--pill-bg); border-radius: 10px; min-width: 120px;"><div style="font-size: 0.7rem; text-transform: uppercase; letter-spacing: 1.5px; color: var(--text-secondary); margin-bottom: 4px;">Biometrics</div><div style="font-weight: 600; font-size: 0.9rem;">Oura Ring API</div></div>
                 <span style="color: var(--text-secondary); font-size: 1.2rem;">&rarr;</span>
-                <div style="text-align: center; padding: 14px 18px; background: var(--violet); color: white; border-radius: 10px; min-width: 120px; box-shadow: 0 4px 16px rgba(124, 58, 237, 0.3);"><div style="font-size: 0.7rem; text-transform: uppercase; letter-spacing: 1.5px; opacity: 0.8; margin-bottom: 4px;">Reasoning</div><div style="font-weight: 600; font-size: 0.9rem;">OpenAI API</div></div>
+                <div style="text-align: center; padding: 14px 18px; background: var(--violet); color: white; border-radius: 10px; min-width: 120px; box-shadow: 0 4px 16px rgba(91, 76, 240, 0.3);"><div style="font-size: 0.7rem; text-transform: uppercase; letter-spacing: 1.5px; opacity: 0.8; margin-bottom: 4px;">Reasoning</div><div style="font-weight: 600; font-size: 0.9rem;">OpenAI API</div></div>
                 <span style="color: var(--text-secondary); font-size: 1.2rem;">&rarr;</span>
                 <div style="text-align: center; padding: 14px 18px; background: var(--pill-bg); border-radius: 10px; min-width: 120px;"><div style="font-size: 0.7rem; text-transform: uppercase; letter-spacing: 1.5px; color: var(--text-secondary); margin-bottom: 4px;">Output</div><div style="font-weight: 600; font-size: 0.9rem;">Ranked Day</div></div>
             </div>
@@ -920,114 +1296,33 @@
         </div>
     </section>
 
-    <!-- ═══ IN ACTION ═══ -->
-    <section class="problem">
+    <!-- ═══ TECHNICAL BUILD ═══ -->
+    <section class="build" id="build">
         <div class="container fade-in">
-            <span class="section-tag">In Action</span>
-            <h2 class="section-title">Your Day at a Glance</h2>
-            <p class="problem-intro">Kaisey gives you an instant snapshot of your day and week &mdash; showing your next event, weekly time balance across all four categories, and where your focus is going. No manual tracking required.</p>
+            <span class="section-tag">04 · Technical build</span>
+            <h2 class="section-title">Under the Hood</h2>
+            <p class="section-desc">Designed in Figma and built end to end as a single-page React app, with every sensitive call kept server-side.</p>
 
-            <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 1.5rem; margin-top: 2rem;">
-                <div style="background: white; border-radius: 12px; padding: 1.5rem; border: 1px solid rgba(0,0,0,0.06);">
-                    <h4 style="font-size: 0.9rem; font-weight: 700; margin-bottom: 1rem; color: var(--navy);">&#128197; Weekly Balance View</h4>
-                    <p style="font-size: 0.85rem; color: var(--text-secondary); margin-bottom: 1rem;">See exactly how many hours you're dedicating to each category this week.</p>
-                    <div style="margin-bottom: 10px;">
-                        <div style="display: flex; justify-content: space-between; font-size: 0.8rem; margin-bottom: 4px;"><span style="color: #3b82f6; font-weight: 600;">Academics</span><span>8.5h</span></div>
-                        <div style="height: 8px; border-radius: 4px; background: #e5e7eb; overflow: hidden;"><div style="width: 65%; height: 100%; background: #3b82f6; border-radius: 4px;"></div></div>
-                    </div>
-                    <div style="margin-bottom: 10px;">
-                        <div style="display: flex; justify-content: space-between; font-size: 0.8rem; margin-bottom: 4px;"><span style="color: #ef4444; font-weight: 600;">Recruiting</span><span>4.0h</span></div>
-                        <div style="height: 8px; border-radius: 4px; background: #e5e7eb; overflow: hidden;"><div style="width: 35%; height: 100%; background: #ef4444; border-radius: 4px;"></div></div>
-                    </div>
-                    <div style="margin-bottom: 10px;">
-                        <div style="display: flex; justify-content: space-between; font-size: 0.8rem; margin-bottom: 4px;"><span style="color: #f97316; font-weight: 600;">Social</span><span>3.0h</span></div>
-                        <div style="height: 8px; border-radius: 4px; background: #e5e7eb; overflow: hidden;"><div style="width: 25%; height: 100%; background: #f97316; border-radius: 4px;"></div></div>
-                    </div>
-                    <div>
-                        <div style="display: flex; justify-content: space-between; font-size: 0.8rem; margin-bottom: 4px;"><span style="color: #22c55e; font-weight: 600;">Wellness</span><span>0h</span></div>
-                        <div style="height: 8px; border-radius: 4px; background: #e5e7eb; overflow: hidden;"><div style="width: 0%; height: 100%; background: #22c55e; border-radius: 4px;"></div></div>
-                    </div>
-                    <div style="margin-top: 12px; padding: 8px 12px; border-radius: 8px; background: rgba(251, 191, 36, 0.08); border: 1px solid rgba(251, 191, 36, 0.2); font-size: 0.8rem; color: #92400e;">&#9888; No wellness time scheduled this week.</div>
-                </div>
-                <div style="background: white; border-radius: 12px; padding: 1.5rem; border: 1px solid rgba(0,0,0,0.06);">
-                    <h4 style="font-size: 0.9rem; font-weight: 700; margin-bottom: 1rem; color: var(--navy);">&#9889; Today's Focus</h4>
-                    <p style="font-size: 0.85rem; color: var(--text-secondary); margin-bottom: 1rem;">Toggle between modes to set your priority for the day. Kaisey highlights what matters most.</p>
-                    <div style="display: flex; gap: 8px; flex-wrap: wrap; margin-bottom: 1.25rem;">
-                        <span style="padding: 6px 14px; border-radius: 20px; font-size: 0.8rem; font-weight: 600; background: #3b82f6; color: white;">&#128218; Academics</span>
-                        <span style="padding: 6px 14px; border-radius: 20px; font-size: 0.8rem; font-weight: 500; background: #f3f4f6; color: #6b7280;">&#128188; Recruiting</span>
-                        <span style="padding: 6px 14px; border-radius: 20px; font-size: 0.8rem; font-weight: 500; background: #f3f4f6; color: #6b7280;">&#128101; Social</span>
-                        <span style="padding: 6px 14px; border-radius: 20px; font-size: 0.8rem; font-weight: 500; background: #f3f4f6; color: #6b7280;">&#128154; Wellness</span>
-                    </div>
-                    <div style="padding: 12px 14px; border-radius: 8px; margin-bottom: 8px; background: rgba(59, 130, 246, 0.06); border-left: 3px solid #3b82f6;"><strong>Up Next: Corporate Finance</strong><br><span style="font-size: 0.8rem; color: var(--text-secondary);">8:00 AM &middot; 90 min</span></div>
-                    <div style="padding: 12px 14px; border-radius: 8px; margin-bottom: 8px; background: rgba(59, 130, 246, 0.06); border-left: 3px solid #3b82f6;"><strong>Strategy Canvas Quiz</strong><br><span style="font-size: 0.8rem; color: var(--text-secondary);">11:00 AM &middot; 60 min</span></div>
-                    <div style="padding: 12px 14px; border-radius: 8px; margin-bottom: 8px; background: rgba(239, 68, 68, 0.06); border-left: 3px solid #ef4444;"><strong>Goldman Sachs Info Session</strong><br><span style="font-size: 0.8rem; color: var(--text-secondary);">12:00 PM &middot; 60 min</span></div>
-                    <div style="padding: 12px 14px; border-radius: 8px; background: rgba(34, 197, 94, 0.06); border-left: 3px solid #22c55e;"><strong>Gym Session</strong><br><span style="font-size: 0.8rem; color: var(--text-secondary);">1:00 PM &middot; 45 min</span></div>
-                </div>
+            <div class="stack-grid">
+                <div class="stack-card"><span class="mono-label">Frontend</span><h3>React 18 + Vite</h3><p>TypeScript, Tailwind and shadcn/ui primitives, with Framer Motion for the logo and transitions. No router: views swap by state, and all state lives in one root component.</p></div>
+                <div class="stack-card"><span class="mono-label">AI layer</span><h3>OpenAI via a serverless proxy</h3><p>gpt-4o-mini with function calling, reached through a Vercel serverless function so the API key never ships to the browser. A keyword engine takes over if the model is unavailable.</p></div>
+                <div class="stack-card"><span class="mono-label">Calendar</span><h3>Google Calendar, two-way</h3><p>Google OAuth for sign-in, then every add, remove or replace flows through one handler that updates the screen and writes the change back to Google Calendar.</p></div>
+                <div class="stack-card"><span class="mono-label">Health data</span><h3>Optional Oura Ring</h3><p>Oura OAuth and API for sleep and readiness, cached on the device. Low readiness promotes wellness blocks in the recommendations.</p></div>
+                <div class="stack-card"><span class="mono-label">Privacy</span><h3>Session-only data</h3><p>Calendar data is processed in the session and not stored on a server. The model sees what it needs to reason about the week, then the context is gone.</p></div>
+                <div class="stack-card"><span class="mono-label">Ship</span><h3>Static deploy</h3><p>Built with Vite to static files on GitHub Pages; the proxy deploys separately on Vercel. Design to code moved through Figma MCP and Claude Code.</p></div>
             </div>
 
-            <p style="margin-top: 1.25rem; font-size: 0.9rem; color: var(--text-secondary); line-height: 1.7;">The weekly balance bar shows at a glance where your time is going. Events are color-coded by category so you can instantly spot imbalances &mdash; like zero wellness hours during finals week. The day view surfaces your next event and full schedule, grouped by the priority mode you've selected.</p>
-        </div>
-    </section>
-
-    <!-- ═══ 4. KEY PRODUCT DECISIONS ═══ -->
-    <section class="decisions">
-        <div class="container fade-in">
-            <span class="section-tag">Product Decisions</span>
-            <h2 class="section-title">What We Chose and Why</h2>
-
-            <div class="cards-grid">
-                <div class="decision-card">
-                    <div class="label">Authentication</div>
-                    <h3>Google OAuth &rarr; Instant Calendar Access</h3>
-                    <p>One sign-in gives Kaisey read access to Google Calendar with zero onboarding friction. No separate account creation, no permission pop-ups later. Students are in under 10 seconds.</p>
-                    <div style="margin-top: 12px; display: flex; gap: 8px; font-size: 0.85rem;">
-                        <span style="background: rgba(124, 58, 237, 0.1); color: var(--violet); padding: 4px 12px; border-radius: 6px; border: 1px solid rgba(124, 58, 237, 0.2);">&check; Google OAuth</span>
-                        <span style="color: var(--text-secondary); text-decoration: line-through; padding: 4px 12px;">Email / Password</span>
-                    </div>
-                </div>
-                <div class="decision-card">
-                    <div class="label">Interaction</div>
-                    <h3>Toggle Over Manual Ranking</h3>
-                    <p>A four-mode selector beats a complex drag-and-drop ranking UI. One tap shifts the entire priority stack &mdash; fast enough to switch contexts mid-day between a lecture and a recruiting event.</p>
-                    <div style="margin-top: 12px; display: flex; gap: 8px; font-size: 0.85rem;">
-                        <span style="background: rgba(124, 58, 237, 0.1); color: var(--violet); padding: 4px 12px; border-radius: 6px; border: 1px solid rgba(124, 58, 237, 0.2);">&check; Priority Toggle</span>
-                        <span style="color: var(--text-secondary); text-decoration: line-through; padding: 4px 12px;">Manual Ranking UI</span>
-                    </div>
-                </div>
-                <div class="decision-card">
-                    <div class="label">Build Stack</div>
-                    <h3>Hosted APIs Over Custom Infrastructure</h3>
-                    <p>Every layer of Kaisey leans on a hosted service so the build stays focused on the product, not the plumbing. The OpenAI API handles reasoning. Oura's API streams biometrics. Google OAuth handles auth. And Claude Code + Figma MCP turn design specs into shipped components without manual handoff.</p>
-                    <div style="margin-top: 12px; display: flex; flex-wrap: wrap; gap: 8px; font-size: 0.85rem;">
-                        <span style="background: rgba(124, 58, 237, 0.1); color: var(--violet); padding: 4px 12px; border-radius: 6px; border: 1px solid rgba(124, 58, 237, 0.2);">OpenAI API</span>
-                        <span style="background: rgba(124, 58, 237, 0.1); color: var(--violet); padding: 4px 12px; border-radius: 6px; border: 1px solid rgba(124, 58, 237, 0.2);">Oura Ring API</span>
-                        <span style="background: rgba(124, 58, 237, 0.1); color: var(--violet); padding: 4px 12px; border-radius: 6px; border: 1px solid rgba(124, 58, 237, 0.2);">Google Calendar OAuth</span>
-                        <span style="background: rgba(124, 58, 237, 0.1); color: var(--violet); padding: 4px 12px; border-radius: 6px; border: 1px solid rgba(124, 58, 237, 0.2);">Claude Code</span>
-                        <span style="background: rgba(124, 58, 237, 0.1); color: var(--violet); padding: 4px 12px; border-radius: 6px; border: 1px solid rgba(124, 58, 237, 0.2);">Figma MCP</span>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </section>
-
-    <!-- ═══ 5. DEMO / VIDEO ═══ -->
-    <section class="demo" id="demo">
-        <div class="container fade-in">
-            <span class="section-tag">Demo</span>
-            <h2 class="section-title">See Kaisey in Action</h2>
-            <p class="section-desc" style="margin-bottom: 1.5rem;">A student tells Kaisey to focus on recruiting. Kaisey reads a week that is mostly academics, recommends time-blocking coffee chats, and the calendar rebalances toward recruiting.</p>
-
-            <div class="video-wrapper">
-                <video controls preload="metadata" playsinline poster="../kaisey/kaisey-demo-poster.jpg">
-                    <source src="../kaisey/kaisey-demo.mp4" type="video/mp4">
-                    Your browser does not support the video tag.
-                </video>
-            </div>
-
-            <div style="margin-top: 2rem;">
-                <a href="../kaisey/index.html" class="cta-btn cta-primary" target="_blank" style="background: var(--violet); color: white;">Try the Live App &rarr;</a>
-            </div>
-            <p class="demo-note">Sign in with Google to try the live app &mdash; your data is processed in-session and never stored.</p>
+            <h3 class="sub-title">The brain dump, as a state machine</h3>
+            <p class="section-desc" style="margin-bottom:1.25rem">Turning a paragraph into calendar blocks is seven explicit phases, so the student can correct things at each step and nothing is written until they accept.</p>
+            <ol class="phase-row">
+                <li><code>IDLE</code><span>waiting for text</span></li>
+                <li><code>EXTRACTING</code><span>model pulls out tasks</span></li>
+                <li><code>EDITING</code><span>student fixes category and length</span></li>
+                <li><code>PROPOSING</code><span>model fits them around the week</span></li>
+                <li><code>REVIEW_SCHEDULE</code><span>proposed blocks shown in place</span></li>
+                <li><code>REVISING</code><span>changes asked for in chat</span></li>
+                <li><code>ACCEPTED</code><span>written to Google Calendar</span></li>
+            </ol>
         </div>
     </section>
 
