@@ -1490,7 +1490,7 @@
         var video = fig.querySelector('video');
         var still = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
         // each block's box inside the video frame (fractions), from the render
-        var GEO = {"ar": 0.7832, "stem": {"x": 0.072, "y": 0.1338, "w": 0.2641, "h": 0.7998}, "top": {"x": 0.6257, "y": 0.1228, "w": 0.2768, "h": 0.2356}, "mid": {"x": 0.3715, "y": 0.4082, "w": 0.2232, "h": 0.2113}, "bot": {"x": 0.6215, "y": 0.646, "w": 0.2684, "h": 0.24}};
+        var GEO = {"ar": 0.8393, "stem": {"x": 0.0566, "y": 0.0631, "w": 0.2744, "h": 0.8885}, "top": {"x": 0.6318, "y": 0.0574, "w": 0.2861, "h": 0.2623}, "mid": {"x": 0.3672, "y": 0.3803, "w": 0.2314, "h": 0.2336}, "bot": {"x": 0.6279, "y": 0.6361, "w": 0.2773, "h": 0.268}};
         fig.style.setProperty('--k-ar', GEO.ar);
         video.src = 'assets/k-twist.mp4';
         if (still) return;
