@@ -929,8 +929,8 @@
            follows it so the letterboxed 16:9 frame never shows as a strip */
         .hero-pane-media.is-dark { background: #0E0E12; }
         /* -- What Kaisey solves: twisting 3D K that splits into the cards --
-           The K assembles once (the brand's cube animation, rendered in
-           Blender) beside the intro. As you scroll, it
+           The K loops the brand's cube assemble (rendered in Blender)
+           beside the intro. As you scroll, it
            is swapped for its four blocks, which ride down with you, turn
            their category colour and land as the icons of "Four demands, one
            week". The video's background is the page's paper (#FAFAFC), so
@@ -1496,15 +1496,20 @@
         // reduced motion: just the finished K
         if (still) { video.poster = 'assets/k-twist-poster.jpg'; return; }
         video.src = 'assets/k-twist.mp4';
-        // the brand's assemble plays once when the section comes into view, then rests on the K
-        var io = new IntersectionObserver(function (es) {
-            es.forEach(function (e) {
-                if (!e.isIntersecting) return;
-                io.disconnect();
-                var p = video.play(); if (p && p.catch) p.catch(function () {});
-            });
-        }, { threshold: 0.5 });
-        io.observe(fig);
+        // the brand's assemble loops like the original mark while the K is on screen;
+        // once the split starts it holds on the finished K, so the blocks break off cleanly
+        video.loop = true;
+        var inView = false, split = false;
+        function play() { var p = video.play(); if (p && p.catch) p.catch(function () {}); }
+        new IntersectionObserver(function (es) {
+            es.forEach(function (e) { inView = e.isIntersecting; if (inView && !split) play(); else video.pause(); });
+        }, { threshold: 0.3 }).observe(fig);
+        function setSplit(on) {
+            if (on === split) return;
+            split = on;
+            if (on) { video.pause(); if (video.duration) video.currentTime = video.duration - 0.04; }
+            else if (inView) play();
+        }
 
         document.documentElement.classList.add('js-kfly');
         var pieces = [].map.call(document.querySelectorAll('.k-piece'), function (el) {
@@ -1525,6 +1530,7 @@
             var s0 = v.top + sy - vh * 0.22;          // the split starts once the K is near the top of the screen
             var kcx = v.left + v.width / 2, kcy = v.top + v.height / 2;
             fig.classList.toggle('is-split', sy >= s0);
+            setSplit(sy >= s0);
             pieces.forEach(function (p, i) {
                 var g = p.g;
                 var hw = g.w * v.width, hh = g.h * v.height;
