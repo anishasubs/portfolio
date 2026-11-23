@@ -176,28 +176,19 @@ export function WelcomePage({ onLogin }: WelcomePageProps) {
   const [showVideo, setShowVideo] = useState(true);
   const [videoError, setVideoError] = useState(false);
   const [videoReady, setVideoReady] = useState(false);
-  const [isPortrait, setIsPortrait] = useState(window.innerWidth < 768);
-
-  useEffect(() => {
-    const mq = window.matchMedia("(max-width: 767px)");
-    const handler = (e: MediaQueryListEvent) => setIsPortrait(e.matches);
-    mq.addEventListener("change", handler);
-    return () => mq.removeEventListener("change", handler);
-  }, []);
-
   const handleSkipVideo = () => {
     setShowVideo(false);
   };
 
   // Video intro view
   if (showVideo && !videoError) {
-    const videoSrc = isPortrait
-      ? `${import.meta.env.BASE_URL}kaisey-instruction-portrait.mp4`
-      : `${import.meta.env.BASE_URL}kaisey-instruction.mp4`;
+    // One 16:9 intro (a cut of the Time Blocks demo) for every screen. On a
+    // phone it spans the full width rather than a narrow portrait column.
+    const videoSrc = `${import.meta.env.BASE_URL}kaisey-instruction.mp4`;
 
     return (
       <div className="min-h-screen bg-[#0E0E12] flex flex-col items-center justify-center p-4 md:p-8">
-        <div className={`w-full ${isPortrait ? 'max-w-sm' : 'max-w-5xl'}`}>
+        <div className="w-full max-w-5xl">
           {!videoReady && (
             <div className="flex flex-col items-center justify-center py-20">
               <KaiseyMark size={56} className="mb-4 ring-1 ring-white/10" motion="shuffle" />
