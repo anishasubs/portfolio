@@ -176,6 +176,21 @@ export function WelcomePage({ onLogin }: WelcomePageProps) {
   const [showVideo, setShowVideo] = useState(true);
   const [videoError, setVideoError] = useState(false);
   const [videoReady, setVideoReady] = useState(false);
+  // The intro is light (renders #FAFAFC) until it cuts to the dark logo end
+  // card (#0E0E12) at ~14.8s.
+  // The page follows it, so the 16:9 frame never shows as a box.
+  const [videoDark, setVideoDark] = useState(false);
+  useEffect(() => {
+    if (!showVideo) return;
+    let id = 0;
+    const tick = () => {
+      const v = videoRef.current;
+      if (v) setVideoDark(v.currentTime >= 14.8);
+      id = requestAnimationFrame(tick);
+    };
+    id = requestAnimationFrame(tick);
+    return () => cancelAnimationFrame(id);
+  }, [showVideo]);
   const handleSkipVideo = () => {
     setShowVideo(false);
   };
@@ -187,12 +202,12 @@ export function WelcomePage({ onLogin }: WelcomePageProps) {
     const videoSrc = `${import.meta.env.BASE_URL}kaisey-instruction.mp4`;
 
     return (
-      <div className="min-h-screen bg-[#0E0E12] flex flex-col items-center justify-center p-4 md:p-8">
+      <div className={`min-h-screen flex flex-col items-center justify-center p-4 md:p-8 ${videoDark ? 'bg-[#0E0E12]' : 'bg-[#FAFAFC]'}`}>
         <div className="w-full max-w-5xl">
           {!videoReady && (
             <div className="flex flex-col items-center justify-center py-20">
-              <KaiseyMark size={56} className="mb-4 ring-1 ring-white/10" motion="shuffle" />
-              <p className="text-white/60 text-sm">Loading demo...</p>
+              <KaiseyMark size={56} className="mb-4" motion="shuffle" />
+              <p className="text-[#5D5D6B] text-sm">Loading demo...</p>
             </div>
           )}
           <video
@@ -206,19 +221,19 @@ export function WelcomePage({ onLogin }: WelcomePageProps) {
             onCanPlay={() => setVideoReady(true)}
             onEnded={handleSkipVideo}
             onError={() => { setVideoError(true); setShowVideo(false); }}
-            className={`w-full rounded-2xl shadow-2xl ${videoReady ? '' : 'hidden'}`}
+            className={`w-full ${videoReady ? '' : 'hidden'}`}
           />
           <div className="flex justify-center gap-4 mt-6">
             <a
               href="/portfolio/"
-              className="px-6 py-2.5 rounded-full bg-white/10 hover:bg-white/20 text-white text-sm font-medium backdrop-blur-sm transition-colors inline-flex items-center gap-2"
+              className={`px-6 py-2.5 rounded-full text-sm font-medium transition-colors inline-flex items-center gap-2 ${videoDark ? 'bg-white/10 hover:bg-white/20 text-white' : 'bg-[#0E0E12]/[0.06] hover:bg-[#0E0E12]/10 text-[#0E0E12]'}`}
             >
               <ArrowLeft className="w-4 h-4" />
               Back to Portfolio
             </a>
             <button
               onClick={handleSkipVideo}
-              className="px-6 py-2.5 rounded-full bg-white/10 hover:bg-white/20 text-white text-sm font-medium backdrop-blur-sm transition-colors"
+              className={`px-6 py-2.5 rounded-full text-sm font-medium transition-colors ${videoDark ? 'bg-white/10 hover:bg-white/20 text-white' : 'bg-[#0E0E12] hover:bg-[#25252D] text-white'}`}
             >
               Skip to Login
             </button>
