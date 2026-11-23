@@ -932,12 +932,12 @@
            The K loops (a Blender render) beside the intro. As you scroll, it
            is swapped for its four blocks, which ride down with you, turn
            their category colour and land as the icons of "Four demands, one
-           week". The video is rendered on white and multiplied, so it has no
-           visible frame on the paper background. */
+           week". The video's background is the page's paper (#FAFAFC), so
+           it has no visible frame. */
         .solves-head { display: grid; grid-template-columns: minmax(0, 1.25fr) minmax(0, 1fr); gap: 3rem; align-items: center; }
         .solves-head .problem-intro { margin-bottom: 0; }
         .solves-k { margin: 0; position: relative; width: 100%; max-width: 400px; justify-self: center; aspect-ratio: var(--k-ar, 1); }
-        .solves-video { display: block; width: 100%; height: 100%; mix-blend-mode: multiply; transition: opacity 0.2s ease; }
+        .solves-video { display: block; width: 100%; height: 100%; transition: opacity 0.2s ease; }
         .solves-k.is-split .solves-video { opacity: 0; }
         @media (max-width: 900px) {
             .solves-head { grid-template-columns: 1fr; gap: 1.5rem; }
@@ -1490,7 +1490,7 @@
         var video = fig.querySelector('video');
         var still = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
         // each block's box inside the video frame (fractions), from the render
-        var GEO = __GEO__;
+        var GEO = {"ar": 0.7832, "stem": {"x": 0.072, "y": 0.1338, "w": 0.2641, "h": 0.7998}, "top": {"x": 0.6257, "y": 0.1228, "w": 0.2768, "h": 0.2356}, "mid": {"x": 0.3715, "y": 0.4082, "w": 0.2232, "h": 0.2113}, "bot": {"x": 0.6215, "y": 0.646, "w": 0.2684, "h": 0.24}};
         fig.style.setProperty('--k-ar', GEO.ar);
         video.src = 'assets/k-twist.mp4';
         if (still) return;
@@ -1531,15 +1531,15 @@
                 var landed = k >= 1;
                 p.target.classList.toggle('is-waiting', !landed);
                 if (sy < s0 || landed) { p.el.style.opacity = 0; return; }
-                var e = ease(k), late = ease(clamp((k - 0.45) / 0.55));
+                var late = ease(clamp((k - 0.45) / 0.55));
                 var cy = hy + (sy - s0);                     // = constant on screen while flying
                 cy = Math.min(cy, ty);
-                var cx = hx + (tx - hx) * e;
+                var cx = hx + (tx - hx) * late;             // stay clear of the text, slide across only near the cards
                 var w = hw + (t.width - hw) * late, h = hh + (t.height - hh) * late;
                 // split apart from the K's centre mid-flight, with a little turn
                 var dx = hx - kcx, dy = hy - kcy, dl = Math.max(1, Math.hypot(dx, dy));
-                var spread = Math.sin(Math.PI * k) * 64;
-                cx += dx / dl * spread; cy += dy / dl * spread * 0.5;
+                var spread = Math.sin(Math.PI * k) * 48;
+                cx += Math.max(0, dx / dl) * spread; cy += dy / dl * spread * 0.5;
                 var rot = Math.sin(Math.PI * k) * (i % 2 ? 14 : -14);
                 p.el.style.opacity = 1;
                 p.el.style.width = w + 'px'; p.el.style.height = h + 'px';
