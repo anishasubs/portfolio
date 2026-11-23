@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { X, LogIn, LogOut, Save, Brain } from "lucide-react";
+import { X, LogIn, LogOut, Save } from "lucide-react";
 import { KaiseyMark } from "@/app/components/KaiseyLogo";
 import { Button } from "@/app/components/ui/button";
 import { Input } from "@/app/components/ui/input";

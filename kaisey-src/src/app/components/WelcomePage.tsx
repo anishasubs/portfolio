@@ -1,5 +1,5 @@
 import { useState, useEffect, useRef } from "react";
-import { Brain, LogIn, Sparkles, Calendar, Play, ArrowLeft } from "lucide-react";
+import { Sparkles, Calendar, Play, ArrowLeft, Activity } from "lucide-react";
 import { KaiseyMark } from "@/app/components/KaiseyLogo";
 import { Button } from "@/app/components/ui/button";
 import { Label } from "@/app/components/ui/label";
@@ -228,116 +228,102 @@ export function WelcomePage({ onLogin }: WelcomePageProps) {
     );
   }
 
+  const blocks = ["bg-blue-500 w-[72px]", "bg-red-500 w-10", "bg-orange-500 w-14", "bg-green-500 w-8"];
+
   return (
-    <div className="min-h-screen bg-[#FAFAFC] dark:bg-background flex items-center justify-center p-6">
-      <Card className="w-full max-w-lg p-8 shadow-2xl">
-        {/* Header */}
-        <div className="text-center mb-8">
-          <KaiseyMark size={72} className="mb-5" motion="assemble" />
-          <h1 className="text-4xl font-semibold mb-2" style={{ letterSpacing: "-0.04em" }}>Welcome to Kaisey</h1>
-          <p className="text-muted-foreground">
-            Your AI-powered Co-Pilot for Academic Excellence, Professional Networking, and Personal Well-being
+    <div className="min-h-screen bg-[#FAFAFC] grid lg:grid-cols-[minmax(0,640px)_1fr]">
+      {/* Brand panel */}
+      <aside className="bg-[#0E0E12] text-[#FAFAFC] px-6 py-8 sm:px-10 lg:p-16 flex flex-col justify-between gap-10">
+        <div className="flex items-center gap-3">
+          <KaiseyMark size={36} />
+          <span className="text-xl font-semibold" style={{ letterSpacing: "-0.04em" }}>Kaisey</span>
+        </div>
+        <div className="space-y-7">
+          <div className="flex gap-2.5" aria-hidden="true">
+            {blocks.map((b) => (
+              <span key={b} className={`h-10 rounded-lg ${b}`} />
+            ))}
+          </div>
+          <h1
+            className="text-4xl lg:text-[46px] font-semibold leading-[1.04] text-[#FAFAFC]"
+            style={{ letterSpacing: "-0.045em" }}
+          >
+            Tell Kaisey what matters.
+            <br />
+            Your week follows.
+          </h1>
+          <p className="text-base lg:text-lg leading-relaxed text-[#FAFAFC]/70 max-w-md">
+            An AI co-pilot for students that balances academics, recruiting, social life and wellness across the calendar you already use.
           </p>
         </div>
+        <a
+          href="/portfolio/"
+          className="inline-flex items-center gap-2 font-mono text-xs text-[#FAFAFC]/55 hover:text-[#FAFAFC] transition-colors"
+        >
+          <ArrowLeft className="w-3.5 h-3.5" />
+          back to portfolio
+        </a>
+      </aside>
 
-        {/* Features */}
-        <div className="grid grid-cols-3 gap-4 mb-8 p-4 rounded-lg bg-muted/50">
-          <div className="text-center">
-            <div className="w-10 h-10 rounded-full bg-brand/10 flex items-center justify-center mx-auto mb-2">
-              <Sparkles className="w-5 h-5 text-brand" />
-            </div>
-            <p className="text-xs font-semibold">AI Insights</p>
-          </div>
-          <div className="text-center">
-            <div className="w-10 h-10 rounded-full bg-brand/10 flex items-center justify-center mx-auto mb-2">
-              <Brain className="w-5 h-5 text-brand" />
-            </div>
-            <p className="text-xs font-semibold">Smart Scheduling</p>
-          </div>
-          <div className="text-center">
-            <div className="w-10 h-10 rounded-full bg-brand/10 flex items-center justify-center mx-auto mb-2">
-              <LogIn className="w-5 h-5 text-brand" />
-            </div>
-            <p className="text-xs font-semibold">Integrations</p>
-          </div>
-        </div>
+      {/* Sign in */}
+      <main className="flex items-center justify-center px-5 py-10 lg:p-12">
+        <Card className="w-full max-w-[460px] p-8 lg:p-10 gap-0 shadow-sm">
+          <KaiseyMark size={56} className="mb-4" motion="assemble" />
+          <h2 className="text-3xl font-semibold mb-2" style={{ letterSpacing: "-0.04em" }}>Welcome to Kaisey</h2>
+          <p className="text-muted-foreground mb-7">
+            Connect your Google Calendar and Kaisey starts with the week you already have.
+          </p>
 
-        {/* Login Form */}
-        <div className="space-y-6">
-          <div className="space-y-4">
-            <div className="text-center">
-              <h2 className="text-xl font-semibold mb-2">Connect Your Calendar</h2>
-              <p className="text-sm text-muted-foreground">
-                Get started by connecting your Google Calendar to Kaisey
-              </p>
-            </div>
-            
+          <div className="grid grid-cols-3 gap-2.5 mb-7">
+            {[
+              { Icon: Sparkles, label: "AI insights" },
+              { Icon: Calendar, label: "Smart scheduling" },
+              { Icon: Activity, label: "Oura sync" },
+            ].map(({ Icon, label }) => (
+              <div key={label} className="rounded-xl bg-brand/10 p-3.5 flex flex-col gap-2">
+                <Icon className="w-4 h-4 text-brand" aria-hidden="true" />
+                <span className="text-[13px] font-semibold leading-tight">{label}</span>
+              </div>
+            ))}
+          </div>
+
+          <div className="space-y-3">
             {!googleCredentials ? (
               <Button
                 onClick={handleGoogleCalendarConnect}
                 disabled={isConnectingGoogle}
-                className="w-full h-14 bg-primary text-primary-foreground hover:bg-primary/90"
+                className="w-full h-13 bg-primary text-primary-foreground hover:bg-primary/90"
                 size="lg"
               >
                 <Calendar className="w-5 h-5 mr-2" />
                 {isConnectingGoogle ? "Connecting..." : "Connect my Google Calendar"}
               </Button>
             ) : (
-              <div className="p-6 rounded-lg border-2 border-green-500/20 bg-green-50 dark:bg-green-900/10 text-center">
-                <div className="flex items-center justify-center gap-2 text-green-700 dark:text-green-400 mb-2">
-                  <div className="w-2 h-2 rounded-full bg-green-500 animate-pulse" />
-                  <span className="text-lg font-semibold">Google Calendar Connected</span>
+              <div className="p-5 rounded-xl border text-center">
+                <div className="flex items-center justify-center gap-2 mb-1">
+                  <span className="w-2 h-2 rounded-full bg-green-500 animate-pulse" />
+                  <span className="font-semibold">Google Calendar connected</span>
                 </div>
-                <p className="text-sm text-muted-foreground">
-                  Redirecting you to Kaisey...
-                </p>
+                <p className="text-sm text-muted-foreground">Taking you to Kaisey&hellip;</p>
               </div>
             )}
-          </div>
-          
-          {/* Divider */}
-          <div className="relative">
-            <div className="absolute inset-0 flex items-center">
-              <div className="w-full border-t border-muted"></div>
+
+            <div className="flex items-center gap-3 font-mono text-[11px] text-muted-foreground" aria-hidden="true">
+              <span className="flex-1 h-px bg-border" />
+              or
+              <span className="flex-1 h-px bg-border" />
             </div>
-            <div className="relative flex justify-center text-xs uppercase">
-              <span className="bg-card px-2 text-muted-foreground">Or</span>
-            </div>
-          </div>
-          
-          <div className="space-y-4">
-            <div className="text-center">
-              <h2 className="text-xl font-semibold mb-2">Try Demo Mode</h2>
-              <p className="text-sm text-muted-foreground">
-                Experience Kaisey with sample data
-              </p>
-            </div>
-            
-            <Button
-              onClick={handleDemoMode}
-              className="w-full h-14 bg-primary text-primary-foreground hover:bg-primary/90"
-              size="lg"
-            >
-              <Sparkles className="w-5 h-5 mr-2" />
-              Activate Demo Mode
+
+            <Button onClick={handleDemoMode} variant="outline" className="w-full h-13" size="lg">
+              Try demo mode
             </Button>
           </div>
-        </div>
 
-        {/* Footer */}
-        <div className="mt-8 pt-6 border-t text-center space-y-3">
-          <p className="text-xs text-muted-foreground">
-            Kaisey works with your Google Calendar and OpenAI, with optional Oura Ring sync.
+          <p className="mt-6 text-xs text-muted-foreground">
+            Calendar data is processed in your session and never stored on a server. Oura Ring sync is optional.
           </p>
-          <a
-            href="/portfolio/"
-            className="inline-flex items-center gap-1.5 text-sm text-muted-foreground hover:text-foreground transition-colors"
-          >
-            <ArrowLeft className="w-3.5 h-3.5" />
-            Back to Portfolio
-          </a>
-        </div>
-      </Card>
+        </Card>
+      </main>
     </div>
   );
 }

@@ -87,6 +87,23 @@
   --font-sans: 'Instrument Sans', ui-sans-serif, system-ui, sans-serif;
   --font-mono: 'JetBrains Mono', ui-monospace, SFMono-Regular, monospace;
   --color-brand: var(--brand);
+  /* Category colours. The app paints categories with Tailwind's blue / red /
+     orange / green, so those shades are pointed at the brand's category
+     colours here: one place, and every block, dot and bar follows. */
+  --color-blue-500: #2F62E8;
+  --color-blue-600: #2754D0;
+  --color-blue-700: #2048B5;
+  --color-red-400: #E5656E;
+  --color-red-500: #DC3F4A;
+  --color-red-600: #C2323D;
+  --color-orange-500: #EA7F23;
+  --color-orange-600: #CF6C15;
+  --color-green-500: #22995C;
+  --color-green-600: #1C8450;
+  --color-academics: #2F62E8;
+  --color-recruiting: #DC3F4A;
+  --color-social: #EA7F23;
+  --color-wellness: #22995C;
   --color-brand-soft: var(--brand-soft);
   --color-background: var(--background);
   --color-foreground: var(--foreground);

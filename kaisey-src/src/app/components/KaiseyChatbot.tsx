@@ -1,5 +1,5 @@
 import { useState, useRef, useEffect } from "react";
-import { MessageSquare, Send, X, Bot, Check, Plus, Minus, RefreshCw, Sparkles, Clock, ListTodo, CalendarPlus, Loader2, Brain } from "lucide-react";
+import { MessageSquare, Send, X, Check, Plus, Minus, RefreshCw, Sparkles, Clock, ListTodo, CalendarPlus, Loader2 } from "lucide-react";
 import { KaiseyMark, KaiseyK } from "@/app/components/KaiseyLogo";
 import { Button } from "@/app/components/ui/button";
 import { Card } from "@/app/components/ui/card";
@@ -1490,9 +1490,10 @@ Return ONLY by calling propose_schedule.`,
             <div>
               <h3 className="font-semibold flex items-center gap-2">
                 Chat with Kaisey
-                <Badge className="bg-green-500 text-white text-[10px] px-1.5 py-0">
-                  AI Active
-                </Badge>
+                <span className="inline-flex items-center gap-1.5 font-mono text-[10px] font-normal text-muted-foreground">
+                  <span className="w-1.5 h-1.5 rounded-full bg-brand" />
+                  online
+                </span>
               </h3>
               <p className="text-xs text-muted-foreground">Quick actions or brain dump — I'll figure out what you need</p>
             </div>

@@ -69,8 +69,8 @@ export function OuraSleepCard({ metrics, isLoading }: OuraSleepCardProps) {
       {/* Header */}
       <div className="flex items-center justify-between mb-4">
         <div className="flex items-center gap-2.5">
-          <div className="p-2 rounded-lg bg-indigo-100">
-            <Moon className="w-5 h-5 text-indigo-600" />
+          <div className="p-2 rounded-lg bg-brand/10">
+            <Moon className="w-5 h-5 text-brand" />
           </div>
           <h3 className="font-semibold text-base">Sleep Quality</h3>
         </div>
@@ -93,7 +93,7 @@ export function OuraSleepCard({ metrics, isLoading }: OuraSleepCardProps) {
         </div>
         <div className="h-3 rounded-full bg-muted overflow-hidden">
           <div
-            className="h-full rounded-full bg-indigo-500 transition-all duration-500"
+            className="h-full rounded-full bg-brand transition-all duration-500"
             style={{ width: `${progressPct}%` }}
           />
         </div>
@@ -103,14 +103,14 @@ export function OuraSleepCard({ metrics, isLoading }: OuraSleepCardProps) {
       <div className="mb-4">
         <p className="text-sm text-muted-foreground mb-1.5">Sleep Composition</p>
         <div className="h-3 rounded-full overflow-hidden flex">
-          <div className="bg-indigo-700" style={{ width: `${deepPct}%` }} />
-          <div className="bg-purple-500" style={{ width: `${remPct}%` }} />
-          <div className="bg-blue-300" style={{ width: `${lightPct}%` }} />
+          <div className="bg-primary" style={{ width: `${deepPct}%` }} />
+          <div className="bg-brand" style={{ width: `${remPct}%` }} />
+          <div className="bg-brand-soft/50" style={{ width: `${lightPct}%` }} />
         </div>
         <div className="flex gap-4 mt-2 text-sm text-muted-foreground">
-          <span className="flex items-center gap-1.5"><span className="w-2.5 h-2.5 rounded-full bg-indigo-700" />Deep {deepHours}h</span>
-          <span className="flex items-center gap-1.5"><span className="w-2.5 h-2.5 rounded-full bg-purple-500" />REM {remHours}h</span>
-          <span className="flex items-center gap-1.5"><span className="w-2.5 h-2.5 rounded-full bg-blue-300" />Light {lightHours}h</span>
+          <span className="flex items-center gap-1.5"><span className="w-2.5 h-2.5 rounded-full bg-primary" />Deep {deepHours}h</span>
+          <span className="flex items-center gap-1.5"><span className="w-2.5 h-2.5 rounded-full bg-brand" />REM {remHours}h</span>
+          <span className="flex items-center gap-1.5"><span className="w-2.5 h-2.5 rounded-full bg-brand-soft/50" />Light {lightHours}h</span>
         </div>
       </div>
 

@@ -1,5 +1,19 @@
 import { useState } from "react";
 import { GraduationCap, Briefcase, Users, Heart } from "lucide-react";
+
+// Brand category blocks for the focus picker.
+const CATEGORY_BLOCK: Record<string, string> = {
+  Academics: "bg-blue-500",
+  Recruiting: "bg-red-500",
+  Social: "bg-orange-500",
+  Wellness: "bg-green-500",
+};
+const CATEGORY_TIME: Record<string, string> = {
+  Academics: "09:00",
+  Recruiting: "14:00",
+  Social: "12:00",
+  Wellness: "17:00",
+};
 import { Button } from "@/app/components/ui/button";
 import { Card } from "@/app/components/ui/card";
 import { motion, AnimatePresence } from "motion/react";
@@ -75,7 +89,7 @@ export function PrioritySelector({
           className="w-full max-w-lg"
         >
           <div className="text-center mb-8">
-            <h2 className="text-2xl font-bold mb-2">
+            <h2 className="text-3xl font-semibold mb-2" style={{ letterSpacing: "-0.04em" }}>
               What's your focus today?
             </h2>
             <p className="text-muted-foreground">
@@ -99,19 +113,23 @@ export function PrioritySelector({
                 >
                   <Card
                     onClick={() => setSelected(p)}
-                    className={`p-6 cursor-pointer transition-all hover:scale-[1.02] ${
+                    role="button"
+                    tabIndex={0}
+                    aria-pressed={isSelected}
+                    onKeyDown={(e) => { if (e.key === "Enter" || e.key === " ") { e.preventDefault(); setSelected(p); } }}
+                    className={`p-5 gap-0 cursor-pointer transition-all bg-card ${
                       isSelected
-                        ? `${config.borderColor} border-2 ${config.bgColor} shadow-lg`
-                        : "border-2 border-transparent hover:border-muted-foreground/20"
+                        ? "border-2 border-primary shadow-lg"
+                        : "border-2 border-border hover:border-muted-foreground/30"
                     }`}
                   >
-                    <div className="text-center">
-                      <div
-                        className={`w-12 h-12 rounded-xl ${config.bgColor} flex items-center justify-center mx-auto mb-3`}
-                      >
-                        <Icon className={`w-6 h-6 ${config.textColor}`} />
+                    <div className="text-left">
+                      {/* A calendar block in the category colour, the brand pattern */}
+                      <div className={`w-20 h-12 rounded-lg ${CATEGORY_BLOCK[p]} p-2 mb-4 flex flex-col justify-between`} aria-hidden="true">
+                        <span className="block w-3/5 h-1.5 rounded-full bg-white/75" />
+                        <span className="font-mono text-[9px] text-white/90">{CATEGORY_TIME[p]}</span>
                       </div>
-                      <h3 className="font-semibold text-sm">{config.label}</h3>
+                      <h3 className="font-semibold text-base" style={{ letterSpacing: "-0.02em" }}>{config.label}</h3>
                       <p className="text-xs text-muted-foreground mt-1">
                         {p === "Academics" && "Classes, studying & exams"}
                         {p === "Recruiting" && "Interviews & career prep"}
