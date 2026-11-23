@@ -4,9 +4,9 @@
  * colour of wherever the mark sits.
  *
  * Motion:
- *  - "assemble": plays once. The blocks slide into place like events being
- *    scheduled; the two right-hand blocks start swapped and trade places, so
- *    the violet one lands on top.
+ *  - "assemble": plays once. On the tile (KaiseyMark) this is the cube: four
+ *    category-coloured blocks turn like a cube, form the K, the blue stem
+ *    grows, then the colours settle. The bare KaiseyK keeps a simpler slide-in.
  *  - "shuffle": loops. The right-hand blocks keep trading places while the
  *    middle block nudges, like Kaisey rescheduling. Use while it's thinking.
  * Both fall back to the still mark when the viewer prefers reduced motion.
@@ -119,6 +119,33 @@ export function KaiseyK({
   );
 }
 
+/**
+ * The cube assemble: four blocks in the category colours pop in one at a
+ * time, turn like a cube, slide into the K, the blue stem grows to full
+ * height, then the colours settle to the brand. Plays once. Keyframes live in
+ * styles/theme.css (kaisey-cube-*); the resting styles below are the finished
+ * K, which is what reduced-motion viewers see.
+ */
+function KaiseyCube({ height }: { height: number }) {
+  const s = height / 184; // drawn on a 160 x 184 px grid
+  const block = (cls: string, left: number, top: number, w: number, h: number, bg: string) => (
+    <span
+      className={`kaisey-cube ${cls}`}
+      style={{ position: "absolute", left, top, width: w, height: h, background: bg, borderRadius: 12 }}
+    />
+  );
+  return (
+    <span aria-hidden="true" style={{ position: "relative", display: "block", width: 160 * s, height: 184 * s }}>
+      <span style={{ position: "absolute", left: 0, top: 0, width: 160, height: 184, transform: `scale(${s})`, transformOrigin: "0 0" }}>
+        {block("kaisey-cube-mid", 56, 68, 40, 48, "#FAFAFC")}
+        {block("kaisey-cube-bot", 108, 128, 52, 56, "#FAFAFC")}
+        {block("kaisey-cube-stem", 0, 0, 44, 184, "#FAFAFC")}
+        {block("kaisey-cube-top", 108, 0, 52, 56, BRAND_VIOLET)}
+      </span>
+    </span>
+  );
+}
+
 /** The K on an ink tile: the app icon. `size` is the tile's width in px. */
 export function KaiseyMark({
   size = 40,
@@ -136,7 +163,11 @@ export function KaiseyMark({
       role="img"
       aria-label="Kaisey"
     >
-      <KaiseyK size={size * 0.55} color="#FAFAFC" motion={mode} />
+      {mode === "assemble" ? (
+        <KaiseyCube height={size * 0.55} />
+      ) : (
+        <KaiseyK size={size * 0.55} color="#FAFAFC" motion={mode} />
+      )}
     </span>
   );
 }

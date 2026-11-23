@@ -45,5 +45,6 @@ All case study pages are single-file HTML/CSS/JS (vanilla, no frameworks). Alway
 ## Demo Videos
 Rendered from Remotion project at `C:\Users\Anisha\kaisey-demo` (separate from this repo).
 - `kaisey/kaisey-instruction.mp4` + portrait variant — plays on WelcomePage before login
-- `kaisey/kaisey-demo.mp4` + portrait variant — used on case study page
+- `kaisey/kaisey-demo.mp4` + `kaisey/kaisey-demo-poster.jpg` — the case study demo (hero loop and the "See Kaisey in Action" player). Since Nov 2026 this is the Time Blocks rebrand demo, rendered from the animatic on the "Kaisey Rebrand" design canvas (24s, 1920x1080), not from Remotion.
+- `kaisey/archive/v1/` and `kaisey-case-study/assets/archive/v1/` — the original Remotion demo and hero loop, kept to rebuild later. Not referenced by any page.
 - Render: `cd C:\Users\Anisha\kaisey-demo && npm run render:all`, then copy `out/*.mp4` to `kaisey/`

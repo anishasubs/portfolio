@@ -6,7 +6,7 @@
     <title>Kaisey — AI Chief of Staff for Student Life | Anisha Subberwal</title>
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Bodoni+Moda:ital,wght@0,400;0,700;1,400&family=Parisienne&family=Raleway:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Bodoni+Moda:ital,wght@0,400;0,700;1,400&family=Parisienne&family=Raleway:wght@300;400;500;600;700&family=Instrument+Sans:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
     <style>
         * { margin: 0; padding: 0; box-sizing: border-box; }
         html { scroll-behavior: smooth; }
@@ -680,11 +680,74 @@
         @media (prefers-reduced-motion: reduce) {
             .hero-bg { display: none; }
             .hero-pane-media {
-                background-image: url("assets/hero-demo-wide-poster.jpg");
+                background-image: url("../kaisey/kaisey-demo-poster.jpg");
                 background-size: cover;
                 background-position: center;
             }
         }
+        /* ── Kaisey brand (Time Blocks, Nov 2026) ──────────────────
+           The case study now wears the product's brand: Instrument Sans
+           with JetBrains Mono labels, ink and one violet, and the category
+           colours as blocks. The portfolio's own nav and footer keep the
+           site identity. Tokens are redefined here so existing rules that
+           read them pick up the new palette. */
+        :root {
+            --violet: #5B4CF0;
+            --violet-dark: #4A3CD6;
+            --violet-deep: #0E0E12;
+            --cream: #FAFAFC;
+            --cream-dark: #ECECF2;
+            --navy: #0E0E12;
+            --text-secondary: #5D5D6B;
+            --pill-bg: #EFEDFF;
+            --pill-text: #4A3CD6;
+            --k-academics: #2F62E8;
+            --k-recruiting: #DC3F4A;
+            --k-social: #EA7F23;
+            --k-wellness: #22995C;
+        }
+        body { font-family: 'Instrument Sans', system-ui, sans-serif; -webkit-font-smoothing: antialiased; }
+        .hero h1, .hero-pane-copy h1, .section-title, .roadmap-closing p {
+            font-family: 'Instrument Sans', system-ui, sans-serif;
+            font-weight: 600;
+            letter-spacing: -0.035em;
+        }
+        .hero-pane-copy h1 { color: #FAFAFC; display: flex; align-items: center; gap: 0.32em; letter-spacing: -0.05em; }
+        .hero-k { width: 0.62em; height: 0.72em; flex-shrink: 0; }
+        .hero-pane-copy {
+            background:
+                radial-gradient(120% 90% at 0% 0%, rgba(91, 76, 240, 0.22) 0%, rgba(14, 14, 18, 0) 58%),
+                #0E0E12;
+        }
+        .hero-standfirst { font-weight: 400; color: rgba(250, 250, 252, 0.74); }
+        .hero-eyebrow, .hero-meta dt, .scroll-indicator, .section-tag {
+            font-family: 'JetBrains Mono', ui-monospace, monospace;
+        }
+        .hero-eyebrow, .scroll-indicator { color: rgba(250, 250, 252, 0.6); }
+        .hero-meta { border-top-color: rgba(250, 250, 252, 0.14); }
+        .hero-meta dt { color: rgba(250, 250, 252, 0.45); }
+        .hero-meta dd { color: rgba(250, 250, 252, 0.85); }
+        .scroll-indicator:hover { color: #FAFAFC; }
+        /* The new demo is drawn on #FAFAFC, so contain shows the whole
+           frame and the pane's own background fills the rest seamlessly. */
+        .hero-pane-media { background: #FAFAFC; }
+        .hero-bg { object-fit: contain; }
+        .section-tag { letter-spacing: 0.12em; font-weight: 500; }
+        .card { border-radius: 12px; }
+        .cat-block {
+            display: block; width: 44px; height: 28px; border-radius: 6px;
+            position: relative;
+        }
+        .cat-block::after {
+            content: ""; position: absolute; left: 7px; top: 8px;
+            width: 22px; height: 4px; border-radius: 2px;
+            background: rgba(255, 255, 255, 0.75);
+        }
+        .cat-academics { background: var(--k-academics); }
+        .cat-recruiting { background: var(--k-recruiting); }
+        .cat-social { background: var(--k-social); }
+        .cat-wellness { background: var(--k-wellness); }
+        .video-wrapper video { border-radius: 14px; background: #FAFAFC; }
     </style>
 </head>
 <body>
@@ -718,7 +781,7 @@
         <div class="hero-pane hero-pane-copy">
             <div class="hero-copy">
                 <span class="hero-eyebrow">AI calendar assistant</span>
-                <h1>Kaisey</h1>
+                <h1><svg class="hero-k" viewBox="0 0 40 46" aria-hidden="true"><rect x="0" y="0" width="11" height="46" rx="3" fill="#FAFAFC"/><rect x="14" y="17" width="10" height="12" rx="3" fill="#FAFAFC"/><rect x="27" y="32" width="13" height="14" rx="3" fill="#FAFAFC"/><rect x="27" y="0" width="13" height="14" rx="3" fill="#8B7FFF"/></svg>Kaisey</h1>
                 <p class="hero-standfirst">Reads your Google Calendar, reasons over it with OpenAI, and tells you what actually matters right now.</p>
                 <dl class="hero-meta">
                     <div><dt>Role</dt><dd>Design &amp; build, end to end</dd></div>
@@ -757,22 +820,22 @@
 
             <div class="cards-grid">
                 <div class="card">
-                    <div class="card-icon">&#128218;</div>
+                    <div class="card-icon"><span class="cat-block cat-academics" aria-hidden="true"></span></div>
                     <h3>Academics</h3>
                     <p>Coursework deadlines, group projects, and reading lists exist in a silo with zero connection to your recruiting calendar or energy levels.</p>
                 </div>
                 <div class="card">
-                    <div class="card-icon">&#128188;</div>
+                    <div class="card-icon"><span class="cat-block cat-recruiting" aria-hidden="true"></span></div>
                     <h3>Recruiting</h3>
                     <p>Coffee chats, application deadlines, and interview prep scattered across email, spreadsheets, and calendar invites &mdash; often with hard deadlines that override everything.</p>
                 </div>
                 <div class="card">
-                    <div class="card-icon">&#127881;</div>
+                    <div class="card-icon"><span class="cat-block cat-social" aria-hidden="true"></span></div>
                     <h3>Social Life</h3>
                     <p>Club events, networking dinners, weekend trips &mdash; the first thing sacrificed when workload spikes, but the hardest to rebuild once dropped.</p>
                 </div>
                 <div class="card">
-                    <div class="card-icon">&#128154;</div>
+                    <div class="card-icon"><span class="cat-block cat-wellness" aria-hidden="true"></span></div>
                     <h3>Wellness</h3>
                     <p>Gym, sleep, mental health &mdash; always deprioritized until burnout hits, then suddenly the most urgent thing on the list.</p>
                 </div>
@@ -952,10 +1015,10 @@
         <div class="container fade-in">
             <span class="section-tag">Demo</span>
             <h2 class="section-title">See Kaisey in Action</h2>
-            <p class="section-desc" style="margin-bottom: 1.5rem;">A walkthrough of the priority toggle with a real student calendar &mdash; watch the model re-rank events in real time.</p>
+            <p class="section-desc" style="margin-bottom: 1.5rem;">A student tells Kaisey to focus on recruiting. Kaisey reads a week that is mostly academics, recommends time-blocking coffee chats, and the calendar rebalances toward recruiting.</p>
 
             <div class="video-wrapper">
-                <video controls preload="metadata" poster="../kaisey/thumb-intro.png">
+                <video controls preload="metadata" playsinline poster="../kaisey/kaisey-demo-poster.jpg">
                     <source src="../kaisey/kaisey-demo.mp4" type="video/mp4">
                     Your browser does not support the video tag.
                 </video>
@@ -1053,8 +1116,8 @@
         // below the split point the media pane is hidden, so never
         // fetch the file at all
         if (window.matchMedia('(max-width: 900px)').matches) return;
-        v.poster = 'assets/hero-demo-wide-poster.jpg';
-        v.src = 'assets/hero-demo-wide.mp4';
+        v.poster = '../kaisey/kaisey-demo-poster.jpg';
+        v.src = '../kaisey/kaisey-demo.mp4';
         var p = v.play();
         if (p && p.catch) { p.catch(function () {}); }
     })();

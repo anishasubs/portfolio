@@ -198,3 +198,45 @@
     line-height: 1.5;
   }
 }
+
+/* Kaisey cube assemble (KaiseyLogo.tsx). Plays once, ~4.6s.
+   Blocks pop in one at a time as the category colours, the top row and right
+   column turn like a cube, the blocks slide into the K, the blue stem grows
+   to full height, then the colours settle to ink-white and violet. */
+.kaisey-cube-stem { animation: kaisey-cube-stem 4.6s cubic-bezier(.65,0,.35,1) both; }
+.kaisey-cube-top  { animation: kaisey-cube-top 4.6s cubic-bezier(.65,0,.35,1) both; }
+.kaisey-cube-mid  { animation: kaisey-cube-mid 4.6s cubic-bezier(.65,0,.35,1) both; }
+.kaisey-cube-bot  { animation: kaisey-cube-bot 4.6s cubic-bezier(.65,0,.35,1) both; }
+@keyframes kaisey-cube-stem {
+  0% { left:0; top:0; width:72px; height:84px; transform:scale(.3); opacity:0; background:#2F62E8 }
+  5.5%, 30% { left:0; top:0; width:72px; height:84px; transform:none; opacity:1; background:#2F62E8 }
+  40%, 44% { left:88px; top:0; width:72px; height:84px; transform:none; opacity:1; background:#2F62E8 }
+  54%, 58% { left:88px; top:100px; width:72px; height:84px; transform:none; opacity:1; background:#2F62E8 }
+  66%, 70% { left:0; top:0; width:44px; height:56px; transform:none; opacity:1; background:#2F62E8 }
+  78% { left:0; top:0; width:44px; height:192px; background:#2F62E8 }
+  81%, 84% { left:0; top:0; width:44px; height:184px; background:#2F62E8 }
+  90%, 100% { left:0; top:0; width:44px; height:184px; transform:none; opacity:1; background:#FAFAFC }
+}
+@keyframes kaisey-cube-top {
+  0%, 6.4% { left:88px; top:0; width:72px; height:84px; transform:scale(.3); opacity:0; background:#DC3F4A }
+  11.8%, 30% { left:88px; top:0; width:72px; height:84px; transform:none; opacity:1; background:#DC3F4A }
+  40%, 58% { left:0; top:0; width:72px; height:84px; transform:none; opacity:1; background:#DC3F4A }
+  66%, 84% { left:108px; top:0; width:52px; height:56px; transform:none; opacity:1; background:#DC3F4A }
+  90%, 100% { left:108px; top:0; width:52px; height:56px; transform:none; opacity:1; background:#8B7FFF }
+}
+@keyframes kaisey-cube-mid {
+  0%, 12.7% { left:0; top:100px; width:72px; height:84px; transform:scale(.3); opacity:0; background:#EA7F23 }
+  18.2%, 58% { left:0; top:100px; width:72px; height:84px; transform:none; opacity:1; background:#EA7F23 }
+  66%, 84% { left:56px; top:68px; width:40px; height:48px; transform:none; opacity:1; background:#EA7F23 }
+  90%, 100% { left:56px; top:68px; width:40px; height:48px; transform:none; opacity:1; background:#FAFAFC }
+}
+@keyframes kaisey-cube-bot {
+  0%, 19.1% { left:88px; top:100px; width:72px; height:84px; transform:scale(.3); opacity:0; background:#22995C }
+  24.5%, 44% { left:88px; top:100px; width:72px; height:84px; transform:none; opacity:1; background:#22995C }
+  54%, 58% { left:88px; top:0; width:72px; height:84px; transform:none; opacity:1; background:#22995C }
+  66%, 84% { left:108px; top:128px; width:52px; height:56px; transform:none; opacity:1; background:#22995C }
+  90%, 100% { left:108px; top:128px; width:52px; height:56px; transform:none; opacity:1; background:#FAFAFC }
+}
+@media (prefers-reduced-motion: reduce) {
+  .kaisey-cube-stem, .kaisey-cube-top, .kaisey-cube-mid, .kaisey-cube-bot { animation: none; }
+}
