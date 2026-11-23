@@ -959,6 +959,8 @@
         @media (max-width: 900px) {
             .screens-grid .wf { grid-template-columns: 1fr; gap: 1rem; }
         }
+        /* the landing fills the screen, so the K below starts out of view */
+        @media (min-width: 901px) { .hero { min-height: 100vh; min-height: 100svh; } }
     </style>
 </head>
 <body>
@@ -1482,9 +1484,14 @@
         video.loop = true;
         var inView = false, split = false;
         function play() { var p = video.play(); if (p && p.catch) p.catch(function () {}); }
+        // the K only pops in once it is well into view (most of it on screen),
+        // not while the landing is still showing; it pauses when it leaves
         new IntersectionObserver(function (es) {
-            es.forEach(function (e) { inView = e.isIntersecting; if (inView && !split) play(); else video.pause(); });
-        }, { threshold: 0.3 }).observe(fig);
+            es.forEach(function (e) {
+                if (e.intersectionRatio >= 0.75) { inView = true; if (!split) play(); }
+                else if (!e.isIntersecting) { inView = false; video.pause(); }
+            });
+        }, { threshold: [0, 0.75] }).observe(fig);
         function setSplit(on) {
             if (on === split) return;
             split = on;
@@ -1508,7 +1515,7 @@
             ticking = false;
             var sy = window.scrollY, vh = window.innerHeight;
             var v = fig.getBoundingClientRect();
-            var s0 = v.top + sy - vh * 0.22;          // the split starts once the K is near the top of the screen
+            var s0 = v.top + v.height / 2 + sy - vh * 0.3;   // the split starts once the K's centre passes 30% down the screen
             var kcx = v.left + v.width / 2, kcy = v.top + v.height / 2;
             fig.classList.toggle('is-split', sy >= s0);
             setSplit(sy >= s0);
