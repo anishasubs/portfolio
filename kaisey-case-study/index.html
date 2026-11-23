@@ -928,6 +928,28 @@
         /* the demo cuts to a dark logo card from 18.9s to the loop; the pane
            follows it so the letterboxed 16:9 frame never shows as a strip */
         .hero-pane-media.is-dark { background: #0E0E12; }
+        /* -- What Kaisey solves: twisting 3D K that splits into the cards --
+           The K loops (a Blender render) beside the intro. As you scroll, it
+           is swapped for its four blocks, which ride down with you, turn
+           their category colour and land as the icons of "Four demands, one
+           week". The video is rendered on white and multiplied, so it has no
+           visible frame on the paper background. */
+        .solves-head { display: grid; grid-template-columns: minmax(0, 1.25fr) minmax(0, 1fr); gap: 3rem; align-items: center; }
+        .solves-head .problem-intro { margin-bottom: 0; }
+        .solves-k { margin: 0; position: relative; width: 100%; max-width: 400px; justify-self: center; aspect-ratio: var(--k-ar, 1); }
+        .solves-video { display: block; width: 100%; height: 100%; mix-blend-mode: multiply; transition: opacity 0.2s ease; }
+        .solves-k.is-split .solves-video { opacity: 0; }
+        @media (max-width: 900px) {
+            .solves-head { grid-template-columns: 1fr; gap: 1.5rem; }
+            .solves-k { max-width: 280px; }
+        }
+        .k-fly { position: fixed; inset: 0; pointer-events: none; z-index: 40; display: none; }
+        .js-kfly .k-fly { display: block; }
+        .k-piece { position: absolute; left: 0; top: 0; opacity: 0; will-change: transform; }
+        .k-piece img { position: absolute; inset: 0; width: 100%; height: 100%; display: block; }
+        .k-piece .k-cat { opacity: 0; }
+        .js-kfly .problem .cat-block { transition: opacity 0.18s ease; }
+        .js-kfly .problem .cat-block.is-waiting { opacity: 0; }
     </style>
 </head>
 <body>
@@ -979,45 +1001,15 @@
     <!-- ═══ 2. THE PROBLEM ═══ -->
     <section class="problem" id="problem">
         <div class="container fade-in">
-            <span class="section-tag">01 · What Kaisey solves</span>
-            <h2 class="section-title">Your Week Drifts Away From What Matters</h2>
-            <p class="problem-intro">It&rsquo;s recruiting season. You&rsquo;re meant to network, prep cases, keep up with classes and still sleep, and every one of those lives somewhere different: a syllabus, an inbox, a spreadsheet of coffee chats, a calendar. None of them knows about the others. So the week fills up with whatever got scheduled first, not with whatever matters most.</p>
-
-            <div class="pw">
-                <div class="pw-week" role="img" aria-label="A sample student week, Monday to Friday, almost entirely blue academics blocks with one red recruiting block.">
-                    <div class="pw-day"><span class="pw-dayname">Mon</span><div class="pw-lane"><span class="pw-block cat-academics" style="top:10.0%;height:calc(20.0% - 3px)">Corporate Finance</span><span class="pw-block cat-academics" style="top:30.0%;height:calc(10.0% - 3px)">Study session</span><span class="pw-block cat-academics" style="top:50.0%;height:calc(20.0% - 3px)">Problem set</span><span class="pw-block cat-wellness" style="top:90.0%;height:calc(10.0% - 3px)">Gym</span></div></div><div class="pw-day"><span class="pw-dayname">Tue</span><div class="pw-lane"><span class="pw-block cat-academics" style="top:10.0%;height:calc(15.0% - 3px)">Strategy</span><span class="pw-block cat-academics" style="top:30.0%;height:calc(20.0% - 3px)">Deep work</span><span class="pw-block cat-recruiting" style="top:60.0%;height:calc(10.0% - 3px)">Info session</span><span class="pw-block cat-academics" style="top:85.0%;height:calc(10.0% - 3px)">Study group</span></div></div><div class="pw-day"><span class="pw-dayname">Wed</span><div class="pw-lane"><span class="pw-block cat-academics" style="top:10.0%;height:calc(20.0% - 3px)">Corporate Finance</span><span class="pw-block cat-academics" style="top:50.0%;height:calc(20.0% - 3px)">Library</span><span class="pw-block cat-wellness" style="top:90.0%;height:calc(10.0% - 3px)">Run</span></div></div><div class="pw-day"><span class="pw-dayname">Thu</span><div class="pw-lane"><span class="pw-block cat-academics" style="top:10.0%;height:calc(15.0% - 3px)">Strategy</span><span class="pw-block cat-academics" style="top:50.0%;height:calc(20.0% - 3px)">Deep work</span><span class="pw-block cat-social" style="top:80.0%;height:calc(10.0% - 3px)">Club meeting</span></div></div><div class="pw-day"><span class="pw-dayname">Fri</span><div class="pw-lane"><span class="pw-block cat-academics" style="top:20.0%;height:calc(20.0% - 3px)">Study group</span><span class="pw-block cat-social" style="top:40.0%;height:calc(10.0% - 3px)">Lunch</span><span class="pw-block cat-wellness" style="top:60.0%;height:calc(10.0% - 3px)">Yoga</span></div></div>
+            <div class="solves-head">
+                <div class="solves-copy">
+                <span class="section-tag">01 · What Kaisey solves</span>
+                <h2 class="section-title">Your Week Drifts Away From What Matters</h2>
+                <p class="problem-intro">It&rsquo;s recruiting season. You&rsquo;re meant to network, prep cases, keep up with classes and still sleep, and every one of those lives somewhere different: a syllabus, an inbox, a spreadsheet of coffee chats, a calendar. None of them knows about the others. So the week fills up with whatever got scheduled first, not with whatever matters most.</p>
                 </div>
-                <div class="pw-side">
-                    <span class="mono-label">The gap</span>
-                    <div class="pw-said"><span class="pw-k">You said</span><span class="pw-v"><span class="cat-dot cat-recruiting"></span>Recruiting comes first</span></div>
-                    <div class="pw-said"><span class="pw-k">Your calendar</span><span class="pw-v">76% academics &middot; <b class="pw-red">4% recruiting</b></span></div>
-                    <div class="pw-bar" aria-hidden="true"><span class="cat-academics" style="flex:19.0"></span><span class="cat-recruiting" style="flex:1"></span><span class="cat-social" style="flex:2"></span><span class="cat-wellness" style="flex:3"></span></div>
-                    <p>Nothing about this week is wrong, exactly. Every block is a real class or study session. It just doesn&rsquo;t match the goal, and no tool says so until the recruiting deadline has passed.</p>
-                </div>
-            </div>
-            <p class="pw-note">Sample week, the same one used in the demo.</p>
-
-            <h3 class="sub-title">Why today&rsquo;s tools miss it</h3>
-            <div class="cards-grid pw-why">
-                <div class="card"><h3>Calendars store time, not priorities</h3><p>Google Calendar knows when something happens, not why it matters or what it&rsquo;s crowding out.</p></div>
-                <div class="card"><h3>To-do lists don&rsquo;t know your week</h3><p>A task app can tell you to prep for an interview. It can&rsquo;t see that every free hour before it is already booked.</p></div>
-                <div class="card"><h3>Nothing notices the drift</h3><p>No tool compares where your time goes with what you said matters, so the gap only shows up as a missed deadline.</p></div>
-            </div>
-
-
-            <div class="cards-grid stats-grid" style="margin-bottom: 2rem;">
-                <div class="card" style="text-align: center;">
-                    <div style="font-size: 2.5rem; font-weight: 700; color: var(--violet);">6+</div>
-                    <p>Tools the average student juggles daily just to stay on schedule</p>
-                </div>
-                <div class="card" style="text-align: center;">
-                    <div style="font-size: 2.5rem; font-weight: 700; color: var(--violet);">73%</div>
-                    <p>Have missed a deadline because the reminder lived in a different app</p>
-                </div>
-                <div class="card" style="text-align: center;">
-                    <div style="font-size: 2.5rem; font-weight: 700; color: var(--violet);">2.4hrs</div>
-                    <p>Lost every week mentally stitching calendars, inboxes, and to-do lists together</p>
-                </div>
+                <figure class="solves-k" aria-hidden="true">
+                    <video class="solves-video" muted loop playsinline preload="metadata" poster="assets/k-twist-poster.jpg"></video>
+                </figure>
             </div>
 
             <h3 class="sub-title">Four demands, one week</h3>
@@ -1043,10 +1035,13 @@
                     <p>Gym, sleep, mental health &mdash; always deprioritized until burnout hits, then suddenly the most urgent thing on the list.</p>
                 </div>
             </div>
-
-            <div style="margin-top: 2rem; padding: 1.5rem; border-radius: 12px; background: rgba(248, 113, 113, 0.06); border: 1px solid rgba(248, 113, 113, 0.15); font-size: 1.05rem; color: var(--text-secondary); line-height: 1.7;">
-                <strong style="color: #dc2626;">This isn't about productivity &mdash; it's about outcomes.</strong> One missed recruiting deadline is a lost job offer. One forgotten group meeting is a trust deficit with your team. Every student knows the feeling of discovering they dropped something important &mdash; not because they were lazy, but because no tool connected the dots.
-            </div>
+        </div>
+        <!-- the K's four blocks, which fly down into the category cards as you scroll -->
+        <div class="k-fly" aria-hidden="true">
+            <span class="k-piece" data-piece="stem" data-cat="academics"><img src="assets/k-stem.webp" alt=""><img class="k-cat" src="assets/k-stem-cat.webp" alt=""></span>
+            <span class="k-piece" data-piece="top" data-cat="recruiting"><img src="assets/k-top.webp" alt=""><img class="k-cat" src="assets/k-top-cat.webp" alt=""></span>
+            <span class="k-piece" data-piece="mid" data-cat="social"><img src="assets/k-mid.webp" alt=""><img class="k-cat" src="assets/k-mid-cat.webp" alt=""></span>
+            <span class="k-piece" data-piece="bot" data-cat="wellness"><img src="assets/k-bot.webp" alt=""><img class="k-cat" src="assets/k-bot-cat.webp" alt=""></span>
         </div>
     </section>
 
@@ -1483,6 +1478,80 @@
             if (d !== dark) { dark = d; pane.classList.toggle('is-dark', d); }
             requestAnimationFrame(tick);
         })();
+    })();
+    </script>
+
+    <script>
+    // What Kaisey solves: the twisting K splits into its four blocks, which
+    // ride down with the reader and land as the category cards' icons.
+    (function () {
+        var fig = document.querySelector('.solves-k');
+        if (!fig) return;
+        var video = fig.querySelector('video');
+        var still = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+        // each block's box inside the video frame (fractions), from the render
+        var GEO = __GEO__;
+        fig.style.setProperty('--k-ar', GEO.ar);
+        video.src = 'assets/k-twist.mp4';
+        if (still) return;
+        new IntersectionObserver(function (es) {
+            es.forEach(function (e) {
+                if (e.isIntersecting) { var p = video.play(); if (p && p.catch) p.catch(function () {}); } else video.pause();
+            });
+        }).observe(fig);
+
+        document.documentElement.classList.add('js-kfly');
+        var pieces = [].map.call(document.querySelectorAll('.k-piece'), function (el) {
+            return {
+                el: el, g: GEO[el.dataset.piece], cat: el.querySelector('.k-cat'),
+                target: document.querySelector('.problem .cat-block.cat-' + el.dataset.cat)
+            };
+        });
+        pieces.forEach(function (p) { p.target.classList.add('is-waiting'); });
+        var ease = function (t) { return t < 0.5 ? 4 * t * t * t : 1 - Math.pow(-2 * t + 2, 3) / 2; };
+        var clamp = function (t) { return Math.max(0, Math.min(1, t)); };
+        var ticking = false;
+
+        function update() {
+            ticking = false;
+            var sy = window.scrollY, vh = window.innerHeight;
+            var v = fig.getBoundingClientRect();
+            var s0 = v.top + sy - vh * 0.22;          // the split starts once the K is near the top of the screen
+            var kcx = v.left + v.width / 2, kcy = v.top + v.height / 2;
+            fig.classList.toggle('is-split', sy >= s0);
+            pieces.forEach(function (p, i) {
+                var g = p.g;
+                var hw = g.w * v.width, hh = g.h * v.height;
+                var hx = v.left + g.x * v.width + hw / 2, hy = v.top + g.y * v.height + hh / 2;
+                var t = p.target.getBoundingClientRect();
+                var tx = t.left + t.width / 2, ty = t.top + t.height / 2;
+                // the piece holds its height on screen (moves with the reader) until its card arrives
+                var D = Math.max(1, ty - hy);
+                var k = sy < s0 ? 0 : clamp((sy - s0) / D);
+                var landed = k >= 1;
+                p.target.classList.toggle('is-waiting', !landed);
+                if (sy < s0 || landed) { p.el.style.opacity = 0; return; }
+                var e = ease(k), late = ease(clamp((k - 0.45) / 0.55));
+                var cy = hy + (sy - s0);                     // = constant on screen while flying
+                cy = Math.min(cy, ty);
+                var cx = hx + (tx - hx) * e;
+                var w = hw + (t.width - hw) * late, h = hh + (t.height - hh) * late;
+                // split apart from the K's centre mid-flight, with a little turn
+                var dx = hx - kcx, dy = hy - kcy, dl = Math.max(1, Math.hypot(dx, dy));
+                var spread = Math.sin(Math.PI * k) * 64;
+                cx += dx / dl * spread; cy += dy / dl * spread * 0.5;
+                var rot = Math.sin(Math.PI * k) * (i % 2 ? 14 : -14);
+                p.el.style.opacity = 1;
+                p.el.style.width = w + 'px'; p.el.style.height = h + 'px';
+                p.el.style.transform = 'translate(' + (cx - w / 2).toFixed(1) + 'px,' + (cy - h / 2).toFixed(1) + 'px) rotate(' + rot.toFixed(1) + 'deg)';
+                p.cat.style.opacity = clamp((k - 0.08) / 0.3).toFixed(3);
+            });
+        }
+        function onScroll() { if (!ticking) { ticking = true; requestAnimationFrame(update); } }
+        window.addEventListener('scroll', onScroll, { passive: true });
+        window.addEventListener('resize', onScroll);
+        window.addEventListener('load', onScroll);
+        update();
     })();
     </script>
 </body>
