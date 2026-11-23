@@ -1491,7 +1491,7 @@
         var video = fig.querySelector('video');
         var still = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
         // each block's box inside the video frame (fractions), from the render
-        var GEO = {"ar": 0.8393, "stem": {"x": 0.0566, "y": 0.0631, "w": 0.2744, "h": 0.8885}, "top": {"x": 0.6318, "y": 0.0574, "w": 0.2861, "h": 0.2623}, "mid": {"x": 0.3672, "y": 0.3803, "w": 0.2314, "h": 0.2336}, "bot": {"x": 0.6279, "y": 0.6361, "w": 0.2773, "h": 0.268}};
+        var GEO = {"ar": 0.9088, "stem": {"x": 0.0631, "y": 0.1331, "w": 0.2273, "h": 0.7971}, "top": {"x": 0.5396, "y": 0.1346, "w": 0.2371, "h": 0.2353}, "mid": {"x": 0.3204, "y": 0.4176, "w": 0.1917, "h": 0.2103}, "bot": {"x": 0.5364, "y": 0.6404, "w": 0.2298, "h": 0.2404}};
         fig.style.setProperty('--k-ar', GEO.ar);
         // reduced motion: just the finished K
         if (still) { video.poster = 'assets/k-twist-poster.jpg'; return; }
