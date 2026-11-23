@@ -1483,24 +1483,22 @@ Return ONLY by calling propose_schedule.`,
 
   if (variant === "widget") {
     return (
-      <Card className="p-4 border">
-        <div className="flex items-center justify-between mb-3">
-          <div className="flex items-center gap-3">
-            <KaiseyMark size={36} />
-            <div>
-              <h3 className="font-semibold flex items-center gap-2">
-                Chat with Kaisey
-                <span className="inline-flex items-center gap-1.5 font-mono text-[10px] font-normal text-muted-foreground">
-                  <span className="w-1.5 h-1.5 rounded-full bg-brand" />
-                  online
-                </span>
-              </h3>
-              <p className="text-xs text-muted-foreground">Quick actions or brain dump — I'll figure out what you need</p>
-            </div>
+      <Card className="p-0 gap-0 border overflow-hidden">
+        {/* Ink header: the "Ask Kaisey" entry point from the design */}
+        <div className="bg-[#0E0E12] text-[#FAFAFC] p-5 flex flex-col gap-3.5">
+          <div className="flex items-center gap-2.5">
+            <span className="w-8 h-8 rounded-lg bg-[#1E1E24] flex items-center justify-center">
+              <KaiseyK size={16} color="#FAFAFC" motion={isTyping ? "shuffle" : "none"} />
+            </span>
+            <h3 className="font-semibold text-base text-[#FAFAFC]">Ask Kaisey</h3>
+            <span className="inline-flex items-center gap-1.5 font-mono text-[10px] text-[#FAFAFC]/55">
+              <span className="w-1.5 h-1.5 rounded-full bg-brand-soft" />
+              online
+            </span>
           </div>
-        </div>
+          <p className="text-sm leading-relaxed text-[#FAFAFC]/70">Brain-dump your week or ask for a change in plain English.</p>
 
-        <div className="flex gap-2 mb-4">
+        <div className="flex gap-2">
           <Input
             ref={inputRef}
             value={inputValue}
@@ -1508,26 +1506,29 @@ Return ONLY by calling propose_schedule.`,
             onKeyPress={handleKeyPress}
             placeholder={getPlaceholder()}
             disabled={isInputDisabled}
-            className="flex-1"
+            aria-label="Message Kaisey"
+            className="flex-1 bg-[#1E1E24] border-[#2A2A31] text-[#FAFAFC] placeholder:text-[#FAFAFC]/45"
           />
           <Button
             onClick={handleSendMessage}
             disabled={!inputValue.trim() || isInputDisabled}
-            className="bg-primary text-primary-foreground hover:bg-primary/90"
+            aria-label="Send"
+            className="bg-brand text-white hover:bg-brand/90"
           >
             <Send className="w-4 h-4" />
           </Button>
         </div>
+        </div>
 
         {messages.length > 1 && (
-          <div className="border-t pt-4">
+          <div className="p-4">
             <ScrollArea className="h-[450px]">
               <div className="space-y-3 pr-4">
                 {messages.slice(1).map((message) => (
                   <div key={message.id}>
                     {message.type === "user" ? (
                       <div className="flex justify-end">
-                        <div className="max-w-[80%] rounded-lg bg-blue-500 text-white p-2">
+                        <div className="max-w-[80%] rounded-lg rounded-br-sm bg-primary text-primary-foreground p-2.5">
                           <p className="text-xs">{message.content}</p>
                         </div>
                       </div>

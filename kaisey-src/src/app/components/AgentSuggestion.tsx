@@ -39,7 +39,7 @@ export function AgentSuggestion({ type, title, description, action, dismiss }: A
       exit={{ opacity: 0, x: 20 }}
       transition={{ duration: 0.3 }}
     >
-      <Card className="border bg-card p-4 mb-3 gap-0">
+      <Card className="border bg-card p-4 gap-0 h-full">
         <div className="flex gap-3">
           <div className="mt-0.5 text-muted-foreground">
             <Icon className="w-4 h-4" />

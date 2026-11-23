@@ -58,13 +58,14 @@ export function PrioritySelector({
             <button
               key={p}
               onClick={() => onSelect(p)}
-              className={`inline-flex items-center gap-1.5 px-3 py-1.5 rounded-full text-xs font-medium transition-all ${
+              aria-pressed={isActive}
+              className={`inline-flex items-center gap-2 px-3.5 py-2 rounded-full text-[13px] font-medium transition-all border ${
                 isActive
-                  ? `${config.bgColor} ${config.textColor} ${config.borderColor} border-2 shadow-sm`
-                  : "bg-muted/50 text-muted-foreground border-2 border-transparent hover:bg-muted"
+                  ? "bg-primary text-primary-foreground border-primary"
+                  : "bg-card text-foreground/80 border-border hover:border-muted-foreground/40"
               }`}
             >
-              <Icon className="w-3.5 h-3.5" />
+              <span className={`w-2 h-2 rounded-[2px] ${CATEGORY_BLOCK[p]}`} aria-hidden="true" />
               {config.label}
             </button>
           );

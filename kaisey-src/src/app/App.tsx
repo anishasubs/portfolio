@@ -808,10 +808,10 @@ export default function App() {
   }
 
   return (
-    <div className="min-h-screen bg-background">
+    <div className="min-h-screen bg-[#FAFAFC]">
       {/* Header */}
       <header className="border-b bg-card sticky top-0 z-50">
-        <div className="max-w-7xl mx-auto px-6 py-4 flex items-center justify-between">
+        <div className="max-w-[1440px] mx-auto px-4 sm:px-6 lg:px-12 h-[72px] flex items-center justify-between">
           <div className="flex items-center gap-3">
             <a href="/portfolio/" className="text-muted-foreground hover:text-foreground transition-colors" title="Back to Portfolio">
               <ArrowLeft className="w-5 h-5" />
@@ -825,82 +825,90 @@ export default function App() {
             <Button size="sm" variant="outline" className="relative">
               <Bell className="w-4 h-4" />
               {suggestions.length > 0 && (
-                <Badge className="absolute -top-1 -right-1 h-5 w-5 p-0 flex items-center justify-center bg-red-500">
+                <Badge className="absolute -top-1.5 -right-1.5 h-5 min-w-5 px-1 flex items-center justify-center bg-brand text-white">
                   {suggestions.length}
                 </Badge>
               )}
             </Button>
             
-            <Button size="sm" variant="outline" onClick={() => setShowSettings(true)}>
+            <Button size="sm" variant="outline" onClick={() => setShowSettings(true)} aria-label="Settings">
               <Settings className="w-4 h-4" />
             </Button>
+            <span
+              className="ml-1 w-10 h-10 rounded-full bg-primary text-primary-foreground text-sm font-semibold flex items-center justify-center overflow-hidden"
+              aria-label={userProfile?.name || "Demo user"}
+              title={userProfile?.name || "Demo user"}
+            >
+              {userProfile?.picture
+                ? <img src={userProfile.picture} alt="" className="w-full h-full object-cover" />
+                : (userProfile?.name || "Demo User").split(" ").map((n) => n[0]).join("").slice(0, 2).toUpperCase()}
+            </span>
           </div>
         </div>
       </header>
 
-      {/* Main Content */}
-      <main className="max-w-7xl mx-auto px-6 py-6">
-        {/* Quick Insight of the Day */}
-        <div className="mb-6">
-          <CommandCenter events={calendarEvents} userFocus={userFocus} userName={userProfile?.name} priority={userPriority} onPriorityChange={handlePrioritySelect} />
-        </div>
-
-        {/* Chat with Kaisey */}
-        <div className="mb-6" data-tour-id="brain-dump">
-          <KaiseyChatbot
-            onScheduleChange={handleScheduleChange}
-            onSuggestionsGenerated={handleBrainDumpSuggestions}
-            variant="widget"
-            priority={userPriority}
-            calendarEvents={calendarEvents}
-            ouraMetrics={ouraMetrics}
-          />
-        </div>
-
-        {/* My Recommendations */}
-        {suggestions.length > 0 && (
-          <div className="mb-6">
-            <div className="flex items-center gap-2 mb-3">
-              <KaiseyMark size={20} />
-              <h3 className="font-semibold">My Recommendations</h3>
-              <Badge variant="outline" className="text-xs">{suggestions.length}</Badge>
-            </div>
-            {suggestions.map((suggestion) => (
-              <AgentSuggestion
-                key={suggestion.id}
-                type={suggestion.type}
-                title={suggestion.title}
-                description={suggestion.description}
-                action={{
-                  label: "Accept & Update Calendar",
-                  onClick: () => handleAcceptSuggestion(suggestion.id),
-                }}
-                dismiss={() => handleDismissSuggestion(suggestion.id)}
-              />
-            ))}
+      {/* Main Content: Today, laid out as the Time Blocks design.
+          Desktop is two columns (day, recommendations and calendar on the
+          left; Ask Kaisey, profile and health on the right). On a phone the
+          columns dissolve (display: contents) and the order classes put
+          Ask Kaisey straight after the day card. */}
+      <main className="max-w-[1440px] mx-auto px-4 sm:px-6 lg:px-12 py-6 lg:py-7 flex flex-col gap-5 lg:grid lg:grid-cols-[minmax(0,1fr)_384px] lg:gap-6 lg:items-start">
+        <div className="contents lg:flex lg:flex-col lg:gap-5 lg:min-w-0">
+          <div className="order-1">
+            <CommandCenter events={calendarEvents} userFocus={userFocus} userName={userProfile?.name} priority={userPriority} onPriorityChange={handlePrioritySelect} />
           </div>
-        )}
 
-        {/* Main View — Calendar + Connected Services */}
-        <div className="grid grid-cols-1 lg:grid-cols-3 gap-6 mb-6">
-          {/* Left Column - Calendar */}
-          <div className="lg:col-span-2 space-y-6">
+          {suggestions.length > 0 && (
+            <section className="order-3" aria-labelledby="recs-heading">
+              <div className="flex items-center gap-2 mb-3">
+                <KaiseyMark size={20} />
+                <h3 id="recs-heading" className="font-semibold">My recommendations</h3>
+                <span className="font-mono text-xs text-muted-foreground">{suggestions.length}</span>
+              </div>
+              <div className="grid gap-4 sm:grid-cols-2">
+                {suggestions.map((suggestion) => (
+                  <AgentSuggestion
+                    key={suggestion.id}
+                    type={suggestion.type}
+                    title={suggestion.title}
+                    description={suggestion.description}
+                    action={{
+                      label: "Accept & update calendar",
+                      onClick: () => handleAcceptSuggestion(suggestion.id),
+                    }}
+                    dismiss={() => handleDismissSuggestion(suggestion.id)}
+                  />
+                ))}
+              </div>
+            </section>
+          )}
+
+          <div className="order-4">
             <CalendarView events={calendarEvents} onScheduleChange={handleScheduleChange} priority={userPriority} />
           </div>
-
-          {/* Right Column - Profile */}
-          <div className="space-y-6">
-            <ProfileSection userProfile={userProfile} ouraMetrics={ouraMetrics} ouraLoading={ouraLoading} onOuraConnect={handleOuraConnect} />
-          </div>
         </div>
 
-        {/* Oura Health Cards */}
-        {(ouraMetrics || ouraLoading) && (
-          <div className="mb-6 grid grid-cols-1 lg:grid-cols-2 gap-4">
-            <OuraSleepCard metrics={ouraMetrics} isLoading={ouraLoading} />
-            <OuraActivityCard metrics={ouraMetrics} isLoading={ouraLoading} />
+        <aside className="contents lg:flex lg:flex-col lg:gap-5">
+          <div className="order-2" data-tour-id="brain-dump">
+            <KaiseyChatbot
+              onScheduleChange={handleScheduleChange}
+              onSuggestionsGenerated={handleBrainDumpSuggestions}
+              variant="widget"
+              priority={userPriority}
+              calendarEvents={calendarEvents}
+              ouraMetrics={ouraMetrics}
+            />
           </div>
-        )}
+          <div className="order-5">
+            <ProfileSection userProfile={userProfile} ouraMetrics={ouraMetrics} ouraLoading={ouraLoading} onOuraConnect={handleOuraConnect} />
+          </div>
+          {(ouraMetrics || ouraLoading) && (
+            <div className="order-6 flex flex-col gap-5">
+              <OuraSleepCard metrics={ouraMetrics} isLoading={ouraLoading} />
+              <OuraActivityCard metrics={ouraMetrics} isLoading={ouraLoading} />
+            </div>
+          )}
+        </aside>
       </main>
 
       {/* Onboarding Tour */}

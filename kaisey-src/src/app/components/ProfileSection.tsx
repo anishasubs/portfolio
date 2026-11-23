@@ -35,7 +35,7 @@ export function ProfileSection({ userProfile: googleProfile, ouraMetrics, ouraLo
   return (
     <Card className="p-6">
       <div className="flex items-start gap-4 mb-6">
-        <Avatar className="h-16 w-16 border-2 border-blue-500">
+        <Avatar className="h-16 w-16">
           {picture && <AvatarImage src={picture} alt={name} />}
           <AvatarFallback className="bg-primary text-primary-foreground text-xl">
             {initials}

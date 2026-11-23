@@ -122,20 +122,17 @@ export function CommandCenter({ events, userFocus, userName, priority, onPriorit
   }
 
   return (
-    <Card className="p-6 border" data-tour-id="command-center">
+    <Card className="p-6 gap-0 border" data-tour-id="command-center">
       <div className="flex items-start gap-4">
-        <KaiseyMark size={48} />
-
         <div className="flex-1 min-w-0">
-          <div className="flex items-center gap-2 mb-4">
-            <h2 className="text-xl font-semibold">Your Day at a Glance</h2>
-            <Badge className="bg-primary text-primary-foreground font-mono font-normal shrink-0">
-              <Calendar className="w-3 h-3 mr-1" />
+          <div className="flex items-center gap-3 mb-1 flex-wrap">
+            <h2 className="text-[26px] font-semibold" style={{ letterSpacing: "-0.035em" }}>Your day at a glance</h2>
+            <span className="font-mono text-xs uppercase bg-primary text-primary-foreground rounded-md px-2 py-1 shrink-0">
               {todayFormatted}
-            </Badge>
+            </span>
           </div>
 
-          <p className="text-sm mb-4 leading-relaxed">
+          <p className="text-sm mb-5 leading-relaxed text-muted-foreground">
             {message}
           </p>
 
@@ -148,19 +145,16 @@ export function CommandCenter({ events, userFocus, userName, priority, onPriorit
                 animate={{ opacity: 1, y: 0 }}
                 exit={{ opacity: 0, y: -5 }}
                 transition={{ duration: 0.2 }}
-                className="mb-4 p-3 rounded-lg bg-background/60 border"
+                className="mb-5 px-4 py-3.5 rounded-xl border"
               >
                 {nextPriorityEvent && nextPriorityEvent.id !== nextEvent?.id ? (
                   <>
-                    <div className="text-xs text-muted-foreground mb-1.5 flex items-center gap-1">
-                      <Clock className="w-3 h-3" />
-                      Next {priority} Event
-                    </div>
-                    <div className="flex items-center gap-3">
-                      <div className={`w-2 h-2 rounded-full ${nextPriorityEvent.color} ring-2 ${PRIORITY_CONFIG[priority!].ringColor} ring-offset-1`}></div>
-                      <span className="font-mono text-xs text-muted-foreground w-16">
+                    <div className="flex items-center gap-3.5 flex-wrap">
+                      <span className="font-mono text-[11px] uppercase tracking-[0.08em] text-muted-foreground">Next {priority}</span>
+                      <span className="font-mono text-sm">
                         {formatTime(nextPriorityEvent.time)}
                       </span>
+                      <span className={`w-1 h-5 rounded-full ${nextPriorityEvent.color}`} />
                       <span className="font-semibold text-sm">{nextPriorityEvent.title}</span>
                       <span className="text-xs text-muted-foreground">
                         ({nextPriorityEvent.duration} min)
@@ -169,19 +163,12 @@ export function CommandCenter({ events, userFocus, userName, priority, onPriorit
                   </>
                 ) : nextEvent ? (
                   <>
-                    <div className="text-xs text-muted-foreground mb-1.5 flex items-center gap-1">
-                      <Clock className="w-3 h-3" />
-                      Up Next
-                    </div>
-                    <div className="flex items-center gap-3">
-                      <div className={`w-2 h-2 rounded-full ${nextEvent.color} ${
-                        priority && PRIORITY_CONFIG[priority].eventTypes.includes(nextEvent.type)
-                          ? `ring-2 ${PRIORITY_CONFIG[priority].ringColor} ring-offset-1`
-                          : ""
-                      }`}></div>
-                      <span className="font-mono text-xs text-muted-foreground w-16">
+                    <div className="flex items-center gap-3.5 flex-wrap">
+                      <span className="font-mono text-[11px] uppercase tracking-[0.08em] text-muted-foreground">Up next</span>
+                      <span className="font-mono text-sm">
                         {formatTime(nextEvent.time)}
                       </span>
+                      <span className={`w-1 h-5 rounded-full ${nextEvent.color}`} />
                       <span className="font-semibold text-sm">{nextEvent.title}</span>
                       <span className="text-xs text-muted-foreground">
                         ({nextEvent.duration} min)
@@ -202,8 +189,11 @@ export function CommandCenter({ events, userFocus, userName, priority, onPriorit
           {/* Weekly Balance Bar */}
           {totalWeekHours > 0 && (
             <div className="mb-4">
-              <div className="text-xs text-muted-foreground mb-1.5">Weekly Balance ({totalWeekHours.toFixed(1)}h)</div>
-              <div className="h-3 rounded-full overflow-hidden flex bg-muted/50">
+              <div className="flex justify-between items-baseline mb-2">
+                <span className="text-sm font-semibold">Weekly balance</span>
+                <span className="font-mono text-xs text-muted-foreground">{totalWeekHours.toFixed(1)}h scheduled</span>
+              </div>
+              <div className="h-3 flex gap-1">
                 {PRIORITY_MODES.map(mode => {
                   const hours = weeklyBalance[mode];
                   if (hours === 0) return null;
@@ -211,23 +201,21 @@ export function CommandCenter({ events, userFocus, userName, priority, onPriorit
                   return (
                     <div
                       key={mode}
-                      className={`${BALANCE_COLORS[mode]} transition-all duration-300 ${
-                        "opacity-100"
-                      }`}
+                      className={`${BALANCE_COLORS[mode]} rounded transition-all duration-300`}
                       style={{ width: `${pct}%` }}
                       title={`${mode}: ${hours.toFixed(1)}h (${Math.round(pct)}%)`}
                     />
                   );
                 })}
               </div>
-              <div className="flex gap-3 mt-1.5 flex-wrap">
+              <div className="flex gap-4 mt-2 flex-wrap">
                 {PRIORITY_MODES.map(mode => {
                   const hours = weeklyBalance[mode];
                   if (hours === 0) return null;
                   return (
-                    <div key={mode} className="flex items-center gap-1">
-                      <div className={`w-2 h-2 rounded-full ${BALANCE_COLORS[mode]}`} />
-                      <span className="text-[10px] text-muted-foreground">
+                    <div key={mode} className="flex items-center gap-1.5">
+                      <div className={`w-2 h-2 rounded-[2px] ${BALANCE_COLORS[mode]}`} />
+                      <span className="font-mono text-[11px] text-muted-foreground">
                         {mode} {hours.toFixed(1)}h
                       </span>
                     </div>
@@ -241,18 +229,17 @@ export function CommandCenter({ events, userFocus, userName, priority, onPriorit
           {imbalanceCallouts.length > 0 && (
             <div className="mb-4 space-y-1.5">
               {imbalanceCallouts.map((callout, i) => (
-                <div key={i} className="flex items-start gap-2 text-xs text-amber-700 bg-amber-50 dark:bg-amber-950/30 dark:text-amber-400 rounded-md px-2.5 py-1.5">
-                  <AlertTriangle className="w-3 h-3 mt-0.5 shrink-0" />
+                <div key={i} className="flex items-start gap-2 text-xs text-foreground bg-muted/60 rounded-md px-2.5 py-1.5">
+                  <AlertTriangle className="w-3 h-3 mt-0.5 shrink-0 text-muted-foreground" />
                   <span>{callout}</span>
                 </div>
               ))}
             </div>
           )}
 
-          <div className="flex items-start gap-2">
-            <Target className="w-4 h-4 text-blue-500 mt-0.5 shrink-0" />
+          <div className="flex items-center gap-3 flex-wrap">
+            <div className="text-sm font-semibold">Focus</div>
             <div className="flex-1">
-              <div className="text-xs text-muted-foreground mb-1.5">Today's Focus</div>
               {onPriorityChange ? (
                 <PrioritySelector
                   mode="inline"
