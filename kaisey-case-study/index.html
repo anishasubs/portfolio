@@ -931,7 +931,7 @@
            K → four category blocks → a week drifting to academics →
            Kaisey's rebalance → back to the K. Desktop gets a sticky
            stage beside Problem, Solution and Branding; narrower screens
-           get the same render as a video that plays once in the Solution. */
+           get the same render as a looping video in the Solution. */
         .story { position: relative; --stage-w: clamp(300px, 27vw, 400px); --stage-side: max(32px, calc(50vw - 690px)); }
         .story-rail { display: none; }
         .story-inline { margin: 0 0 2.5rem; max-width: 520px; border-radius: 18px; overflow: hidden; background: #020203; }
@@ -1091,7 +1091,7 @@
             <h2 class="section-title">One Intelligent Layer Across Everything</h2>
             <p class="section-desc" style="margin-bottom: 2.5rem;">Kaisey reads your Google Calendar, reasons over it with OpenAI to work out what matters most right now, then makes the changes for you: adding, moving and removing events once you accept. Not a new calendar. A smarter layer over the one you already use.</p>
             <figure class="story-inline">
-                <video muted playsinline preload="none" poster="assets/scroll/story-poster.jpg" aria-label="The Kaisey K breaks into its four category blocks, builds a week that drifts toward academics, adds three red recruiting blocks, then folds back into the K."></video>
+                <video muted loop playsinline preload="none" poster="assets/scroll/story-poster.jpg" aria-label="The Kaisey K breaks into its four category blocks, builds a week that drifts toward academics, adds three red recruiting blocks, then folds back into the K."></video>
                 <figcaption class="mono-label">The K, the week it reads, and the rebalance</figcaption>
             </figure>
 
@@ -1531,18 +1531,17 @@
         var still = window.matchMedia('(prefers-reduced-motion: reduce)');
         var saveData = navigator.connection && navigator.connection.saveData;
 
-        // narrow screens: play the cut once when it comes into view, then rest on the K
+        // narrow screens: play the looping cut while it is on screen
         var inline = story.querySelector('.story-inline video');
         if (inline && !still.matches) {
-            var io = new IntersectionObserver(function (es) {
+            new IntersectionObserver(function (es) {
                 es.forEach(function (e) {
-                    if (!e.isIntersecting) return;
-                    io.disconnect();
-                    inline.src = 'assets/scroll/story.mp4';
-                    var p = inline.play(); if (p && p.catch) p.catch(function () {});
+                    if (e.isIntersecting) {
+                        if (!inline.src) inline.src = 'assets/scroll/story.mp4';
+                        var p = inline.play(); if (p && p.catch) p.catch(function () {});
+                    } else inline.pause();
                 });
-            }, { threshold: 0.5 });
-            io.observe(inline);
+            }, { threshold: 0.35 }).observe(inline);
         }
         if (saveData) return;
         document.documentElement.classList.add('js-story');
