@@ -931,11 +931,11 @@
            Problem, Solution and Branding, turning a little as you
            scroll. Wide screens only; the text column narrows to make
            room for it. */
-        .story { position: relative; --k-w: clamp(180px, 17vw, 260px); --k-side: max(40px, calc(50vw - 660px)); }
+        .story { position: relative; --k-w: clamp(150px, 17vw, 260px); --k-side: max(40px, calc(50vw - 660px)); }
         .story-rail { display: none; }
-        @media (min-width: 1240px) {
+        @media (min-width: 960px) {
             .story-rail { display: block; position: sticky; top: 0; height: 100vh; margin-bottom: -100vh; z-index: 5; pointer-events: none; }
-            .story .container { max-width: none; margin-left: max(40px, var(--k-side)); margin-right: calc(var(--k-side) + var(--k-w) + 72px); }
+            .story .container { max-width: none; margin-left: max(40px, var(--k-side)); margin-right: calc(var(--k-side) + var(--k-w) + 56px); }
             .story .brand-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); }
             .story .brand-grid .brand-colour { grid-column: 1 / -1; }
         }
