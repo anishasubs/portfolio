@@ -925,33 +925,6 @@
             .pw-block { font-size: 0; padding: 0; }
             .pw-why { grid-template-columns: 1fr; }
         }
-
-        /* -- Scroll story -------------------------------------------
-           A 3D render of the K that the reader scrubs by scrolling:
-           K → four category blocks → a week drifting to academics →
-           Kaisey's rebalance → back to the K. Desktop gets a sticky
-           stage beside Problem, Solution and Branding; narrower screens
-           get the same render as a looping video in the Solution. */
-        .story { position: relative; --stage-w: clamp(300px, 27vw, 400px); --stage-side: max(32px, calc(50vw - 690px)); }
-        .story-rail { display: none; }
-        .story-inline { margin: 0 0 2.5rem; max-width: 520px; border-radius: 18px; overflow: hidden; background: #020203; }
-        .story-inline video { display: block; width: 100%; aspect-ratio: 1; object-fit: cover; }
-        .story-inline figcaption { display: block; padding: 0.8rem 1rem 0.9rem; color: #A9A9B8; background: #0E0E12; }
-        @media (min-width: 1240px) {
-            .js-story .story-rail { display: block; position: sticky; top: 0; height: 100vh; margin-bottom: -100vh; z-index: 20; pointer-events: none; }
-            .js-story .story-inline { display: none; }
-            .js-story .story .container { max-width: none; margin-left: max(40px, var(--stage-side)); margin-right: calc(var(--stage-side) + var(--stage-w) + 56px); }
-            .js-story .story .brand-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); }
-            .js-story .story .brand-grid .brand-colour { grid-column: 1 / -1; }
-        }
-        .story-stage { position: absolute; right: var(--stage-side); top: 50%; width: var(--stage-w); aspect-ratio: 1; transform: translateY(-50%) scale(0.96); opacity: 0; border-radius: 24px; overflow: hidden; background: #020203; box-shadow: 0 30px 80px rgba(14, 14, 18, 0.28), 0 0 0 1px rgba(255, 255, 255, 0.06) inset; transition: opacity 0.5s ease, transform 0.5s ease; }
-        .story.is-live .story-stage { opacity: 1; transform: translateY(-50%) scale(1); }
-        .story-canvas { display: block; width: 100%; height: 100%; }
-        .story-cap { position: absolute; left: 18px; top: 16px; right: 18px; display: flex; align-items: baseline; gap: 10px; font-family: 'JetBrains Mono', ui-monospace, monospace; font-size: 0.74rem; letter-spacing: 0.04em; color: #C9C9D6; }
-        .story-step { color: #8B7FFF; }
-        .story-text { transition: opacity 0.25s ease; }
-        .story-progress { position: absolute; left: 18px; right: 18px; bottom: 16px; height: 2px; border-radius: 2px; background: rgba(255, 255, 255, 0.12); overflow: hidden; }
-        .story-progress span { display: block; height: 100%; width: 100%; background: #8B7FFF; transform-origin: left; transform: scaleX(0); }
     </style>
 </head>
 <body>
@@ -999,16 +972,6 @@
             <video class="hero-bg" id="hero-bg" autoplay muted loop playsinline preload="metadata" aria-hidden="true"></video>
         </div>
     </section>
-
-    <!-- ═══ SCROLL STORY: the 3D K follows Problem → Solution → Branding ═══ -->
-    <div class="story" id="story">
-    <div class="story-rail" aria-hidden="true">
-        <div class="story-stage">
-            <canvas class="story-canvas" width="720" height="720"></canvas>
-            <div class="story-cap"><span class="story-step">01</span><span class="story-text">The K</span></div>
-            <div class="story-progress"><span></span></div>
-        </div>
-    </div>
 
     <!-- ═══ 2. THE PROBLEM ═══ -->
     <section class="problem" id="problem">
@@ -1090,10 +1053,6 @@
             <span class="section-tag">01 · What Kaisey solves</span>
             <h2 class="section-title">One Intelligent Layer Across Everything</h2>
             <p class="section-desc" style="margin-bottom: 2.5rem;">Kaisey reads your Google Calendar, reasons over it with OpenAI to work out what matters most right now, then makes the changes for you: adding, moving and removing events once you accept. Not a new calendar. A smarter layer over the one you already use.</p>
-            <figure class="story-inline">
-                <video muted loop playsinline preload="none" poster="assets/scroll/story-poster.jpg" aria-label="The Kaisey K breaks into its four category blocks, builds a week that drifts toward academics, adds three red recruiting blocks, then folds back into the K."></video>
-                <figcaption class="mono-label">The K, the week it reads, and the rebalance</figcaption>
-            </figure>
 
             <div class="cards-grid">
                 <div class="card">
@@ -1192,8 +1151,6 @@
             </div>
         </div>
     </section>
-
-    </div><!-- /story -->
 
     <!-- ═══ WIREFRAMES ═══ -->
     <section class="wireframes" id="design">
@@ -1517,147 +1474,6 @@
         v.src = '../kaisey/kaisey-demo.mp4';
         var p = v.play();
         if (p && p.catch) { p.catch(function () {}); }
-    })();
-    </script>
-
-    <script>
-    // Scroll story: scrub a 3D render of the K with the reader's scroll.
-    (function () {
-        var story = document.getElementById('story');
-        if (!story) return;
-        var COUNT = 150;                 // rendered every other frame of a 300-frame sequence
-        var src = function (i) { return 'assets/scroll/k-' + String(i).padStart(3, '0') + '.webp'; };
-        var wide = window.matchMedia('(min-width: 1240px)');
-        var still = window.matchMedia('(prefers-reduced-motion: reduce)');
-        var saveData = navigator.connection && navigator.connection.saveData;
-
-        // narrow screens: play the looping cut while it is on screen
-        var inline = story.querySelector('.story-inline video');
-        if (inline && !still.matches) {
-            new IntersectionObserver(function (es) {
-                es.forEach(function (e) {
-                    if (e.isIntersecting) {
-                        if (!inline.src) inline.src = 'assets/scroll/story.mp4';
-                        var p = inline.play(); if (p && p.catch) p.catch(function () {});
-                    } else inline.pause();
-                });
-            }, { threshold: 0.35 }).observe(inline);
-        }
-        if (saveData) return;
-        document.documentElement.classList.add('js-story');
-
-        var canvas = story.querySelector('.story-canvas');
-        var ctx = canvas.getContext('2d');
-        var cap = story.querySelector('.story-text');
-        var step = story.querySelector('.story-step');
-        var bar = story.querySelector('.story-progress span');
-        var q = function (sel) { return story.querySelector(sel); };
-
-        // where each chapter of the render lands on the page (frame 1-300)
-        var ANCHORS = [
-            [q('#problem'), 'top', 1],
-            [q('.problem-intro'), 'bottom', 72],
-            [q('.pw'), 'top', 88],
-            [q('.pw'), 'bottom', 140],
-            [q('.solution .cards-grid'), 'top', 150],
-            [q('.solution .cards-grid'), 'bottom', 204],
-            [q('.brand-compare'), 'top', 214],
-            [q('.build-steps'), 'bottom', 300]
-        ];
-        var CHAPTERS = [
-            [1, '01', 'The K'],
-            [24, '02', 'Four categories'],
-            [80, '03', 'A week drifting to academics'],
-            [146, '04', 'Kaisey adds recruiting: 4% \u2192 16%'],
-            [206, '05', 'Back to the K'],
-        ];
-        var STILLS = [1, 70, 140, 200, 300];   // reduced motion: hold each chapter's key frame
-
-        var marks = [];
-        function measure() {
-            marks = ANCHORS.filter(function (a) { return a[0]; }).map(function (a) {
-                var r = a[0].getBoundingClientRect();
-                return [(a[1] === 'top' ? r.top : r.bottom) + window.scrollY, a[2]];
-            });
-        }
-        function frameAt(y) {
-            if (y <= marks[0][0]) return marks[0][1];
-            for (var i = 1; i < marks.length; i++) {
-                if (y <= marks[i][0]) {
-                    var a = marks[i - 1], b = marks[i];
-                    return a[1] + (b[1] - a[1]) * (y - a[0]) / Math.max(1, b[0] - a[0]);
-                }
-            }
-            return marks[marks.length - 1][1];
-        }
-
-        var imgs = new Array(COUNT), loaded = new Array(COUNT), started = false;
-        function load() {
-            if (started) return; started = true;
-            // coarse to fine, so any scroll position has a nearby frame early
-            var order = [], seen = {};
-            [16, 8, 4, 2, 1].forEach(function (stepN) {
-                for (var i = 0; i < COUNT; i += stepN) if (!seen[i]) { seen[i] = 1; order.push(i); }
-            });
-            if (still.matches) order = STILLS.map(function (f) { return Math.round((f - 1) / 2); }).map(function (i) { return Math.min(i, COUNT - 1); });
-            var next = 0, active = 0;
-            function pump() {
-                while (active < 6 && next < order.length) {
-                    (function (i) {
-                        var im = new Image(); active++;
-                        im.decoding = 'async';
-                        im.onload = function () { loaded[i] = true; active--; if (Math.abs(i - want) < 3 || !drawn) draw(); pump(); };
-                        im.onerror = function () { active--; pump(); };
-                        im.src = src(i); imgs[i] = im;
-                    })(order[next++]);
-                }
-            }
-            pump();
-        }
-
-        var want = 0, shown = -1, drawn = false, ticking = false;
-        function draw() {
-            var best = -1;
-            for (var d = 0; d < COUNT; d++) {
-                if (want - d >= 0 && loaded[want - d]) { best = want - d; break; }
-                if (want + d < COUNT && loaded[want + d]) { best = want + d; break; }
-            }
-            if (best < 0 || best === shown) return;
-            ctx.drawImage(imgs[best], 0, 0, canvas.width, canvas.height);
-            shown = best; drawn = true;
-        }
-        function update() {
-            ticking = false;
-            if (!wide.matches) return;
-            var line = window.scrollY + window.innerHeight * 0.55;
-            var f = frameAt(line);
-            if (still.matches) {
-                var k = STILLS[0];
-                STILLS.forEach(function (sf) { if (f >= sf - 25) k = sf; });
-                f = k;
-            }
-            want = Math.max(0, Math.min(COUNT - 1, Math.round((f - 1) / 2)));
-            draw();
-            var ch = CHAPTERS[0];
-            CHAPTERS.forEach(function (c) { if (f >= c[0]) ch = c; });
-            if (step.textContent !== ch[1]) { step.textContent = ch[1]; cap.textContent = ch[2]; }
-            bar.style.transform = 'scaleX(' + ((f - 1) / 299).toFixed(3) + ')';
-        }
-        function onScroll() { if (!ticking) { ticking = true; requestAnimationFrame(update); } }
-
-        // start fetching a screen before the story arrives; show the stage while it is in view
-        new IntersectionObserver(function (es) {
-            es.forEach(function (e) { if (e.isIntersecting && wide.matches) { measure(); load(); update(); } });
-        }, { rootMargin: '100% 0px 100% 0px' }).observe(story);
-        new IntersectionObserver(function (es) {
-            es.forEach(function (e) { story.classList.toggle('is-live', e.isIntersecting); });
-        }, { rootMargin: '-35% 0px -45% 0px' }).observe(story);
-
-        window.addEventListener('scroll', onScroll, { passive: true });
-        window.addEventListener('resize', function () { measure(); onScroll(); });
-        window.addEventListener('load', function () { measure(); onScroll(); });
-        if (wide.addEventListener) wide.addEventListener('change', function () { measure(); if (wide.matches) load(); onScroll(); });
-        measure();
     })();
     </script>
 </body>
