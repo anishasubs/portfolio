@@ -925,6 +925,9 @@
             .pw-block { font-size: 0; padding: 0; }
             .pw-why { grid-template-columns: 1fr; }
         }
+        /* the demo cuts to a dark logo card from 18.9s to the loop; the pane
+           follows it so the letterboxed 16:9 frame never shows as a strip */
+        .hero-pane-media.is-dark { background: #0E0E12; }
     </style>
 </head>
 <body>
@@ -1474,6 +1477,12 @@
         v.src = '../kaisey/kaisey-demo.mp4';
         var p = v.play();
         if (p && p.catch) { p.catch(function () {}); }
+        var pane = v.parentNode, dark = false;
+        (function tick() {
+            var d = v.currentTime >= 18.85;
+            if (d !== dark) { dark = d; pane.classList.toggle('is-dark', d); }
+            requestAnimationFrame(tick);
+        })();
     })();
     </script>
 </body>
