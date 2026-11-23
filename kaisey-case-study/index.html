@@ -929,7 +929,8 @@
            follows it so the letterboxed 16:9 frame never shows as a strip */
         .hero-pane-media.is-dark { background: #0E0E12; }
         /* -- What Kaisey solves: twisting 3D K that splits into the cards --
-           The K loops (a Blender render) beside the intro. As you scroll, it
+           The K assembles once (the brand's cube animation, rendered in
+           Blender) beside the intro. As you scroll, it
            is swapped for its four blocks, which ride down with you, turn
            their category colour and land as the icons of "Four demands, one
            week". The video's background is the page's paper (#FAFAFC), so
@@ -1008,7 +1009,7 @@
                 <p class="problem-intro">It&rsquo;s recruiting season. You&rsquo;re meant to network, prep cases, keep up with classes and still sleep, and every one of those lives somewhere different: a syllabus, an inbox, a spreadsheet of coffee chats, a calendar. None of them knows about the others. So the week fills up with whatever got scheduled first, not with whatever matters most.</p>
                 </div>
                 <figure class="solves-k" aria-hidden="true">
-                    <video class="solves-video" muted loop playsinline preload="metadata" poster="assets/k-twist-poster.jpg"></video>
+                    <video class="solves-video" muted playsinline preload="auto"></video>
                 </figure>
             </div>
 
@@ -1492,13 +1493,18 @@
         // each block's box inside the video frame (fractions), from the render
         var GEO = {"ar": 0.8393, "stem": {"x": 0.0566, "y": 0.0631, "w": 0.2744, "h": 0.8885}, "top": {"x": 0.6318, "y": 0.0574, "w": 0.2861, "h": 0.2623}, "mid": {"x": 0.3672, "y": 0.3803, "w": 0.2314, "h": 0.2336}, "bot": {"x": 0.6279, "y": 0.6361, "w": 0.2773, "h": 0.268}};
         fig.style.setProperty('--k-ar', GEO.ar);
+        // reduced motion: just the finished K
+        if (still) { video.poster = 'assets/k-twist-poster.jpg'; return; }
         video.src = 'assets/k-twist.mp4';
-        if (still) return;
-        new IntersectionObserver(function (es) {
+        // the brand's assemble plays once when the section comes into view, then rests on the K
+        var io = new IntersectionObserver(function (es) {
             es.forEach(function (e) {
-                if (e.isIntersecting) { var p = video.play(); if (p && p.catch) p.catch(function () {}); } else video.pause();
+                if (!e.isIntersecting) return;
+                io.disconnect();
+                var p = video.play(); if (p && p.catch) p.catch(function () {});
             });
-        }).observe(fig);
+        }, { threshold: 0.5 });
+        io.observe(fig);
 
         document.documentElement.classList.add('js-kfly');
         var pieces = [].map.call(document.querySelectorAll('.k-piece'), function (el) {
