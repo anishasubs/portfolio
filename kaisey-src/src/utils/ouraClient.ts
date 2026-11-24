@@ -74,39 +74,6 @@ export function initOuraOAuth(): void {
   window.location.href = authUrl;
 }
 
-/** Exchange authorization code for access token client-side */
-export async function exchangeOuraCodeClientSide(code: string): Promise<OuraAuth> {
-  const clientId = env.health.ouraClientId;
-  const redirectUri = env.health.ouraRedirectUri;
-  // Client secret for dev apps — Oura dev portal exposes this on the app page
-  const clientSecret = "cFlG78HX8E2snrBa0GZNhs3Nh7Wxl0NU9_S4sdMm2LM";
-
-  const response = await fetch("https://api.ouraring.com/oauth/token", {
-    method: "POST",
-    headers: { "Content-Type": "application/x-www-form-urlencoded" },
-    body: new URLSearchParams({
-      grant_type: "authorization_code",
-      code,
-      redirect_uri: redirectUri,
-      client_id: clientId,
-      client_secret: clientSecret,
-    }),
-  });
-
-  if (!response.ok) {
-    const err = await response.json().catch(() => ({}));
-    console.error("🔴 Oura token exchange response:", err);
-    throw new Error(err.error_description || err.error || `Token exchange failed: ${response.status}`);
-  }
-
-  const data = await response.json();
-  return {
-    accessToken: data.access_token,
-    refreshToken: data.refresh_token || "",
-    expiresAt: Date.now() + (data.expires_in || 86400) * 1000,
-  };
-}
-
 /** Exchange authorization code for tokens via backend proxy */
 export async function exchangeOuraCode(code: string): Promise<OuraAuth> {
   const proxyUrl = env.openai.proxyUrl.replace("/api/chat", "/api/oura");

@@ -53,16 +53,6 @@ export default async function handler(req: any, res: any) {
   try {
     const { action, code, redirectUri, refreshToken } = req.body;
 
-    // Debug: check env var values (first/last chars only)
-    if (action === "debug") {
-      return res.status(200).json({
-        clientIdLength: clientId.length,
-        clientIdPrefix: clientId.substring(0, 8),
-        clientIdSuffix: clientId.substring(clientId.length - 4),
-        secretLength: clientSecret.length,
-      });
-    }
-
     if (action === "exchange") {
       if (!code || !redirectUri) {
         return res.status(400).json({ error: "Missing required fields: code, redirectUri" });

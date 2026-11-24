@@ -17,7 +17,7 @@ import { type PriorityMode, PRIORITY_STORAGE_KEY } from "@/app/components/priori
 import { OnboardingTour, isTourComplete } from "@/app/components/OnboardingTour";
 import { OuraSleepCard } from "@/app/components/OuraSleepCard";
 import { OuraActivityCard } from "@/app/components/OuraActivityCard";
-import { fetchOuraData, exchangeOuraCodeClientSide, initOuraOAuth, type OuraMetrics } from "@/utils/ouraClient";
+import { fetchOuraData, initOuraOAuth, type OuraMetrics } from "@/utils/ouraClient";
 import { saveOuraMetrics, loadOuraMetrics, loadOuraAuth, saveOuraAuth, clearOuraData, isCacheValid } from "@/utils/ouraStorage";
 
 // Helper function to fetch Google user profile
