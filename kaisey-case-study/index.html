@@ -1023,14 +1023,46 @@
         /* -- One intelligent layer: the four category blocks (the icons they
            landed in above) slide together into one bar, the rebalanced week.
            Scroll-driven; reduced motion shows the finished bar. -- */
-        .layer { margin: 0 0 2.5rem; }
+        .layer { margin: 0; }
         .layer-track { position: relative; height: 28px; }
         .layer-seg { position: absolute; top: 50%; left: 0; width: 25%; height: 14px; transform: translateY(-50%); border-radius: 4px; }
         .layer-legend { display: flex; flex-wrap: wrap; gap: 0.4rem 1.2rem; margin-top: 1rem; font-family: 'JetBrains Mono', ui-monospace, monospace; font-size: 0.75rem; color: var(--text-secondary); }
         .layer-legend i { display: inline-block; width: 8px; height: 8px; border-radius: 2px; margin-right: 0.45rem; }
-        .layer-note { margin-left: auto; color: var(--navy); }
+        .layer-note { margin: 1.25rem 0 0; font-size: 0.95rem; color: var(--text-secondary); }
+        .layer-kicker { display: block; margin-bottom: 0.9rem; }
+        .layer-legend b { font-weight: 500; color: var(--navy); margin-left: 0.25rem; }
         .layer-cards { grid-template-columns: repeat(3, minmax(0, 1fr)); }
-        @media (max-width: 900px) { .layer-cards { grid-template-columns: 1fr; } .layer-note { margin-left: 0; } }
+        @media (max-width: 900px) { .layer-cards { grid-template-columns: 1fr; } }
+        /* the Ask Kaisey chat beside the bar: the demo's request plays once in view */
+        .layer-panel { display: grid; grid-template-columns: minmax(0, 420px) minmax(0, 1fr); gap: 3rem; align-items: center; margin: 0 0 3rem; }
+        .chat { background: #FFFFFF; border: 1px solid #E6E6EE; border-radius: 18px; overflow: hidden; box-shadow: 0 24px 60px rgba(14, 14, 18, 0.08); }
+        .chat-head { display: flex; align-items: center; gap: 0.6rem; background: #0E0E12; color: #FAFAFC; padding: 0.9rem 1.1rem; font-size: 0.95rem; }
+        .chat-k { width: 15px; height: 17px; }
+        .chat-on { margin-left: auto; font-family: 'JetBrains Mono', ui-monospace, monospace; font-size: 0.7rem; color: #8BE3B0; }
+        .chat-on::before { content: ""; display: inline-block; width: 6px; height: 6px; border-radius: 50%; background: #22995C; margin-right: 0.4rem; vertical-align: 1px; }
+        .chat-body { padding: 1.1rem; display: flex; flex-direction: column; gap: 0.75rem; min-height: 360px; box-sizing: border-box; }
+        .chat-me { align-self: flex-end; max-width: 85%; margin: 0; background: #0E0E12; color: #FAFAFC; border-radius: 14px 14px 4px 14px; padding: 0.6rem 0.9rem; font-size: 0.92rem; line-height: 1.45; min-height: 1.3em; }
+        .chat-bot { align-self: flex-start; max-width: 94%; background: #F4F4F7; border-radius: 4px 14px 14px 14px; padding: 0.8rem 0.9rem; font-size: 0.9rem; line-height: 1.5; color: var(--navy); }
+        .chat-bot p { margin: 0 0 0.6rem; }
+        .t-red { color: var(--k-recruiting); }
+        .chat-recs { list-style: none; margin: 0 0 0.75rem; padding: 0; display: flex; flex-direction: column; gap: 0.35rem; }
+        .chat-recs li { display: flex; align-items: center; gap: 0.55rem; background: #FFFFFF; border: 1.5px dashed #F3C3C7; border-radius: 8px; padding: 0.4rem 0.6rem; font-size: 0.85rem; font-weight: 600; }
+        .chat-recs li i { width: 7px; height: 7px; border-radius: 2px; background: var(--k-recruiting); }
+        .chat-recs li span { margin-left: auto; font-family: 'JetBrains Mono', ui-monospace, monospace; font-size: 0.72rem; font-weight: 400; color: var(--text-secondary); }
+        .chat-recs li.is-set { border-style: solid; border-color: var(--k-recruiting); background: #FDF1F2; }
+        .chat-btn { display: inline-block; background: #0E0E12; color: #FAFAFC; border-radius: 9px; padding: 0.5rem 0.9rem; font-size: 0.85rem; font-weight: 600; transition: transform 0.15s ease, background-color 0.3s ease; }
+        .chat-btn.is-press { transform: scale(0.95); }
+        .chat-btn.is-done { background: #22995C; }
+        .chat-typing { display: none; align-self: flex-start; gap: 4px; background: #F4F4F7; border-radius: 12px; padding: 0.6rem 0.8rem; }
+        .chat-typing i { width: 6px; height: 6px; border-radius: 50%; background: #8A8A98; animation: chat-dot 1s infinite ease-in-out; }
+        .chat-typing i:nth-child(2) { animation-delay: 0.15s; } .chat-typing i:nth-child(3) { animation-delay: 0.3s; }
+        @keyframes chat-dot { 0%, 80%, 100% { opacity: 0.3; transform: translateY(0); } 40% { opacity: 1; transform: translateY(-3px); } }
+        .js-chat .chat-me, .js-chat .chat-bot, .js-chat .chat-recs li { opacity: 0; transform: translateY(6px); transition: opacity 0.35s ease, transform 0.35s ease; }
+        .js-chat .chat-me.is-in, .js-chat .chat-bot.is-in, .js-chat .chat-recs li.is-in { opacity: 1; transform: none; }
+        .js-chat .chat-typing.is-in { display: flex; }
+        .layer-legend b { transition: color 0.3s ease; }
+        .layer-legend b.is-new { color: var(--k-recruiting); }
+        @media (max-width: 900px) { .layer-panel { grid-template-columns: 1fr; gap: 2rem; } }
     </style>
 </head>
 <body>
@@ -1133,12 +1165,32 @@
             <h2 class="section-title">One Intelligent Layer Across Everything</h2>
             <p class="section-desc" style="margin-bottom: 2.5rem;">Kaisey reads your Google Calendar, reasons over it with OpenAI to work out what matters most right now, then makes the changes for you: adding, moving and removing events once you accept. Not a new calendar. A smarter layer over the one you already use.</p>
 
-            <figure class="layer" aria-label="The four category blocks join into one bar: your week after Kaisey rebalances it, academics 66%, recruiting 16%, social 7%, wellness 11%.">
-                <div class="layer-track" aria-hidden="true">
-                    <span class="layer-seg" data-w="18" style="background:var(--k-academics)"></span><span class="layer-seg" data-w="4.25" style="background:var(--k-recruiting)"></span><span class="layer-seg" data-w="2" style="background:var(--k-social)"></span><span class="layer-seg" data-w="3" style="background:var(--k-wellness)"></span>
+            <div class="layer-panel">
+                <div class="chat" aria-label="Example: the student tells Kaisey they need to focus on recruiting; Kaisey proposes three coffee chats and, once accepted, recruiting goes from 4% to 16% of the week.">
+                    <div class="chat-head"><svg class="chat-k" viewBox="0 0 40 46" aria-hidden="true"><rect x="0" y="0" width="11" height="46" rx="3" fill="#FAFAFC"/><rect x="14" y="17" width="10" height="12" rx="3" fill="#FAFAFC"/><rect x="27" y="32" width="13" height="14" rx="3" fill="#FAFAFC"/><rect x="27" y="0" width="13" height="14" rx="3" fill="#8B7FFF"/></svg><b>Ask Kaisey</b><span class="chat-on">online</span></div>
+                    <div class="chat-body">
+                        <p class="chat-me" data-text="I really need to focus on recruiting">I really need to focus on recruiting</p>
+                        <div class="chat-typing" aria-hidden="true"><i></i><i></i><i></i></div>
+                        <div class="chat-bot">
+                            <p>Recruiting is only <b class="t-red">4%</b> of your week. I can time-block three coffee chats in free slots:</p>
+                            <ul class="chat-recs">
+                                <li><i></i>Coffee chat &middot; Bain<span>Tue 15:00</span></li>
+                                <li><i></i>Coffee chat &middot; Goldman<span>Wed 11:30</span></li>
+                                <li><i></i>Coffee chat &middot; McKinsey<span>Thu 11:00</span></li>
+                            </ul>
+                            <span class="chat-btn">Accept &amp; update calendar</span>
+                        </div>
+                    </div>
                 </div>
-                <figcaption class="layer-legend"><span><i style="background:var(--k-academics)"></i>Academics 66%</span><span><i style="background:var(--k-recruiting)"></i>Recruiting 4% &rarr; 16%</span><span><i style="background:var(--k-social)"></i>Social 7%</span><span><i style="background:var(--k-wellness)"></i>Wellness 11%</span><span class="layer-note">One layer over the calendar you already use</span></figcaption>
-            </figure>
+                <figure class="layer" aria-label="Your week as one bar: before, academics 76% and recruiting 4%; after Kaisey, academics 66% and recruiting 16%.">
+                    <span class="mono-label layer-kicker">Your week</span>
+                    <div class="layer-track" aria-hidden="true">
+                        <span class="layer-seg" data-w="19" data-after="18" style="background:var(--k-academics)"></span><span class="layer-seg" data-w="1" data-after="4.25" style="background:var(--k-recruiting)"></span><span class="layer-seg" data-w="2" data-after="2" style="background:var(--k-social)"></span><span class="layer-seg" data-w="3" data-after="3" style="background:var(--k-wellness)"></span>
+                    </div>
+                    <figcaption class="layer-legend"><span><i style="background:var(--k-academics)"></i>Academics <b data-before="76%" data-after="66%">76%</b></span><span><i style="background:var(--k-recruiting)"></i>Recruiting <b data-before="4%" data-after="16%">4%</b></span><span><i style="background:var(--k-social)"></i>Social <b data-before="8%" data-after="7%">8%</b></span><span><i style="background:var(--k-wellness)"></i>Wellness <b data-before="12%" data-after="11%">12%</b></span></figcaption>
+                    <p class="layer-note">One layer over the calendar you already use. Nothing changes until you accept.</p>
+                </figure>
+            </div>
 
             <div class="cards-grid layer-cards">
                 <div class="card">
@@ -1738,20 +1790,22 @@
     </script>
 
     <script>
-    // One intelligent layer: four category blocks slide together into one bar as you scroll
+    // One intelligent layer: the four category blocks join into one bar as you scroll,
+    // then the Ask Kaisey chat plays the demo's request and the bar rebalances
     (function () {
         var track = document.querySelector('.layer-track');
         if (!track) return;
         var segs = [].slice.call(track.querySelectorAll('.layer-seg'));
-        var wts = segs.map(function (s) { return +s.dataset.w; }), sum = wts.reduce(function (a, b) { return a + b; }, 0);
+        var wts = segs.map(function (s) { return +s.dataset.w; });
+        var after = segs.map(function (s) { return +s.dataset.after; });
         var still = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
         var ease = function (t) { return t < 0.5 ? 4 * t * t * t : 1 - Math.pow(-2 * t + 2, 3) / 2; };
         var ticking = false;
         function draw() {
             ticking = false;
             var W = track.clientWidth, vh = window.innerHeight, r = track.getBoundingClientRect();
-            var p = still ? 1 : Math.max(0, Math.min(1, (vh * 0.85 - r.top) / (vh * 0.45)));
-            var e = ease(p);
+            var p = still ? 1 : Math.max(0, Math.min(1, (vh * 0.85 - r.top) / (vh * 0.4)));
+            var e = ease(p), sum = wts.reduce(function (a, b) { return a + b; }, 0);
             // start: four 44x28 blocks, 24px apart; end: one bar with 3px seams
             var g = 24 + (3 - 24) * e, h = 28 + (14 - 28) * e, x = 0, avail = W - 3 * 3;
             segs.forEach(function (s, i) {
@@ -1766,6 +1820,46 @@
         window.addEventListener('resize', onScroll);
         window.addEventListener('load', onScroll);
         draw();
+
+        var labels = [].slice.call(document.querySelectorAll('.layer-legend b'));
+        function rebalance(dur) {
+            var from = wts.slice(), t0 = performance.now();
+            labels.forEach(function (b) { b.textContent = b.dataset.after; });
+            labels[1].classList.add('is-new');
+            (function tick(now) {
+                var k = dur ? ease(Math.min(1, (now - t0) / dur)) : 1;
+                wts = from.map(function (f, i) { return f + (after[i] - f) * k; });
+                draw();
+                if (k < 1) requestAnimationFrame(tick);
+            })(t0);
+        }
+
+        var chat = document.querySelector('.chat');
+        if (!chat) return;
+        var me = chat.querySelector('.chat-me'), typing = chat.querySelector('.chat-typing'), bot = chat.querySelector('.chat-bot');
+        var recs = [].slice.call(chat.querySelectorAll('.chat-recs li')), btn = chat.querySelector('.chat-btn');
+        if (still) { rebalance(0); recs.forEach(function (li) { li.classList.add('is-set'); }); btn.textContent = 'Added to calendar'; btn.classList.add('is-done'); return; }
+        document.documentElement.classList.add('js-chat');
+        var text = me.dataset.text; me.textContent = '';
+        function play() {
+            var t = 300;
+            me.classList.add('is-in');
+            for (var i = 1; i <= text.length; i++) (function (n) { setTimeout(function () { me.textContent = text.slice(0, n); }, t + n * 45); })(i);
+            t += text.length * 45 + 400;
+            setTimeout(function () { typing.classList.add('is-in'); }, t); t += 1100;
+            setTimeout(function () { typing.classList.remove('is-in'); bot.classList.add('is-in'); }, t); t += 450;
+            recs.forEach(function (li, i) { setTimeout(function () { li.classList.add('is-in'); }, t + i * 220); }); t += recs.length * 220 + 900;
+            setTimeout(function () { btn.classList.add('is-press'); }, t); t += 160;
+            setTimeout(function () {
+                btn.classList.remove('is-press'); btn.classList.add('is-done'); btn.textContent = 'Added to calendar';
+                recs.forEach(function (li) { li.classList.add('is-set'); });
+                rebalance(1100);
+            }, t);
+        }
+        var io = new IntersectionObserver(function (es) {
+            es.forEach(function (e) { if (e.isIntersecting) { io.disconnect(); setTimeout(play, 500); } });
+        }, { threshold: 0.6 });
+        io.observe(chat);
     })();
     </script>
 </body>
