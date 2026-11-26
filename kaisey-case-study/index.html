@@ -1074,6 +1074,18 @@
         .js-cardfly .problem .cat-block.is-lifted { opacity: 0; }
         .js-cardfly .layer-seg { transition: opacity 0.15s ease; }
         .js-cardfly .layer-seg.is-waiting { opacity: 0; }
+        /* -- room for the scroll animations: the K's split, the blocks' flight
+           from the cards into the layer, and the bar joining -- */
+        #problem { padding-bottom: 240px; }
+        #problem .solves-head + .sub-title { margin-top: 9rem; }
+        #layer { padding-top: 240px; }
+        #layer .layer-panel { margin-top: 6rem; }
+        @media (max-width: 900px) {
+            #problem { padding-bottom: 140px; }
+            #problem .solves-head + .sub-title { margin-top: 5rem; }
+            #layer { padding-top: 140px; }
+            #layer .layer-panel { margin-top: 3.5rem; }
+        }
     </style>
 </head>
 <body>
@@ -1170,7 +1182,7 @@
     </section>
 
     <!-- ═══ 3. THE SOLUTION ═══ -->
-    <section class="solution">
+    <section class="solution" id="layer">
         <div class="container fade-in">
             <span class="section-tag">01 · What Kaisey solves</span>
             <h2 class="section-title">One Intelligent Layer Across Everything</h2>
