@@ -990,6 +990,36 @@
         .cal-plain .src-m { background: #039BE5; }
         .cal-plain .src-s { background: #8E24AA; }
         .cal-plain .src-c { background: #F6BF26; }
+        /* -- How the mark is built, as a mini ad: a dark spot where the same
+           events go from a messy calendar to category colours, stack into the
+           K's four blocks and end on the mark with the line. The static
+           four-step row stays as the fallback (no JS, reduced motion). -- */
+        .kbuild { display: none; }
+        .js-kbuild .kbuild { display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 300px); gap: 3rem; align-items: center;
+            background: radial-gradient(120% 140% at 85% 20%, #1D1A33 0%, #0E0E12 55%); border-radius: 22px; padding: clamp(2rem, 5vw, 4rem); min-height: 460px; overflow: hidden; }
+        .js-kbuild .build-steps-4 { display: none; }
+        .kb-copy { position: relative; min-height: 190px; }
+        .kb-beat { position: absolute; inset: 0; display: flex; flex-direction: column; justify-content: center; gap: 0.9rem; opacity: 0; transform: translateY(14px); transition: opacity 0.5s ease, transform 0.6s cubic-bezier(.2,.7,.2,1); pointer-events: none; }
+        .kb-beat:not(.is-on) { transition-duration: 0.25s; transform: translateY(-10px); }
+        .kb-beat.is-on { opacity: 1; transform: none; transition-delay: 0.3s; }
+        .kb-beat b { color: #FAFAFC; font-size: clamp(2rem, 4.2vw, 3.4rem); font-weight: 600; letter-spacing: -0.04em; line-height: 1.02; }
+        .kb-beat > span { color: #A9A9B8; font-size: 1.05rem; line-height: 1.5; max-width: 26rem; }
+        .kb-kicker { font-family: 'JetBrains Mono', ui-monospace, monospace; font-size: 0.75rem !important; letter-spacing: 0.12em; text-transform: uppercase; color: #8B7FFF !important; }
+        .kb-cats { display: flex; flex-wrap: wrap; align-items: center; gap: 0.35rem 0.9rem; }
+        .kb-cats i { display: inline-block; width: 10px; height: 10px; border-radius: 3px; margin-right: -0.45rem; }
+        .kb-end .kb-word { font-size: clamp(3rem, 7vw, 5.5rem); letter-spacing: -0.05em; }
+        .kbuild-stage { position: relative; width: 100%; aspect-ratio: 160 / 184; }
+        .kb-card, .kb-lane, .kb-ev, .kb-k { position: absolute; }
+        .kb-card { inset: -6%; background: #FFFFFF; border-radius: 16px; box-shadow: 0 30px 70px rgba(0, 0, 0, 0.45); transition: opacity 0.6s ease, transform 0.9s cubic-bezier(.65,0,.35,1); }
+        .kb-lane { background: #F1F1F5; border-radius: 6px; transition: opacity 0.6s ease; }
+        .kb-ev { border-radius: 3px; box-shadow: inset 0 0 0 1px rgba(255, 255, 255, 0.55);
+                 transition: left 0.9s cubic-bezier(.65,0,.35,1), top 0.9s cubic-bezier(.65,0,.35,1), width 0.9s cubic-bezier(.65,0,.35,1), height 0.9s cubic-bezier(.65,0,.35,1), background-color 0.45s ease, opacity 0.4s ease; }
+        .kb-k { border-radius: 8px; opacity: 0; transition: background-color 0.7s ease, opacity 0.35s ease, transform 0.9s cubic-bezier(.65,0,.35,1); }
+        @media (max-width: 760px) {
+            .js-kbuild .kbuild { grid-template-columns: 1fr; gap: 2rem; min-height: 0; }
+            .kbuild-stage { max-width: 240px; justify-self: center; order: -1; margin-top: 1rem; }
+            .kb-copy { min-height: 170px; }
+        }
     </style>
 </head>
 <body>
@@ -1137,6 +1167,15 @@
             </div>
 
             <h3 class="sub-title">How the mark is built</h3>
+            <div class="kbuild" role="img" aria-label="A short animated spot: a normal week of events, coloured by which calendar they came from, is colour-coded by Kaisey into academics, recruiting, social and wellness; each category's events stack into one block, and the four blocks form the Kaisey K. Tell Kaisey what matters. Your week follows.">
+                <div class="kb-copy" aria-hidden="true">
+                    <div class="kb-beat" data-step="0"><span class="kb-kicker">01 · your week</span><b>This is your week.</b><span>Coloured by where each event came from. Not by what matters.</span></div>
+                    <div class="kb-beat" data-step="1"><span class="kb-kicker">02 · kaisey</span><b>Kaisey sorts it.</b><span class="kb-cats"><i style="background:#2F62E8"></i>Academics <i style="background:#DC3F4A"></i>Recruiting <i style="background:#EA7F23"></i>Social <i style="background:#22995C"></i>Wellness</span></div>
+                    <div class="kb-beat" data-step="2"><span class="kb-kicker">03 · the mark</span><b>Every category, one block.</b><span>Four blocks of a week, arranged into a K.</span></div>
+                    <div class="kb-beat kb-end" data-step="3"><b class="kb-word">Kaisey</b><span>Tell Kaisey what matters. Your week follows.</span></div>
+                </div>
+                <div class="kbuild-stage" aria-hidden="true"></div>
+            </div>
             <div class="build-steps build-steps-4">
                 <figure>
                     <div class="build-box cal-box cal-plain" aria-hidden="true"><span class="cal-lane"><i class="src-s" style="top:4.8%;height:calc(14.3% - 2px);left:calc(0% + 2px);right:calc(0% + 2px)"></i><i class="src-m" style="top:21.4%;height:calc(7.1% - 2px);left:calc(0% + 2px);right:calc(0% + 2px)"></i><i class="src-s" style="top:28.6%;height:calc(19.0% - 2px);left:calc(0% + 2px);right:calc(45% + 2px)"></i><i class="src-m" style="top:33.3%;height:calc(9.5% - 2px);left:calc(45% + 2px);right:calc(0% + 2px)"></i><i class="src-m" style="top:57.1%;height:calc(7.1% - 2px);left:calc(0% + 2px);right:calc(0% + 2px)"></i><i class="src-s" style="top:71.4%;height:calc(11.9% - 2px);left:calc(0% + 2px);right:calc(0% + 2px)"></i><i class="src-m" style="top:88.1%;height:calc(4.8% - 2px);left:calc(0% + 2px);right:calc(0% + 2px)"></i></span><span class="cal-lane"><i class="src-s" style="top:9.5%;height:calc(9.5% - 2px);left:calc(0% + 2px);right:calc(0% + 2px)"></i><i class="src-m" style="top:19.0%;height:calc(4.8% - 2px);left:calc(0% + 2px);right:calc(0% + 2px)"></i><i class="src-m" style="top:38.1%;height:calc(14.3% - 2px);left:calc(0% + 2px);right:calc(0% + 2px)"></i><i class="src-c" style="top:47.6%;height:calc(9.5% - 2px);left:calc(50% + 2px);right:calc(0% + 2px)"></i><i class="src-s" style="top:61.9%;height:calc(19.0% - 2px);left:calc(0% + 2px);right:calc(0% + 2px)"></i><i class="src-m" style="top:85.7%;height:calc(9.5% - 2px);left:calc(0% + 2px);right:calc(0% + 2px)"></i></span><span class="cal-lane"><i class="src-s" style="top:0.0%;height:calc(21.4% - 2px);left:calc(0% + 2px);right:calc(0% + 2px)"></i><i class="src-m" style="top:23.8%;height:calc(9.5% - 2px);left:calc(0% + 2px);right:calc(50% + 2px)"></i><i class="src-c" style="top:26.2%;height:calc(9.5% - 2px);left:calc(50% + 2px);right:calc(0% + 2px)"></i><i class="src-m" style="top:47.6%;height:calc(4.8% - 2px);left:calc(0% + 2px);right:calc(0% + 2px)"></i><i class="src-s" style="top:54.8%;height:calc(14.3% - 2px);left:calc(0% + 2px);right:calc(0% + 2px)"></i><i class="src-m" style="top:76.2%;height:calc(7.1% - 2px);left:calc(0% + 2px);right:calc(0% + 2px)"></i><i class="src-c" style="top:81.0%;height:calc(9.5% - 2px);left:calc(50% + 2px);right:calc(0% + 2px)"></i></span><span class="cal-lane"><i class="src-m" style="top:14.3%;height:calc(7.1% - 2px);left:calc(0% + 2px);right:calc(0% + 2px)"></i><i class="src-s" style="top:23.8%;height:calc(19.0% - 2px);left:calc(0% + 2px);right:calc(0% + 2px)"></i><i class="src-m" style="top:45.2%;height:calc(4.8% - 2px);left:calc(0% + 2px);right:calc(0% + 2px)"></i><i class="src-m" style="top:52.4%;height:calc(9.5% - 2px);left:calc(0% + 2px);right:calc(0% + 2px)"></i><i class="src-s" style="top:66.7%;height:calc(23.8% - 2px);left:calc(0% + 2px);right:calc(45% + 2px)"></i><i class="src-c" style="top:71.4%;height:calc(9.5% - 2px);left:calc(50% + 2px);right:calc(0% + 2px)"></i></span><span class="cal-lane"><i class="src-m" style="top:7.1%;height:calc(9.5% - 2px);left:calc(0% + 2px);right:calc(0% + 2px)"></i><i class="src-s" style="top:19.0%;height:calc(16.7% - 2px);left:calc(0% + 2px);right:calc(0% + 2px)"></i><i class="src-m" style="top:40.5%;height:calc(9.5% - 2px);left:calc(0% + 2px);right:calc(0% + 2px)"></i><i class="src-c" style="top:57.1%;height:calc(4.8% - 2px);left:calc(0% + 2px);right:calc(0% + 2px)"></i><i class="src-m" style="top:69.0%;height:calc(14.3% - 2px);left:calc(0% + 2px);right:calc(0% + 2px)"></i></span></div>
@@ -1598,6 +1637,90 @@
             es.forEach(function (e) { if (e.isIntersecting) { row.classList.add('is-in'); io.disconnect(); } });
         }, { threshold: 0.35 });
         io.observe(row);
+    })();
+    </script>
+
+    <script>
+    // How the mark is built, animated. Coordinates are % of the stage (160x184).
+    (function () {
+        var root = document.querySelector('.kbuild');
+        if (!root || window.matchMedia('(prefers-reduced-motion: reduce)').matches || !('IntersectionObserver' in window)) return;
+        document.documentElement.classList.add('js-kbuild');
+        var stage = root.querySelector('.kbuild-stage');
+        var steps = root.querySelectorAll('.kb-beat');
+        var SRC = { m: '#039BE5', s: '#8E24AA', c: '#F6BF26' };
+        var CAT = { A: '#2F62E8', R: '#DC3F4A', S: '#EA7F23', W: '#22995C' };
+        // the same week as the static steps: [start hour, length, left, right, source calendar, category]
+        var WEEK = [[[8.5,1.5,0,1,'s','A'],[10.25,0.75,0,1,'m','R'],[11,2,0,.55,'s','A'],[11.5,1,.45,1,'m','R'],[14,0.75,0,1,'m','W'],[15.5,1.25,0,1,'s','A'],[17.25,0.5,0,1,'m','S']],
+                    [[9,1,0,1,'s','A'],[10,0.5,0,1,'m','R'],[12,1.5,0,1,'m','A'],[13,1,.5,1,'c','S'],[14.5,2,0,1,'s','A'],[17,1,0,1,'m','W']],
+                    [[8,2.25,0,1,'s','A'],[10.5,1,0,.5,'m','A'],[10.75,1,.5,1,'c','S'],[13,0.5,0,1,'m','R'],[13.75,1.5,0,1,'s','A'],[16,0.75,0,1,'m','W'],[16.5,1,.5,1,'c','S']],
+                    [[9.5,0.75,0,1,'m','R'],[10.5,2,0,1,'s','A'],[12.75,0.5,0,1,'m','W'],[13.5,1,0,1,'m','A'],[15,2.5,0,.55,'s','A'],[15.5,1,.5,1,'c','S']],
+                    [[8.75,1,0,1,'m','W'],[10,1.75,0,1,'s','A'],[12.25,1,0,1,'m','R'],[14,0.5,0,1,'c','S'],[15.25,1.5,0,1,'m','A']]];
+        // the K: academics = stem, recruiting = top, social = middle, wellness = bottom
+        var K = { A: [0, 0, 27.5, 100], R: [67.5, 0, 32.5, 30], S: [35, 37, 25, 26], W: [67.5, 70, 32.5, 30] };
+        var INK = { A: '#FAFAFC', R: '#8B7FFF', S: '#FAFAFC', W: '#FAFAFC' };
+        var PAD = 4, GAP = 2, LW = (100 - 2 * PAD - 4 * GAP) / 5, TOP = 4, H = 92;
+
+        function el(cls) { var d = document.createElement('div'); d.className = cls; stage.appendChild(d); return d; }
+        function place(d, r) { d.style.left = r[0] + '%'; d.style.top = r[1] + '%'; d.style.width = r[2] + '%'; d.style.height = r[3] + '%'; }
+        var card = el('kb-card'), lanes = [];
+        for (var d = 0; d < 5; d++) { var ln = el('kb-lane'); place(ln, [PAD + d * (LW + GAP), TOP, LW, H]); lanes.push(ln); }
+        var evs = [];
+        WEEK.forEach(function (day, di) {
+            day.forEach(function (e) {
+                var x = PAD + di * (LW + GAP) + e[2] * LW + 0.5, w = (e[3] - e[2]) * LW - 1;
+                var y = TOP + (e[0] - 8) / 10.5 * H, h = e[1] / 10.5 * H - 0.6;
+                evs.push({ el: el('kb-ev'), cal: [x, y, w, h], src: SRC[e[4]], cat: e[5] });
+            });
+        });
+        // where each event sits inside its category's block: stacked, splitting the block by length
+        ['A', 'R', 'S', 'W'].forEach(function (c) {
+            var mine = evs.filter(function (v) { return v.cat === c; }), b = K[c], y = b[1], n = mine.length;
+            mine.forEach(function (v, i) { var h = b[3] / n; v.stack = [b[0], y + 0.4, b[2], h - 0.8]; y += h; });
+        });
+        var kb = {};
+        ['A', 'R', 'S', 'W'].forEach(function (c) { kb[c] = el('kb-k'); place(kb[c], K[c]); kb[c].style.backgroundColor = CAT[c]; });
+
+        var timers = [];
+        function at(ms, fn) { timers.push(setTimeout(fn, ms)); }
+        function step(n) { steps.forEach(function (b) { b.classList.toggle('is-on', +b.dataset.step === n); }); }
+        function reset() {
+            timers.forEach(clearTimeout); timers = [];
+            card.style.opacity = 1; lanes.forEach(function (l) { l.style.opacity = 1; });
+            card.style.transform = 'none';
+            for (var c0 in kb) kb[c0].style.transform = 'none';
+            evs.forEach(function (v) { place(v.el, v.cal); v.el.style.backgroundColor = v.src; v.el.style.opacity = 1; v.el.style.borderRadius = '3px'; });
+            for (var c in kb) { place(kb[c], K[c]); kb[c].style.backgroundColor = CAT[c]; kb[c].style.opacity = 0; }
+            step(0);
+        }
+        function run() {
+            reset();
+            // 2: colour-code in place, a wave through the week
+            at(1800, function () { step(1); evs.forEach(function (v, i) { at(i * 28, function () { v.el.style.backgroundColor = CAT[v.cat]; }); }); });
+            // 3: the calendar falls away and each category's events stack into its block
+            at(4200, function () {
+                step(2); card.style.opacity = 0; card.style.transform = 'scale(0.92)'; lanes.forEach(function (l) { l.style.opacity = 0; });
+                evs.forEach(function (v, i) { at(i * 18, function () { place(v.el, v.stack); v.el.style.borderRadius = '2px'; }); });
+            });
+            // the stacks merge into four solid blocks
+            at(6000, function () { for (var c in kb) kb[c].style.opacity = 1; });
+            at(6350, function () { evs.forEach(function (v) { v.el.style.opacity = 0; }); });
+            // 4: the end card: the K settles to white and violet on ink, with the name and line
+            at(7400, function () {
+                step(3);
+                for (var c in kb) { kb[c].style.backgroundColor = INK[c]; }
+            });
+            // hold, then loop
+            at(12200, run);
+        }
+        var started = false;
+        new IntersectionObserver(function (es) {
+            es.forEach(function (e) {
+                if (e.isIntersecting && !started) { started = true; run(); }
+                else if (!e.isIntersecting && started) { started = false; timers.forEach(clearTimeout); timers = []; reset(); }
+            });
+        }, { threshold: 0.4 }).observe(stage);
+        reset();
     })();
     </script>
 </body>
