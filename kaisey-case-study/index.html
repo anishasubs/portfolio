@@ -1067,6 +1067,13 @@
         .focus-chips span { display: inline-flex; align-items: center; gap: 0.4rem; border: 1px solid #E6E6EE; border-radius: 999px; padding: 0.3rem 0.65rem; font-size: 0.78rem; color: var(--navy); }
         .focus-chips span.is-on { background: #0E0E12; border-color: #0E0E12; color: #FAFAFC; font-weight: 600; }
         .focus-chips i { width: 7px; height: 7px; border-radius: 2px; }
+        /* the card icons lift off and fly into the layer's four blocks */
+        .card-fly { position: fixed; inset: 0; pointer-events: none; z-index: 40; display: none; }
+        .js-cardfly .card-fly { display: block; }
+        .card-fly .cat-block { position: absolute; left: 0; top: 0; opacity: 0; will-change: transform; box-shadow: 0 10px 24px rgba(14, 14, 18, 0.18); }
+        .js-cardfly .problem .cat-block.is-lifted { opacity: 0; }
+        .js-cardfly .layer-seg { transition: opacity 0.15s ease; }
+        .js-cardfly .layer-seg.is-waiting { opacity: 0; }
     </style>
 </head>
 <body>
@@ -1214,6 +1221,8 @@
                 </div>
             </div>
         </div>
+        <!-- the card icons fly from Four demands into the layer bar (outside the fading container so position:fixed works) -->
+        <div class="card-fly" aria-hidden="true"><span class="cat-block cat-academics"></span><span class="cat-block cat-recruiting"></span><span class="cat-block cat-social"></span><span class="cat-block cat-wellness"></span></div>
     </section>
 
     <!-- ═══ BRANDING ═══ -->
@@ -1808,7 +1817,8 @@
         function draw() {
             ticking = false;
             var W = track.clientWidth, vh = window.innerHeight, r = track.getBoundingClientRect();
-            var p = still ? 1 : Math.max(0, Math.min(1, (vh * 0.85 - r.top) / (vh * 0.4)));
+            // the blocks land at 55% of the screen (see the card fly script), then join over the next quarter screen
+            var p = still ? 1 : Math.max(0, Math.min(1, (vh * 0.55 - (r.top + r.height / 2)) / (vh * 0.25)));
             var e = ease(p), sum = wts.reduce(function (a, b) { return a + b; }, 0);
             // start: four 44x28 blocks, 24px apart; end: one bar with 3px seams
             var g = 24 + (3 - 24) * e, h = 28 + (14 - 28) * e, x = 0, avail = W - 3 * 3;
@@ -1864,6 +1874,53 @@
             es.forEach(function (e) { if (e.isIntersecting) { io.disconnect(); setTimeout(play, 500); } });
         }, { threshold: 0.6 });
         io.observe(chat);
+    })();
+    </script>
+
+    <script>
+    // The four card icons (where the 3D K's blocks landed) lift off, ride down with the
+    // reader and land as the four blocks of the layer bar, which then join into one.
+    (function () {
+        var fly = document.querySelector('.card-fly');
+        if (!fly || window.matchMedia('(prefers-reduced-motion: reduce)').matches) return;
+        document.documentElement.classList.add('js-cardfly');
+        var cats = ['academics', 'recruiting', 'social', 'wellness'];
+        var segs = document.querySelectorAll('.layer-seg');
+        var pieces = cats.map(function (c, i) {
+            return { el: fly.children[i], icon: document.querySelector('.problem .cat-block.cat-' + c), seg: segs[i] };
+        });
+        // leave the card once its icon is near the top of the screen (after the 3D piece has landed in it),
+        // glide down the screen and land in the bar as it reaches 55% (where the bar starts to join)
+        var LD = 0.16, LA = 0.55, ticking = false;
+        var ease = function (t) { return t < 0.5 ? 4 * t * t * t : 1 - Math.pow(-2 * t + 2, 3) / 2; };
+        function update() {
+            ticking = false;
+            var sy = window.scrollY, vh = window.innerHeight, vw = window.innerWidth;
+            pieces.forEach(function (p, i) {
+                var a = p.icon.getBoundingClientRect(), t = p.seg.getBoundingClientRect();
+                var ay = a.top + a.height / 2, ty = t.top + t.height / 2;
+                var s0 = ay + sy - vh * LD, s1 = ty + sy - vh * LA;
+                var k = Math.max(0, Math.min(1, (sy - s0) / Math.max(1, s1 - s0)));
+                var flying = sy > s0 && k < 1;
+                // the 3D K's landing hides the icon until it arrives; only lift it once it is there
+                var arrived = !p.icon.classList.contains('is-waiting');
+                p.icon.classList.toggle('is-lifted', arrived && sy > s0);
+                p.seg.classList.toggle('is-waiting', k < 1);
+                if (!flying || !arrived) { p.el.style.opacity = 0; return; }
+                var e = ease(k);
+                var cx = a.left + a.width / 2 + (t.left + 22 - (a.left + a.width / 2)) * e;
+                // swing out to the right of the text while travelling, then come back in
+                cx += Math.sin(Math.PI * k) * Math.min(vw * 0.32, 420) * (0.75 + i * 0.08);
+                var cy = vh * (LD + (LA - LD) * e) + Math.sin(Math.PI * k) * (i - 1.5) * 26;
+                p.el.style.opacity = 1;
+                p.el.style.transform = 'translate(' + (cx - 22).toFixed(1) + 'px,' + (cy - 14).toFixed(1) + 'px) rotate(' + (Math.sin(Math.PI * k) * (i % 2 ? 16 : -16)).toFixed(1) + 'deg)';
+            });
+        }
+        function onScroll() { if (!ticking) { ticking = true; requestAnimationFrame(update); } }
+        window.addEventListener('scroll', onScroll, { passive: true });
+        window.addEventListener('resize', onScroll);
+        window.addEventListener('load', onScroll);
+        update();
     })();
     </script>
 </body>
