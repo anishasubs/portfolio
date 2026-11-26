@@ -1063,6 +1063,10 @@
         .layer-legend b { transition: color 0.3s ease; }
         .layer-legend b.is-new { color: var(--k-recruiting); }
         @media (max-width: 900px) { .layer-panel { grid-template-columns: 1fr; gap: 2rem; } }
+        .focus-chips { display: flex; flex-wrap: wrap; gap: 0.35rem; margin-bottom: 1.1rem; }
+        .focus-chips span { display: inline-flex; align-items: center; gap: 0.4rem; border: 1px solid #E6E6EE; border-radius: 999px; padding: 0.3rem 0.65rem; font-size: 0.78rem; color: var(--navy); }
+        .focus-chips span.is-on { background: #0E0E12; border-color: #0E0E12; color: #FAFAFC; font-weight: 600; }
+        .focus-chips i { width: 7px; height: 7px; border-radius: 2px; }
     </style>
 </head>
 <body>
@@ -1194,9 +1198,9 @@
 
             <div class="cards-grid layer-cards">
                 <div class="card">
-                    <div class="card-icon"><svg class="line-icon" viewBox="0 0 24 24" aria-hidden="true"><path d="M13 2 3 14h9l-1 8 10-12h-9l1-8z"/></svg></div>
-                    <h3>Dynamic Priority Toggle</h3>
-                    <p>One tap shifts your entire day. Slide between Academics, Recruiting, Social, and Wellness modes &mdash; Kaisey re-ranks every event using the model's reasoning, not a simple sort.</p>
+                    <div class="focus-chips" aria-hidden="true"><span><i style="background:var(--k-academics)"></i>Academics</span><span class="is-on"><i style="background:var(--k-recruiting)"></i>Recruiting</span><span><i style="background:var(--k-social)"></i>Social</span><span><i style="background:var(--k-wellness)"></i>Wellness</span></div>
+                    <h3>Pick a Focus</h3>
+                    <p>Tell Kaisey what matters this week with one tap. Today&rsquo;s &ldquo;next&rdquo; line jumps to your next event in that category, Kaisey flags when it&rsquo;s getting too little of your week, and Kaisey keeps it in mind when it suggests changes.</p>
                 </div>
                 <div class="card">
                     <div class="card-icon"><svg class="line-icon" viewBox="0 0 24 24" aria-hidden="true"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg></div>
