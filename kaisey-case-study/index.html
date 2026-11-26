@@ -961,6 +961,28 @@
         }
         /* the landing fills the screen, so the K below starts out of view */
         @media (min-width: 901px) { .hero { min-height: 100vh; min-height: 100svh; } }
+        /* -- How the mark is built: from an organized week to the K --
+           1 a week of category blocks, 2 the same blocks sorted into four
+           lanes stacked from the bottom (time per category), 3 one block per category arranged as the K, 4 the mark.
+           Steps reveal left to right when the row scrolls into view. */
+        .build-steps-4 { grid-template-columns: repeat(4, minmax(0, 1fr)); }
+        .build-steps-4 figure { position: relative; }
+        .cal-box { display: grid; grid-template-columns: repeat(5, minmax(0, 1fr)); gap: 4px; padding: 8px; box-sizing: border-box; background: #FFFFFF; border: 1px solid #ECECF2; border-radius: 12px; }
+        .cal-sorted { grid-template-columns: repeat(4, minmax(0, 1fr)); }
+        .cal-lane { position: relative; background: #F4F4F7; border-radius: 5px; }
+        .cal-lane i { position: absolute; left: 2px; right: 2px; border-radius: 3px; }
+        @media (min-width: 681px) {
+            .build-steps-4 figure + figure::before { content: "\2192"; position: absolute; left: -1.15rem; top: 38%; color: #8A8A98; font-size: 1rem; }
+        }
+        @media (max-width: 680px) {
+            .build-steps-4 { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+        }
+        .js-build .build-steps-4 figure { opacity: 0; transform: translateY(14px); transition: opacity 0.5s ease, transform 0.5s ease; }
+        .js-build .build-steps-4.is-in figure { opacity: 1; transform: none; }
+        .js-build .build-steps-4.is-in figure:nth-child(2) { transition-delay: 0.35s; }
+        .js-build .build-steps-4.is-in figure:nth-child(3) { transition-delay: 0.7s; }
+        .js-build .build-steps-4.is-in figure:nth-child(4) { transition-delay: 1.05s; }
+        @media (prefers-reduced-motion: reduce) { .js-build .build-steps-4 figure { opacity: 1; transform: none; transition: none; } }
     </style>
 </head>
 <body>
@@ -1108,18 +1130,22 @@
             </div>
 
             <h3 class="sub-title">How the mark is built</h3>
-            <div class="build-steps">
+            <div class="build-steps build-steps-4">
                 <figure>
-                    <div class="build-box"><span class="bb" style="left:0;top:0;width:44%;height:45%;background:var(--k-academics)"></span><span class="bb" style="left:56%;top:0;width:44%;height:45%;background:var(--k-recruiting)"></span><span class="bb" style="left:0;top:55%;width:44%;height:45%;background:var(--k-social)"></span><span class="bb" style="left:56%;top:55%;width:44%;height:45%;background:var(--k-wellness)"></span></div>
-                    <figcaption><span class="mono-label">1</span>Four blocks, one per category</figcaption>
+                    <div class="build-box cal-box" aria-hidden="true"><span class="cal-lane"><i style="top:10.0%;height:calc(20.0% - 3px);background:var(--k-academics)"></i><i style="top:35.0%;height:calc(10.0% - 3px);background:var(--k-recruiting)"></i><i style="top:50.0%;height:calc(15.0% - 3px);background:var(--k-academics)"></i><i style="top:90.0%;height:calc(10.0% - 3px);background:var(--k-wellness)"></i></span><span class="cal-lane"><i style="top:10.0%;height:calc(15.0% - 3px);background:var(--k-academics)"></i><i style="top:30.0%;height:calc(10.0% - 3px);background:var(--k-social)"></i><i style="top:50.0%;height:calc(20.0% - 3px);background:var(--k-academics)"></i><i style="top:80.0%;height:calc(10.0% - 3px);background:var(--k-wellness)"></i></span><span class="cal-lane"><i style="top:10.0%;height:calc(20.0% - 3px);background:var(--k-academics)"></i><i style="top:35.0%;height:calc(10.0% - 3px);background:var(--k-recruiting)"></i><i style="top:60.0%;height:calc(10.0% - 3px);background:var(--k-social)"></i><i style="top:90.0%;height:calc(10.0% - 3px);background:var(--k-wellness)"></i></span><span class="cal-lane"><i style="top:10.0%;height:calc(15.0% - 3px);background:var(--k-academics)"></i><i style="top:30.0%;height:calc(20.0% - 3px);background:var(--k-academics)"></i><i style="top:60.0%;height:calc(10.0% - 3px);background:var(--k-recruiting)"></i><i style="top:80.0%;height:calc(10.0% - 3px);background:var(--k-social)"></i></span><span class="cal-lane"><i style="top:20.0%;height:calc(20.0% - 3px);background:var(--k-academics)"></i><i style="top:50.0%;height:calc(10.0% - 3px);background:var(--k-wellness)"></i><i style="top:70.0%;height:calc(10.0% - 3px);background:var(--k-recruiting)"></i></span></div>
+                    <figcaption><span class="mono-label">1</span>An organized week, every block in its place</figcaption>
+                </figure>
+                <figure>
+                    <div class="build-box cal-box cal-sorted" aria-hidden="true"><span class="cal-lane"><i style="bottom:0.0%;height:calc(12.5% - 3px);background:var(--k-academics)"></i><i style="bottom:12.5%;height:calc(9.4% - 3px);background:var(--k-academics)"></i><i style="bottom:21.9%;height:calc(9.4% - 3px);background:var(--k-academics)"></i><i style="bottom:31.2%;height:calc(12.5% - 3px);background:var(--k-academics)"></i><i style="bottom:43.8%;height:calc(12.5% - 3px);background:var(--k-academics)"></i><i style="bottom:56.2%;height:calc(9.4% - 3px);background:var(--k-academics)"></i><i style="bottom:65.6%;height:calc(12.5% - 3px);background:var(--k-academics)"></i><i style="bottom:78.1%;height:calc(12.5% - 3px);background:var(--k-academics)"></i></span><span class="cal-lane"><i style="bottom:0.0%;height:calc(6.2% - 3px);background:var(--k-recruiting)"></i><i style="bottom:6.2%;height:calc(6.2% - 3px);background:var(--k-recruiting)"></i><i style="bottom:12.5%;height:calc(6.2% - 3px);background:var(--k-recruiting)"></i><i style="bottom:18.8%;height:calc(6.2% - 3px);background:var(--k-recruiting)"></i></span><span class="cal-lane"><i style="bottom:0.0%;height:calc(6.2% - 3px);background:var(--k-social)"></i><i style="bottom:6.2%;height:calc(6.2% - 3px);background:var(--k-social)"></i><i style="bottom:12.5%;height:calc(6.2% - 3px);background:var(--k-social)"></i></span><span class="cal-lane"><i style="bottom:0.0%;height:calc(6.2% - 3px);background:var(--k-wellness)"></i><i style="bottom:6.2%;height:calc(6.2% - 3px);background:var(--k-wellness)"></i><i style="bottom:12.5%;height:calc(6.2% - 3px);background:var(--k-wellness)"></i><i style="bottom:18.8%;height:calc(6.2% - 3px);background:var(--k-wellness)"></i></span></div>
+                    <figcaption><span class="mono-label">2</span>Sorted into the four categories</figcaption>
                 </figure>
                 <figure>
                     <div class="build-box"><span class="bb" style="left:0;top:0;width:27.5%;height:100%;background:var(--k-academics)"></span><span class="bb" style="left:35%;top:37%;width:25%;height:26%;background:var(--k-social)"></span><span class="bb" style="left:67.5%;top:0;width:32.5%;height:30%;background:var(--k-recruiting)"></span><span class="bb" style="left:67.5%;top:70%;width:32.5%;height:30%;background:var(--k-wellness)"></span></div>
-                    <figcaption><span class="mono-label">2</span>Rearranged into a K, like rescheduling</figcaption>
+                    <figcaption><span class="mono-label">3</span>Each category becomes one block of the K</figcaption>
                 </figure>
                 <figure>
                     <div class="build-tile"><div class="build-box"><span class="bb" style="left:0;top:0;width:27.5%;height:100%;background:#FAFAFC"></span><span class="bb" style="left:35%;top:37%;width:25%;height:26%;background:#FAFAFC"></span><span class="bb" style="left:67.5%;top:0;width:32.5%;height:30%;background:#8B7FFF"></span><span class="bb" style="left:67.5%;top:70%;width:32.5%;height:30%;background:#FAFAFC"></span></div></div>
-                    <figcaption><span class="mono-label">3</span>Settled to ink and one violet block</figcaption>
+                    <figcaption><span class="mono-label">4</span>Settled to ink and one violet block</figcaption>
                 </figure>
             </div>
 
@@ -1552,6 +1578,19 @@
         window.addEventListener('resize', onScroll);
         window.addEventListener('load', onScroll);
         update();
+    })();
+    </script>
+
+    <script>
+    // How the mark is built: reveal the four steps in order when they scroll in
+    (function () {
+        var row = document.querySelector('.build-steps-4');
+        if (!row || !('IntersectionObserver' in window)) return;
+        document.documentElement.classList.add('js-build');
+        var io = new IntersectionObserver(function (es) {
+            es.forEach(function (e) { if (e.isIntersecting) { row.classList.add('is-in'); io.disconnect(); } });
+        }, { threshold: 0.35 });
+        io.observe(row);
     })();
     </script>
 </body>
